@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#8C1515">
 <title>Academia de Engenharia de IA</title>
 <meta name="description" content="Programa completo de formação em Engenharia de IA — currículo, quizzes, flashcards com repetição espaçada e projetos.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -34,8 +35,8 @@ header{background:var(--navy);color:#fff}
 .hstats{margin-left:auto;display:flex;gap:18px;align-items:center;font-size:.9rem}
 .hstats b{color:#fff}
 nav{background:#fff;border-bottom:1px solid var(--line)}
-nav .topo{padding:0 20px;gap:0}
-nav a{color:var(--ink);text-decoration:none;padding:11px 16px;display:inline-block;border-bottom:3px solid transparent;font-size:.95rem}
+nav .topo{padding:0 20px;gap:0;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch}
+nav a{color:var(--ink);text-decoration:none;padding:11px 16px;display:inline-block;border-bottom:3px solid transparent;font-size:.95rem;white-space:nowrap}
 nav a:hover{color:var(--navy2)}
 nav a.on{color:var(--navy);border-color:var(--navy);font-weight:600}
 
@@ -105,6 +106,9 @@ main{max-width:1060px;margin:0 auto;padding:26px 20px 60px}
 .assin div{border-top:1.5px solid var(--ink);padding-top:6px;font-size:.85rem;min-width:190px}
 @media print{header,nav,footer,.util,.noprint{display:none!important}main{padding:0;max-width:none}.cert{border-width:10px}}
 
+/* ---------- sincronizar ---------- */
+.synccode{width:100%;height:110px;font-size:.7rem;font-family:ui-monospace,monospace;border:1px solid var(--line);border-radius:8px;padding:8px;margin-top:10px;word-break:break-all}
+
 /* ---------- toast ---------- */
 #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 22px;border-radius:99px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:9}
 #toast.show{opacity:1}
@@ -134,6 +138,7 @@ footer b{font-family:"Source Serif 4",Georgia,serif;color:#fff;font-size:1rem;di
   <a href="#/painel" data-v="painel">Painel</a>
   <a href="#/curriculo" data-v="curriculo">Currículo</a>
   <a href="#/revisao" data-v="revisao">Revisão 🃏 <b id="ndue"></b></a>
+  <a href="#/sync" data-v="sync">Sincronizar</a>
   <a href="#/certificado" data-v="certificado">Certificado</a>
   <a id="ghlink" target="_blank" rel="noopener">Biblioteca ↗</a>
 </div></nav>
@@ -842,6 +847,49 @@ window.grade=okv=>{
   if(okv)R.ok++;R.i++;R.flip=false;vRevisao();
 };
 
+/* ---------- sincronizar ---------- */
+function vSync(){
+  app.innerHTML=`
+  <div class="secttl"><h2>Sincronizar dispositivos</h2><span class="mut">leve seu progresso para o celular (e de volta)</span></div>
+  <div class="grid g2">
+    <div class="card">
+      <h3 class="serif" style="color:var(--navy)">📤 Enviar deste aparelho</h3>
+      <p class="mut" style="margin:8px 0;font-size:.92rem">Gere o código e mande para você mesmo (WhatsApp, e-mail, bloco de notas). Ele carrega todo o seu progresso: aulas, quizzes, flashcards, XP e streak.</p>
+      <button class="btn" onclick="exportarSync()">Gerar e copiar código</button>
+      <textarea id="expcode" class="synccode" readonly style="display:none" onclick="this.select()"></textarea>
+    </div>
+    <div class="card">
+      <h3 class="serif" style="color:var(--navy)">📥 Receber neste aparelho</h3>
+      <p class="mut" style="margin:8px 0;font-size:.92rem">Cole abaixo o código gerado no outro aparelho. A importação <b>mescla</b> os progressos — nada do que você fez aqui se perde.</p>
+      <textarea id="impcode" class="synccode" placeholder="Cole o código AIA1.… aqui"></textarea>
+      <button class="btn" style="margin-top:10px" onclick="importarSync()">Importar e mesclar</button>
+    </div>
+  </div>
+  <p class="mut" style="margin-top:14px;font-size:.88rem">💡 Como funciona: o progresso fica salvo no navegador de cada aparelho. O código é um retrato do seu progresso — gere no aparelho mais atualizado e importe no outro sempre que quiser conciliar os dois.</p>`;
+}
+window.exportarSync=async()=>{
+  const code='AIA1.'+btoa(unescape(encodeURIComponent(JSON.stringify(S))));
+  const ta=document.getElementById('expcode');ta.value=code;ta.style.display='block';
+  try{await navigator.clipboard.writeText(code);toast('Código copiado! Agora cole no outro aparelho 📋');}
+  catch(e){ta.focus();ta.select();toast('Toque no código para selecionar e copiar');}
+};
+window.importarSync=()=>{
+  const raw=document.getElementById('impcode').value.trim();
+  let dados=null;
+  if(raw.startsWith('AIA1.')){try{dados=JSON.parse(decodeURIComponent(escape(atob(raw.slice(5)))));}catch(e){}}
+  if(!dados){toast('Código inválido — confira se copiou inteiro 😕');return;}
+  for(const k in dados.lessons||{}){const a=S.lessons[k]||[],b=dados.lessons[k]||[];
+    S.lessons[k]=Array.from({length:Math.max(a.length,b.length)},(_,i)=>!!(a[i]||b[i]));}
+  for(const k in dados.proj||{})S.proj[k]=S.proj[k]||dados.proj[k];
+  for(const k in dados.quiz||{})S.quiz[k]=Math.max(S.quiz[k]??-1,dados.quiz[k]);
+  for(const k in dados.cards||{}){const a=S.cards[k],b=dados.cards[k];if(!a||(b&&b.d>a.d))S.cards[k]=b;}
+  S.xp=Math.max(S.xp,dados.xp||0);
+  S.days=[...new Set([...S.days,...(dados.days||[])])].sort();
+  S.reviews=Math.max(S.reviews,dados.reviews||0);
+  if(!S.name&&dados.name)S.name=dados.name;
+  save();renderHeader();toast('Progresso mesclado! ✅');location.hash='#/painel';
+};
+
 /* ---------- certificado ---------- */
 function vCert(){
   const pct=totalPct(),pronto=pct===100;
@@ -881,6 +929,7 @@ function render(){
   else if(v==='mod')vMod(+arg||0);
   else if(v==='quiz')vQuiz();
   else if(v==='revisao'){if(R.feito)R={};vRevisao();}
+  else if(v==='sync')vSync();
   else if(v==='certificado')vCert();
   else vPainel();
   window.scrollTo(0,0);
