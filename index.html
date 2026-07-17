@@ -5,30 +5,39 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Academia de Engenharia de IA</title>
 <meta name="description" content="Programa completo de formação em Engenharia de IA — currículo, quizzes, flashcards com repetição espaçada e projetos.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --navy:#0C2340; --navy2:#14355c; --gold:#C9A227; --gold2:#e8c95a;
-  --paper:#faf9f6; --card:#ffffff; --ink:#20242c; --mut:#6b7280;
-  --line:#e6e2d8; --ok:#1a7f4e; --err:#b3261e; --okbg:#e9f6ef; --errbg:#fbeae9;
+  /* Paleta inspirada em Stanford: Cardinal red + neutros frios.
+     Os nomes --navy/--gold são herança do tema anterior, mantidos
+     para não tocar nos templates JS. */
+  --navy:#8C1515; --navy2:#B1040E; --gold:#820000; --gold2:#f4f0e8;
+  --paper:#ffffff; --card:#ffffff; --ink:#2E2D29; --mut:#53565A;
+  --line:#d9d7d2; --ok:#175E54; --err:#B1040E; --okbg:#e9f2f0; --errbg:#fbeceb;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--paper);color:var(--ink);line-height:1.55}
-h1,h2,h3,.serif{font-family:Georgia,"Times New Roman",serif}
+body{font-family:"Source Sans 3",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--paper);color:var(--ink);line-height:1.55}
+h1,h2,h3,.serif{font-family:"Source Serif 4",Georgia,"Times New Roman",serif}
 a{color:var(--navy2)}
 button{font:inherit;cursor:pointer}
 
 /* ---------- topo ---------- */
-header{background:var(--navy);color:#fff;border-bottom:4px solid var(--gold)}
+.util{background:var(--ink);color:#fff;font-size:.75rem;letter-spacing:.14em;text-transform:uppercase}
+.util .topo{padding:6px 20px;justify-content:space-between}
+header{background:var(--navy);color:#fff}
 .topo{max-width:1060px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
 .crest{width:46px;height:52px;flex:none}
-.brand h1{font-size:1.25rem;letter-spacing:.02em}
-.brand small{color:var(--gold2);font-style:italic;font-family:Georgia,serif}
+.brand h1{font-size:1.45rem;letter-spacing:.01em;font-weight:600}
+.brand small{color:rgba(255,255,255,.78);font-style:italic;font-family:"Source Serif 4",Georgia,serif}
 .hstats{margin-left:auto;display:flex;gap:18px;align-items:center;font-size:.9rem}
-.hstats b{color:var(--gold2)}
-nav{background:var(--navy2)}
+.hstats b{color:#fff}
+nav{background:#fff;border-bottom:1px solid var(--line)}
 nav .topo{padding:0 20px;gap:0}
-nav a{color:#dbe4f0;text-decoration:none;padding:10px 16px;display:inline-block;border-bottom:3px solid transparent;font-size:.95rem}
-nav a.on{color:#fff;border-color:var(--gold);background:rgba(255,255,255,.06)}
+nav a{color:var(--ink);text-decoration:none;padding:11px 16px;display:inline-block;border-bottom:3px solid transparent;font-size:.95rem}
+nav a:hover{color:var(--navy2)}
+nav a.on{color:var(--navy);border-color:var(--navy);font-weight:600}
 
 /* ---------- layout ---------- */
 main{max-width:1060px;margin:0 auto;padding:26px 20px 60px}
@@ -37,22 +46,23 @@ main{max-width:1060px;margin:0 auto;padding:26px 20px 60px}
 @media(min-width:760px){.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}}
 .mut{color:var(--mut)}
 .chip{display:inline-block;font-size:.75rem;padding:2px 10px;border-radius:99px;border:1px solid var(--line);background:#f4f2ec;color:#555}
-.chip.gold{background:var(--gold);border-color:var(--gold);color:var(--navy);font-weight:600}
+.chip.gold{background:#fff;border-color:var(--navy);color:var(--navy);font-weight:600}
 .chip.ok{background:var(--okbg);border-color:#bfe3cf;color:var(--ok)}
 .btn{background:var(--navy);color:#fff;border:none;border-radius:8px;padding:10px 18px;font-weight:600}
 .btn:hover{background:var(--navy2)}
 .btn.sec{background:#fff;color:var(--navy);border:1.5px solid var(--navy)}
-.btn.gold{background:var(--gold);color:var(--navy)}
+.btn.gold{background:#fff;color:var(--navy)}
+.btn.gold:hover{background:var(--gold2)}
 .btn:disabled{opacity:.45;cursor:default}
 .bar{height:8px;background:#eceadf;border-radius:99px;overflow:hidden}
 .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--navy2),var(--navy));border-radius:99px;transition:width .4s}
-.bar.gold i{background:linear-gradient(90deg,var(--gold),#a8871f)}
-.secttl{display:flex;align-items:baseline;gap:12px;margin:30px 0 14px;border-bottom:2px solid var(--navy);padding-bottom:6px}
-.secttl h2{font-size:1.3rem;color:var(--navy)}
+.bar.gold i{background:linear-gradient(90deg,var(--navy2),var(--navy))}
+.secttl{display:flex;align-items:baseline;gap:12px;margin:30px 0 14px;border-bottom:1px solid var(--line);padding-bottom:6px}
+.secttl h2{font-size:1.3rem;color:var(--ink)}
 
 /* ---------- dashboard ---------- */
-.hero{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;border:none}
-.hero .serif{color:var(--gold2)}
+.hero{background:var(--navy);color:#fff;border:none}
+.hero .serif{color:rgba(255,255,255,.85)}
 .ring{width:120px;height:120px}
 .statn{font-size:1.9rem;font-weight:700;font-family:Georgia,serif;color:var(--navy)}
 .badges{display:flex;gap:10px;flex-wrap:wrap}
@@ -79,7 +89,7 @@ main{max-width:1060px;margin:0 auto;padding:26px 20px 60px}
 .qopt.ok{background:var(--okbg);border-color:var(--ok)}
 .qopt.err{background:var(--errbg);border-color:var(--err)}
 .qopt:disabled{cursor:default}
-.explain{border-left:4px solid var(--gold);background:#fdf9ee;padding:10px 14px;border-radius:0 8px 8px 0;margin-top:10px}
+.explain{border-left:4px solid var(--navy);background:#faf4f4;padding:10px 14px;border-radius:0 8px 8px 0;margin-top:10px}
 
 /* ---------- flashcards ---------- */
 .fcard{min-height:230px;display:flex;align-items:center;justify-content:center;text-align:center;padding:30px;font-size:1.15rem;cursor:pointer;border:1.5px solid var(--navy);position:relative}
@@ -89,24 +99,26 @@ main{max-width:1060px;margin:0 auto;padding:26px 20px 60px}
 /* ---------- certificado ---------- */
 .cert{border:14px double var(--navy);background:#fffdf5;padding:46px 40px;text-align:center;position:relative}
 .cert h2{font-size:1.9rem;color:var(--navy);letter-spacing:.06em}
-.cert .nome{font-family:Georgia,serif;font-size:2rem;color:var(--navy);border-bottom:2px solid var(--gold);display:inline-block;padding:0 30px 4px;margin:16px 0}
+.cert .nome{font-family:"Source Serif 4",Georgia,serif;font-size:2rem;color:var(--navy);border-bottom:2px solid var(--navy);display:inline-block;padding:0 30px 4px;margin:16px 0}
 .cert .marca{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:3rem;color:rgba(179,38,30,.16);transform:rotate(-18deg);font-weight:800;pointer-events:none}
 .assin{display:flex;justify-content:center;gap:80px;margin-top:40px}
 .assin div{border-top:1.5px solid var(--ink);padding-top:6px;font-size:.85rem;min-width:190px}
-@media print{header,nav,footer,.noprint{display:none!important}main{padding:0;max-width:none}.cert{border-width:10px}}
+@media print{header,nav,footer,.util,.noprint{display:none!important}main{padding:0;max-width:none}.cert{border-width:10px}}
 
 /* ---------- toast ---------- */
-#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;padding:10px 22px;border-radius:99px;border:1.5px solid var(--gold);opacity:0;transition:opacity .3s;pointer-events:none;z-index:9}
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 22px;border-radius:99px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:9}
 #toast.show{opacity:1}
 
-footer{border-top:1px solid var(--line);color:var(--mut);font-size:.85rem;text-align:center;padding:20px}
+footer{background:var(--ink);color:#c9c7c2;font-size:.85rem;text-align:center;padding:26px 20px;margin-top:40px}
+footer b{font-family:"Source Serif 4",Georgia,serif;color:#fff;font-size:1rem;display:block;margin-bottom:4px}
 </style>
 </head>
 <body>
 
+<div class="util"><div class="topo"><span>Programa de Formação Profissional</span><span>Campus Virtual</span></div></div>
 <header>
   <div class="topo">
-    <svg class="crest" viewBox="0 0 60 70"><path d="M30 2 56 12v22c0 16-11 28-26 34C15 62 4 50 4 34V12Z" fill="#0C2340" stroke="#C9A227" stroke-width="2.5"/><text x="30" y="34" text-anchor="middle" fill="#C9A227" font-family="Georgia" font-size="18" font-weight="bold">IA</text><text x="30" y="50" text-anchor="middle" fill="#dbe4f0" font-family="Georgia" font-size="8">MMXXVI</text></svg>
+    <svg class="crest" viewBox="0 0 60 70"><path d="M30 2 56 12v22c0 16-11 28-26 34C15 62 4 50 4 34V12Z" fill="#fff"/><text x="30" y="34" text-anchor="middle" fill="#8C1515" font-family="Georgia" font-size="18" font-weight="bold">IA</text><text x="30" y="50" text-anchor="middle" fill="#820000" font-family="Georgia" font-size="8">MMXXVI</text></svg>
     <div class="brand">
       <h1>Academia de Engenharia de IA</h1>
       <small>Aprender · Construir · Entregar</small>
@@ -128,7 +140,7 @@ footer{border-top:1px solid var(--line);color:var(--mut);font-size:.85rem;text-a
 
 <main id="app"></main>
 <div id="toast"></div>
-<footer>Academia de Engenharia de IA · conteúdo aberto (MIT) · seu progresso fica salvo neste navegador</footer>
+<footer><b>Academia de Engenharia de IA</b>Aprender · Construir · Entregar<br>conteúdo aberto (MIT) · seu progresso fica salvo neste navegador</footer>
 
 <script>
 /* ================= DADOS ================= */
@@ -611,13 +623,14 @@ function dueCards(){
 }
 
 /* ================= COMPONENTES ================= */
-const ring=(pct,size=120)=>{const r=(size-14)/2,c=2*Math.PI*r;return `
+const ring=(pct,size=120,escuro=false)=>{const r=(size-14)/2,c=2*Math.PI*r,
+  trilha=escuro?'rgba(255,255,255,.28)':'#E5E4E2',cor=escuro?'#fff':'#8C1515',txt=escuro?'#fff':'#2E2D29';return `
   <svg class="ring" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
-    <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="#e8e5da" stroke-width="11"/>
-    <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="#C9A227" stroke-width="11"
+    <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${trilha}" stroke-width="11"/>
+    <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${cor}" stroke-width="11"
       stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${c*(1-pct/100)}"
       transform="rotate(-90 ${size/2} ${size/2})"/>
-    <text x="50%" y="53%" text-anchor="middle" dominant-baseline="middle" font-size="${size/4.6}" font-weight="700" fill="#0C2340" font-family="Georgia">${pct}%</text>
+    <text x="50%" y="53%" text-anchor="middle" dominant-baseline="middle" font-size="${size/4.6}" font-weight="700" fill="${txt}" font-family="Georgia">${pct}%</text>
   </svg>`;};
 
 function badgesList(){
@@ -656,10 +669,11 @@ function vPainel(){
       <p style="margin-top:8px;color:#dbe4f0">13 módulos · ~160 horas · do zero ao deploy. ${
         pct===0?'Sua jornada começa no Módulo 0.':pct===100?'Programa concluído — parabéns, Engenheiro(a) de IA! 🎓':'Continue de onde parou.'}</p>
       ${nx?`<button class="btn gold" style="margin-top:14px" onclick="location.hash='#/mod/${nx.mi}'">▶ Continuar: ${MODS[nx.mi].ic} ${nx.txt}</button>`:''}
-      ${!S.name?`<div class="noprint" style="margin-top:14px"><input id="nome" placeholder="Como devemos te chamar?" style="padding:9px 12px;border-radius:8px;border:none;margin-right:8px">
-        <button class="btn sec" style="background:#fff" onclick="S.name=document.getElementById('nome').value.trim();save();render()">Matricular-me</button></div>`:''}
+      ${!S.name?`<form class="noprint" style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap" onsubmit="event.preventDefault();matricular()">
+        <input id="nome" placeholder="Como devemos te chamar?" autocomplete="name" style="padding:9px 12px;border-radius:8px;border:none;min-width:210px">
+        <button type="submit" class="btn gold">Matricular-me</button></form>`:''}
     </div>
-    <div style="text-align:center">${ring(pct)}<div style="color:#dbe4f0;font-size:.85rem;margin-top:4px">progresso geral</div></div>
+    <div style="text-align:center">${ring(pct,120,true)}<div style="color:rgba(255,255,255,.85);font-size:.85rem;margin-top:4px">progresso geral</div></div>
   </div>
 
   <div class="grid g3" style="margin-top:16px">
@@ -732,6 +746,12 @@ function vMod(i){
     <small class="mut">O enunciado completo, com critérios de aceite, está no material do módulo.</small>
   </div>`;
 }
+
+window.matricular=()=>{
+  const inp=document.getElementById('nome'),v=inp.value.trim();
+  if(!v){inp.focus();inp.placeholder='Digite seu nome para se matricular ✍️';return;}
+  S.name=v;save();toast(`Matrícula confirmada, ${v}! 🎓`);render();
+};
 
 window.tickLesson=(i,j,v)=>{
   S.lessons['m'+i][j]=v;save();
@@ -834,7 +854,7 @@ function vCert(){
   </div>
   <div class="cert">
     ${pronto?'':'<div class="marca">EM ANDAMENTO</div>'}
-    <svg width="64" height="74" viewBox="0 0 60 70" style="margin-bottom:6px"><path d="M30 2 56 12v22c0 16-11 28-26 34C15 62 4 50 4 34V12Z" fill="#0C2340" stroke="#C9A227" stroke-width="2.5"/><text x="30" y="34" text-anchor="middle" fill="#C9A227" font-family="Georgia" font-size="18" font-weight="bold">IA</text><text x="30" y="50" text-anchor="middle" fill="#dbe4f0" font-family="Georgia" font-size="8">MMXXVI</text></svg>
+    <svg width="64" height="74" viewBox="0 0 60 70" style="margin-bottom:6px"><path d="M30 2 56 12v22c0 16-11 28-26 34C15 62 4 50 4 34V12Z" fill="#8C1515" stroke="#820000" stroke-width="2.5"/><text x="30" y="34" text-anchor="middle" fill="#fff" font-family="Georgia" font-size="18" font-weight="bold">IA</text><text x="30" y="50" text-anchor="middle" fill="#f4d5d5" font-family="Georgia" font-size="8">MMXXVI</text></svg>
     <h2 class="serif">ACADEMIA DE ENGENHARIA DE IA</h2>
     <p class="serif" style="font-style:italic;margin:8px 0">confere o presente certificado a</p>
     <div class="nome">${S.name||'________________________'}</div>
