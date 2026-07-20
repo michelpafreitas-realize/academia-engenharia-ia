@@ -69,6 +69,10 @@ main{max-width:1240px;min-height:62vh;margin:0 auto;padding:42px 24px 88px}
 .synccode{width:100%;height:120px;font-size:.72rem;font-family:ui-monospace,monospace;border:1px solid var(--line);border-radius:10px;padding:10px;margin-top:10px;word-break:break-all}
 #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:11px 22px;border-radius:99px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:12;box-shadow:var(--shadow)}#toast.show{opacity:1}
 footer{background:#292826;color:#c9c5bd;font-size:.82rem;text-align:center;padding:34px 20px;margin-top:20px}footer b{font-family:"Source Serif 4",Georgia,serif;color:#fff;font-size:1.05rem;display:block;margin-bottom:4px}
+.fnav{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:22px;max-width:1240px;margin:0 auto 30px;text-align:left;padding-bottom:26px;border-bottom:1px solid #3b3936}
+.fnav h4{color:#fff;font-family:"Source Serif 4",Georgia,serif;font-size:.88rem;margin-bottom:8px}
+.fnav a{display:block;color:#c9c5bd;text-decoration:none;font-size:.8rem;padding:3px 0}.fnav a:hover{color:#fff;text-decoration:underline}
+.fld{width:100%;min-height:46px;padding:11px 14px;border:1px solid var(--line);border-radius:10px;margin-top:9px;font:inherit;outline-color:var(--navy)}
 @media(min-width:760px){.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:900px){.hero,.curriculum-intro,.module-hero{grid-template-columns:1fr}.hero-photo,.curriculum-image,.module-hero-photo{min-height:300px}.dashboard-split,.module-layout{grid-template-columns:1fr}.badges{grid-template-columns:repeat(4,1fr)}.hstats>span:nth-child(3){display:none}}
 @media(max-width:680px){body{padding-bottom:62px}.util{display:none}.topo{padding-left:16px;padding-right:16px}.crest{width:38px;height:46px}.brand h1{font-size:1.05rem}.brand small{font-size:.72rem}.hstats{gap:6px}.hstats>span{display:none}.hstats .profile-avatar{display:flex}nav{position:fixed;top:auto;bottom:0;left:0;right:0;border-top:1px solid var(--line);border-bottom:0}nav .topo{justify-content:flex-start;padding:0 8px}nav a{padding:12px 11px 10px;font-size:.72rem}nav #ghlink{display:none}main{padding:20px 14px 52px}.card{border-radius:15px;padding:18px}.hero{display:block;min-height:0}.hero-content{padding:26px 22px}.hero h2{font-size:2rem}.hero p{font-size:.91rem}.hero-photo{min-height:215px}.hero-quote{left:14px;right:14px;bottom:14px;padding:13px}.dashboard-metrics{grid-template-columns:repeat(3,1fr);gap:8px}.metric-card{min-height:118px;padding:12px}.metric-icon{width:30px;height:30px;font-size:.9rem}.statn{font-size:1.55rem;margin-top:13px}.metric-card>.mut{font-size:.68rem}.metric-card small,.metric-card .btn{display:none}.continue-card{grid-template-columns:38% 62%;min-height:180px}.continue-copy{padding:15px}.continue-copy h3{font-size:1.15rem}.continue-copy p{font-size:.72rem}.badges{grid-template-columns:repeat(4,1fr)}.secttl{margin-top:30px;align-items:center;flex-wrap:wrap}.secttl h2{font-size:1.35rem}.curriculum-intro{min-height:0}.curriculum-copy{padding:28px 22px}.curriculum-copy h1{font-size:2.1rem}.curriculum-image{min-height:220px}.module-hero-copy{padding:28px 22px}.module-hero h2{font-size:2.1rem}.module-hero-photo{min-height:220px}.lesson{grid-template-columns:22px 22px minmax(0,1fr)}.lesson a{grid-column:3}.assin{gap:20px;flex-direction:column;align-items:center}.cert{padding:30px 18px}.cert .nome{font-size:1.45rem;padding:0 8px}}
@@ -89,7 +93,7 @@ footer{background:#292826;color:#c9c5bd;font-size:.82rem;text-align:center;paddi
       <span>⭐ <b id="hxp">0</b> XP</span>
       <span>🔥 <b id="hstreak">0</b> dias</span>
       <span id="hlevel" class="chip gold">Calouro</span>
-      <span class="profile-avatar" aria-label="Perfil do estudante">IA</span>
+      <a id="havatar" class="profile-avatar" href="#/conta" aria-label="Conta do aluno" style="text-decoration:none">IA</a>
     </div>
   </div>
 </header>
@@ -99,12 +103,16 @@ footer{background:#292826;color:#c9c5bd;font-size:.82rem;text-align:center;paddi
   <a href="#/revisao" data-v="revisao">Revisão 🃏 <b id="ndue"></b></a>
   <a href="#/sync" data-v="sync">Sincronizar</a>
   <a href="#/certificado" data-v="certificado">Certificado</a>
+  <a href="#/conta" data-v="conta">Conta</a>
   <a id="ghlink" target="_blank" rel="noopener">Biblioteca ↗</a>
 </div></nav>
 
 <main id="app"></main>
 <div id="toast"></div>
-<footer><b>Academia de Engenharia de IA</b>Aprender · Construir · Entregar<br>conteúdo aberto sob licença MIT · seu progresso permanece neste navegador</footer>
+<footer>
+  <div class="fnav" id="fnav"></div>
+  <b>Academia de Engenharia de IA</b>Aprender · Construir · Entregar<br>conteúdo aberto sob licença MIT · seu progresso permanece neste navegador
+</footer>
 
 <script>
 /* ================= DADOS ================= */
@@ -546,9 +554,19 @@ const NIVEIS=[[0,'Calouro'],[100,'Veterano(a)'],[300,'Estagiário(a) de IA'],[70
 const INTERVALOS=[1,3,7,14,30]; // dias por caixa (Leitner)
 
 /* ================= ESTADO ================= */
+/* Contas de aluno — 100% locais (site estático, sem servidor).
+   ponytail: senha vira SHA-256 no navegador; protege de olhares casuais, não é auth real.
+   Auth de verdade (multi-aparelho) exige backend — até lá, a aba Sincronizar cobre. */
+const USERS=JSON.parse(localStorage.getItem('academia_users')||'{}');
+let USER=localStorage.getItem('academia_sessao')||'';
+if(USER&&!USERS[USER]){USER='';localStorage.removeItem('academia_sessao');}
+const saveUsers=()=>localStorage.setItem('academia_users',JSON.stringify(USERS));
+const sha=async t=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(t)))].map(b=>b.toString(16).padStart(2,'0')).join('');
+
+const SKEY=USER?'academia:u:'+USER:'academia'; // sem conta = modo visitante (chave antiga)
 const S=Object.assign({name:'',lessons:{},proj:{},quiz:{},cards:{},xp:0,days:[],reviews:0},
-  JSON.parse(localStorage.getItem('academia')||'{}'));
-const save=()=>localStorage.setItem('academia',JSON.stringify(S));
+  JSON.parse(localStorage.getItem(SKEY)||'{}'));
+const save=()=>localStorage.setItem(SKEY,JSON.stringify(S));
 const hoje=()=>new Date().toISOString().slice(0,10);
 
 function addXP(n,msg){
@@ -638,6 +656,7 @@ function vPainel(){
       ${!S.name?`<form class="hero-form noprint" onsubmit="event.preventDefault();matricular()">
         <input id="nome" placeholder="Como devemos te chamar?" autocomplete="name">
         <button type="submit" class="btn gold">Matricular-me</button></form>`:''}
+      ${!USER?`<a class="noprint" style="color:#e0d9d2;font-size:.82rem;margin-top:14px;display:inline-block" href="#/conta">🔐 ${S.name?'Criar conta de aluno (login e senha)':'Prefere login e senha? Crie sua conta de aluno'} →</a>`:''}
     </div>
     <div class="hero-photo" role="img" aria-label="Estudantes colaborando em um ambiente acadêmico">
       <div class="hero-quote"><q>Quem aprende construindo não coleciona aulas: coleciona evidências.</q><small>Projetos aplicados em todos os módulos</small></div>
@@ -731,6 +750,66 @@ window.tickProj=(i,v)=>{
   vMod(i);
 };
 
+/* ---------- conta de aluno ---------- */
+const fld=id=>document.getElementById(id).value.trim();
+function vConta(){
+  if(USER){const c=USERS[USER];
+    app.innerHTML=`
+    <div class="secttl"><h2>Conta do aluno</h2><span class="mut">salva neste navegador</span></div>
+    <div class="grid g2">
+      <div class="card"><h3 class="serif" style="color:var(--navy)">🎓 ${c.n}</h3>
+        <p class="mut" style="margin:8px 0">Login: <b>@${USER}</b></p>
+        <p class="mut" style="font-size:.9rem">Progresso: <b>${totalPct()}%</b> · ${S.xp} XP · 🔥 ${streak()} dias</p>
+        <div class="module-actions"><button class="btn sec" onclick="sair()">Sair da conta</button>
+        <button class="btn sec" style="border-color:var(--err);color:var(--err)" onclick="excluirConta()">Excluir conta</button></div></div>
+      <div class="card"><h3 class="serif" style="color:var(--navy)">📱 Vai estudar em outro aparelho?</h3>
+        <p class="mut" style="margin:8px 0;font-size:.92rem">A conta vale neste navegador. Para levar o progresso ao celular (e trazer de volta), use a aba <a href="#/sync">Sincronizar</a>.</p></div>
+    </div>`;return;}
+  app.innerHTML=`
+  <div class="secttl"><h2>Entrar ou criar conta</h2><span class="mut">cada aluno com seu próprio progresso neste computador</span></div>
+  <div class="grid g2">
+    <form class="card" onsubmit="entrar(event)">
+      <h3 class="serif" style="color:var(--navy)">Já sou aluno</h3>
+      <input id="loguser" class="fld" placeholder="Login" autocomplete="username" required>
+      <input id="logpass" class="fld" type="password" placeholder="Senha" autocomplete="current-password" required>
+      <button class="btn" style="margin-top:12px">Entrar</button>
+    </form>
+    <form class="card" onsubmit="criarConta(event)">
+      <h3 class="serif" style="color:var(--navy)">Criar conta de aluno</h3>
+      <input id="cadnome" class="fld" placeholder="Seu nome" autocomplete="name" required>
+      <input id="caduser" class="fld" placeholder="Escolha um login (ex.: maria.silva)" autocomplete="username" required>
+      <input id="cadpass" class="fld" type="password" placeholder="Senha (mínimo 6 caracteres)" autocomplete="new-password" required>
+      <button class="btn" style="margin-top:12px">Criar conta e matricular</button>
+      <p class="mut" style="font-size:.78rem;margin-top:10px">O progresso que você já fez sem conta vem junto. Tudo fica salvo apenas neste navegador.</p>
+    </form>
+  </div>`;
+}
+window.criarConta=async e=>{
+  e.preventDefault();
+  const n=fld('cadnome'),u=fld('caduser').toLowerCase(),p=document.getElementById('cadpass').value;
+  if(!/^[a-z0-9._-]{3,20}$/.test(u))return toast('Login: 3–20 caracteres, só letras, números, ponto, hífen');
+  if(p.length<6)return toast('A senha precisa de pelo menos 6 caracteres');
+  if(USERS[u])return toast('Esse login já existe neste navegador — tente entrar');
+  USERS[u]={n,h:await sha(u+'·'+p)};saveUsers();
+  S.name=n;
+  localStorage.setItem('academia:u:'+u,JSON.stringify(S)); // adota o progresso de visitante
+  localStorage.setItem('academia_sessao',u);
+  location.reload();
+};
+window.entrar=async e=>{
+  e.preventDefault();
+  const u=fld('loguser').toLowerCase(),p=document.getElementById('logpass').value,c=USERS[u];
+  if(!c||c.h!==await sha(u+'·'+p))return toast('Login ou senha incorretos 😕');
+  localStorage.setItem('academia_sessao',u);location.reload();
+};
+window.sair=()=>{localStorage.removeItem('academia_sessao');location.reload();};
+window.excluirConta=()=>{
+  if(!confirm('Excluir a conta @'+USER+' e TODO o progresso dela neste navegador?'))return;
+  delete USERS[USER];saveUsers();
+  localStorage.removeItem('academia:u:'+USER);
+  localStorage.removeItem('academia_sessao');location.reload();
+};
+
 /* ---------- quiz ---------- */
 let Q={};
 window.startQuiz=i=>{Q={mi:i,idx:0,score:0};location.hash='#/quiz';};
@@ -794,11 +873,11 @@ function vRevisao(){
       <span class="chip gold">🃏 ${c.mod}</span><span class="mut">${R.i+1} de ${R.fila.length}</span></div>
     <div class="card fcard" onclick="R.flip=!R.flip;vRevisao()">
       ${R.flip?`<div class="verso">${c.verso}</div>`:`<div class="serif" style="font-size:1.3rem;color:var(--navy)">${c.frente}</div>`}
-      <div class="hint">${R.flip?'':'clique para virar'}</div>
+      <div class="hint">${R.flip?'':'clique (ou espaço) para virar'}</div>
     </div>
     ${R.flip?`<div style="display:flex;gap:10px;margin-top:14px;justify-content:center">
-      <button class="btn sec" style="border-color:var(--err);color:var(--err)" onclick="grade(false)">✗ Errei</button>
-      <button class="btn" style="background:var(--ok)" onclick="grade(true)">✓ Acertei</button></div>`:''}
+      <button class="btn sec" style="border-color:var(--err);color:var(--err)" onclick="grade(false)">✗ Errei <small>(1)</small></button>
+      <button class="btn" style="background:var(--ok)" onclick="grade(true)">✓ Acertei <small>(2)</small></button></div>`:''}
   </div>`;
 }
 window.grade=okv=>{
@@ -880,6 +959,8 @@ function renderHeader(){
   document.getElementById('hxp').textContent=S.xp;
   document.getElementById('hstreak').textContent=streak();
   document.getElementById('hlevel').textContent=nivel().cur[1];
+  const ini=(S.name||USER).trim().split(/[\s._-]+/).map(w=>w[0]).slice(0,2).join('').toUpperCase();
+  document.getElementById('havatar').textContent=ini||'IA';
   updDue();
 }
 function updDue(){const n=dueCards().length;document.getElementById('ndue').textContent=n?`(${n})`:'';}
@@ -893,10 +974,20 @@ function render(){
   else if(v==='revisao'){if(R.feito)R={};vRevisao();}
   else if(v==='sync')vSync();
   else if(v==='certificado')vCert();
+  else if(v==='conta')vConta();
   else vPainel();
   window.scrollTo(0,0);
 }
 document.getElementById('ghlink').href=REPO;
+document.getElementById('fnav').innerHTML=PERIODOS.map(p=>`<div><h4>${p.nome}</h4>${
+  p.mods.map(i=>`<a href="#/mod/${i}">${MODS[i].ic} Módulo ${i} — ${MODS[i].t}</a>`).join('')}</div>`).join('');
+addEventListener('keydown',e=>{ // atalhos da revisão: espaço vira, 1 errei, 2 acertei
+  if(!location.hash.startsWith('#/revisao')||!R.fila||!R.fila.length||R.i>=R.fila.length)return;
+  if(/INPUT|TEXTAREA/.test(e.target.tagName))return;
+  if(e.code==='Space'){e.preventDefault();R.flip=!R.flip;vRevisao();}
+  else if(R.flip&&e.key==='1')grade(false);
+  else if(R.flip&&e.key==='2')grade(true);
+});
 window.addEventListener('hashchange',render);
 renderHeader();render();
 </script>
