@@ -77,6 +77,31 @@ footer{background:#292826;color:#c9c5bd;font-size:.82rem;text-align:center;paddi
 @media(max-width:900px){.hero,.curriculum-intro,.module-hero{grid-template-columns:1fr}.hero-photo,.curriculum-image,.module-hero-photo{min-height:300px}.dashboard-split,.module-layout{grid-template-columns:1fr}.badges{grid-template-columns:repeat(4,1fr)}.hstats>span:nth-child(3){display:none}}
 @media(max-width:680px){body{padding-bottom:62px}.util{display:none}.topo{padding-left:16px;padding-right:16px}.crest{width:38px;height:46px}.brand h1{font-size:1.05rem}.brand small{font-size:.72rem}.hstats{gap:6px}.hstats>span{display:none}.hstats .profile-avatar{display:flex}nav{position:fixed;top:auto;bottom:0;left:0;right:0;border-top:1px solid var(--line);border-bottom:0}nav .topo{justify-content:flex-start;padding:0 8px}nav a{padding:12px 11px 10px;font-size:.72rem}nav #ghlink{display:none}main{padding:20px 14px 52px}.card{border-radius:15px;padding:18px}.hero{display:block;min-height:0}.hero-content{padding:26px 22px}.hero h2{font-size:2rem}.hero p{font-size:.91rem}.hero-photo{min-height:215px}.hero-quote{left:14px;right:14px;bottom:14px;padding:13px}.dashboard-metrics{grid-template-columns:repeat(3,1fr);gap:8px}.metric-card{min-height:118px;padding:12px}.metric-icon{width:30px;height:30px;font-size:.9rem}.statn{font-size:1.55rem;margin-top:13px}.metric-card>.mut{font-size:.68rem}.metric-card small,.metric-card .btn{display:none}.continue-card{grid-template-columns:38% 62%;min-height:180px}.continue-copy{padding:15px}.continue-copy h3{font-size:1.15rem}.continue-copy p{font-size:.72rem}.badges{grid-template-columns:repeat(4,1fr)}.secttl{margin-top:30px;align-items:center;flex-wrap:wrap}.secttl h2{font-size:1.35rem}.curriculum-intro{min-height:0}.curriculum-copy{padding:28px 22px}.curriculum-copy h1{font-size:2.1rem}.curriculum-image{min-height:220px}.module-hero-copy{padding:28px 22px}.module-hero h2{font-size:2.1rem}.module-hero-photo{min-height:220px}.lesson{grid-template-columns:22px 22px minmax(0,1fr)}.lesson a{grid-column:3}.assin{gap:20px;flex-direction:column;align-items:center}.cert{padding:30px 18px}.cert .nome{font-size:1.45rem;padding:0 8px}}
 @media print{header,nav,footer,.util,.noprint{display:none!important}body{background:#fff;padding:0}main{padding:0;max-width:none}.cert{border-width:10px}}
+/* ===== sistema de crescimento ===== */
+#hbar{height:4px;background:rgba(140,21,21,.12)}#hbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#8C1515,#C9A227);transition:width .6s ease}
+.hoje{display:grid;grid-template-columns:1.4fr 1fr;gap:18px;margin-bottom:26px}
+.missao{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:.94rem}
+.missao:last-of-type{border-bottom:0}
+.missao.ok{color:var(--ok)}.missao.ok .mt{text-decoration:line-through;opacity:.7}
+.missao .mp{margin-left:auto;font-size:.78rem;color:var(--mut);font-weight:700}
+.pilula{font-style:italic;color:var(--mut);font-size:.85rem;margin-top:12px;border-left:3px solid var(--gold2);padding-left:10px}
+.ceremony{position:fixed;inset:0;background:rgba(30,12,10,.62);display:flex;align-items:center;justify-content:center;z-index:90;padding:20px}
+.ceremony .card{max-width:460px;text-align:center;animation:pop .45s cubic-bezier(.2,1.6,.4,1)}
+@keyframes pop{from{transform:scale(.6);opacity:0}}
+.confete{position:fixed;top:-16px;width:9px;height:14px;display:block;z-index:91;border-radius:2px;animation:cair linear forwards}
+@keyframes cair{to{transform:translateY(105vh) rotate(720deg)}}
+.pass{display:flex;gap:10px;overflow-x:auto;padding:6px 2px 12px}
+.tier{min-width:84px;border:1px solid var(--line);border-radius:12px;padding:10px 6px;text-align:center;background:#fff;flex-shrink:0}
+.tier.on{border-color:var(--navy);background:var(--gold2)}
+.tier.off{opacity:.45;filter:grayscale(.7)}
+.tier span{font-size:1.35rem;display:block}.tier small{font-size:.64rem;color:var(--mut)}
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;font-size:.9rem;padding:7px 0;border-bottom:1px solid var(--line)}
+.duel:last-of-type{border-bottom:0}
+.aviso{background:var(--errbg);border:1px solid #efc9c6;border-radius:12px;padding:12px 14px;font-size:.88rem}
+.titulo-chip{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:5px 12px;margin:4px 6px 0 0;font-size:.8rem;cursor:pointer;background:#fff}
+.titulo-chip.eq{background:var(--navy);color:#fff;border-color:var(--navy)}
+@media(max-width:900px){.hoje{grid-template-columns:1fr}}
+@media(max-width:680px){nav .topo{flex-wrap:nowrap;overflow-x:auto}}
 </style>
 </head>
 <body>
@@ -91,16 +116,19 @@ footer{background:#292826;color:#c9c5bd;font-size:.82rem;text-align:center;paddi
     </div>
     <div class="hstats">
       <span>⭐ <b id="hxp">0</b> XP</span>
-      <span>🔥 <b id="hstreak">0</b> dias</span>
+      <span>🔥 <b id="hstreak">0</b> dias<span id="hshield"></span></span>
+      <span id="hliga" class="chip gold">🪨 Ferro</span>
       <span id="hlevel" class="chip gold">Calouro</span>
       <a id="havatar" class="profile-avatar" href="#/conta" aria-label="Conta do aluno" style="text-decoration:none">IA</a>
     </div>
   </div>
+  <div id="hbar"><i></i></div>
 </header>
 <nav><div class="topo">
   <a href="#/painel" data-v="painel">Painel</a>
   <a href="#/curriculo" data-v="curriculo">Currículo</a>
   <a href="#/revisao" data-v="revisao">Revisão 🃏 <b id="ndue"></b></a>
+  <a href="#/crescimento" data-v="crescimento">Crescimento 🌱</a>
   <a href="#/sync" data-v="sync">Sincronizar</a>
   <a href="#/certificado" data-v="certificado">Certificado</a>
   <a href="#/conta" data-v="conta">Conta</a>
@@ -550,8 +578,51 @@ const MODS=[
   ['Aprendizado contínuo','Fontes recorrentes fixas + prática constante; papers sob demanda']]},
 ];
 
-const NIVEIS=[[0,'Calouro'],[100,'Veterano(a)'],[300,'Estagiário(a) de IA'],[700,'Eng. de IA Júnior'],[1200,'Eng. de IA Pleno'],[1800,'Eng. de IA Sênior'],[2500,'Staff AI Engineer']];
+/* níveis = escada de crescimento: cada um carrega um princípio sobre por que estudar transforma uma pessoa */
+const NIVEIS=[
+ [0,'Calouro','Aprender é a tecnologia mais antiga do ser humano — e você acabou de religá-la.'],
+ [100,'Veterano(a)','Seu cérebro muda fisicamente a cada sessão de estudo. Neuroplasticidade não é metáfora: é você se reconstruindo.'],
+ [300,'Estagiário(a) de IA','Conhecimento rende juros compostos: cada conceito que você domina barateia o próximo.'],
+ [700,'Eng. de IA Júnior','Você não coleciona aulas — constrói uma identidade: alguém que estuda todos os dias.'],
+ [1200,'Eng. de IA Pleno','Habilidade é liberdade. Cada nível amplia o que você pode escolher fazer da própria vida.'],
+ [1800,'Eng. de IA Sênior','Quem ensina aprende duas vezes. Compartilhar o que você sabe consolida quem você é.'],
+ [2500,'Staff AI Engineer','O estudo deixou de ser esforço: virou parte de quem você é. E isso ninguém tira.']];
 const INTERVALOS=[1,3,7,14,30]; // dias por caixa (Leitner)
+
+/* ===== sistema de crescimento (loops diário / semanal / temporada) ===== */
+const LIGAS=[['🪨','Ferro'],['🥉','Bronze'],['🥈','Prata'],['🥇','Ouro'],['💠','Platina'],['💚','Esmeralda'],['💎','Diamante'],['🔱','Mestre'],['👑','Desafiante']];
+const PL_SOBE=150,PL_MANTEM=60; // PL (XP da semana) p/ promoção · permanência
+const MISSOES=[['📖','Concluir 1 aula',1],['🃏','Revisar 5 flashcards',5],['🧠','Acertar 3 questões de quiz',3]];
+const TIER_XP=60,TIERS=20; // passe da temporada: 20 tiers × 60 XP
+const TITULOS_RAROS=['Incansável','Mente Blindada','Caça-Conhecimento','Forja Viva'];
+const PILULAS=[ // por que estudar importa — 1 por dia, no painel
+ 'Testar-se é aprender duas vezes: cada lembrança recuperada volta mais forte.',
+ 'O cérebro que você leva pra cama hoje é fisicamente diferente do que acordou. Estudar esculpe sinapses.',
+ '20 minutos hoje valem mais que 3 horas no domingo: o sono consolida o que o dia planta.',
+ 'Se está fácil demais, não está mudando você. Dificuldade na medida certa é o sinal do crescimento.',
+ 'Aprender é o único investimento que ninguém pode confiscar.',
+ 'Constância vence talento — o talento tira dias de folga.',
+ 'Cada erro em quiz agora é um erro a menos numa entrevista depois.',
+ 'Você estuda para ter opções. Opções são a forma prática da liberdade.',
+ 'Habilidade nova = versão nova de você. O resto é changelog.',
+ 'A IA não substitui quem aprende rápido — multiplica.',
+ 'Explicar em voz alta é o teste final: se você não explica, ainda não aprendeu.',
+ 'O futuro pertence a quem transforma curiosidade em rotina.',
+ 'Progresso pequeno e visível todo dia sustenta mais que qualquer promessa grande.',
+ 'Estudar é dizer ao seu futuro eu: eu me importo com você.'];
+const TEMPORADAS={ // mês → [nome, princípio]; renova todo dia 1º (fresh-start effect)
+ 1:['Temporada do Recomeço','Todo dia 1º é uma página em branco — o cérebro adora marcos.'],
+ 2:['Temporada da Disciplina','Motivação começa; disciplina termina.'],
+ 3:['Temporada das Raízes','Fundamentos profundos seguram árvores altas.'],
+ 4:['Temporada da Semente','O que você planta em silêncio, colhe em público.'],
+ 5:['Temporada do Ritmo','Não é correr: é nunca parar.'],
+ 6:['Temporada da Travessia','Metade do ano, metade da ponte — continue andando.'],
+ 7:['Temporada da Forja','Ferramentas se compram. Habilidades se forjam, um dia de cada vez.'],
+ 8:['Temporada da Escalada','Olhe para trás só para medir a subida.'],
+ 9:['Temporada da Colheita','Revisar é colher o que você plantou.'],
+ 10:['Temporada da Prova','Projetos são a prova de que o estudo virou habilidade.'],
+ 11:['Temporada da Ponte','Cada módulo conecta quem você era a quem você será.'],
+ 12:['Temporada do Legado','O conhecimento que você constrói agora trabalha por você para sempre.']};
 
 /* ================= ESTADO ================= */
 /* Contas de aluno — 100% locais (site estático, sem servidor).
@@ -566,19 +637,133 @@ const sha=async t=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',new T
 const SKEY=USER?'academia:u:'+USER:'academia'; // sem conta = modo visitante (chave antiga)
 const S=Object.assign({name:'',lessons:{},proj:{},quiz:{},cards:{},xp:0,days:[],reviews:0},
   JSON.parse(localStorage.getItem(SKEY)||'{}'));
+/* g = estado do sistema de crescimento (dia, semana/liga, temporada/passe) */
+S.g=Object.assign({d:'',m:[0,0,0],fv:'',bau:'',boost:'',wk:'',pl:0,liga:0,shields:0,sdays:[],
+  w:{l:0,c:0,x:0},lw:null,se:'',sxp:0,tier:0,titles:[],title:''},S.g||{});
 const save=()=>localStorage.setItem(SKEY,JSON.stringify(S));
 const hoje=()=>new Date().toISOString().slice(0,10);
 
+/* ===== motor de crescimento ===== */
+const amanha=()=>new Date(new Date(hoje()).getTime()+864e5).toISOString().slice(0,10);
+const wkey=s=>{const d=new Date(s+'T12:00:00Z');d.setUTCDate(d.getUTCDate()-(d.getUTCDay()+6)%7);return d.toISOString().slice(0,10);}; // segunda-feira da semana
+const ganha=n=>{S.xp+=n;S.g.pl+=n;S.g.sxp+=n;S.g.w.x+=n;};
+const misDone=()=>S.g.m.every((v,i)=>v>=MISSOES[i][2]);
+
+function rollo(){ // virada de dia/semana/temporada — idempotente, roda antes de qualquer mutação
+  const t=hoje();
+  if(S.g.d===t)return;
+  // escudos: só cobrem a ausência se derem conta do buraco inteiro (senão o streak morre e os escudos ficam)
+  const todos=[...S.days,...S.g.sdays].sort(),ult=todos[todos.length-1];
+  if(ult&&ult<t){
+    const gap=Math.round((new Date(t)-new Date(ult))/864e5)-1;
+    if(gap>0&&gap<=S.g.shields){
+      const d=new Date(ult+'T12:00:00Z');
+      for(let i=0;i<gap;i++){d.setUTCDate(d.getUTCDate()+1);S.g.sdays.push(d.toISOString().slice(0,10));S.g.shields--;}
+      setTimeout(()=>toast(`🛡️ ${gap===1?'Um escudo se sacrificou':gap+' escudos se sacrificaram'} — seu streak sobreviveu!`),600);
+    }
+  }
+  // virada de semana: avalia a liga com o PL da semana encerrada
+  const w=wkey(t);
+  if(S.g.wk&&S.g.wk!==w){
+    const pl=S.g.pl;let res='';
+    if(pl>=PL_SOBE&&S.g.liga<LIGAS.length-1){S.g.liga++;res='promo';}
+    else if(pl<PL_MANTEM&&S.g.liga>0){S.g.liga--;res='queda';} // ponytail: 1 divisão por virada, mesmo após semanas fora
+    S.g.lw=S.g.w;S.g.w={l:0,c:0,x:0};S.g.pl=0;
+    const L=LIGAS[S.g.liga];
+    if(res==='promo')setTimeout(()=>cerimonia(L[0],'Promoção: liga '+L[1],'Uma semana de constância te fez subir. Constância é a habilidade por trás de todas as outras.'),500);
+    else if(res==='queda')setTimeout(()=>toast(`Você caiu para ${L[0]} ${L[1]} — uma semana boa te traz de volta 💪`),500);
+  }
+  S.g.wk=w;
+  // virada de temporada (todo dia 1º): recomeço limpo
+  const se=t.slice(0,7);
+  if(S.g.se&&S.g.se!==se){
+    S.g.sxp=0;S.g.tier=0;
+    const T=TEMPORADAS[+se.slice(5)];
+    setTimeout(()=>cerimonia('🌱','Nova temporada: '+T[0],T[1]+' O passe recomeçou — 20 tiers esperam por você.'),1200);
+  }
+  S.g.se=se;
+  // novo dia: missões zeradas
+  S.g.d=t;S.g.m=[0,0,0];
+  save();
+}
+
+function mission(i){ // progresso das missões diárias (0=aula, 1=cards, 2=quiz)
+  rollo();
+  if(S.g.m[i]>=MISSOES[i][2])return;
+  S.g.m[i]++;save();
+  if(S.g.m[i]===MISSOES[i][2]){
+    toast(`✅ Missão cumprida: ${MISSOES[i][1]}`);
+    if(misDone()&&S.g.bau!==hoje())setTimeout(()=>toast('🎁 Missões do dia completas — seu baú te espera no Painel!'),2800);
+  }
+}
+
+function checarTier(){ // passe da temporada: prêmios automáticos ao cruzar cada tier
+  while(S.g.tier<TIERS&&S.g.sxp>=TIER_XP*(S.g.tier+1)){
+    S.g.tier++;
+    toast(`🎫 Passe — tier ${S.g.tier}/${TIERS}: ${premioTier(S.g.tier)}`);
+  }
+}
+function premioTier(t){
+  const nome=(TEMPORADAS[+S.g.se.slice(5)]||TEMPORADAS[1])[0];
+  if(t===20){const ti='Lenda · '+nome;if(!S.g.titles.includes(ti))S.g.titles.push(ti);return '🏆 título '+ti;}
+  if([3,8,13,18].includes(t)){if(S.g.shields<2){S.g.shields++;return '🛡️ escudo de streak';}ganha(20);return '+20 XP (escudos no máx.)';}
+  if([5,10,15].includes(t)){S.g.boost=amanha();return '🎁 XP em dobro amanhã';}
+  ganha(15);return '+15 XP';
+}
+
+window.abrirBau=()=>{ // recompensa variável do loop diário
+  rollo();
+  if(!misDone()||S.g.bau===hoje())return;
+  S.g.bau=hoje();
+  const r=Math.random();let ic,tt,tx;
+  if(r<.35){ganha(25);ic='⭐';tt='+25 XP';tx='Bônus direto pelo dia completo de estudo.';}
+  else if(r<.6){S.g.boost=amanha();ic='🎁';tt='XP em dobro amanhã';tx='Volte amanhã: cada atividade valerá o dobro.';}
+  else if(r<.85&&S.g.shields<2){S.g.shields++;ic='🛡️';tt='Escudo de streak';tx='Se você faltar um dia, o escudo se sacrifica no seu lugar. Máximo de 2.';}
+  else{const disp=TITULOS_RAROS.filter(t=>!S.g.titles.includes(t));
+    if(disp.length){const t=disp[Math.floor(Math.random()*disp.length)];S.g.titles.push(t);if(!S.g.title)S.g.title=t;
+      ic='🏵️';tt='Título raro: '+t;tx='Equipe seus títulos na aba Crescimento.';}
+    else{ganha(40);ic='⭐';tt='+40 XP';tx='Sua coleção de títulos está completa — convertido em XP.';}}
+  checarTier();save();renderHeader();render();cerimonia(ic,'Baú de estudo · '+tt,tx);
+};
+
+window.equipar=t=>{S.g.title=S.g.title===t?'':t;save();vCrescimento();};
+
+function cerimonia(ic,tt,tx){ // juice: modal + confete p/ momentos de conquista
+  confete();
+  const o=document.createElement('div');o.className='ceremony';
+  o.innerHTML=`<div class="card"><div style="font-size:3.4rem">${ic}</div>
+    <h2 class="serif" style="color:var(--navy);margin:8px 0">${tt}</h2>
+    <p class="mut" style="margin-bottom:16px">${tx}</p>
+    <button class="btn gold">Continuar jornada →</button></div>`;
+  o.querySelector('button').onclick=()=>o.remove();
+  o.onclick=e=>{if(e.target===o)o.remove();};
+  document.body.appendChild(o);
+}
+function confete(){
+  const cores=['#8C1515','#C9A227','#185c52','#315c8c','#b26f1b'];
+  for(let i=0;i<30;i++){const s=document.createElement('i');s.className='confete';
+    s.style.cssText=`left:${Math.random()*100}vw;background:${cores[i%cores.length]};animation-duration:${2+Math.random()*1.5}s;animation-delay:${Math.random()*.5}s`;
+    document.body.appendChild(s);setTimeout(()=>s.remove(),4500);}
+}
+
 function addXP(n,msg){
-  S.xp+=n;
+  rollo();
+  const extras=[];
+  if(S.g.fv!==hoje()){S.g.fv=hoje();n*=2;extras.push('⚔️ 1ª vitória do dia: x2');}
+  if(S.g.boost===hoje()){n*=2;extras.push('🎁 baú: x2');}
+  const antes=nivel().cur[0];
+  ganha(n);
   if(!S.days.includes(hoje()))S.days.push(hoje());
+  checarTier();
   save();renderHeader();
-  if(msg)toast(`+${n} XP · ${msg}`);
+  if(msg)toast(`+${n} XP · ${msg}${extras.length?' · '+extras.join(' · '):''}`);
+  const {cur}=nivel();
+  if(cur[0]>antes)setTimeout(()=>cerimonia('🎓','Novo nível: '+cur[1],cur[2]||''),700);
 }
 function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2600);}
 
 function streak(){
-  const set=new Set(S.days);let d=new Date(),n=0;
+  const set=new Set([...S.days,...S.g.sdays]);let d=new Date(),n=0; // sdays = dias cobertos por escudo
   if(!set.has(hoje()))d.setDate(d.getDate()-1); // streak sobrevive até o fim do dia
   while(set.has(d.toISOString().slice(0,10))){n++;d.setDate(d.getDate()-1);}
   return n;
@@ -628,6 +813,10 @@ function badgesList(){
     ['🔥','Streak 7 dias',streak()>=7],
     ['🧠','50 revisões',S.reviews>=50],
     ['👑','Formatura',modsDone.every(Boolean)],
+    ['⚡','Streak 30 dias',streak()>=30],
+    ['🥇','Liga Ouro+',S.g.liga>=3],
+    ['🏵️','1º título',S.g.titles.length>0],
+    ['🎫','Passe completo',S.g.tier>=TIERS],
   ];
 }
 
@@ -635,7 +824,11 @@ function badgesList(){
 const app=document.getElementById('app');
 
 function vPainel(){
+  rollo();
   const {cur,next}=nivel(),due=dueCards().length,pct=totalPct();
+  const st=streak(),hojeOk=S.days.includes(hoje()),L=LIGAS[S.g.liga];
+  const hrs=Math.max(1,Math.ceil((new Date(hoje()+'T00:00:00Z').getTime()+864e5-Date.now())/36e5));
+  const pil=PILULAS[Math.floor(Date.now()/864e5)%PILULAS.length];
   // próxima ação: primeira aula pendente do primeiro módulo incompleto
   let nx=null;
   for(let i=0;i<MODS.length&&!nx;i++){
@@ -644,9 +837,36 @@ function vPainel(){
       nx={mi:i,txt:li>=0?MODS[i].aulas[li][1]:(S.quiz['m'+i]==null?'Fazer o quiz':'Concluir o projeto')};}
   }
   app.innerHTML=`
+  <section class="hoje noprint">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
+        <h3 class="serif" style="color:var(--navy)">⚔️ Missões de hoje</h3>
+        <span class="chip ${S.g.fv===hoje()?'':'gold'}">${S.g.fv===hoje()?'1ª vitória ✓':'1ª vitória do dia: XP em dobro'}</span></div>
+      <div style="margin-top:8px">
+        <div class="missao ok"><span>🏛️</span><span class="mt">Entrar no campus</span><span class="mp">1/1</span></div>
+        ${MISSOES.map((m,i)=>`<div class="missao ${S.g.m[i]>=m[2]?'ok':''}"><span>${m[0]}</span><span class="mt">${m[1]}</span><span class="mp">${Math.min(S.g.m[i],m[2])}/${m[2]}</span></div>`).join('')}
+      </div>
+      ${misDone()?(S.g.bau===hoje()
+        ?'<p class="mut" style="margin-top:10px;font-size:.85rem">🎁 Baú de hoje aberto — o próximo chega amanhã.</p>'
+        :'<button class="btn gold" style="margin-top:12px" onclick="abrirBau()">🎁 Abrir o baú de estudo</button>')
+        :'<p class="mut" style="margin-top:10px;font-size:.82rem">Complete as 3 missões e o baú do dia se abre 🎁</p>'}
+      <div class="pilula">${pil}</div>
+    </div>
+    <div class="card">
+      <h3 class="serif" style="color:var(--navy)">${L[0]} Liga ${L[1]}</h3>
+      <div style="display:flex;justify-content:space-between;font-size:.78rem;margin:10px 0 6px"><span>PL da semana</span><b>${S.g.pl} / ${PL_SOBE}</b></div>
+      <div class="bar gold"><i style="width:${Math.min(100,Math.round(100*S.g.pl/PL_SOBE))}%"></i></div>
+      <small class="mut">${S.g.pl>=PL_SOBE?'promoção garantida no fim da semana 🏆':S.g.pl>=PL_MANTEM?`liga defendida — faltam ${PL_SOBE-S.g.pl} PL para subir`:`abaixo de ${PL_MANTEM} PL no domingo você cai de liga`}</small>
+      ${hojeOk?`<p style="margin-top:12px;font-size:.88rem;color:var(--ok)">✅ Streak de ${st} dia${st===1?'':'s'} protegido por hoje${S.g.shields?` · 🛡️×${S.g.shields}`:''}</p>`
+        :st>0?`<div class="aviso" style="margin-top:12px">🔥 Seu streak de <b>${st} dia${st===1?'':'s'}</b> termina em ~${hrs}h${S.g.shields?` — 🛡️×${S.g.shields} de reserva`:' e você está sem escudo'}. Uma aula resolve.</div>`
+        :'<p class="mut" style="margin-top:12px;font-size:.88rem">Comece um streak hoje — a constância é o jogo. 🔥</p>'}
+      ${S.g.boost===hoje()?'<p style="margin-top:8px;font-size:.85rem;color:var(--amber);font-weight:700">🎁 XP em dobro ativo hoje!</p>':''}
+      <a href="#/crescimento" style="display:inline-block;margin-top:12px;font-size:.85rem;font-weight:700">Ver sistema de crescimento →</a>
+    </div>
+  </section>
   <section class="card hero">
     <div class="hero-content">
-      <div class="eyebrow">${S.name?`Bom ter você de volta, ${S.name}`:'Sua jornada em Engenharia de IA'}</div>
+      <div class="eyebrow">${S.name?`Bom ter você de volta, ${S.name}`:'Sua jornada em Engenharia de IA'}${S.g.title?` · 🏵️ ${S.g.title}`:''}</div>
       <h2>${pct===100?'Você construiu uma nova trajetória.':'Transforme constância em uma carreira que você constrói.'}</h2>
       <p>Continue de onde parou, entregue projetos reais e avance do fundamento ao deploy — um passo visível por dia.</p>
       <div class="hero-actions">
@@ -741,7 +961,8 @@ window.matricular=()=>{
 
 window.tickLesson=(i,j,v)=>{
   S.lessons['m'+i][j]=v;save();
-  if(v)addXP(10,'aula concluída');else{S.xp=Math.max(0,S.xp-10);save();renderHeader();}
+  if(v){addXP(10,'aula concluída');mission(0);S.g.w.l++;save();}
+  else{S.xp=Math.max(0,S.xp-10);save();renderHeader();}
   vMod(i);
 };
 window.tickProj=(i,v)=>{
@@ -841,7 +1062,7 @@ function vQuiz(){
 window.answer=(j,ok)=>{
   const m=MODS[Q.mi],[,,,exp]=m.quiz[Q.idx];
   document.querySelectorAll('.qopt').forEach((b,k)=>{b.disabled=true;if(k===ok)b.classList.add('ok');else if(k===j)b.classList.add('err');});
-  if(j===ok)Q.score++;
+  if(j===ok){Q.score++;mission(2);}
   document.getElementById('fb').innerHTML=`
     <div class="explain"><b>${j===ok?'✓ Correto!':'✗ Não foi dessa vez.'}</b> ${exp}</div>
     <button class="btn" style="margin-top:12px" onclick="Q.idx++;vQuiz()">${Q.idx+1<m.quiz.length?'Próxima →':'Ver resultado'}</button>`;
@@ -884,7 +1105,7 @@ window.grade=okv=>{
   const c=R.fila[R.i],k=`m${c.mi}c${c.ci}`,st=S.cards[k]||{b:0};
   st.b=okv?Math.min(st.b+1,INTERVALOS.length-1):0;
   const d=new Date();d.setDate(d.getDate()+INTERVALOS[st.b]);st.d=d.toISOString().slice(0,10);
-  S.cards[k]=st;save();
+  S.cards[k]=st;S.g.w.c++;save();mission(1);
   if(okv)R.ok++;R.i++;R.flip=false;vRevisao();
 };
 
@@ -895,7 +1116,7 @@ function vSync(){
   <div class="grid g2">
     <div class="card">
       <h3 class="serif" style="color:var(--navy)">📤 Enviar deste aparelho</h3>
-      <p class="mut" style="margin:8px 0;font-size:.92rem">Gere o código e mande para você mesmo (WhatsApp, e-mail, bloco de notas). Ele carrega todo o seu progresso: aulas, quizzes, flashcards, XP e streak.</p>
+      <p class="mut" style="margin:8px 0;font-size:.92rem">Gere o código e mande para você mesmo (WhatsApp, e-mail, bloco de notas). Ele carrega todo o seu progresso: aulas, quizzes, flashcards, XP, streak, liga e temporada.</p>
       <button class="btn" onclick="exportarSync()">Gerar e copiar código</button>
       <textarea id="expcode" class="synccode" readonly style="display:none" onclick="this.select()"></textarea>
     </div>
@@ -927,6 +1148,17 @@ window.importarSync=()=>{
   S.xp=Math.max(S.xp,dados.xp||0);
   S.days=[...new Set([...S.days,...(dados.days||[])])].sort();
   S.reviews=Math.max(S.reviews,dados.reviews||0);
+  if(dados.g){const a=S.g,b=dados.g; // crescimento: dia/semana/temporada mais recentes vencem; coleções se unem
+    if((b.d||'')>(a.d||'')){a.d=b.d;a.m=b.m||[0,0,0];a.fv=b.fv||'';a.bau=b.bau||'';}
+    if((b.wk||'')>(a.wk||'')){a.wk=b.wk;a.pl=b.pl||0;a.w=b.w||{l:0,c:0,x:0};a.lw=b.lw||a.lw;}
+    else if(b.wk===a.wk){a.pl=Math.max(a.pl,b.pl||0);['l','c','x'].forEach(k=>a.w[k]=Math.max(a.w[k]||0,(b.w||{})[k]||0));}
+    if((b.se||'')>(a.se||'')){a.se=b.se;a.sxp=b.sxp||0;a.tier=b.tier||0;}
+    else if(b.se===a.se){a.sxp=Math.max(a.sxp,b.sxp||0);a.tier=Math.max(a.tier,b.tier||0);}
+    a.liga=Math.max(a.liga,b.liga||0);a.shields=Math.max(a.shields,b.shields||0);
+    if((b.boost||'')>(a.boost||''))a.boost=b.boost;
+    a.sdays=[...new Set([...a.sdays,...(b.sdays||[])])].sort();
+    a.titles=[...new Set([...a.titles,...(b.titles||[])])];
+    if(!a.title)a.title=b.title||'';}
   if(!S.name&&dados.name)S.name=dados.name;
   save();renderHeader();toast('Progresso mesclado! ✅');location.hash='#/painel';
 };
@@ -954,11 +1186,71 @@ function vCert(){
   ${pronto?'':`<p class="mut noprint" style="text-align:center;margin-top:12px">Complete 100% do programa para remover a marca d'água. Faltam ${100-pct} pontos percentuais — você chega lá. 💪</p>`}`;
 }
 
+/* ---------- crescimento ---------- */
+function vCrescimento(){
+  rollo();
+  const T=TEMPORADAS[+S.g.se.slice(5)]||TEMPORADAS[new Date().getMonth()+1];
+  const L=LIGAS[S.g.liga],w=S.g.w,lw=S.g.lw;
+  app.innerHTML=`
+  <section class="card hero"><div class="hero-content">
+    <div class="eyebrow">Sistema de crescimento</div>
+    <h2>Você não está juntando pontos. Está construindo um cérebro.</h2>
+    <p>Cada aula reconfigura sinapses. Cada revisão protege o que você já conquistou. Cada semana de constância vira identidade: alguém que aprende. XP, ligas e temporadas só tornam visível um crescimento que já é seu — e que ninguém pode tirar.</p>
+  </div><div class="hero-photo" role="img" aria-label="Caminho de crescimento">
+    <div class="hero-quote"><q>${T[1]}</q><small>${T[0]}</small></div></div></section>
+
+  <div class="secttl"><h2>Liga semanal</h2><span class="mut">o ranked do estudo — PL = XP conquistado na semana</span></div>
+  <section class="grid g2">
+    <div class="card">
+      <div style="display:flex;align-items:center;gap:14px"><div style="font-size:2.8rem">${L[0]}</div>
+        <div><h3 class="serif" style="color:var(--navy)">Liga ${L[1]}</h3><small class="mut">${S.g.pl} PL nesta semana</small></div></div>
+      <div class="bar gold" style="margin:14px 0 6px"><i style="width:${Math.min(100,Math.round(100*S.g.pl/PL_SOBE))}%"></i></div>
+      <small class="mut">${PL_SOBE}+ PL = promoção · abaixo de ${PL_MANTEM} PL no fim da semana = rebaixamento. Semana nova, placar novo.</small>
+      <div style="margin-top:14px;display:flex;flex-wrap:wrap;gap:6px">${LIGAS.map((l,i)=>`<span class="chip ${i===S.g.liga?'gold':''}" style="${i>S.g.liga?'opacity:.4':''}">${l[0]} ${l[1]}</span>`).join('')}</div>
+    </div>
+    <div class="card">
+      <h3 class="serif" style="color:var(--navy)">👻 Duelo fantasma</h3>
+      <p class="mut" style="font-size:.88rem;margin:6px 0 10px">Seu único adversário justo: você, na semana passada.</p>
+      ${lw?`
+        <div class="duel"><b style="text-align:right">${w.l}</b><span class="mut">📖 aulas</span><span style="opacity:.6">${lw.l||0}</span></div>
+        <div class="duel"><b style="text-align:right">${w.c}</b><span class="mut">🃏 revisões</span><span style="opacity:.6">${lw.c||0}</span></div>
+        <div class="duel"><b style="text-align:right">${w.x}</b><span class="mut">⭐ XP</span><span style="opacity:.6">${lw.x||0}</span></div>
+        <p style="margin-top:10px;font-size:.9rem;font-weight:700;color:${w.x>=(lw.x||0)?'var(--ok)':'var(--err)'}">${w.x>(lw.x||0)?'Você está vencendo seu fantasma 🏆':w.x===(lw.x||0)?'Empate técnico — desempate na próxima aula':'Seu fantasma está na frente — ainda dá tempo'}</p>
+        <small class="mut">esquerda = esta semana · direita = semana passada</small>`
+        :'<p class="mut">Complete sua primeira semana de estudo para invocar seu fantasma.</p>'}
+    </div>
+  </section>
+
+  <div class="secttl"><h2>🎫 Passe da temporada — ${T[0]}</h2><span class="mut">${S.g.sxp} XP na temporada · tier ${S.g.tier}/${TIERS} · renova todo dia 1º</span></div>
+  <div class="card">
+    <div class="pass">${Array.from({length:TIERS},(_,i)=>{const t=i+1,ic=t===20?'🏆':[3,8,13,18].includes(t)?'🛡️':[5,10,15].includes(t)?'🎁':'⭐';
+      return `<div class="tier ${S.g.tier>=t?'on':S.g.tier+1===t?'':'off'}"><span>${ic}</span><small>tier ${t}<br>${t*TIER_XP} XP</small></div>`;}).join('')}</div>
+    <div class="bar gold"><i style="width:${Math.min(100,Math.round(100*S.g.sxp/(TIERS*TIER_XP)))}%"></i></div>
+    <small class="mut">Todo XP do mês avança o passe. Prêmios entram sozinhos ao cruzar cada tier — o tier 20 guarda o título da temporada.</small>
+  </div>
+
+  <div class="secttl"><h2>🏵️ Títulos</h2><span class="mut">raros de baú e lendas de temporada — clique para equipar</span></div>
+  <div class="card">${S.g.titles.length
+    ?S.g.titles.map(t=>`<span class="titulo-chip ${S.g.title===t?'eq':''}" onclick="equipar('${t.replace(/'/g,"\\'")}')">${S.g.title===t?'✓ ':''}${t}</span>`).join('')
+    :'<p class="mut">Nenhum ainda. Baús diários escondem 4 títulos raros; o tier 20 do passe guarda a lenda da temporada.</p>'}</div>
+
+  <div class="secttl"><h2>A escada do crescimento</h2><span class="mut">cada nível carrega um princípio — porque estudar é sobre quem você se torna</span></div>
+  <div class="grid g2">${NIVEIS.map(nv=>`<div class="card" style="${S.xp>=nv[0]?'':'opacity:.55'}">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><b class="serif" style="color:var(--navy)">${S.xp>=nv[0]?'✓ ':''}${nv[1]}</b><span class="chip ${S.xp>=nv[0]?'ok':''}">${nv[0]} XP</span></div>
+    <p class="mut" style="margin-top:8px;font-size:.9rem">${nv[2]}</p></div>`).join('')}</div>`;
+}
+
 /* ================= ROUTER ================= */
 function renderHeader(){
   document.getElementById('hxp').textContent=S.xp;
   document.getElementById('hstreak').textContent=streak();
-  document.getElementById('hlevel').textContent=nivel().cur[1];
+  document.getElementById('hshield').textContent=S.g.shields?` · 🛡️${S.g.shields}`:'';
+  document.getElementById('hliga').textContent=`${LIGAS[S.g.liga][0]} ${LIGAS[S.g.liga][1]}`;
+  const {cur,next}=nivel();
+  document.getElementById('hlevel').textContent=cur[1];
+  const hb=document.getElementById('hbar');
+  hb.title=next?`${cur[1]} — faltam ${next[0]-S.xp} XP para ${next[1]}`:'Nível máximo alcançado';
+  hb.querySelector('i').style.width=(next?Math.round(100*(S.xp-cur[0])/(next[0]-cur[0])):100)+'%';
   const ini=(S.name||USER).trim().split(/[\s._-]+/).map(w=>w[0]).slice(0,2).join('').toUpperCase();
   document.getElementById('havatar').textContent=ini||'IA';
   updDue();
@@ -972,6 +1264,7 @@ function render(){
   else if(v==='mod')vMod(+arg||0);
   else if(v==='quiz')vQuiz();
   else if(v==='revisao'){if(R.feito)R={};vRevisao();}
+  else if(v==='crescimento')vCrescimento();
   else if(v==='sync')vSync();
   else if(v==='certificado')vCert();
   else if(v==='conta')vConta();
@@ -989,7 +1282,7 @@ addEventListener('keydown',e=>{ // atalhos da revisão: espaço vira, 1 errei, 2
   else if(R.flip&&e.key==='2')grade(true);
 });
 window.addEventListener('hashchange',render);
-renderHeader();render();
+rollo();renderHeader();render();
 </script>
 </body>
 </html>
