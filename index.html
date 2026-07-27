@@ -645,7 +645,8 @@ const ROTAS=[ // rumo da temporada: uma escolha, um mês — autonomia sustenta 
 /* ================= ESTADO ================= */
 /* Contas de aluno — 100% locais (site estático, sem servidor).
    ponytail: senha vira SHA-256 no navegador; protege de olhares casuais, não é auth real.
-   Auth de verdade (multi-aparelho) exige backend — até lá, a aba Sincronizar cobre. */
+   Sync entre aparelhos = link manual (aba Sincronizar), com contadores por aparelho
+   p/ o merge somar XP dos dois lados; auto-sync de verdade exige backend. */
 const USERS=JSON.parse(localStorage.getItem('academia_users')||'{}');
 let USER=localStorage.getItem('academia_sessao')||'';
 if(USER&&!USERS[USER]){USER='';localStorage.removeItem('academia_sessao');}
@@ -656,11 +657,13 @@ const limpo=s=>String(s||'').replace(/[<>&"']/g,'').trim().slice(0,60);
 const titOk=t=>TITULOS_RAROS.includes(t)||Object.values(TEMPORADAS).some(x=>t==='Lenda · '+x[0]);
 
 const SKEY=USER?'academia:u:'+USER:'academia'; // sem conta = modo visitante (chave antiga)
-const S=Object.assign({name:'',lessons:{},proj:{},quiz:{},cards:{},xp:0,days:[],reviews:0},
+const DEV=localStorage.getItem('academia_dev')||Math.random().toString(36).slice(2,8);
+localStorage.setItem('academia_dev',DEV); // id deste aparelho — cada um só escreve o próprio contador *By
+const S=Object.assign({name:'',lessons:{},proj:{},quiz:{},cards:{},xp:0,days:[],reviews:0,xpBy:{}},
   JSON.parse(localStorage.getItem(SKEY)||'{}'));
 /* g = estado do sistema de crescimento (dia, semana/liga, temporada/passe) */
-S.g=Object.assign({d:'',m:[0,0,0],fv:'',bau:'',boost:'',wk:'',pl:0,liga:0,shields:0,sdays:[],
-  w:{l:0,c:0,x:0},lw:null,se:'',sxp:0,tier:0,titles:[],title:'',aug:-1,rota:-1},S.g||{});
+S.g=Object.assign({d:'',m:[0,0,0],fv:'',bau:'',boost:'',wk:'',pl:0,plBy:{},liga:0,shields:0,sdays:[],
+  w:{l:0,c:0,x:0},lw:null,se:'',sxp:0,sxpBy:{},tier:0,titles:[],title:'',aug:-1,rota:-1},S.g||{});
 S.name=limpo(S.name);S.g.titles=S.g.titles.filter(titOk);if(!titOk(S.g.title))S.g.title=''; // auto-higieniza estado legado/importado
 const save=()=>localStorage.setItem(SKEY,JSON.stringify(S));
 const hoje=()=>new Date().toISOString().slice(0,10);
@@ -668,7 +671,8 @@ const hoje=()=>new Date().toISOString().slice(0,10);
 /* ===== motor de crescimento ===== */
 const amanha=()=>new Date(new Date(hoje()).getTime()+864e5).toISOString().slice(0,10);
 const wkey=s=>{const d=new Date(s+'T12:00:00Z');d.setUTCDate(d.getUTCDate()-(d.getUTCDay()+6)%7);return d.toISOString().slice(0,10);}; // segunda-feira da semana
-const ganha=n=>{S.xp+=n;S.g.pl+=n;S.g.sxp+=n;S.g.w.x+=n;};
+const ganha=n=>{S.xp+=n;S.g.pl+=n;S.g.sxp+=n;S.g.w.x+=n;
+  S.xpBy[DEV]=(S.xpBy[DEV]||0)+n;S.g.plBy[DEV]=(S.g.plBy[DEV]||0)+n;S.g.sxpBy[DEV]=(S.g.sxpBy[DEV]||0)+n;};
 const misDone=()=>S.g.m.every((v,i)=>v>=MISSOES[i][2]);
 
 function rollo(){ // virada de dia/semana/temporada — idempotente, roda antes de qualquer mutação
@@ -690,7 +694,7 @@ function rollo(){ // virada de dia/semana/temporada — idempotente, roda antes 
     const pl=S.g.pl;let res='';
     if(pl>=PL_SOBE&&S.g.liga<LIGAS.length-1){S.g.liga++;res='promo';}
     else if(pl<PL_MANTEM&&S.g.liga>0){S.g.liga--;res='queda';} // ponytail: 1 divisão por virada, mesmo após semanas fora
-    S.g.lw=S.g.w;S.g.w={l:0,c:0,x:0};S.g.pl=0;
+    S.g.lw=S.g.w;S.g.w={l:0,c:0,x:0};S.g.pl=0;S.g.plBy={};
     const L=LIGAS[S.g.liga];
     if(res==='promo')setTimeout(()=>cerimonia(L[0],'Promoção: liga '+L[1],'Uma semana de constância te fez subir. Constância é a habilidade por trás de todas as outras.'),500);
     else if(res==='queda')setTimeout(()=>toast(`Você caiu para ${L[0]} ${L[1]} — uma semana boa te traz de volta 💪`),500);
@@ -699,7 +703,7 @@ function rollo(){ // virada de dia/semana/temporada — idempotente, roda antes 
   // virada de temporada (todo dia 1º): recomeço limpo
   const se=t.slice(0,7);
   if(S.g.se&&S.g.se!==se){
-    S.g.sxp=0;S.g.tier=0;S.g.rota=-1;
+    S.g.sxp=0;S.g.sxpBy={};S.g.tier=0;S.g.rota=-1;
     const T=TEMPORADAS[+se.slice(5)];
     setTimeout(()=>cerimonia('🌱','Nova temporada: '+T[0],T[1]+' O passe recomeçou — 20 tiers esperam por você.'),1200);
   }
@@ -1031,7 +1035,8 @@ window.tickLesson=(i,j,v)=>{
 };
 window.tickProj=(i,v)=>{
   S.proj['m'+i]=v;save();
-  if(v)addXP(100,'projeto entregue! 🚀','proj');else{S.xp=Math.max(0,S.xp-100);save();renderHeader();}
+  if(v)addXP(100,'projeto entregue! 🚀','proj');
+  else{const d=Math.min(100,S.xp);S.xp-=d;S.xpBy[DEV]=(S.xpBy[DEV]||0)-d;save();renderHeader();} // contador do aparelho pode ficar negativo: é o saldo líquido dele
   vMod(i);
 };
 
@@ -1180,56 +1185,76 @@ function vSync(){
   <div class="grid g2">
     <div class="card">
       <h3 class="serif" style="color:var(--navy)">📤 Enviar deste aparelho</h3>
-      <p class="mut" style="margin:8px 0;font-size:.92rem">Gere o código e mande para você mesmo (WhatsApp, e-mail, bloco de notas). Ele carrega todo o seu progresso: aulas, quizzes, flashcards, XP, streak, liga e temporada.</p>
-      <button class="btn" onclick="exportarSync()">Gerar e copiar código</button>
+      <p class="mut" style="margin:8px 0;font-size:.92rem">Gere o link e mande para você mesmo (WhatsApp, e-mail). <b>Abrir o link no outro aparelho já importa tudo sozinho</b>: aulas, quizzes, flashcards, XP, streak, liga e temporada.</p>
+      <button class="btn" onclick="exportarSync()">Gerar link e enviar</button>
       <textarea id="expcode" class="synccode" readonly style="display:none" onclick="this.select()"></textarea>
     </div>
     <div class="card">
       <h3 class="serif" style="color:var(--navy)">📥 Receber neste aparelho</h3>
-      <p class="mut" style="margin:8px 0;font-size:.92rem">Cole abaixo o código gerado no outro aparelho. A importação <b>mescla</b> os progressos — nada do que você fez aqui se perde.</p>
-      <textarea id="impcode" class="synccode" placeholder="Cole o código AIA1.… aqui"></textarea>
+      <p class="mut" style="margin:8px 0;font-size:.92rem">Recebeu o link? É só abrir. Se preferir, cole o link (ou o código) abaixo. A importação <b>mescla</b> os progressos — XP feito nos dois aparelhos é somado, nada se perde.</p>
+      <textarea id="impcode" class="synccode" placeholder="Cole o link ou o código AIA1.… aqui"></textarea>
       <button class="btn" style="margin-top:10px" onclick="importarSync()">Importar e mesclar</button>
     </div>
   </div>
-  <p class="mut" style="margin-top:14px;font-size:.88rem">💡 Como funciona: o progresso fica salvo no navegador de cada aparelho. O código é um retrato do seu progresso — gere no aparelho mais atualizado e importe no outro sempre que quiser conciliar os dois.</p>`;
+  <p class="mut" style="margin-top:14px;font-size:.88rem">💡 Como funciona: o progresso fica salvo no navegador de cada aparelho. O link é um retrato do seu progresso — gere no aparelho onde você estudou e abra no outro sempre que quiser conciliar os dois.</p>`;
 }
 window.exportarSync=async()=>{
   const code='AIA1.'+btoa(unescape(encodeURIComponent(JSON.stringify(S))));
-  const ta=document.getElementById('expcode');ta.value=code;ta.style.display='block';
-  try{await navigator.clipboard.writeText(code);toast('Código copiado! Agora cole no outro aparelho 📋');}
-  catch(e){ta.focus();ta.select();toast('Toque no código para selecionar e copiar');}
+  const url=location.href.split('#')[0]+'#s='+code;
+  const ta=document.getElementById('expcode');ta.value=url;ta.style.display='block';
+  if(navigator.share&&/Android|iPhone|iPad/i.test(navigator.userAgent)){
+    try{await navigator.share({title:'Meu progresso na Academia',url});return;}catch(e){if(e.name==='AbortError')return;}}
+  try{await navigator.clipboard.writeText(url);toast('Link copiado! Abra no outro aparelho 📋');}
+  catch(e){ta.focus();ta.select();toast('Toque no link para selecionar e copiar');}
 };
 window.importarSync=()=>{
-  const raw=document.getElementById('impcode').value.trim();
+  if(mesclar(document.getElementById('impcode').value)){renderHeader();toast('Progresso mesclado! ✅');location.hash='#/painel';}
+  else toast('Código inválido — confira se copiou inteiro 😕');
+};
+/* soma por aparelho: cada aparelho só escreve o próprio contador em *By, então o merge
+   pega o maior valor de cada contador e soma tudo — XP feito nos dois lados não se perde.
+   Estados antigos (sem *By) viram "base" comum, mesclada por max como antes. */
+const numBy=o=>{const r={};for(const k in o||{}){const v=+o[k];r[String(k).slice(0,20)]=Number.isFinite(v)?v:0;}return r;};
+const somaBy=o=>Object.values(o).reduce((a,b)=>a+b,0);
+const mesclaCtr=(av,aBy,bv,bBy)=>{
+  const A=numBy(aBy),B=numBy(bBy);
+  const base=Math.max((+av||0)-somaBy(A),(+bv||0)-somaBy(B),0);
+  const by={...A};for(const k in B)by[k]=Math.max(by[k]??-1/0,B[k]);
+  return [Math.max(0,base+somaBy(by)),by];
+};
+function mesclar(raw){ // aceita o link #s=… ou o código puro; retorna false se inválido
+  raw=String(raw||'').trim();
+  const h=raw.indexOf('#s=');if(h>=0)raw=raw.slice(h+3);
   let dados=null;
   if(raw.startsWith('AIA1.')){try{dados=JSON.parse(decodeURIComponent(escape(atob(raw.slice(5)))));}catch(e){}}
-  if(!dados){toast('Código inválido — confira se copiou inteiro 😕');return;}
+  if(!dados)return false;
   for(const k in dados.lessons||{}){const a=S.lessons[k]||[],b=dados.lessons[k]||[];
     S.lessons[k]=Array.from({length:Math.max(a.length,b.length)},(_,i)=>!!(a[i]||b[i]));}
   for(const k in dados.proj||{})S.proj[k]=S.proj[k]||dados.proj[k];
   for(const k in dados.quiz||{})S.quiz[k]=Math.max(S.quiz[k]??-1,dados.quiz[k]);
   for(const k in dados.cards||{}){const a=S.cards[k],b=dados.cards[k];if(!a||(b&&b.d>a.d))S.cards[k]=b;}
-  S.xp=Math.max(S.xp,dados.xp||0);
+  [S.xp,S.xpBy]=mesclaCtr(S.xp,S.xpBy,dados.xp,dados.xpBy);
   S.days=[...new Set([...S.days,...(dados.days||[])])].sort();
   S.reviews=Math.max(S.reviews,dados.reviews||0);
   if(dados.g){const a=S.g,b=dados.g; // crescimento: dia/semana/temporada mais recentes vencem; coleções se unem
     // o código de sync é entrada externa: só números coeridos e títulos da whitelist chegam ao innerHTML
     const numW=o=>({l:+(o&&o.l)||0,c:+(o&&o.c)||0,x:+(o&&o.x)||0});
     if((b.d||'')>(a.d||'')){a.d=b.d;a.m=(b.m||[0,0,0]).map(x=>+x||0);a.fv=b.fv||'';a.bau=b.bau||'';a.aug=AUGS[+b.aug]?+b.aug:-1;}
-    if((b.wk||'')>(a.wk||'')){a.wk=b.wk;a.pl=+b.pl||0;a.w=numW(b.w);a.lw=b.lw?numW(b.lw):a.lw;}
-    else if(b.wk===a.wk){a.pl=Math.max(a.pl,+b.pl||0);const w2=numW(b.w);['l','c','x'].forEach(k=>a.w[k]=Math.max(a.w[k]||0,w2[k]));}
-    if((b.se||'')>(a.se||'')){a.se=b.se;a.sxp=+b.sxp||0;a.tier=Math.min(TIERS,+b.tier||0);a.rota=ROTAS[+b.rota]?+b.rota:-1;}
-    else if(b.se===a.se){a.sxp=Math.max(a.sxp,+b.sxp||0);a.tier=Math.min(TIERS,Math.max(a.tier,+b.tier||0));
+    if((b.wk||'')>(a.wk||'')){a.wk=b.wk;a.pl=+b.pl||0;a.plBy=numBy(b.plBy);a.w=numW(b.w);a.lw=b.lw?numW(b.lw):a.lw;}
+    else if(b.wk===a.wk){[a.pl,a.plBy]=mesclaCtr(a.pl,a.plBy,b.pl,b.plBy);const w2=numW(b.w);['l','c','x'].forEach(k=>a.w[k]=Math.max(a.w[k]||0,w2[k]));}
+    if((b.se||'')>(a.se||'')){a.se=b.se;a.sxp=+b.sxp||0;a.sxpBy=numBy(b.sxpBy);a.tier=Math.min(TIERS,+b.tier||0);a.rota=ROTAS[+b.rota]?+b.rota:-1;}
+    else if(b.se===a.se){[a.sxp,a.sxpBy]=mesclaCtr(a.sxp,a.sxpBy,b.sxp,b.sxpBy);a.tier=Math.min(TIERS,Math.max(a.tier,+b.tier||0));
       if(a.rota===-1&&ROTAS[+b.rota])a.rota=+b.rota;}
     a.liga=Math.min(LIGAS.length-1,Math.max(a.liga,+b.liga||0));
     a.shields=Math.min(2,Math.max(a.shields,+b.shields||0));
     if((b.boost||'')>(a.boost||''))a.boost=b.boost;
     a.sdays=[...new Set([...a.sdays,...(b.sdays||[])])].sort();
     a.titles=[...new Set([...a.titles,...(b.titles||[]).filter(titOk)])];
-    if(!a.title&&titOk(b.title))a.title=b.title;}
+    if(!a.title&&titOk(b.title))a.title=b.title;
+    checarTier();} // se a soma cruzou um tier que nenhum aparelho tinha, o prêmio sai aqui (uma vez só)
   if(!S.name&&dados.name)S.name=limpo(dados.name);
-  save();renderHeader();toast('Progresso mesclado! ✅');location.hash='#/painel';
-};
+  save();return true;
+}
 
 /* ---------- certificado ---------- */
 function vCert(){
@@ -1339,6 +1364,11 @@ function renderHeader(){
 function updDue(){const n=dueCards().length;document.getElementById('ndue').textContent=n?`(${n})`:'';}
 
 function render(){
+  if(location.hash.startsWith('#s=')){ // link de sync — cobre boot E link aberto/colado com o site já em pé
+    const ok=mesclar(location.hash.slice(3));
+    history.replaceState(null,'','#/painel');
+    renderHeader();toast(ok?'Progresso do outro aparelho mesclado! ✅':'Link de sync inválido — gere um novo 😕');
+  }
   const h=location.hash||'#/painel',[,v,arg]=h.split('/');
   document.querySelectorAll('nav a[data-v]').forEach(a=>a.classList.toggle('on',a.dataset.v===v));
   if(v==='curriculo')vCurriculo();

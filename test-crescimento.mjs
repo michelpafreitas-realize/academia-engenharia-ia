@@ -16,7 +16,7 @@ const sandbox={
   document:{getElementById:()=>el(),createElement:()=>el(),querySelectorAll:()=>[],body:{appendChild(){}}},
   localStorage:{getItem:k=>store[k]??null,setItem:(k,v)=>{store[k]=String(v);},removeItem:k=>{delete store[k];}},
   location:{hash:''},addEventListener(){},scrollTo(){},setTimeout:()=>0,clearTimeout(){},
-  console,Math,Date,JSON,assert,
+  console,Math,Date,JSON,assert,atob,btoa,
 };
 sandbox.window=sandbox;sandbox.globalThis=sandbox;
 vm.createContext(sandbox);
@@ -96,6 +96,22 @@ vm.runInContext(`{
   rollo();
   assert.equal(S.g.sxp,0);assert.equal(S.g.tier,0);assert.equal(S.g.se,hoje().slice(0,7));
   assert.equal(S.g.rota,-1); // virada de temporada re-abre a escolha de rota
+
+  // sync: XP feito em dois aparelhos SOMA no merge (não faz max)
+  const cod=o=>'AIA1.'+btoa(unescape(encodeURIComponent(JSON.stringify(o))));
+  S.xp=150;S.xpBy={pc:150};
+  S.g.d=t;S.g.wk=wkey(t);S.g.pl=150;S.g.plBy={pc:150};
+  S.g.se=t.slice(0,7);S.g.sxp=150;S.g.sxpBy={pc:150};S.g.tier=4;
+  const outro={xp:90,xpBy:{cel:90},days:[t],g:{d:t,wk:wkey(t),pl:90,plBy:{cel:90},
+    se:t.slice(0,7),sxp:90,sxpBy:{cel:90},tier:0,w:{l:0,c:0,x:90},titles:[],sdays:[]}};
+  assert(mesclar('https://exemplo.dev/academia/#s='+cod(outro))); // aceita o link inteiro
+  assert.equal(S.xp,240);assert.equal(S.g.pl,240);assert.equal(S.g.sxp,240);
+  assert(mesclar(cod(outro))); // re-importar o mesmo código é idempotente
+  assert.equal(S.xp,240);assert.equal(S.g.pl,240);
+  assert(!mesclar('AIA1.lixo')); // código quebrado não derruba nem zera nada
+  assert.equal(S.xp,240);
+  assert(mesclar(cod({xp:500}))); // código antigo (sem contadores) entra como base independente
+  assert.equal(S.xp,740);
 
   // as views novas renderizam sem explodir
   vCrescimento();vPainel();
