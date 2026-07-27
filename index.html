@@ -100,6 +100,10 @@ footer{background:#292826;color:#c9c5bd;font-size:.82rem;text-align:center;paddi
 .aviso{background:var(--errbg);border:1px solid #efc9c6;border-radius:12px;padding:12px 14px;font-size:.88rem}
 .titulo-chip{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:5px 12px;margin:4px 6px 0 0;font-size:.8rem;cursor:pointer;background:#fff}
 .titulo-chip.eq{background:var(--navy);color:#fff;border-color:var(--navy)}
+.augs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
+.aug{border:1px solid var(--line);border-radius:12px;background:#fff;padding:10px 8px;text-align:center;cursor:pointer;font:inherit;transition:border-color .15s,transform .15s}
+.aug:hover{border-color:var(--navy);transform:translateY(-2px)}
+.aug span{font-size:1.5rem;display:block}.aug b{display:block;font-size:.8rem;margin:4px 0 2px;color:var(--navy)}.aug small{font-size:.68rem;color:var(--mut);line-height:1.3;display:block}
 @media(max-width:900px){.hoje{grid-template-columns:1fr}}
 @media(max-width:680px){nav .topo{flex-wrap:nowrap;overflow-x:auto}}
 </style>
@@ -623,6 +627,20 @@ const TEMPORADAS={ // mês → [nome, princípio]; renova todo dia 1º (fresh-st
  10:['Temporada da Prova','Projetos são a prova de que o estudo virou habilidade.'],
  11:['Temporada da Ponte','Cada módulo conecta quem você era a quem você será.'],
  12:['Temporada do Legado','O conhecimento que você constrói agora trabalha por você para sempre.']};
+const AUGS=[ // aumentos diários (estilo Arena): 3 opções sorteadas por dia, a escolha vale até a virada
+ ['📖','Devora-Aulas','Aulas valem o dobro hoje',{aula:2}],
+ ['🃏','Memória de Aço','Revisões valem o dobro hoje',{cards:2}],
+ ['🧠','Cabeça de Prova','Quizzes valem o dobro hoje',{quiz:2}],
+ ['🚀','Mão na Massa','Projetos valem +50% hoje',{proj:1.5}],
+ ['⚖️','Generalista','Todo XP de estudo vale +25% hoje',{all:1.25}],
+ ['🛡️','Dia Blindado','Sua primeira atividade de hoje forja 1 escudo de streak',{escudo:1}],
+ ['💰','Baú Dourado','O baú de hoje vem com +25 XP extras',{bau:1}],
+ ['⚡','Sprint','A 1ª vitória do dia vale x3 em vez de x2',{fv:3}],
+ ['🌱','Jardim Vivo','Sua primeira atividade ganha +1 XP por dia de streak',{jardim:1}]];
+const ROTAS=[ // rumo da temporada: uma escolha, um mês — autonomia sustenta persistência
+ ['🏗️','do Alicerce','Aprender com as mãos: aulas e projetos valem +40% até o fim da temporada.',{aula:1.4,proj:1.4}],
+ ['🛡️','da Guarda','Proteger o que já venceu o esquecimento: revisões valem o dobro até o fim da temporada.',{cards:2}],
+ ['🎯','do Duelo','Se testar sem medo: quizzes valem +60% até o fim da temporada.',{quiz:1.6}]];
 
 /* ================= ESTADO ================= */
 /* Contas de aluno — 100% locais (site estático, sem servidor).
@@ -642,7 +660,7 @@ const S=Object.assign({name:'',lessons:{},proj:{},quiz:{},cards:{},xp:0,days:[],
   JSON.parse(localStorage.getItem(SKEY)||'{}'));
 /* g = estado do sistema de crescimento (dia, semana/liga, temporada/passe) */
 S.g=Object.assign({d:'',m:[0,0,0],fv:'',bau:'',boost:'',wk:'',pl:0,liga:0,shields:0,sdays:[],
-  w:{l:0,c:0,x:0},lw:null,se:'',sxp:0,tier:0,titles:[],title:''},S.g||{});
+  w:{l:0,c:0,x:0},lw:null,se:'',sxp:0,tier:0,titles:[],title:'',aug:-1,rota:-1},S.g||{});
 S.name=limpo(S.name);S.g.titles=S.g.titles.filter(titOk);if(!titOk(S.g.title))S.g.title=''; // auto-higieniza estado legado/importado
 const save=()=>localStorage.setItem(SKEY,JSON.stringify(S));
 const hoje=()=>new Date().toISOString().slice(0,10);
@@ -681,13 +699,13 @@ function rollo(){ // virada de dia/semana/temporada — idempotente, roda antes 
   // virada de temporada (todo dia 1º): recomeço limpo
   const se=t.slice(0,7);
   if(S.g.se&&S.g.se!==se){
-    S.g.sxp=0;S.g.tier=0;
+    S.g.sxp=0;S.g.tier=0;S.g.rota=-1;
     const T=TEMPORADAS[+se.slice(5)];
     setTimeout(()=>cerimonia('🌱','Nova temporada: '+T[0],T[1]+' O passe recomeçou — 20 tiers esperam por você.'),1200);
   }
   S.g.se=se;
-  // novo dia: missões zeradas
-  S.g.d=t;S.g.m=[0,0,0];
+  // novo dia: missões zeradas, novo trio de aumentos para escolher
+  S.g.d=t;S.g.m=[0,0,0];S.g.aug=-1;
   save();
 }
 
@@ -727,6 +745,7 @@ window.abrirBau=()=>{ // recompensa variável do loop diário
     if(disp.length){const t=disp[Math.floor(Math.random()*disp.length)];S.g.titles.push(t);if(!S.g.title)S.g.title=t;
       ic='🏵️';tt='Título raro: '+t;tx='Equipe seus títulos na aba Crescimento.';}
     else{ganha(40);ic='⭐';tt='+40 XP';tx='Sua coleção de títulos está completa — convertido em XP.';}}
+  if(augEff().bau){ganha(25);tx+=' 💰 Baú Dourado: +25 XP extras.';}
   checarTier();save();renderHeader();render();cerimonia(ic,'Baú de estudo · '+tt,tx);
 };
 
@@ -750,10 +769,45 @@ function confete(){
     document.body.appendChild(s);setTimeout(()=>s.remove(),4500);}
 }
 
-function addXP(n,msg){
+/* ===== escolhas (aumento do dia + rota da temporada) ===== */
+const augEff=()=>(AUGS[S.g.aug]||[])[3]||{};
+function augOpcoes(){ // trio do dia: determinístico pela data (recarregar não re-rola)
+  const b=Math.floor(Date.now()/864e5)%AUGS.length;
+  return [b,(b+3)%AUGS.length,(b+7)%AUGS.length];
+}
+function multDe(t){ // multiplicador combinado das escolhas p/ um tipo de estudo
+  if(!t)return 1;
+  let m=1;const a=augEff(),r=(ROTAS[S.g.rota]||[])[3]||{};
+  if(a[t])m*=a[t];if(a.all)m*=a.all;
+  if(r[t])m*=r[t];
+  return m;
+}
+window.escolherAug=i=>{
   rollo();
-  const extras=[];
-  if(S.g.fv!==hoje()){S.g.fv=hoje();n*=2;extras.push('⚔️ 1ª vitória do dia: x2');}
+  if(S.g.aug!==-1||!augOpcoes().includes(i))return;
+  S.g.aug=i;save();
+  toast(`${AUGS[i][0]} ${AUGS[i][1]} ativo até a virada do dia!`);render();
+};
+window.escolherRota=i=>{
+  rollo();
+  if(S.g.rota!==-1||!ROTAS[i])return;
+  S.g.rota=i;save();
+  cerimonia(ROTAS[i][0],'Rota '+ROTAS[i][1],ROTAS[i][2]+' Escolha travada até o fim da temporada — compromisso também é uma mecânica.');
+  render();
+};
+
+function addXP(n,msg,tipo){
+  rollo();
+  const extras=[],ef=augEff();
+  const mul=multDe(tipo);
+  if(mul>1){n=Math.round(n*mul);extras.push('🎯 escolhas: x'+mul);}
+  if(S.g.fv!==hoje()){
+    S.g.fv=hoje();
+    const st0=streak();
+    n*=ef.fv||2;extras.push(`⚔️ 1ª vitória do dia: x${ef.fv||2}`);
+    if(ef.jardim&&st0){n+=st0;extras.push('🌱 +'+st0+' do streak');}
+    if(ef.escudo&&S.g.shields<2){S.g.shields++;extras.push('🛡️ +1 escudo');}
+  }
   if(S.g.boost===hoje()){n*=2;extras.push('🎁 baú: x2');}
   const antes=nivel().cur[0];
   ganha(n);
@@ -845,7 +899,11 @@ function vPainel(){
     <div class="card">
       <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
         <h3 class="serif" style="color:var(--navy)">⚔️ Missões de hoje</h3>
-        <span class="chip ${S.g.fv===hoje()?'':'gold'}">${S.g.fv===hoje()?'1ª vitória ✓':'1ª vitória do dia: XP em dobro'}</span></div>
+        <span style="display:flex;gap:6px;flex-wrap:wrap">${S.g.aug!==-1?`<span class="chip">${AUGS[S.g.aug][0]} ${AUGS[S.g.aug][1]}</span>`:''}<span class="chip ${S.g.fv===hoje()?'':'gold'}">${S.g.fv===hoje()?'1ª vitória ✓':'1ª vitória do dia: XP em dobro'}</span></span></div>
+      ${S.g.aug===-1?`<div style="margin-top:10px">
+        <p style="font-size:.82rem;font-weight:700">🎰 Escolha o aumento de hoje <span class="mut" style="font-weight:400">— 1 de 3, como na Arena; vale até a virada</span></p>
+        <div class="augs">${augOpcoes().map(i=>`<button class="aug" onclick="escolherAug(${i})"><span>${AUGS[i][0]}</span><b>${AUGS[i][1]}</b><small>${AUGS[i][2]}</small></button>`).join('')}</div>
+      </div>`:''}
       <div style="margin-top:8px">
         <div class="missao ok"><span>🏛️</span><span class="mt">Entrar no campus</span><span class="mp">1/1</span></div>
         ${MISSOES.map((m,i)=>`<div class="missao ${S.g.m[i]>=m[2]?'ok':''}"><span>${m[0]}</span><span class="mt">${m[1]}</span><span class="mp">${Math.min(S.g.m[i],m[2])}/${m[2]}</span></div>`).join('')}
@@ -865,6 +923,8 @@ function vPainel(){
         :st>0?`<div class="aviso" style="margin-top:12px">🔥 Seu streak de <b>${st} dia${st===1?'':'s'}</b> termina em ~${hrs}h${S.g.shields?` — 🛡️×${S.g.shields} de reserva`:' e você está sem escudo'}. Uma aula resolve.</div>`
         :'<p class="mut" style="margin-top:12px;font-size:.88rem">Comece um streak hoje — a constância é o jogo. 🔥</p>'}
       ${S.g.boost===hoje()?'<p style="margin-top:8px;font-size:.85rem;color:var(--amber);font-weight:700">🎁 XP em dobro ativo hoje!</p>':''}
+      ${S.g.rota===-1?'<p class="mut" style="margin-top:8px;font-size:.85rem">🧭 Sua rota da temporada está em aberto — escolha seu rumo na aba Crescimento.</p>'
+        :`<p style="margin-top:8px;font-size:.85rem">🧭 Rota ${ROTAS[S.g.rota][0]} <b>${ROTAS[S.g.rota][1]}</b> ativa nesta temporada</p>`}
       <a href="#/crescimento" style="display:inline-block;margin-top:12px;font-size:.85rem;font-weight:700">Ver sistema de crescimento →</a>
     </div>
   </section>
@@ -965,13 +1025,13 @@ window.matricular=()=>{
 
 window.tickLesson=(i,j,v)=>{
   S.lessons['m'+i][j]=v;save();
-  if(v){addXP(10,'aula concluída');mission(0);S.g.w.l++;save();}
+  if(v){addXP(10,'aula concluída','aula');mission(0);S.g.w.l++;save();}
   else{S.xp=Math.max(0,S.xp-10);save();renderHeader();}
   vMod(i);
 };
 window.tickProj=(i,v)=>{
   S.proj['m'+i]=v;save();
-  if(v)addXP(100,'projeto entregue! 🚀');else{S.xp=Math.max(0,S.xp-100);save();renderHeader();}
+  if(v)addXP(100,'projeto entregue! 🚀','proj');else{S.xp=Math.max(0,S.xp-100);save();renderHeader();}
   vMod(i);
 };
 
@@ -1043,7 +1103,7 @@ function vQuiz(){
   const m=MODS[Q.mi];
   if(Q.idx>=m.quiz.length){ // resultado
     const prev=S.quiz['m'+Q.mi]??-1;
-    if(Q.score>prev){const ganho=(Q.score-Math.max(prev,0))*10;S.quiz['m'+Q.mi]=Q.score;save();addXP(ganho,'novo recorde no quiz');}
+    if(Q.score>prev){const ganho=(Q.score-Math.max(prev,0))*10;S.quiz['m'+Q.mi]=Q.score;save();addXP(ganho,'novo recorde no quiz','quiz');}
     app.innerHTML=`<div class="card" style="text-align:center;max-width:560px;margin:30px auto">
       <div style="font-size:3rem">${Q.score===5?'🏆':Q.score>=3?'🎉':'📚'}</div>
       <h2 class="serif" style="color:var(--navy)">${Q.score}/5 acertos</h2>
@@ -1085,7 +1145,7 @@ function vRevisao(){
     <p class="mut" style="margin:10px 0">A repetição espaçada agenda cada card para a véspera do esquecimento. Volte amanhã — ou avance nas aulas.</p>
     <button class="btn" onclick="location.hash='#/curriculo'">Ir ao currículo</button></div>`;R={};return;}
   if(R.i>=R.fila.length){ // fim de sessão
-    const n=R.fila.length;S.reviews+=n;save();addXP(n,'sessão de revisão');
+    const n=R.fila.length;S.reviews+=n;save();addXP(n,'sessão de revisão','cards');
     app.innerHTML=`<div class="card" style="text-align:center;max-width:520px;margin:40px auto">
       <div style="font-size:2.6rem">🧠</div><h2 class="serif" style="color:var(--navy)">Sessão concluída</h2>
       <p class="mut" style="margin:10px 0">${R.ok}/${n} de primeira. Cards errados voltam mais cedo; acertados, mais tarde.</p>
@@ -1155,11 +1215,12 @@ window.importarSync=()=>{
   if(dados.g){const a=S.g,b=dados.g; // crescimento: dia/semana/temporada mais recentes vencem; coleções se unem
     // o código de sync é entrada externa: só números coeridos e títulos da whitelist chegam ao innerHTML
     const numW=o=>({l:+(o&&o.l)||0,c:+(o&&o.c)||0,x:+(o&&o.x)||0});
-    if((b.d||'')>(a.d||'')){a.d=b.d;a.m=(b.m||[0,0,0]).map(x=>+x||0);a.fv=b.fv||'';a.bau=b.bau||'';}
+    if((b.d||'')>(a.d||'')){a.d=b.d;a.m=(b.m||[0,0,0]).map(x=>+x||0);a.fv=b.fv||'';a.bau=b.bau||'';a.aug=AUGS[+b.aug]?+b.aug:-1;}
     if((b.wk||'')>(a.wk||'')){a.wk=b.wk;a.pl=+b.pl||0;a.w=numW(b.w);a.lw=b.lw?numW(b.lw):a.lw;}
     else if(b.wk===a.wk){a.pl=Math.max(a.pl,+b.pl||0);const w2=numW(b.w);['l','c','x'].forEach(k=>a.w[k]=Math.max(a.w[k]||0,w2[k]));}
-    if((b.se||'')>(a.se||'')){a.se=b.se;a.sxp=+b.sxp||0;a.tier=Math.min(TIERS,+b.tier||0);}
-    else if(b.se===a.se){a.sxp=Math.max(a.sxp,+b.sxp||0);a.tier=Math.min(TIERS,Math.max(a.tier,+b.tier||0));}
+    if((b.se||'')>(a.se||'')){a.se=b.se;a.sxp=+b.sxp||0;a.tier=Math.min(TIERS,+b.tier||0);a.rota=ROTAS[+b.rota]?+b.rota:-1;}
+    else if(b.se===a.se){a.sxp=Math.max(a.sxp,+b.sxp||0);a.tier=Math.min(TIERS,Math.max(a.tier,+b.tier||0));
+      if(a.rota===-1&&ROTAS[+b.rota])a.rota=+b.rota;}
     a.liga=Math.min(LIGAS.length-1,Math.max(a.liga,+b.liga||0));
     a.shields=Math.min(2,Math.max(a.shields,+b.shields||0));
     if((b.boost||'')>(a.boost||''))a.boost=b.boost;
@@ -1227,6 +1288,19 @@ function vCrescimento(){
         :'<p class="mut">Complete sua primeira semana de estudo para invocar seu fantasma.</p>'}
     </div>
   </section>
+
+  <div class="secttl"><h2>🧭 Rota da temporada</h2><span class="mut">estudar também é escolher — quem escolhe o próprio caminho persiste nele</span></div>
+  ${S.g.rota===-1?`<section style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px">
+    ${ROTAS.map((r,i)=>`<div class="card" style="text-align:center"><div style="font-size:2.2rem">${r[0]}</div>
+      <h3 class="serif" style="color:var(--navy);margin:6px 0">Rota ${r[1]}</h3>
+      <p class="mut" style="font-size:.88rem;margin-bottom:12px">${r[2]}</p>
+      <button class="btn" onclick="escolherRota(${i})">Seguir esta rota</button></div>`).join('')}
+  </section>`
+  :`<div class="card" style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+    <div style="font-size:2.6rem">${ROTAS[S.g.rota][0]}</div>
+    <div style="flex:1;min-width:220px"><h3 class="serif" style="color:var(--navy)">Rota ${ROTAS[S.g.rota][1]}</h3>
+      <p class="mut" style="font-size:.9rem;margin:4px 0">${ROTAS[S.g.rota][2]}</p>
+      <small class="mut">Escolha travada até o fim da temporada — compromisso também é uma mecânica. Um novo trio de rotas abre todo dia 1º.</small></div></div>`}
 
   <div class="secttl"><h2>🎫 Passe da temporada — ${T[0]}</h2><span class="mut">${S.g.sxp} XP na temporada · tier ${S.g.tier}/${TIERS} · renova todo dia 1º</span></div>
   <div class="card">

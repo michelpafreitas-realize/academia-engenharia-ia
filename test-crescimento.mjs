@@ -58,10 +58,23 @@ vm.runInContext(`{
   S.g.fv=t;addXP(200,'');
   assert.equal(S.g.tier,Math.min(20,Math.floor(S.g.sxp/60)));
 
+  // escolhas: aumento do dia (1 de 3, trava até a virada) e rota da temporada (trava até dia 1º)
+  const ops=augOpcoes();
+  assert.equal(new Set(ops).size,3);
+  escolherAug(ops[1]);
+  assert.equal(S.g.aug,ops[1]);
+  escolherAug(ops[0]);assert.equal(S.g.aug,ops[1]); // já escolhido hoje
+  escolherRota(2);
+  assert.equal(S.g.rota,2);
+  escolherRota(0);assert.equal(S.g.rota,2); // travada na temporada
+  assert(multDe('quiz')>=1.6); // rota do Duelo em vigor
+  assert.equal(multDe(),1);    // XP sem tipo (baú etc.) não recebe multiplicador
+
   // virada de semana: 150+ PL promove, <60 PL rebaixa
   S.g.wk='2000-01-03';S.g.pl=200;S.g.liga=0;S.g.d='2000-01-04';
   rollo();
   assert.equal(S.g.liga,1);assert.equal(S.g.pl,0);assert(S.g.lw&&S.g.lw.x>0);
+  assert.equal(S.g.aug,-1); // virada de dia re-abre a escolha de aumento
   S.g.wk='2000-01-03';S.g.pl=10;S.g.d='2000-01-04';
   rollo();
   assert.equal(S.g.liga,0);
@@ -82,6 +95,7 @@ vm.runInContext(`{
   S.g.se='2000-01';S.g.sxp=500;S.g.tier=8;S.g.d='2000-01-05';
   rollo();
   assert.equal(S.g.sxp,0);assert.equal(S.g.tier,0);assert.equal(S.g.se,hoje().slice(0,7));
+  assert.equal(S.g.rota,-1); // virada de temporada re-abre a escolha de rota
 
   // as views novas renderizam sem explodir
   vCrescimento();vPainel();
