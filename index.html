@@ -633,6 +633,9 @@ let USER=localStorage.getItem('academia_sessao')||'';
 if(USER&&!USERS[USER]){USER='';localStorage.removeItem('academia_sessao');}
 const saveUsers=()=>localStorage.setItem('academia_users',JSON.stringify(USERS));
 const sha=async t=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(t)))].map(b=>b.toString(16).padStart(2,'0')).join('');
+/* strings externas (nome digitado, código de sync) entram no innerHTML — saneia na entrada, nunca depois */
+const limpo=s=>String(s||'').replace(/[<>&"']/g,'').trim().slice(0,60);
+const titOk=t=>TITULOS_RAROS.includes(t)||Object.values(TEMPORADAS).some(x=>t==='Lenda · '+x[0]);
 
 const SKEY=USER?'academia:u:'+USER:'academia'; // sem conta = modo visitante (chave antiga)
 const S=Object.assign({name:'',lessons:{},proj:{},quiz:{},cards:{},xp:0,days:[],reviews:0},
@@ -640,6 +643,7 @@ const S=Object.assign({name:'',lessons:{},proj:{},quiz:{},cards:{},xp:0,days:[],
 /* g = estado do sistema de crescimento (dia, semana/liga, temporada/passe) */
 S.g=Object.assign({d:'',m:[0,0,0],fv:'',bau:'',boost:'',wk:'',pl:0,liga:0,shields:0,sdays:[],
   w:{l:0,c:0,x:0},lw:null,se:'',sxp:0,tier:0,titles:[],title:''},S.g||{});
+S.name=limpo(S.name);S.g.titles=S.g.titles.filter(titOk);if(!titOk(S.g.title))S.g.title=''; // auto-higieniza estado legado/importado
 const save=()=>localStorage.setItem(SKEY,JSON.stringify(S));
 const hoje=()=>new Date().toISOString().slice(0,10);
 
@@ -954,7 +958,7 @@ function vMod(i){
 }
 
 window.matricular=()=>{
-  const inp=document.getElementById('nome'),v=inp.value.trim();
+  const inp=document.getElementById('nome'),v=limpo(inp.value);
   if(!v){inp.focus();inp.placeholder='Digite seu nome para se matricular ✍️';return;}
   S.name=v;save();toast(`Matrícula confirmada, ${v}! 🎓`);render();
 };
@@ -1007,7 +1011,7 @@ function vConta(){
 }
 window.criarConta=async e=>{
   e.preventDefault();
-  const n=fld('cadnome'),u=fld('caduser').toLowerCase(),p=document.getElementById('cadpass').value;
+  const n=limpo(fld('cadnome')),u=fld('caduser').toLowerCase(),p=document.getElementById('cadpass').value;
   if(!/^[a-z0-9._-]{3,20}$/.test(u))return toast('Login: 3–20 caracteres, só letras, números, ponto, hífen');
   if(p.length<6)return toast('A senha precisa de pelo menos 6 caracteres');
   if(USERS[u])return toast('Esse login já existe neste navegador — tente entrar');
@@ -1149,17 +1153,20 @@ window.importarSync=()=>{
   S.days=[...new Set([...S.days,...(dados.days||[])])].sort();
   S.reviews=Math.max(S.reviews,dados.reviews||0);
   if(dados.g){const a=S.g,b=dados.g; // crescimento: dia/semana/temporada mais recentes vencem; coleções se unem
-    if((b.d||'')>(a.d||'')){a.d=b.d;a.m=b.m||[0,0,0];a.fv=b.fv||'';a.bau=b.bau||'';}
-    if((b.wk||'')>(a.wk||'')){a.wk=b.wk;a.pl=b.pl||0;a.w=b.w||{l:0,c:0,x:0};a.lw=b.lw||a.lw;}
-    else if(b.wk===a.wk){a.pl=Math.max(a.pl,b.pl||0);['l','c','x'].forEach(k=>a.w[k]=Math.max(a.w[k]||0,(b.w||{})[k]||0));}
-    if((b.se||'')>(a.se||'')){a.se=b.se;a.sxp=b.sxp||0;a.tier=b.tier||0;}
-    else if(b.se===a.se){a.sxp=Math.max(a.sxp,b.sxp||0);a.tier=Math.max(a.tier,b.tier||0);}
-    a.liga=Math.max(a.liga,b.liga||0);a.shields=Math.max(a.shields,b.shields||0);
+    // o código de sync é entrada externa: só números coeridos e títulos da whitelist chegam ao innerHTML
+    const numW=o=>({l:+(o&&o.l)||0,c:+(o&&o.c)||0,x:+(o&&o.x)||0});
+    if((b.d||'')>(a.d||'')){a.d=b.d;a.m=(b.m||[0,0,0]).map(x=>+x||0);a.fv=b.fv||'';a.bau=b.bau||'';}
+    if((b.wk||'')>(a.wk||'')){a.wk=b.wk;a.pl=+b.pl||0;a.w=numW(b.w);a.lw=b.lw?numW(b.lw):a.lw;}
+    else if(b.wk===a.wk){a.pl=Math.max(a.pl,+b.pl||0);const w2=numW(b.w);['l','c','x'].forEach(k=>a.w[k]=Math.max(a.w[k]||0,w2[k]));}
+    if((b.se||'')>(a.se||'')){a.se=b.se;a.sxp=+b.sxp||0;a.tier=Math.min(TIERS,+b.tier||0);}
+    else if(b.se===a.se){a.sxp=Math.max(a.sxp,+b.sxp||0);a.tier=Math.min(TIERS,Math.max(a.tier,+b.tier||0));}
+    a.liga=Math.min(LIGAS.length-1,Math.max(a.liga,+b.liga||0));
+    a.shields=Math.min(2,Math.max(a.shields,+b.shields||0));
     if((b.boost||'')>(a.boost||''))a.boost=b.boost;
     a.sdays=[...new Set([...a.sdays,...(b.sdays||[])])].sort();
-    a.titles=[...new Set([...a.titles,...(b.titles||[])])];
-    if(!a.title)a.title=b.title||'';}
-  if(!S.name&&dados.name)S.name=dados.name;
+    a.titles=[...new Set([...a.titles,...(b.titles||[]).filter(titOk)])];
+    if(!a.title&&titOk(b.title))a.title=b.title;}
+  if(!S.name&&dados.name)S.name=limpo(dados.name);
   save();renderHeader();toast('Progresso mesclado! ✅');location.hash='#/painel';
 };
 
@@ -1170,7 +1177,7 @@ function vCert(){
   <div class="noprint" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px">
     <input id="cnome" value="${S.name||''}" placeholder="Nome completo para o diploma"
       style="padding:10px 14px;border:1px solid var(--line);border-radius:8px;flex:1;min-width:220px"
-      onchange="S.name=this.value.trim();save();vCert()">
+      onchange="S.name=limpo(this.value);save();vCert()">
     <button class="btn" onclick="window.print()" ${S.name?'':'disabled'}>🖨️ Imprimir / salvar PDF</button>
   </div>
   <div class="cert">

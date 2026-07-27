@@ -20,10 +20,15 @@ const sandbox={
 };
 sandbox.window=sandbox;sandbox.globalThis=sandbox;
 vm.createContext(sandbox);
-vm.runInContext(src+'\n;globalThis.__T={S,hoje,wkey,misDone,amanha};',sandbox);
+vm.runInContext(src+'\n;globalThis.__T={S,hoje,wkey,misDone,amanha,limpo,titOk};',sandbox);
 
 vm.runInContext(`{
-  const {S,hoje,wkey,misDone,amanha}=__T,t=hoje();
+  const {S,hoje,wkey,misDone,amanha,limpo,titOk}=__T,t=hoje();
+
+  // entrada externa (nome, código de sync) nunca carrega HTML
+  assert(!/[<>"'&]/.test(limpo('<img src=x onerror="alert(1)">Zé')));
+  assert(!titOk('"><script>x</script>'));
+  assert(titOk('Incansável')&&titOk('Lenda · Temporada da Forja'));
 
   // boot: rollover inicializou dia/semana/temporada
   assert.equal(S.g.d,t);
