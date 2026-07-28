@@ -150,6 +150,7 @@ footer{background:#292826;color:#c9c5bd;font-size:.82rem;text-align:center;paddi
 /* ================= DADOS ================= */
 const REPO='https://github.com/michelpafreitas-realize/academia-engenharia-ia';
 const MD=s=>`${REPO}/blob/main/modulos/${s}.md`;
+const VID=i=>`${REPO}/releases/download/videos-v1/mod${String(i).padStart(2,'0')}.mp4`;
 
 const PERIODOS=[
   {nome:'Período 1 — Fundamentos',mods:[0,1,2,3]},
@@ -1009,6 +1010,11 @@ function vMod(i){
   </div><div class="module-hero-photo" role="img" aria-label="Estudantes trabalhando juntos em um laboratório"></div></section>
 
   <section class="module-layout"><div class="module-main">
+    <div class="secttl"><h2>Vídeo-aula do módulo</h2><span class="mut">o conteúdo essencial narrado, em poucos minutos</span></div>
+    <div class="card" style="padding:10px">
+      <video controls preload="metadata" style="width:100%;display:block;border-radius:8px;background:#242321"
+        src="${VID(i)}">Seu navegador não reproduz vídeo — <a href="${VID(i)}">baixe a vídeo-aula</a>.</video>
+    </div>
     <div class="secttl"><h2>Plano de aprendizagem</h2><span class="mut">marque cada etapa e veja o progresso acontecer</span></div>
     <div class="card" style="padding:7px 16px">${m.aulas.map((a,j)=>`<label class="lesson ${arr[j]?'done':''}">
       <input type="checkbox" ${arr[j]?'checked':''} onchange="tickLesson(${i},${j},this.checked)"><span>${a[0]}</span><span class="lt">${a[1]}</span>
