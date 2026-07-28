@@ -1,0 +1,132 @@
+{
+  "id": "Modulo12",
+  "slug": "mod12",
+  "modulo": 12,
+  "titulo": "Capstone & Carreira",
+  "periodo": "Período 4",
+  "carga": "20h",
+  "scenes": [
+    {
+      "tipo": "capa",
+      "fala": "Chegamos ao módulo doze, o último da Academia: Capstone e Carreira. Aqui você prova que sabe montar tudo o que aprendeu, escolhendo um projeto de portfólio de nível profissional. Você sai com um plano de carreira concreto: como se posicionar, onde estar e como passar em entrevistas."
+    },
+    {
+      "tipo": "conceito",
+      "kicker": "POR QUE ISSO IMPORTA",
+      "frase": "No mercado de IA, portfólio vale mais que diploma — projeto que roda convence mais que certificado.",
+      "fala": "No mercado de IA, portfólio vale mais que diploma. Um recrutador confia mais em três projetos que roda e lê do que em qualquer lista de cursos. O termo Engenheiro de IA foi cunhado por Swyx para descrever quem constrói produtos sobre modelos de fundação — demanda maior que a oferta."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "A PROFISSÃO",
+      "titulo": "AI Engineer vs ML Engineer",
+      "bullets": [
+        "ML Engineer treina modelos do zero",
+        "AI Engineer constrói produto sobre eles",
+        "Prompt, RAG, agentes, evals, LLMOps",
+        "Demanda maior que a oferta hoje"
+      ],
+      "fala": "O ML Engineer treina modelos: matemática, dados, GPUs. O engenheiro de IA constrói produtos sobre modelos já treinados, via API ou abertos. Você não precisa treinar do zero — precisa dominar prompt, RAG, agentes, evals e LLMOps. É o que esta Academia cobriu. Você é essa pessoa."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "PORTFÓLIO NO GITHUB",
+      "titulo": "O que faz o recrutador parar",
+      "bullets": [
+        "Demo em vídeo ou GIF logo no topo",
+        "Decisões técnicas documentadas",
+        "Tabela de métricas de eval",
+        "Código limpo, roda em 5 minutos",
+        "Poucos projetos fortes, não muitos fracos"
+      ],
+      "fala": "Um recrutador gasta segundos por repositório. Abra o README com uma demo em vídeo ou GIF — ver é acreditar. Documente as decisões técnicas e mostre uma tabela de métricas de eval. Foque em poucos projetos fortes: três completos batem dez pela metade."
+    },
+    {
+      "tipo": "conceito",
+      "kicker": "MARCA PESSOAL",
+      "frase": "A marca pessoal não é vaidade: é reduzir o atrito para a próxima oportunidade te achar.",
+      "fala": "No LinkedIn, coloque Engenheiro de IA na headline e ligue os projetos ao GitHub. Poste um resumo por projeto conforme termina: print da demo, o que aprendeu. Ensinar é a melhor prova de que você entende."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "COMUNIDADES",
+      "titulo": "Onde o campo respira",
+      "bullets": [
+        "Hugging Face Discord — ecossistema aberto",
+        "r/LocalLLaMA — modelos e inferência local",
+        "AI Engineer — palestras no YouTube"
+      ],
+      "fala": "Três comunidades valem sua presença. Hugging Face Discord é o coração do ecossistema aberto. R barra LocalLLaMA é referência em modelos abertos e inferência local. E o canal AI Engineer no YouTube traz quem opera IA em produção de verdade."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "ATUALIZAÇÃO SUSTENTÁVEL",
+      "titulo": "Poucas fontes, alto sinal",
+      "bullets": [
+        "Latent Space — pulso do AI Engineer",
+        "Ahead of AI — fundamentos, Raschka",
+        "Interconnects — mercado, Lambert",
+        "Papers só quando relevantes"
+      ],
+      "fala": "O campo publica mais numa semana do que dá para ler num ano. Assine três newsletters de alto sinal: Latent Space, Ahead of AI e Interconnects. Leia papers só quando forem relevantes ao seu trabalho. Duas a três horas por semana bastam."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "ENTREVISTAS",
+      "titulo": "As três frentes",
+      "bullets": [
+        "System design de sistema LLM",
+        "Perguntas conceituais em voz alta",
+        "Defender decisões do seu portfólio"
+      ],
+      "fala": "A peça central é o system design de um sistema LLM: RAG versus fine-tuning, arquitetura de gateway e guardrails, eval, custo e segurança — verbalizando os trade-offs. Pratique as perguntas conceituais em voz alta e prepare-se para defender cada decisão dos seus capstones."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "MERCADO BR X REMOTO",
+      "titulo": "Duas portas, mesma escassez",
+      "bullets": [
+        "Brasil — perfil escasso, salário maior",
+        "Remoto internacional — maior alavanca",
+        "Portfólio bilíngue abre as duas portas"
+      ],
+      "fala": "O mercado brasileiro paga acima da média pela raridade do perfil. Mas a maior alavanca é o remoto internacional: empresas dos Estados Unidos e da Europa pagam em dólar, multiplicando seu poder de compra. O passaporte é um portfólio bilíngue e presença nas comunidades internacionais."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "OS QUATRO CAPSTONES",
+      "titulo": "Escolha pelo menos dois",
+      "bullets": [
+        "Assistente de documentos — RAG com citação",
+        "Agente operacional — tools e MCP",
+        "Modelo especialista — fine-tune QLoRA",
+        "Produto em produção — deploy e Langfuse"
+      ],
+      "fala": "São quatro capstones, e você escolhe pelo menos dois. O assistente de documentos faz RAG com citação da fonte. O agente operacional usa três ferramentas, uma via MCP, com humano no loop. O modelo especialista compara base contra fine-tuned. O produto em produção tem deploy, streaming e Langfuse."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "MINI-PROJETO",
+      "titulo": "Publique seu capstone",
+      "bullets": [
+        "Dois projetos completos e públicos",
+        "README com demo, decisões e evals",
+        "LinkedIn atualizado, ligado aos repos",
+        "Um post de bastidores por projeto"
+      ],
+      "fala": "O mini-projeto é publicar dois capstones profissionais: repositório público, README com demo, decisões documentadas e tabela de eval. Depois monte a vitrine: LinkedIn com Engenheiro de IA na headline, repositórios ligados, e um post por projeto."
+    },
+    {
+      "tipo": "fim",
+      "bullets": [
+        "2 capstones públicos com README forte",
+        "LinkedIn atualizado e ligado aos repos",
+        "Em pelo menos 2 comunidades ativas",
+        "Rotina de atualização sustentável",
+        "System design de LLM em voz alta"
+      ],
+      "proximo": "Fim da trilha — parabéns, engenheiro de IA",
+      "fala": "Recapitulando: dois capstones públicos com README forte, LinkedIn ligado aos repositórios, presença em comunidades, rotina sustentável de atualização, e system design de LLM em voz alta. Este é o fim da trilha inteira. Você não precisa saber tudo — precisa saber construir, avaliar, colocar em produção e explicar suas escolhas. A Academia te deu isso. Agora o roteiro é seu: publique, poste, candidate-se — parabéns, engenheiro de IA."
+    }
+  ]
+}

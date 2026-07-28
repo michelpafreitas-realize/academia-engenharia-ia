@@ -1,0 +1,125 @@
+{
+  "id": "Modulo04",
+  "slug": "mod04",
+  "modulo": 4,
+  "titulo": "Deep Learning na Prática",
+  "periodo": "Período 2",
+  "carga": "16h",
+  "scenes": [
+    {
+      "tipo": "capa",
+      "fala": "Bem-vindo ao módulo quatro: deep learning na prática. Aqui você abre a caixa-preta das redes neurais com números na mão. Ao final, você treina uma rede em PyTorch do zero, na GPU do Colab, e sabe diagnosticar quando o treino quebra."
+    },
+    {
+      "tipo": "conceito",
+      "kicker": "POR QUE ISSO IMPORTA",
+      "frase": "Todo modelo de IA, do classificador simples ao LLM gigante, é a mesma máquina treinada por backpropagation.",
+      "fala": "Todo modelo de IA, do classificador de churn ao LLM gigante, é por baixo a mesma máquina: camadas de neurônios treinadas por backpropagation. Empresas pagam melhor quem entende o que acontece quando o treino quebra: loss que vira NaN, modelo que decora, GPU que estoura memória."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "O NEURÔNIO",
+      "titulo": "O neurônio artificial",
+      "bullets": [
+        "Multiplica entrada por peso",
+        "Soma tudo mais um bias",
+        "Passa por uma ativação",
+        "Pesos são o que a rede aprende"
+      ],
+      "fala": "Um neurônio multiplica cada entrada por um peso, soma com um bias e passa por uma ativação. É como um comitê de empréstimo: o presidente confia mais no analista, peso alto, do que no estagiário, peso baixo. Os pesos são o que a rede aprende."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "ATIVAÇÕES",
+      "titulo": "Funções de ativação",
+      "bullets": [
+        "ReLU — o padrão, max(0, z)",
+        "Sigmoid — comprime para 0 e 1",
+        "Tanh — comprime para -1 e 1",
+        "Softmax — vira probabilidades"
+      ],
+      "fala": "Empilhar camadas lineares sem ativação ainda dá uma função linear: dez camadas viram uma só. A ativação quebra isso. ReLU é o padrão; sigmoid espreme entre zero e um; tanh centra em zero; softmax vira uma distribuição de probabilidade."
+    },
+    {
+      "tipo": "code",
+      "kicker": "FORWARD PASS",
+      "titulo": "Forward pass com números",
+      "code": "# 2 entradas -> 2 neurônios -> 1 saída\nx = [1, 2]\n\n# camada escondida (ReLU)\nh1 = ReLU(1*1 + 2*-0.5 + 0.5)  # 0.5\nh2 = ReLU(1*-1 + 2*1 + 0)      # 1.0\n\n# saída (sigmoid)\nsaida = sigmoid(0.5*h1 - 1*h2 + 0.5)\n# resultado 0.5 -> modelo em dúvida",
+      "fala": "Passamos uma entrada por uma rede mínima: duas entradas, dois neurônios ReLU, uma saída sigmoid. O modelo previu zero vírgula cinco: não sei, cinquenta por cento. Todo forward pass, até de um GPT, é essa mesma mecânica repetida bilhões de vezes."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "LOSS FUNCTIONS",
+      "titulo": "Medindo o erro do modelo",
+      "bullets": [
+        "MSE — para regressão",
+        "Cross-entropy — para classificação",
+        "Erro grande é punido ao quadrado",
+        "Confiança errada custa caro"
+      ],
+      "fala": "A loss resume o erro do modelo; treinar é minimizar essa loss. MSE serve para regressão e pune erros grandes ao quadrado. Cross-entropy serve para classificação e castiga confiança errada. No PyTorch ela já embute o softmax; não aplique duas vezes."
+    },
+    {
+      "tipo": "conceito",
+      "kicker": "BACKPROPAGATION",
+      "frase": "Backprop usa a regra da cadeia para calcular, de trás pra frente, o efeito de cada peso na loss.",
+      "fala": "A pergunta do treino é: se eu mexer este peso, a loss sobe ou desce, e quanto? Backpropagation calcula essa derivada para todos os pesos de uma vez, usando a regra da cadeia: como uma corrente que se percorre de trás para frente."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "OTIMIZADORES",
+      "titulo": "Otimizador e learning rate",
+      "bullets": [
+        "SGD — passo fixo, com momentum",
+        "Adam — adapta o passo sozinho",
+        "lr alto — loss explode",
+        "lr baixo — treino eterno",
+        "Ponto de partida: 1e-3"
+      ],
+      "fala": "O gradiente dá a direção; o otimizador decide o passo. SGD usa um passo fixo, geralmente com momentum. Adam adapta o passo sozinho e é o padrão em 2026. Learning rate alto explode a loss; baixo demais, o treino se arrasta. Comece com um por mil."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "REGULARIZAÇÃO",
+      "titulo": "Impedindo o overfitting",
+      "bullets": [
+        "Dropout — desliga neurônios ao acaso",
+        "Weight decay — penaliza pesos grandes",
+        "Early stopping — para no ponto certo"
+      ],
+      "fala": "Overfitting é loss de treino baixa e validação alta: o modelo decorou. Dropout desliga neurônios ao acaso durante o treino. Weight decay penaliza pesos grandes. Early stopping para o treino, ou guarda o melhor checkpoint, quando a validação piora."
+    },
+    {
+      "tipo": "code",
+      "kicker": "LOOP DE TREINO",
+      "titulo": "PyTorch: o loop de treino",
+      "code": "for x, y in dataloader:\n    optimizer.zero_grad()  # 1. zera grad\n    pred = model(x)        # 2. forward\n    loss = criterion(pred, y)  # 3. loss\n    loss.backward()        # 4. backprop\n    optimizer.step()       # 5. atualiza",
+      "fala": "O loop de treino sempre segue a mesma liturgia: zera gradientes, forward, calcula a loss, backward, atualiza os pesos. Esquecer o zero_grad é o bug mais comum. Se a loss não desce, treine em um único batch: uma rede saudável decora; se não, o bug é seu."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "MINI-PROJETO",
+      "titulo": "Fashion-MNIST do zero",
+      "bullets": [
+        "Dados, modelo e loop à mão",
+        "Validação com early stopping",
+        "Curvas de loss plotadas",
+        "Duas arquiteturas comparadas",
+        "Acurácia de teste ≥ 88%"
+      ],
+      "fala": "O mini-projeto é treinar o Fashion-MNIST do zero: dados, modelo e loop à mão, sem Trainer pronto. Separe dez por cento para validação com early stopping, plote as curvas de loss e compare pelo menos duas arquiteturas. Meta: acurácia de teste de oitenta e oito por cento."
+    },
+    {
+      "tipo": "fim",
+      "bullets": [
+        "Forward pass à mão dominado",
+        "Backprop pela regra da cadeia",
+        "MNIST treinado no Colab, GPU",
+        "Overfitting diagnosticado",
+        "Mini-projeto Fashion-MNIST entregue"
+      ],
+      "proximo": "Módulo 5 — Transformers & LLMs por Dentro",
+      "fala": "Recapitulando: você domina o forward pass à mão, entende backpropagation pela regra da cadeia e sabe diagnosticar loss que não desce ou modelo que decora demais. Treinou uma rede em PyTorch na GPU do Colab. No próximo módulo, você abre o Transformer por dentro: atenção, embeddings e como um LLM funciona de verdade. Até lá."
+    }
+  ]
+}

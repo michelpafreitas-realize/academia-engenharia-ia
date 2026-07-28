@@ -1,0 +1,125 @@
+{
+  "id": "Modulo02",
+  "slug": "mod02",
+  "modulo": 2,
+  "titulo": "Matemática Essencial (abordagem visual)",
+  "periodo": "Período 1",
+  "carga": "10h",
+  "scenes": [
+    {
+      "tipo": "capa",
+      "fala": "Bem-vindo ao módulo dois: matemática essencial. Você constrói intuição sobre vetores, derivadas e probabilidade — a base de toda engenharia de IA. Cada ideia vem com uma conta calculada à mão e conferida em NumPy."
+    },
+    {
+      "tipo": "conceito",
+      "kicker": "POR QUE ISSO IMPORTA",
+      "frase": "Quem entende a matemática por trás não usa a IA como caixa-preta — sabe onde olhar quando quebra.",
+      "fala": "Você não precisa de mestrado em matemática, só de intuição sobre um punhado de ideias — tudo na área é construído sobre elas. Embeddings são vetores, semelhança é produto escalar, treinar é descida do gradiente. Sem essa base você trava no primeiro erro inesperado."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "VETORES E EMBEDDINGS",
+      "titulo": "Vetores: lista e seta",
+      "bullets": [
+        "Lista de números e seta no espaço",
+        "Cliente vira vetor de atributos",
+        "Palavra vira embedding — vetor denso",
+        "Distância e ângulo continuam valendo"
+      ],
+      "fala": "Um vetor é duas coisas ao mesmo tempo: uma lista de números e uma seta no espaço. Essa dupla identidade é o truque central da IA — o que você descreve com números vira um ponto no espaço. Um cliente vira vetor de idade, renda e compras; uma palavra vira embedding."
+    },
+    {
+      "tipo": "code",
+      "kicker": "PRODUTO ESCALAR",
+      "titulo": "A régua de semelhança",
+      "code": "def similaridade_cosseno(a, b):\n    # -1 (opostos) a 1 (idênticos)\n    return a @ b / (\n        np.linalg.norm(a) * np.linalg.norm(b)\n    )\n\nrei = np.array([0.9, 0.8, 0.1])\nbanana = np.array([0.1, 0.2, 0.95])\nprint(similaridade_cosseno(rei, banana))\n# ~0.33 -> pouco parecidos",
+      "fala": "O produto escalar multiplica coordenada a coordenada e soma tudo. Mesma direção dá valor grande e positivo, perpendicular dá zero, oposta dá negativo. É assim que a busca semântica funciona — vence quem tem maior similaridade de cosseno."
+    },
+    {
+      "tipo": "conceito",
+      "kicker": "IDEIA-CHAVE",
+      "frase": "Produto escalar é a régua de semelhança da IA: mesma direção alto, perpendicular zero, oposta negativo.",
+      "fala": "Guarde essa frase, ela volta o módulo inteiro: produto escalar é a régua de semelhança da IA. Busca semântica, recomendação, embeddings parecidos — por baixo é sempre essa conta simples."
+    },
+    {
+      "tipo": "code",
+      "kicker": "MATRIZES",
+      "titulo": "Matriz transforma vetor",
+      "code": "A = np.array([[1, 2], [3, 4]])\nB = np.array([[5, 6], [7, 8]])\nprint(A @ B)\n# [[19 22]\n#  [43 50]] -> confere com a mao\n\n# regra de shapes:\n# (m, n) @ (n, p) -> (m, p)",
+      "fala": "Uma matriz é uma grade de números e, geometricamente, uma transformação do espaço. Multiplicar matrizes compõe transformações em sequência. Regra de shapes: m por n vezes n por p dá m por p — o n do meio precisa bater."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "SENSIBILIDADE",
+      "titulo": "Derivada e gradiente",
+      "bullets": [
+        "Derivada mede sensibilidade da saída",
+        "Sinal indica direção, magnitude a força",
+        "Gradiente empacota várias derivadas",
+        "Aponta para a maior subida da função"
+      ],
+      "fala": "A derivada responde: se eu mexer um tiquinho na entrada, quanto mexe a saída? Sinal indica direção, magnitude indica força. Com bilhões de entradas, empacotamos essa sensibilidade num gradiente, que aponta para a maior subida da função."
+    },
+    {
+      "tipo": "code",
+      "kicker": "GRADIENT DESCENT",
+      "titulo": "O loop que treina tudo",
+      "code": "w, b, lr = 0.0, 0.0, 0.01\nfor passo in range(200):\n    dw, db = gradientes(w, b, x, y)\n    w -= lr * dw   # contra o gradiente\n    b -= lr * db\n\nprint(f\"w aprendido: {w:.3f}\")  # ~2.5\nprint(f\"b aprendido: {b:.3f}\")  # ~7.0",
+      "fala": "Treinar um modelo é achar os parâmetros que minimizam a perda. A receita: calcule o gradiente e ande na direção contrária, w menos o learning rate vezes o gradiente. Os passos encurtam perto do mínimo; learning rate alto demais faz o w explodir."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "PROBABILIDADE",
+      "titulo": "Distribuições e esperança",
+      "bullets": [
+        "Toda distribuição soma exatamente 1",
+        "Dado honesto: 1/6 para cada face",
+        "Normal: extremos raros, média provável",
+        "Esperança é a média ponderada"
+      ],
+      "fala": "Uma distribuição diz quanto de crença vai para cada resultado, e tudo soma um. Dado honesto: um sexto por face; normal: extremos raros. Esperança é a média ponderada — em IA, a perda que minimizamos é a esperança do erro."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "BAYES INTUITIVO",
+      "titulo": "Atualizando crenças",
+      "bullets": [
+        "Pense em 1.000 pessoas, não em %",
+        "Doença rara: poucos positivos reais",
+        "Falsos positivos dominam os raros",
+        "Taxa base muda tudo na conclusão"
+      ],
+      "fala": "Bayes responde: dado que vi uma evidência, quanto devo acreditar na hipótese? Pense em mil pessoas: numa doença de um por cento, com teste de noventa por cento de acerto, a chance real de estar doente após um positivo é só quinze por cento. A taxa base muda tudo."
+    },
+    {
+      "tipo": "code",
+      "kicker": "SOFTMAX",
+      "titulo": "De scores a probabilidade",
+      "code": "def softmax(z):\n    e = np.exp(z - z.max())  # evita overflow\n    return e / e.sum()\n\nlogits = np.array([2.0, 1.0, 0.1])\nprint(softmax(logits))\n# [0.659 0.242 0.099] -> soma 1",
+      "fala": "Um classificador produz logits, scores brutos como dois, um e zero vírgula um. A softmax exponencia cada valor, acentuando diferenças, e divide pela soma, garantindo que tudo some um. É o que um modelo de linguagem faz a cada token gerado."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "MINI-PROJETO",
+      "titulo": "Matemática com seus números",
+      "bullets": [
+        "Similaridade de cosseno entre 5 itens",
+        "Gradient descent à mão, 5 passos",
+        "Cenário de Bayes do seu cotidiano",
+        "Softmax somando 1 no notebook"
+      ],
+      "fala": "O mini-projeto: um notebook com três seções calculadas à mão e conferidas em NumPy. Crie embeddings de cinco itens seus e monte a matriz de similaridade de cosseno. Refaça o gradiente para cinco passos e monte um cenário de Bayes com softmax somando um."
+    },
+    {
+      "tipo": "fim",
+      "bullets": [
+        "Produto escalar como régua de semelhança",
+        "Multiplicação de matrizes e shapes",
+        "Gradient descent calculado à mão",
+        "Bayes com taxa base e softmax"
+      ],
+      "proximo": "Módulo 3 — Machine Learning Clássico",
+      "fala": "Recapitulando: você entende vetores e embeddings, calcula produto escalar como régua de semelhança, domina as regras de shape, e rodou a descida do gradiente à mão. No próximo módulo entra machine learning clássico: regressão, classificação e seu primeiro modelo treinado do início ao fim. Até lá."
+    }
+  ]
+}

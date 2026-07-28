@@ -1,0 +1,130 @@
+{
+  "id": "Modulo09",
+  "slug": "mod09",
+  "modulo": 9,
+  "titulo": "Fine-tuning & Modelos Abertos",
+  "periodo": "Período 3",
+  "carga": "12h",
+  "scenes": [
+    {
+      "tipo": "capa",
+      "fala": "Bem-vindo ao módulo nove: fine-tuning e modelos abertos. Você vai aprender quando vale treinar um modelo, e quando basta um prompt melhor e RAG. Vai rodar modelos abertos com Ollama, entender quantização, treinar um LoRA e publicar no Hugging Face Hub."
+    },
+    {
+      "tipo": "conceito",
+      "kicker": "POR QUE ISSO IMPORTA",
+      "frase": "Fine-tuning é a última opção da árvore — não a primeira, e a maioria dos casos nem chega lá.",
+      "fala": "Vamos treinar nosso próprio modelo é uma frase comum, e quase sempre errada, em reuniões de produto com IA. Na maioria dos casos, um prompt melhor ou um RAG resolvem por uma fração do custo. O engenheiro de IA sabe dizer quando fine-tuning compensa."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "A ÁRVORE DE DECISÃO",
+      "titulo": "Prompt → RAG → Fine-tuning",
+      "bullets": [
+        "Prompt: horas, resolve a maioria dos casos",
+        "RAG: dias, conhecimento que muda",
+        "Fine-tuning: semanas, muda o comportamento",
+        "Cada degrau custa dez vezes mais"
+      ],
+      "fala": "Grave esta ordem: cada degrau custa dez vezes mais que o anterior. Prompt resolve a maioria dos casos em horas. RAG traz para o contexto o conhecimento que muda, em dias. Só depois, fine-tuning muda o comportamento do modelo."
+    },
+    {
+      "tipo": "conceito",
+      "kicker": "REGRA DE OURO",
+      "frase": "RAG dá conhecimento; fine-tuning dá comportamento.",
+      "fala": "Fine-tuning serve para estilo, formato rígido, domínio estreito, ou destilar um modelo grande num pequeno. Não serve para injetar fatos: eles ficam congelados nos pesos e custam caro para atualizar. Slogan: RAG dá conhecimento, fine-tuning dá comportamento."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "MODELOS LOCAIS",
+      "titulo": "Ollama, llama.cpp, LM Studio",
+      "bullets": [
+        "Ollama — CLI e API local tipo OpenAI",
+        "llama.cpp — motor C/C++, criou o GGUF",
+        "LM Studio — interface gráfica",
+        "Privacidade, custo zero, sem rede"
+      ],
+      "fala": "Três ferramentas, um motor por baixo. Ollama serve o modelo por uma API local compatível com OpenAI. Llama ponto cpp é o motor em C que criou o GGUF. LM Studio dá uma interface gráfica. Rodar local significa privacidade, custo zero e controle total."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "QUANTIZAÇÃO",
+      "titulo": "O que significa Q4_K_M",
+      "bullets": [
+        "FP16: dezesseis bits, referência",
+        "Q4_K_M: quatro bits, ponto ideal",
+        "Q2_K: degradação visível, evite",
+        "VRAM ≈ tamanho do GGUF + 10 a 20%"
+      ],
+      "fala": "Cada peso treinado ocupa dois bytes. Quantizar armazena com menos bits, perdendo pouca precisão. Q4_K_M usa cerca de quatro bits por peso, o ponto ideal de custo e qualidade. Para estimar a VRAM, some vinte por cento ao tamanho do arquivo GGUF."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "HUGGING FACE HUB",
+      "titulo": "O GitHub dos modelos",
+      "bullets": [
+        "Modelos — pesos versionados + model card",
+        "Datasets — load_dataset em uma linha",
+        "Spaces — demos com Gradio ou Streamlit",
+        "Leia a licença antes de usar"
+      ],
+      "fala": "O Hub é o GitHub dos modelos: pesos versionados com model cards, datasets numa linha de código, e Spaces, demos ótimas para portfólio. Sempre leia a model card antes de usar um modelo: nem todo aberto permite uso comercial."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "LORA E QLORA",
+      "titulo": "Fine-tuning sem tocar em W",
+      "bullets": [
+        "W de 4096×4096 = 16,7 milhões de params",
+        "A e B com rank 16 = 131 mil params",
+        "QLoRA: base em 4 bits, adaptador em 16",
+        "8B treina em ~6 GB — Colab grátis"
+      ],
+      "fala": "LoRA congela a matriz W e aprende duas matrizes finas, A e B, menos de um por cento dos parâmetros. Rank dezesseis treina cento e trinta e um mil parâmetros numa camada de dezesseis milhões. QLoRA quantiza a base em quatro bits: um modelo de oito bilhões treina em seis gigabytes, no Colab grátis."
+    },
+    {
+      "tipo": "code",
+      "kicker": "PEFT",
+      "titulo": "LoRA em poucas linhas",
+      "code": "from peft import LoraConfig, get_peft_model\n\nconfig = LoraConfig(\n    r=16, lora_alpha=32,\n    target_modules=[\"q_proj\",\"v_proj\"],\n    task_type=\"CAUSAL_LM\",\n)\nmodel = get_peft_model(base_model, config)\nmodel.print_trainable_parameters()\n# trainable%: 0.34",
+      "fala": "A biblioteca PEFT implementa isso em poucas linhas: defina o rank, o alpha e as camadas alvo, chame get_peft_model, e print_trainable_parameters mostra a fração treinada."
+    },
+    {
+      "tipo": "code",
+      "kicker": "DADOS DE TREINO",
+      "titulo": "JSONL e chat template",
+      "code": "import json\nfrom datasets import Dataset\n\nwith open(\"dados.jsonl\") as f:\n    exemplos = [json.loads(l) for l in f]\n\ndef formatar(ex):\n    texto = tokenizer.apply_chat_template(\n        ex[\"messages\"])\n    return {\"text\": texto}",
+      "fala": "O formato dos dados é onde fine-tunes morrem. Cada linha do JSONL é uma conversa com papéis de sistema, usuário e assistente. O modelo espera tokens especiais da sua família: use apply_chat_template, nunca monte a string na mão."
+    },
+    {
+      "tipo": "conceito",
+      "kicker": "AVALIAÇÃO",
+      "frase": "Loss baixo não prova nada — a prova é o eval de tarefa em dados nunca vistos.",
+      "fala": "Loss descendo é hipnótico e não prova nada: só mostra que o modelo prevê os tokens do próprio dataset. O que vale é o eval de tarefa, em dados nunca vistos, comparando base e fine-tuned lado a lado. Publique no Hub com uma model card honesta."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "MINI-PROJETO",
+      "titulo": "Formatador especialista",
+      "bullets": [
+        "Dataset próprio, 150+ exemplos em JSONL",
+        "QLoRA via Unsloth ou PEFT no Colab",
+        "Eval: JSON válido e campos corretos",
+        "Publicar no Hub com model card completa"
+      ],
+      "fala": "O mini-projeto é o formatador especialista: um QLoRA que transforma mensagens informais em JSON padronizado, com intenção, produto, urgência e resumo. Monte um dataset de cento e cinquenta exemplos revisados à mão, com três splits. Meça JSON válido e campos corretos, base contra fine-tuned, e publique com model card completa."
+    },
+    {
+      "tipo": "fim",
+      "bullets": [
+        "Árvore prompt → RAG → fine-tuning",
+        "Modelo local rodando no Ollama",
+        "LoRA/QLoRA explicado com as matrizes",
+        "Dataset JSONL com chat template certo",
+        "Modelo publicado no Hugging Face Hub"
+      ],
+      "proximo": "Módulo 10 — Avaliação & Segurança de Sistemas de IA",
+      "fala": "Recapitulando: você navega a árvore prompt, RAG, fine-tuning, roda modelos abertos e escolhe a quantização certa, explica LoRA e QLoRA com as matrizes na mão, e avalia um fine-tune sem confiar só no loss. No próximo módulo: avaliação e segurança de sistemas de IA. Até lá."
+    }
+  ]
+}

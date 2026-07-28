@@ -1,0 +1,130 @@
+{
+  "id": "Modulo08",
+  "slug": "mod08",
+  "modulo": 8,
+  "titulo": "Agentes de IA & Tool Use",
+  "periodo": "Período 3",
+  "carga": "12h",
+  "scenes": [
+    {
+      "tipo": "capa",
+      "fala": "Bem-vindo ao módulo oito: agentes de inteligência artificial e tool use. Você vai aprender o mecanismo por trás de sistemas que fazem coisas, não só respondem: consultam bancos, abrem tickets, cruzam planilhas. Ao final, você escreve um loop de agente completo, sem framework."
+    },
+    {
+      "tipo": "conceito",
+      "kicker": "POR QUE ISSO IMPORTA",
+      "frase": "O engenheiro sênior se destaca por saber quando NÃO usar um agente.",
+      "fala": "Agentes são a fronteira mais quente da engenharia de IA nas empresas. O chatbot que só responde virou commodity — o que vale caro é o sistema que age. Mas a maioria dos problemas não precisa de agente, e sim de um workflow simples. É esse critério que este módulo ensina."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "DEFINIÇÃO",
+      "titulo": "O que é um agente",
+      "bullets": [
+        "Chamada única — um prompt, um texto",
+        "Workflow — seu código decide a ordem",
+        "Agente — o modelo decide a ordem",
+        "Repete até concluir ou desistir"
+      ],
+      "fala": "Três níveis de autonomia. Chamada única: um prompt, um texto, fim. Workflow: seu código decide a ordem das etapas. Agente: o próprio modelo decide, escolhendo ferramenta e próximo passo até concluir."
+    },
+    {
+      "tipo": "conceito",
+      "kicker": "A ANALOGIA",
+      "frase": "Workflow é linha de montagem; agente é estagiário com acesso ao computador da empresa.",
+      "fala": "O workflow é uma linha de montagem: previsível e barata. O agente é um estagiário com acesso ao computador da empresa: resolve o imprevisto, mas pode dar voltas e custar caro. Escolha conforme o problema, não a moda."
+    },
+    {
+      "tipo": "code",
+      "kicker": "SCHEMA DA TOOL",
+      "titulo": "Declarando uma ferramenta",
+      "code": "{\n  \"name\": \"calculadora\",\n  \"description\": \"Avalia expressoes aritmeticas\",\n  \"input_schema\": {\n    \"type\": \"object\",\n    \"properties\": {\n      \"expressao\": {\"type\": \"string\"}\n    },\n    \"required\": [\"expressao\"]\n  }\n}",
+      "fala": "Toda ferramenta é declarada com nome, descrição e um schema dos parâmetros, em JSON. O modelo lê a descrição para decidir quando chamar. Descrição vaga gera erro; prescritiva, tipo use isto para qualquer conta, funciona melhor."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "OS 4 PASSOS",
+      "titulo": "Como o tool use funciona",
+      "bullets": [
+        "1. Você declara as ferramentas",
+        "2. Modelo pede tool_use, não executa",
+        "3. Seu código executa a função",
+        "4. Você devolve o tool_result"
+      ],
+      "fala": "Quatro passos. Você declara as ferramentas. O modelo responde com um bloco tool_use — um pedido, não execução. Seu código roda a função. Você devolve como tool_result e o modelo continua. Várias de uma vez? Tudo numa única mensagem."
+    },
+    {
+      "tipo": "code",
+      "kicker": "O LOOP",
+      "titulo": "O loop de agente em Python",
+      "code": "msgs = [{\"role\": \"user\", \"content\": objetivo}]\nwhile True:\n    r = client.messages.create(\n        model=MODELO, tools=TOOLS, messages=msgs)\n    msgs.append(\n        {\"role\": \"assistant\", \"content\": r.content})\n    if r.stop_reason != \"tool_use\":\n        break  # terminou\n    saidas = [tool_result(b) for b in r.content\n              if b.type == \"tool_use\"]\n    msgs.append({\"role\": \"user\", \"content\": saidas})",
+      "fala": "Todo agente se reduz a este esqueleto. Chama o modelo num laço; se stop_reason não for tool_use, terminou. Senão, roda cada tool e devolve os resultados numa única mensagem. Proteções obrigatórias: limite de iterações e erro como tool_result com is_error."
+    },
+    {
+      "tipo": "conceito",
+      "kicker": "PADRÃO REACT",
+      "frase": "ReAct é pensar, agir e observar, repetindo até a resposta final.",
+      "fala": "ReAct descreve o mesmo loop de outro jeito: Thought, quando raciocina, Action, quando chama a ferramenta, Observation, quando lê o resultado. O tool use nativo cumpre o Action, mas o vocabulário ReAct segue onipresente em papers e entrevistas."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "REGRA DE OURO",
+      "titulo": "Workflow ou agente?",
+      "bullets": [
+        "Prompt chaining — etapas fixas em sequência",
+        "Routing — direciona por tipo de entrada",
+        "Parallelization — chamadas paralelas",
+        "Orchestrator-workers — delega subtarefas",
+        "Agente — só se o caminho é imprevisível"
+      ],
+      "fala": "Building Effective Agents organiza cinco padrões de workflow, do encadear prompts ao orquestrador que delega. Só no agente o modelo decide o caminho. Regra de ouro: comece pelo mais simples e só suba de complexidade com evidência."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "MCP",
+      "titulo": "MCP: o USB da IA",
+      "bullets": [
+        "Server expõe tools, resources e prompts",
+        "Client conecta e usa essas capacidades",
+        "Resolve o problema M vezes N em M mais N",
+        "Protocolo aberto criado pela Anthropic"
+      ],
+      "fala": "Cada ferramenta precisava de integração própria em cada app de IA: um problema M vezes N. O MCP vira isso em M mais N, como o USB fez com periféricos. O server expõe tools e dados; o client, seu agente, se conecta e usa. Procure um server pronto antes de integrar na mão."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "CUSTOS & FRAMEWORKS",
+      "titulo": "Multi-agente e tokens",
+      "bullets": [
+        "Código puro resolve até uns 3 tools",
+        "Multi-agente isola contexto, não estética",
+        "Cada iteração reenvia o histórico",
+        "Prompt caching reduz custo do prefixo"
+      ],
+      "fala": "Multi-agente vale com subtarefas independentes ou contexto que estoura a janela — não para dividir tarefa linear em personagens. A API é stateless: cada iteração reenvia o histórico, que só cresce. Mitigue com prompt caching. E use framework só quando souber explicar o que ele faz por baixo."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "MINI-PROJETO",
+      "titulo": "Analista de CSV",
+      "bullets": [
+        "3 tools: colunas, estatísticas, filtro",
+        "Loop escrito à mão, sem framework",
+        "Erro de tool não derruba o programa",
+        "Limite de iterações + tokens no final"
+      ],
+      "fala": "O mini-projeto é o Analista de CSV: um agente que responde perguntas sobre um CSV, com loop escrito à mão. Mínimo três tools: colunas, estatísticas e filtro. Precisa de limite de iterações e tratar erro sem derrubar o programa. Entregue com CLI, log e total de tokens ao final."
+    },
+    {
+      "tipo": "fim",
+      "bullets": [
+        "Loop de agente escrito à mão",
+        "4 passos do tool use na prática",
+        "Padrão mais simples antes do agente",
+        "MCP, multi-agente e custo em tokens"
+      ],
+      "proximo": "Módulo 9 — Fine-tuning & Modelos Abertos",
+      "fala": "Recapitulando: você diferencia chamada única, workflow e agente, e escreveu o loop de tool use à mão. Você sabe quando um agente se justifica, o que é MCP e por que tokens custam caro sem critério. No próximo módulo: fine-tuning e modelos abertos, LoRA e quantização. Até lá."
+    }
+  ]
+}

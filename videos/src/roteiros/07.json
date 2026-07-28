@@ -1,0 +1,126 @@
+{
+  "id": "Modulo07",
+  "slug": "mod07",
+  "modulo": 7,
+  "titulo": "RAG: Retrieval-Augmented Generation",
+  "periodo": "Período 3",
+  "carga": "12h",
+  "scenes": [
+    {
+      "tipo": "capa",
+      "fala": "Bem-vindo ao módulo sete: RAG, geração aumentada por recuperação. É a arquitetura de LLM mais construída nas empresas, porque o modelo não conhece seus documentos internos. Você vai construir um pipeline de RAG do zero, sem framework, com busca, citações e avaliação de verdade."
+    },
+    {
+      "tipo": "conceito",
+      "kicker": "POR QUE ISSO IMPORTA",
+      "frase": "Chatbot que responde sobre os documentos da empresa é o pedido número um do primeiro mês de trabalho.",
+      "fala": "O modelo não sabe o que não estava no treino, o conhecimento congela no corte, e ninguém confia em resposta sem fonte. RAG ataca os três de uma vez: busca os trechos certos, entrega como contexto e permite citar a origem. Demo de RAG leva uma tarde; RAG bom leva engenharia de verdade."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "COMO O RAG FUNCIONA",
+      "titulo": "O pipeline em 3 passos",
+      "bullets": [
+        "Busca os trechos relevantes na base",
+        "Monta o contexto com o top-k",
+        "LLM responde citando a fonte",
+        "Conhecimento fica sempre atualizado",
+        "Nada entra nos pesos do modelo"
+      ],
+      "fala": "O pipeline tem três passos: a pergunta dispara uma busca nos documentos, os trechos mais relevantes viram contexto no prompt, e o modelo responde citando de onde tirou cada afirmação. O resultado: conhecimento privado, atualizado e citável, sem retreinar nada."
+    },
+    {
+      "tipo": "code",
+      "kicker": "SIMILARIDADE",
+      "titulo": "Cosseno entre vetores",
+      "code": "# cosseno = quão parecido é o sentido\ncos(a, b) = (a . b) / (|a| * |b|)\n\n# exemplo com vetores 2D\na = [1, 0]\nb = [0.7, 0.7]   # cos ~= 0.71 (parecidos)\nc = [0, 1]       # cos(a, c) = 0 (nada a ver)\n\n# vetores normalizados (norma 1):\n# cosseno vira produto escalar direto\nscore = X @ pergunta_embedding",
+      "fala": "A régua de proximidade entre vetores é a similaridade de cosseno, o ângulo entre eles. Varia de zero, nada a ver, a um, mesmíssimo assunto. Com vetores normalizados para norma um, o cosseno vira um simples produto escalar, mais rápido, e é o que as bibliotecas fazem por baixo dos panos."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "CHUNKING",
+      "titulo": "A decisão mais subestimada",
+      "bullets": [
+        "300 a 800 tokens por chunk",
+        "Overlap de 10 a 20% entre vizinhos",
+        "Quebrar por seção, não por sorte",
+        "Metadados: arquivo, seção, página"
+      ],
+      "fala": "PDF inteiro vira um embedding média de tudo, bom em nada, por isso fatiamos em chunks. Ponto de partida: trezentos a oitocentos tokens, com dez a vinte por cento de overlap. O upgrade que mais paga é quebrar por estrutura, nunca no meio de uma tabela. Guarde metadados: viabilizam a citação depois."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "VECTOR STORES",
+      "titulo": "FAISS, Chroma ou pgvector?",
+      "bullets": [
+        "FAISS: performance máxima, pesquisa",
+        "Chroma: protótipo simples e rápido",
+        "pgvector: empresa que já tem Postgres",
+        "Poucos chunks? NumPy já resolve"
+      ],
+      "fala": "Vector store indexa milhões de vetores para busca em milissegundos. Protótipo, use Chroma. Empresa que já roda Postgres, use pgvector, vetores ao lado dos dados relacionais. Escala extrema ou pesquisa, FAISS. E para poucos milhares de chunks, uma matriz NumPy já resolve."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "RETRIEVAL HÍBRIDO",
+      "titulo": "Vetorial + BM25 + reranker",
+      "bullets": [
+        "Vetorial acha sentido parecido",
+        "BM25 acha termos exatos e siglas",
+        "Fusão combina os dois rankings",
+        "Reranker afina os melhores 3 a 5"
+      ],
+      "fala": "Busca vetorial é ótima em semântica e ruim em termos exatos, como código de produto ou sigla. BM25 é o oposto. O retrieval híbrido roda os dois e combina os resultados, padrão de produção hoje. O reranker depois reordena com nota fina, e você manda só os três a cinco melhores ao modelo."
+    },
+    {
+      "tipo": "code",
+      "kicker": "CITAÇÃO",
+      "titulo": "Prompt anti-alucinação",
+      "code": "Responda usando APENAS os trechos\nabaixo. Cite as fontes como [1], [2].\nSe a resposta não estiver nos trechos,\ndiga \"não encontrei nos documentos\".\n\n[1] (manual.pdf, seção 3)\n\"O reembolso deve ser solicitado...\"\n\n[2] (faq.md)\n\"Cancelamentos após o envio...\"",
+      "fala": "A resposta precisa apontar de onde veio. Numere os trechos no prompt e exija a citação no formato colchete um, colchete dois. A instrução mais importante do RAG: se não estiver nos trechos, o modelo diz que não encontrou. Essa é a válvula anti-alucinação."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "AVALIAÇÃO RAG",
+      "titulo": "Ragas: as três métricas",
+      "bullets": [
+        "Faithfulness: a resposta é fiel?",
+        "Answer relevancy: respondeu mesmo?",
+        "Context precision: a busca acertou?",
+        "Cruzar as três aponta o culpado"
+      ],
+      "fala": "RAG tem duas partes que falham à parte: busca e geração. O Ragas padronizou três métricas: faithfulness, a resposta é fiel aos trechos; answer relevancy, ela respondeu à pergunta; context precision, os chunks eram relevantes, apontando se o problema é de busca ou de geração."
+    },
+    {
+      "tipo": "conceito",
+      "kicker": "A ESCOLHA CERTA",
+      "frase": "Fine-tuning muda o estilo do modelo; RAG muda o que ele sabe — raramente um substitui o outro.",
+      "fala": "Corpus pequeno que cabe no contexto: long context com prompt caching pode bastar. Base grande e mutável: RAG. Mudar o comportamento do modelo: fine-tuning, quase sempre combinado com RAG, nunca substituto para fatos. Falhas clássicas: chunk ruim, retrieval que não acha, resposta que ignora o contexto."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "MINI-PROJETO",
+      "titulo": "Assistente sobre seus documentos",
+      "bullets": [
+        "Pipeline sem framework, com overlap",
+        "Índice persistido (não re-embeda)",
+        "15+ perguntas, 5 sem resposta",
+        "Recall top-3 ≥ 80% após melhoria",
+        "Citações [n] em toda resposta"
+      ],
+      "fala": "Construa um assistente sobre uma base real sua, mínimo dez documentos ou cinquenta chunks: pipeline sem framework com overlap, embeddings, cosseno e citações. Monte quinze perguntas, dez respondíveis e cinco sem resposta, e implemente uma melhoria de retrieval no mesmo conjunto. Meta: oitenta por cento de recall no top-três."
+    },
+    {
+      "tipo": "fim",
+      "bullets": [
+        "Pipeline RAG sem framework",
+        "Chunking com overlap e estrutura",
+        "Cosseno para achar os trechos certos",
+        "Citações e válvula anti-alucinação",
+        "Avaliação com métricas do Ragas"
+      ],
+      "proximo": "Módulo 8 — Agentes de IA & Tool Use",
+      "fala": "Você construiu um RAG do zero: chunking, cosseno, a escolha entre FAISS, Chroma e pgvector, citação de fontes e avaliação com Ragas. RAG resolve conhecimento privado e atualizado, mas não muda o comportamento do modelo. No próximo módulo: agentes de IA e tool use. Até lá."
+    }
+  ]
+}

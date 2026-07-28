@@ -1,0 +1,135 @@
+{
+  "id": "Modulo11",
+  "slug": "mod11",
+  "modulo": 11,
+  "titulo": "LLMOps: IA em Produção",
+  "periodo": "Período 4",
+  "carga": "12h",
+  "scenes": [
+    {
+      "tipo": "capa",
+      "fala": "Bem-vindo ao módulo onze: LLMOps, IA em produção. Você vai aprender o que separa o protótipo do produto: gateway, custo, latência e resiliência. No fim, você constrói um serviço de LLM em container, com streaming, fallback e métricas de custo."
+    },
+    {
+      "tipo": "conceito",
+      "kicker": "POR QUE ISSO IMPORTA",
+      "frase": "A maioria dos projetos de IA não morre por falta de inteligência do modelo, e sim de engenharia.",
+      "fala": "Escrever o protótipo de um app de IA é a parte fácil. O que separa o protótipo do produto é o que acontece depois: aguenta dez mil usuários? Quando um provedor cai, o serviço degrada ou explode? LLMOps responde isso, e é onde a maioria dos projetos de IA morre."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "ARQUITETURA",
+      "titulo": "Gateway, guardrails e LLM",
+      "bullets": [
+        "Gateway detém as chaves de API",
+        "Guardrails filtram entrada e saída",
+        "LLM: API gerenciada ou self-hosted",
+        "Logs e evals cobrem cada etapa"
+      ],
+      "fala": "Nenhum app sério chama a API do LLM direto do frontend. O padrão é uma cadeia: cliente, gateway, guardrails, o LLM, guardrails, cliente. O gateway é seu backend: detém as chaves de API e aplica autenticação e roteamento. Logs e evals medem cada etapa."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "SELF-HOSTED X API",
+      "titulo": "vLLM ou API gerenciada",
+      "bullets": [
+        "Baixo volume: API gerenciada vence",
+        "Alto volume: self-hosting compensa",
+        "vLLM usa PagedAttention no KV cache",
+        "Dados sensíveis pedem self-hosting",
+        "Modal: GPU serverless, meio-termo"
+      ],
+      "fala": "A decisão é hospedar o modelo ou alugar a inferência. vLLM é o servidor de referência para modelos abertos: o PagedAttention gerencia o KV cache em páginas de memória, multiplicando as requisições simultâneas. Regra prática: comece gerenciado, migre quando o volume justificar."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "CUSTO E LATÊNCIA",
+      "titulo": "4 alavancas de otimização",
+      "bullets": [
+        "Streaming: derruba o 1º token",
+        "Prompt caching: até 90% mais barato",
+        "Batching: desconto para o assíncrono",
+        "Modelo menor que resolve o caso",
+        "Roteamento e cascata cortam custo"
+      ],
+      "fala": "Quatro alavancas de custo e latência. Streaming não muda custo nem tempo total, mas derruba o tempo até o primeiro token. Prompt caching lê o prefixo estável a um décimo do preço. Batching processa em lote mais barato. Escolha o menor modelo que resolve, com roteamento ou cascata."
+    },
+    {
+      "tipo": "conceito",
+      "kicker": "PROMPT É CÓDIGO",
+      "frase": "Prompt é código: vive no repositório, é revisado, e o eval gate barra o merge que piora a qualidade.",
+      "fala": "Prompts são código: vivem no repositório, com histórico de versão. Todo pull request que toca prompt, modelo ou pipeline dispara a suite de evals do módulo anterior. O eval gate barra o merge se a qualidade cair, igual a um teste quebrado."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "RESILIÊNCIA",
+      "titulo": "O mundo real falha",
+      "bullets": [
+        "Retries com backoff exponencial",
+        "Timeout: um teto por request",
+        "Fallback só em 429 e erro 5xx",
+        "Nunca em erro do próprio cliente",
+        "Rate limit por usuário no gateway"
+      ],
+      "fala": "APIs caem, dão timeout e retornam erro de limite de taxa. Em erros transitórios, tente de novo com espera crescente. Defina um teto por request; se o provedor falhar, redirecione para outro modelo. Fallback só vale para limite de taxa ou falha de servidor, nunca para erro do cliente."
+    },
+    {
+      "tipo": "code",
+      "kicker": "LAB: GATEWAY LLM",
+      "titulo": "FastAPI + streaming + fallback",
+      "code": "def perguntar(p):\n    def gerar():\n        try:\n            yield from stream(PRIMARIO, p.texto)\n        except anthropic.APIStatusError as e:\n            # só refaz em 429 ou 5xx (não 4xx)\n            if e.status_code in (429, 500, 503):\n                yield from stream(FALLBACK, p.texto)\n            else:\n                raise\n    return StreamingResponse(gerar())",
+      "fala": "No lab você constrói um gateway em FastAPI na frente do LLM. A função de streaming devolve os tokens e loga custo e latência ao final. O endpoint tenta o modelo principal; se der limite de taxa ou erro de servidor, cai para o fallback. Erro do cliente sobe direto."
+    },
+    {
+      "tipo": "code",
+      "kicker": "DEPLOY",
+      "titulo": "Containerize com Docker",
+      "code": "FROM python:3.12-slim\nWORKDIR /app\nCOPY requirements.txt .\nRUN pip install -r requirements.txt\nCOPY app.py .\nEXPOSE 8000\nCMD [\"uvicorn\", \"app:app\", \\\n     \"--host\", \"0.0.0.0\"]",
+      "fala": "Empacote o serviço num container: reprodutível e portátil, base do deploy. Um Dockerfile de app FastAPI é curto, como este. Suba num PaaS como Railway, Render ou Fly ponto io: do git push ao ar em minutos. Modal entra quando você serve o próprio modelo em GPU."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "OBSERVABILIDADE",
+      "titulo": "Meça tudo, sempre",
+      "bullets": [
+        "Prompt, resposta e tokens",
+        "Custo e latência por request",
+        "Tracing de cadeias e agentes",
+        "Langfuse, LangSmith, W&B Weave",
+        "Dashboard de custo por rota"
+      ],
+      "fala": "Para cada request, registre prompt, resposta, tokens, custo, latência e modelo. Para agentes, use tracing: qual ferramenta rodou e quanto tempo levou. Langfuse, LangSmith e W&B Weave fazem isso prontos. Com esses logs, monte o FinOps: custo por rota e por usuário."
+    },
+    {
+      "tipo": "conceito",
+      "kicker": "O PRINCÍPIO",
+      "frase": "Se não está instrumentado, não existe: você só otimiza o que consegue medir.",
+      "fala": "Guarde este princípio: se não está instrumentado, não existe. Você não otimiza custo, latência ou qualidade daquilo que não mede. É a observabilidade que diz onde aplicar cache e qual feature consome a maior fatia do orçamento."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "MINI-PROJETO",
+      "titulo": "Serviço de IA observável",
+      "bullets": [
+        "Duas rotas de IA com streaming",
+        "Langfuse ou logs estruturados",
+        "Fallback só em 429 e 5xx",
+        "Roteamento por complexidade",
+        "Endpoint de custos + deploy"
+      ],
+      "fala": "O mini-projeto evolui o gateway do lab para um serviço observável. Duas rotas de IA com streaming. Cada request registrado com prompt, resposta, tokens, custo e latência, e um trace de dois passos. Fallback só em erros retryáveis, roteamento comprovado, custos por rota, tudo em container."
+    },
+    {
+      "tipo": "fim",
+      "bullets": [
+        "Arquitetura gateway → guardrails → LLM",
+        "vLLM ou API: tabela de decisão",
+        "4 alavancas de custo e latência",
+        "Fallback só em erros retryáveis",
+        "Observabilidade e FinOps de tokens"
+      ],
+      "proximo": "Módulo 12 — Capstone & Carreira",
+      "fala": "Recapitulando: você sabe desenhar o gateway até o LLM, decidir entre vLLM e API gerenciada, aplicar as quatro alavancas de custo e latência e construir resiliência com fallback certo. No próximo módulo, o capstone: entrega final e entrada na carreira. Até lá."
+    }
+  ]
+}

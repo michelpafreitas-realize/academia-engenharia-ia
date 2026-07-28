@@ -1,0 +1,143 @@
+{
+  "id": "Modulo05",
+  "slug": "mod05",
+  "modulo": 5,
+  "titulo": "Transformers & LLMs por Dentro",
+  "periodo": "Período 2",
+  "carga": "16h",
+  "scenes": [
+    {
+      "tipo": "capa",
+      "fala": "Bem-vindo ao módulo cinco: Transformers e LLMs por dentro. Você vai abrir o capô do GPT e do Claude: como texto vira token, como a atenção decide o que importa, e como um modelo pré-treinado vira assistente. No fim, você gera texto com um modelo real."
+    },
+    {
+      "tipo": "conceito",
+      "kicker": "POR QUE ISSO IMPORTA",
+      "frase": "Quando o modelo alucina, corta texto ou cobra caro, a explicação mora neste módulo.",
+      "fala": "O transformer sustenta quase toda IA generativa em produção: GPT, Claude, Gemini, Llama. Quando o modelo alucina, corta texto ou cobra caro, a explicação está em tokenização, atenção ou pós-treino. Este módulo te dá o vocabulário que entrevistas técnicas cobram."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "TOKENIZAÇÃO",
+      "titulo": "BPE: texto vira números",
+      "bullets": [
+        "BPE funde os pares mais frequentes",
+        "Vocabulário típico: 50 mil a 200 mil",
+        "Português gasta mais tokens que inglês",
+        "APIs cobram por token, PT custa mais",
+        "LLM não vê letras, só tokens opacos"
+      ],
+      "fala": "LLMs leem tokens, não letras nem palavras. O BPE funde os pares mais frequentes do corpus até um vocabulário de cinquenta a duzentos mil tokens. Português gasta mais tokens que inglês, e APIs cobram por token. É por isso que o modelo erra ao contar letras de uma palavra."
+    },
+    {
+      "tipo": "conceito",
+      "kicker": "EMBEDDINGS",
+      "frase": "O modelo não manipula símbolos: manipula coordenadas em um espaço de significado.",
+      "fala": "Cada token tem um vetor denso aprendido no treino. Nesse espaço, proximidade geométrica é semelhança semântica: rei perto de rainha, gato perto de felino. Essa ideia, texto virar vetor comparável, é a fundação do RAG que você vê no módulo sete."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "SELF-ATTENTION",
+      "titulo": "Q, K e V: quem atende quem",
+      "bullets": [
+        "Query: o que este token procura",
+        "Key: o que cada token oferece",
+        "Value: o que ele entrega, se escolhido",
+        "Analogia: pergunta, lombada e livro",
+        "Máscara causal: ninguém vê o futuro"
+      ],
+      "fala": "Attention deixa cada token olhar para os outros. Cada um gera query, o que procura; key, o que oferece; e value, o que entrega se escolhido. É como uma busca em biblioteca: sua pergunta é a query, a lombada é a key, o conteúdo é o value. A máscara causal impede ver o futuro."
+    },
+    {
+      "tipo": "code",
+      "kicker": "NA PRÁTICA",
+      "titulo": "Attention: exemplo numérico",
+      "code": "# token 2 decide a quem prestar atenção\nq2 = [1, 0]\nk1, v1 = [1, 0], [10, 0]\nk2, v2 = [0, 1], [0, 10]\n\nscores = [q2·k1, q2·k2]  # = [1, 0]\npesos = softmax(scores)  # ≈ [0.73, 0.27]\nsaida = 0.73*v1 + 0.27*v2\n# saida ≈ [7.3, 2.7] -> 73% veio de v1",
+      "fala": "Um exemplo minúsculo: o token dois compara sua query com a key de cada token, tira softmax dos scores, e mistura os values por esses pesos. Aqui, setenta e três por cento da informação vem do token um. Na fórmula real ainda existe a divisão pela raiz de d."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "MULTI-HEAD",
+      "titulo": "Várias cabeças, uma ordem",
+      "bullets": [
+        "Várias attentions em paralelo (ex: 32)",
+        "Cada cabeça foca uma relação diferente",
+        "Sintaxe, correferência, padrão de código",
+        "Attention sozinha não sabe ordem",
+        "Posição entra como parte do vetor"
+      ],
+      "fala": "O modelo roda várias attentions em paralelo, cada cabeça focada numa relação: sintaxe, correferência, código. Attention sozinha não sabe ordem — João ama Maria ficaria igual a Maria ama João. A solução é injetar posição direto no vetor."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "COMO O GPT GERA",
+      "titulo": "Da pilha de blocos ao próximo token",
+      "bullets": [
+        "Pilha de attention + MLP × N camadas",
+        "Logits: 1 score por token do vocabulário",
+        "Greedy: sempre o mais provável",
+        "Temperatura ajusta a distribuição",
+        "Top-p corta a cauda de tokens ruins"
+      ],
+      "fala": "Um GPT empilha attention e MLP dezenas de vezes: a attention mistura tokens, o MLP processa cada um sozinho. No fim, logits dão um score por token do vocabulário. Greedy escolhe sempre o mais provável. Temperatura ajusta a distribuição, e top-p corta a cauda de tokens ruins."
+    },
+    {
+      "tipo": "code",
+      "kicker": "HANDS-ON",
+      "titulo": "Python: do prompt ao texto",
+      "code": "from transformers import pipeline\n\ng = pipeline(\"text-generation\", model=\"gpt2\")\n\n# greedy: sempre igual\ng(prompt, do_sample=False)\n\n# amostragem com temperatura e top-p\ng(prompt, do_sample=True,\n  temperature=0.9, top_p=0.9)",
+      "fala": "Três linhas de Hugging Face já geram texto com o gpt2. Com do sample falso, a geração é greedy e sempre igual. Com do sample verdadeiro, temperatura e top-p, cada execução sai diferente. É esse experimento que você repete no lab guiado."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "TREINO EM 2 ATOS",
+      "titulo": "Pré-treino vira assistente",
+      "bullets": [
+        "Pré-treino: prever o próximo token",
+        "Trilhões de tokens, meses de GPUs",
+        "Modelo base só completa, não conversa",
+        "SFT ensina o formato de assistente",
+        "RLHF/RLAIF alinha com preferências"
+      ],
+      "fala": "O treino tem dois atos. Pré-treino: prever o próximo token em trilhões de tokens, por meses, em milhares de GPUs — o resultado é um modelo base que só completa texto. Pós-treino transforma isso em assistente: SFT ensina o formato, e RLHF, ou RLAIF com uma IA avaliando, ajusta pelas preferências."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "PANORAMA 2026",
+      "titulo": "Modelos, contexto e KV cache",
+      "bullets": [
+        "Fechado: GPT, Claude, Gemini — só API",
+        "Aberto: Llama, Qwen, DeepSeek — pesos",
+        "Contexto: de 128 mil a 1 milhão+ tokens",
+        "KV cache guarda K e V já processados",
+        "Contexto 10× maior ≈ 10× mais memória"
+      ],
+      "fala": "Fechados como GPT, Claude e Gemini: você paga por token, sem ver os pesos. Abertos como Llama, Qwen e DeepSeek: você baixa os pesos e roda onde quiser. Contexto vai de 128 mil a 1 milhão de tokens. KV cache guarda K e V já processados; contexto maior custa memória."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "MINI-PROJETO",
+      "titulo": "Anatomia de um LLM",
+      "bullets": [
+        "Tokenização: PT vs EN em 5 frases",
+        "Logits: top-10 em 3 prompts",
+        "Temperatura: T de 0.2 a 1.5",
+        "Base vs instruído: SFT/RLHF na prática",
+        "Notebook roda de ponta a ponta no Colab"
+      ],
+      "fala": "O mini-projeto é um relatório de anatomia de um LLM, o material pra explicar transformers a um colega. Compare tokenização em PT e EN, mostre o top-dez do próximo token em três prompts, varie temperatura e top-p, e compare um modelo base com um instruído."
+    },
+    {
+      "tipo": "fim",
+      "bullets": [
+        "BPE e por que PT gasta mais tokens",
+        "Q, K, V e a máscara causal",
+        "Decoder-only: attention + MLP × N",
+        "Temperatura, top-p e amostragem",
+        "Pré-treino vs SFT/RLHF"
+      ],
+      "proximo": "Módulo 6 — Prompt Engineering & APIs de LLM",
+      "fala": "Recapitulando: BPE, query, key e value, a pilha decoder-only, temperatura e top-p, e a diferença entre modelo base e pós-treinado. Essa é a base de todo LLM que você vai usar daqui em diante. No próximo módulo: prompt engineering e como chamar APIs de LLM no seu código. Até lá."
+    }
+  ]
+}

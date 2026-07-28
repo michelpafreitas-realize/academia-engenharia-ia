@@ -1,0 +1,16 @@
+{
+  "name": "academia-videos",
+  "private": true,
+  "scripts": {
+    "studio": "remotion studio src/index.ts",
+    "audio": "uv run --with edge-tts --with mutagen python scripts/gen_audio.py",
+    "render": "bash scripts/render_all.sh"
+  },
+  "dependencies": {
+    "@remotion/cli": "^4.0.486",
+    "@remotion/google-fonts": "^4.0.486",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "remotion": "^4.0.486"
+  }
+}

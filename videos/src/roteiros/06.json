@@ -1,0 +1,120 @@
+{
+  "id": "Modulo06",
+  "slug": "mod06",
+  "modulo": 6,
+  "titulo": "Prompt Engineering & APIs de LLM",
+  "periodo": "Período 3",
+  "carga": "10h",
+  "scenes": [
+    {
+      "tipo": "capa",
+      "fala": "Bem-vindo ao módulo seis: Prompt Engineering e APIs de LLM. É a habilidade de maior retorno imediato do programa. Você vai escrever prompts profissionais, garantir saída estruturada e chamar as APIs da Anthropic e da OpenAI, medindo custo e tratando erros como profissional."
+    },
+    {
+      "tipo": "conceito",
+      "kicker": "POR QUE ISSO IMPORTA",
+      "frase": "Prompt bem estruturado com saída validada é a diferença entre feature confiável e chatbot quebrado.",
+      "fala": "Prompt engineering não é truque de rede social: é especificação de comportamento, contrato entre seu sistema e um modelo probabilístico. Prompt bem estruturado separa feature confiável de chatbot que quebra o parser. Ele viaja numa API que custa e falha — isso alimenta RAG e Agentes."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "ESTRUTURA DO PROMPT",
+      "titulo": "System vs. user",
+      "bullets": [
+        "System — persona, regras e formato",
+        "User — dado variável da requisição",
+        "Nunca misture as duas coisas",
+        "Injeção de prompt mora nesse erro"
+      ],
+      "fala": "As APIs de chat separam papéis. O system é o manual do funcionário: quem o modelo é, as regras, o formato — escrito por você. O user carrega só o dado da vez. Misturar tudo numa string funciona em demo e apodrece em produção; concatenar input do usuário no system facilita prompt injection."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "TÉCNICAS QUE IMPORTAM",
+      "titulo": "Few-shot, CoT e tags XML",
+      "bullets": [
+        "Few-shot — 2 a 5 exemplos entrada→saída",
+        "Chain-of-thought — peça o raciocínio antes",
+        "Tags XML — separam dado de instrução",
+        "Peça o formato de saída, sempre"
+      ],
+      "fala": "Few-shot: dois a cinco exemplos de entrada e saída — o modelo imita padrão melhor do que segue descrição. Chain-of-thought pede o raciocínio antes da resposta. Tags XML separam dado de instrução. Peça o formato de saída sempre — sem isso, vem prosa que ninguém parseia."
+    },
+    {
+      "tipo": "conceito",
+      "kicker": "SAÍDA GARANTIDA",
+      "frase": "JSON prometido falha na cauda dos casos; structured output restringe a geração e garante o schema.",
+      "fala": "Pedir JSON no prompt acerta noventa e cinco por cento das vezes — e os cinco por cento restantes derrubam o pipeline às três da manhã. Structured output resolve na raiz: você passa um schema Pydantic e a API restringe a geração a ele. Use sempre que a resposta alimentar código."
+    },
+    {
+      "tipo": "code",
+      "kicker": "CHAMANDO A API",
+      "titulo": "Anthropic em Python",
+      "code": "import anthropic\nclient = anthropic.Anthropic()  # lê a chave\npergunta = \"O que é um token?\"\nresp = client.messages.create(\n    model=\"claude-opus-4-8\",\n    max_tokens=1024,\n    system=\"Responda em português.\",\n    messages=[\n        {\"role\": \"user\", \"content\": pergunta}\n    ],\n)\nprint(resp.content[0].text)",
+      "fala": "Instale o SDK com pip install anthropic e nunca coloque a chave no código: exporte-a numa variável de ambiente. A chamada leva modelo, system com as regras estáveis e a lista de mensagens. A resposta vem em resp ponto content, e resp ponto usage traz os tokens gastos — é ali que a conta chega."
+    },
+    {
+      "tipo": "code",
+      "kicker": "STREAMING",
+      "titulo": "Token a token, sem travar",
+      "code": "with client.messages.stream(\n    model=\"claude-opus-4-8\",\n    max_tokens=2048,\n    messages=[{\"role\": \"user\",\n               \"content\": pergunta}],\n) as stream:\n    for texto in stream.text_stream:\n        print(texto, end=\"\", flush=True)\n    final = stream.get_final_message()",
+      "fala": "Resposta longa deve ser transmitida token a token, não entregue de uma vez após vinte segundos de spinner. Nos SDKs isso é um gerenciador de contexto: você abre o stream e imprime cada pedaço assim que chega. Regra prática: chat com humano, sempre streaming; lote pode ser síncrono."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "CUSTO E CACHE",
+      "titulo": "Tokens: o que você paga",
+      "bullets": [
+        "Output custa ~5× mais que input",
+        "count_tokens mede sem gastar nada",
+        "max_tokens como teto de gasto",
+        "Cache = prefixo idêntico, ~10% do preço"
+      ],
+      "fala": "Você paga por token, e output custa cerca de cinco vezes mais que input. Meça antes com o método que conta tokens de graça; controle o output, a parte cara; use prompt caching quando o início do prompt se repete — leitura custa uns dez por cento. Cache exige prefixo idêntico."
+    },
+    {
+      "tipo": "code",
+      "kicker": "ERROS E SEGURANÇA",
+      "titulo": "Retry e a regra número 1",
+      "code": "try:\n    resp = client.messages.create(...)\nexcept anthropic.RateLimitError:\n    ...  # aguarde e tente de novo\nexcept anthropic.APIStatusError as e:\n    ...  # logue e.status_code\nexcept anthropic.APIConnectionError:\n    ...  # problema de rede",
+      "fala": "Chamadas falham: limite de requisições, servidor sobrecarregado, rede. O SDK já faz retry com espera crescente; capture as exceções tipadas e nunca repita erro de validação, que só queima cota. Regra número um: chave de API nunca vai pro código nem pro Git — se vazar, revogue na hora."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "AVALIAÇÃO",
+      "titulo": "Meça, não opine",
+      "bullets": [
+        "Conjunto de teste: 20-50 exemplos",
+        "Rode cada versão do prompt nele todo",
+        "Meça acurácia, custo e latência",
+        "Só promova quem vence nos números"
+      ],
+      "fala": "Esse prompt parece melhor não é engenharia. Monte um conjunto de teste com vinte a cinquenta exemplos e gabarito; rode cada versão do prompt nele; meça acurácia, custo e latência; e só promova quem vence nos números. Duas versões podem parecer iguais e diferir quinze pontos de acurácia."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "MINI-PROJETO",
+      "titulo": "Extrator de currículos",
+      "bullets": [
+        "Schema Pydantic com lista e Literal",
+        "Structured output, sem json.loads torcendo",
+        "≥15 exemplos de teste com gabarito",
+        "v1 sem few-shot × v2 com 3 exemplos",
+        "Relatório: acurácia, custo e vencedor"
+      ],
+      "fala": "O mini-projeto é um extrator estruturado de currículos: texto livre entra, JSON validado sai, com nome, cargo, skills, experiência e senioridade. Schema Pydantic com cinco campos. Teste com quinze exemplos, v1 sem few-shot contra v2 com três. Vence quem ganha nos números."
+    },
+    {
+      "tipo": "fim",
+      "bullets": [
+        "System/user, few-shot, CoT e tags XML",
+        "Structured output para saída confiável",
+        "APIs Anthropic/OpenAI com streaming",
+        "Custo medido e prompt caching",
+        "Retry, segurança e avaliação v1×v2"
+      ],
+      "proximo": "Módulo 7 — RAG: Retrieval-Augmented Generation",
+      "fala": "Recapitulando: você sabe estruturar prompt com system e user, usar few-shot e chain-of-thought, e delimitar dado com tags XML. Sabe garantir saída estruturada, chamar APIs com streaming, medir e cachear custo, tratar erros com retry. Próximo módulo, o sete, é RAG: retrieval-augmented generation. Até lá."
+    }
+  ]
+}

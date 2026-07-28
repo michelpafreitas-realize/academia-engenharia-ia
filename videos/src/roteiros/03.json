@@ -1,0 +1,123 @@
+{
+  "id": "Modulo03",
+  "slug": "mod03",
+  "modulo": 3,
+  "titulo": "Machine Learning Clássico",
+  "periodo": "Período 1",
+  "carga": "16h",
+  "scenes": [
+    {
+      "tipo": "capa",
+      "fala": "Bem-vindo ao módulo três: Machine Learning Clássico. Mesmo na era dos LLMs, empresas resolvem churn, crédito e fraude com ML clássico. Você vai treinar modelos lineares, árvores e ensembles com scikit-learn, até montar um pipeline completo e submeter no Kaggle."
+    },
+    {
+      "tipo": "conceito",
+      "kicker": "POR QUE ISSO IMPORTA",
+      "frase": "Um canhão de R$ 500 mata mosquito pior que um XGBoost de R$ 0,50.",
+      "fala": "Para dados em tabela, gradient boosting ainda vence redes neurais, por uma fração do preço. Mas o essencial é outro: aqui você aprende disciplinas que valem para toda a IA, como separar treino e teste e desconfiar de resultado bom demais."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "APRENDER COM DADOS",
+      "titulo": "Supervisionado x não-supervisionado",
+      "bullets": [
+        "Supervisionado: dados com rótulo certo",
+        "Regressão: resposta numérica (preço)",
+        "Classificação: resposta categórica",
+        "Não-supervisionado: busca estrutura sozinho",
+        "Pergunta-guia: tenho a resposta certa?"
+      ],
+      "fala": "Pergunta-guia de todo projeto: você tem a resposta certa para exemplos do passado? Se tem, é supervisionado — regressão prevê número, classificação prevê categoria. Se não tem rótulo, é não-supervisionado: o algoritmo busca estrutura sozinho. É noventa por cento do ML nas empresas."
+    },
+    {
+      "tipo": "code",
+      "kicker": "MODELOS LINEARES",
+      "titulo": "Regressão logística",
+      "code": "# Regressão vira classificador com sigmoide\nfrom sklearn.linear_model import LogisticRegression\n\nmodelo = LogisticRegression(max_iter=1000)\nmodelo.fit(X_treino, y_treino)\n\n# sigmoide espreme a saída em probabilidade\nprobs = modelo.predict_proba(X_teste)[:, 1]",
+      "fala": "A regressão logística, apesar do nome, é um classificador: a saída linear passa por uma sigmoide, que vira probabilidade entre zero e um. Comece sempre por modelos lineares — são rápidos, interpretáveis e formam o baseline. Se o modelo sofisticado não bate o baseline, o problema é o dado."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "ENSEMBLES",
+      "titulo": "Árvores, florestas e boosting",
+      "bullets": [
+        "Árvore: regras se/então, decora fácil",
+        "Random Forest: centenas de árvores votando",
+        "Gradient Boosting: árvores em sequência",
+        "Corrige erros da árvore anterior",
+        "Padrão-ouro para dado tabular"
+      ],
+      "fala": "Uma árvore de decisão aprende regras se/então, mas sozinha decora o treino. Random Forest treina centenas de árvores em amostras aleatórias e vota; Gradient Boosting treina em sequência, cada árvore corrigindo a anterior — é o padrão-ouro para dado tabular. É como muitos médicos opinando versus um revisando os erros dos colegas."
+    },
+    {
+      "tipo": "conceito",
+      "kicker": "VIÉS X VARIÂNCIA",
+      "frase": "Treino bom e teste ruim é overfitting; treino ruim já denuncia underfitting.",
+      "fala": "O objetivo do ML não é acertar o passado, é generalizar. Underfitting vai mal no treino e no teste — modelo simples demais. Overfitting decora o treino e fracassa no teste. Esse cabo de guerra entre viés e variância você vai gerenciar em todo projeto da carreira."
+    },
+    {
+      "tipo": "code",
+      "kicker": "VALIDAÇÃO CRUZADA",
+      "titulo": "Treino, validação e teste",
+      "code": "# Regra: nunca avalie no que já viu\nfrom sklearn.model_selection import (\n    train_test_split, cross_val_score)\n\nX_tr, X_te, y_tr, y_te = train_test_split(\n    X, y, test_size=0.2, stratify=y)\n\n# k-fold: 5 treinos, media e desvio\nscores = cross_val_score(modelo, X_tr, y_tr, cv=5)\nprint(scores.mean(), scores.std())",
+      "fala": "A regra sagrada: o modelo só pode ser avaliado em dados que nunca viu. Separe treino, validação e teste — o teste é tocado uma única vez, no final. Com poucos dados, use validação cruzada: k treinos alternando o fold, relatando média e desvio padrão."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "MÉTRICAS",
+      "titulo": "Cada métrica engana de um jeito",
+      "bullets": [
+        "Acurácia engana com classes raras",
+        "Precisão: dos marcados, quantos eram?",
+        "Recall: dos reais, quantos achei?",
+        "F1: equilíbrio entre os dois",
+        "ROC-AUC: qualidade do ranking geral"
+      ],
+      "fala": "Acurácia engana com classes desbalanceadas: um por cento de fraude, chutar sempre não é fraude já dá noventa e nove por cento de acurácia inútil. Precisão pergunta dos marcados quantos eram certos; recall, dos reais quantos achei. Câncer prioriza recall; spam prioriza precisão."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "FEATURE ENGINEERING",
+      "titulo": "Onde se ganha o jogo",
+      "bullets": [
+        "Extrair: dia da semana, mês, feriado",
+        "Combinar: renda dividido por dependentes",
+        "Transformar: log doma distribuição torta",
+        "One-hot: categoria vira colunas 0 e 1",
+        "Escalar: obrigatório em modelo linear"
+      ],
+      "fala": "Modelo só enxerga as colunas que você entrega. Feature engineering cria representações que revelam o padrão: extrair dia da semana, combinar renda por dependente, transformar com logaritmo. One-hot vira categoria em colunas de zero e um. No Titanic, o título do nome prevê melhor que a idade crua."
+    },
+    {
+      "tipo": "conceito",
+      "kicker": "DATA LEAKAGE",
+      "frase": "Resultado bom demais é sintoma: desconfie do vazamento antes de comemorar o seu gênio.",
+      "fala": "Data leakage é informação que não existiria na hora da previsão contaminando o treino — ótimo no papel, inútil em produção. Acontece com feature do futuro, pré-processamento antes do split, ou duplicatas atravessando o split. Resultado bom demais é sintoma: desconfie do vazamento. O Pipeline é o antídoto estrutural."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "MINI-PROJETO",
+      "titulo": "Compita de verdade no Kaggle",
+      "bullets": [
+        "Pipeline com pré-processamento completo",
+        "2+ features novas criadas por você",
+        "Comparar 3 modelos por validação cruzada",
+        "Submissão real com score no Kaggle",
+        "Post-mortem: o que funcionou e o que não"
+      ],
+      "fala": "O mini-projeto é competir de verdade: inscreva-se no Titanic no Kaggle e submeta suas previsões. Construa um pipeline completo, crie pelo menos duas features novas e compare três modelos por validação cruzada. Registre o score público e escreva um post-mortem do que funcionou."
+    },
+    {
+      "tipo": "fim",
+      "bullets": [
+        "Matriz de confusão, precisão, recall, F1",
+        "3 formas de data leakage e o antídoto",
+        "Pipeline Titanic com validação cruzada",
+        "Primeira submissão real no Kaggle",
+        "Mini-projeto com post-mortem publicado"
+      ],
+      "proximo": "Módulo 4 — Deep Learning na Prática",
+      "fala": "Recapitulando: você sabe montar a matriz de confusão e derivar precisão, recall e F1; sabe citar as formas de data leakage e como o Pipeline previne; rodou o lab do Titanic com validação cruzada; e fez sua primeira submissão real no Kaggle. No próximo módulo, o salto é para deep learning na prática. Até lá."
+    }
+  ]
+}
