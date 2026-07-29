@@ -224,6 +224,100 @@ plt.tight_layout(); plt.show()
 5. Submeter ao Kaggle e registrar o score público no notebook.
 6. Seção "Post-mortem": o que funcionou, o que não funcionou, qual seria o próximo passo.
 
+### 🧭 Passo a passo
+
+Reserve ~5h no total (divida em 2 ou 3 sessões). Siga na ordem — cada etapa termina com um **checkpoint**; só avance quando ele passar.
+
+**Etapa 1 — Inscrever-se na competição e baixar os dados (20 min)**
+
+1. Entre em [kaggle.com/competitions/titanic](https://www.kaggle.com/competitions/titanic) logado na conta que você usou no Kaggle Learn e clique em **Join Competition** → aceite as regras. (Prefere regressão? O roteiro é o mesmo na House Prices.)
+2. Abra a aba **Data** da competição e baixe os 3 arquivos: `train.csv` (com a resposta `Survived`), `test.csv` (sem a resposta — é ele que você vai prever) e `gender_submission.csv` (exemplo do formato de submissão).
+
+✅ **Checkpoint:** os 3 arquivos baixados e você sabe dizer qual deles NÃO tem a coluna `Survived`.
+
+**Etapa 2 — Criar o projeto e explorar (40 min)**
+
+No terminal, dentro do repositório `academia-ia`:
+
+```bash
+cd academia-ia && uv init modulo03-kaggle && cd modulo03-kaggle
+uv add scikit-learn pandas matplotlib seaborn jupyter
+mkdir dados          # mova os 3 CSVs baixados para esta pasta
+uv run jupyter lab
+```
+
+Crie o notebook `titanic.ipynb` e repita o raio-X do Módulo 1 (`shape`, `info()`, `isna().sum()`) no `train.csv`. Atenção: aqui as colunas vêm com maiúsculas (`Age`, `Sex`, `Pclass`) — diferente do dataset do seaborn usado no lab guiado.
+
+✅ **Checkpoint:** você sabe quantas linhas tem o treino (891) e quais colunas têm nulos (`Age`, `Cabin`, `Embarked`).
+
+**Etapa 3 — Primeira submissão, com modelo bobo de propósito (20 min)**
+
+1. Entenda o formato exigido: um CSV com **exatamente as colunas do `sample_submission`** da competição (`PassengerId,Survived` no Titanic), uma linha para cada linha do `test.csv`, sem coluna de índice. O próprio `gender_submission.csv` já está nesse formato — destrave o processo submetendo-o antes de modelar.
+2. Na página da competição, clique em **Submit Predictions**, envie o `gender_submission.csv` e confirme.
+3. Anote o score público que aparecer (perto de 0.765) numa célula Markdown do notebook: é o seu baseline a bater.
+
+✅ **Checkpoint:** a aba *Submissions* mostra 1 submissão aceita e o score está registrado no notebook.
+
+**Etapa 4 — Pipeline com pré-processamento (45 min)**
+
+Adapte as células 3 e 4 do lab guiado deste módulo (volte a elas): `ColumnTransformer` com imputação + escala nas numéricas e imputação + one-hot nas categóricas. Duas diferenças em relação ao lab: os nomes de coluna maiúsculos, e **sem split de teste local** — o teste é o `test.csv` do Kaggle; sua avaliação local é a validação cruzada (volte à seção 5).
+
+```python
+treino, teste = pd.read_csv("dados/train.csv"), pd.read_csv("dados/test.csv")
+X, y = treino[["Pclass", "Sex", "Age", "SibSp", "Parch", "Fare", "Embarked"]], treino["Survived"]
+```
+
+✅ **Checkpoint:** `cross_val_score(pipe_lr, X, y, cv=5)` roda sem erro e você imprime média ± desvio.
+
+**Etapa 5 — Criar 2+ features novas (45 min)**
+
+A seção 7 mostrou que o título do nome prevê melhor que a idade crua. Crie as features **nos dois** dataframes, adicione `"TamFamilia"` à lista de numéricas e `"Titulo"` à de categóricas do `ColumnTransformer`, e recrie `X` incluindo as duas colunas novas:
+
+```python
+for df in (treino, teste):
+    df["Titulo"] = df["Name"].str.extract(r",\s*([^\.]+)\.")
+    df["TamFamilia"] = df["SibSp"] + df["Parch"] + 1
+```
+
+✅ **Checkpoint:** `treino["Titulo"].value_counts()` mostra Mr, Miss, Mrs, Master no topo e a validação cruzada da Etapa 4 melhora (ou você sabe explicar por que não).
+
+**Etapa 6 — Comparar 3 modelos em tabela (45 min)**
+
+```python
+from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
+pipes = {"Logística": pipe_lr,
+         "RandomForest": Pipeline([("pre", pre), ("modelo", RandomForestClassifier(n_estimators=300, random_state=42))]),
+         "GradBoosting": Pipeline([("pre", pre), ("modelo", GradientBoostingClassifier(random_state=42))])}
+scores = {nome: cross_val_score(p, X, y, cv=5, scoring="accuracy") for nome, p in pipes.items()}
+pd.DataFrame({nome: [s.mean(), s.std()] for nome, s in scores.items()}, index=["média", "desvio"]).T
+```
+
+✅ **Checkpoint:** tabela com 3 linhas (média ± desvio) no notebook e um vencedor escolhido pela média.
+
+**Etapa 7 — Gerar o arquivo de submissão e submeter (30 min)**
+
+```python
+melhor = pipes["RandomForest"]   # troque pelo vencedor da SUA tabela
+melhor.fit(X, y)                 # agora com TODO o treino
+sub = pd.DataFrame({"PassengerId": teste["PassengerId"], "Survived": melhor.predict(teste[X.columns])})
+sub.to_csv("submissao.csv", index=False)
+assert len(sub) == 418 and list(sub.columns) == ["PassengerId", "Survived"]
+```
+
+Volte à página da competição → **Submit Predictions** → envie `submissao.csv` → anote o score público no notebook, ao lado do baseline.
+
+✅ **Checkpoint:** segundo score registrado no notebook; bateu o baseline da Etapa 3? (Se não bateu, siga mesmo assim — vira material do post-mortem.)
+
+**Etapa 8 — Post-mortem e entrega (30 min)**
+
+1. Escreva a seção Markdown "Post-mortem": o que funcionou, o que não funcionou e o próximo passo — uma frase honesta para cada.
+2. Confira que nenhum `fit` acontece fora do Pipeline e que o `test.csv` nunca influenciou decisão de modelagem (volte à seção 8 se ficou em dúvida).
+3. Rode *Restart & Run All* (conserte qualquer falha) e entregue: `git add . && git commit -m "Módulo 3: pipeline Titanic + submissão Kaggle" && git push`.
+
+✅ **Checkpoint:** todos os critérios de aceite abaixo marcados.
+
+**🆘 Se travar:** erro do Kaggle na submissão (número de linhas ou coluna errada) → seu CSV precisa espelhar o `sample_submission`: 418 linhas, `PassengerId,Survived`, `index=False` (o `assert` da Etapa 7 pega isso antes do upload); `KeyError: 'age'` → as colunas do Kaggle são maiúsculas (`Age`), diferente do lab com seaborn; validação local bem acima do leaderboard → cheiro de leakage, revise a seção 8; travou 30+ minutos em qualquer etapa → pergunte ao seu assistente de IA colando o erro completo e dizendo em qual etapa está (mas peça a *explicação*, não só a resposta — o objetivo é treinar).
+
 **Critérios de aceite:**
 
 - [ ] Submissão aceita no Kaggle com score público registrado (Titanic: acima de 0.77 é um bom começo)

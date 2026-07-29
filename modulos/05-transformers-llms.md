@@ -219,6 +219,97 @@ print("\nSAMPLING:", tok.decode(s[0], skip_special_tokens=True))
 5. Seção *Base vs. Instruct*: gerar a mesma pergunta com o `gpt2` (base) e com um modelo instruído pequeno da Hugging Face de sua escolha, e explicar a diferença usando os conceitos de SFT/RLHF.
 6. Conclusão de 10-15 linhas conectando o que você mediu com a teoria (seções 5.1, 5.6 e 5.7).
 
+### 🧭 Passo a passo
+
+Reserve ~4h no total (dá para dividir em 2 sessões). Siga na ordem — cada etapa termina com um **checkpoint**; só avance quando ele passar.
+
+**Etapa 1 — Notebook no Colab + esqueleto (15 min)**
+
+1. Abra o [Colab](https://colab.research.google.com), crie um notebook novo chamado `modulo05-anatomia-llm.ipynb` e, em células *Markdown*, monte o esqueleto: título + `## 1. Tokenização`, `## 2. Logits`, `## 3. Temperatura`, `## 4. Top-p`, `## 5. Base vs. Instruct`, `## Conclusão`.
+2. Na primeira célula de código, repita a instalação e a carga do lab guiado (passos 1 e 3 de `## 💻 Lab guiado`): `!pip -q install transformers torch`, depois `tok = AutoTokenizer.from_pretrained("gpt2")` e `model = AutoModelForCausalLM.from_pretrained("gpt2")` (com `import torch`).
+
+✅ **Checkpoint:** a célula de carga roda sem erro e o notebook tem as 6 seções criadas.
+
+**Etapa 2 — Tokenização: PT vs. EN + subpalavras (30 min)**
+
+1. Monte 5 pares de frases (PT e sua tradução EN), imprima a contagem com percentual de diferença e mostre 3 palavras quebradas em subpalavras (o `Ġ` é o espaço embutido — seção 5.1):
+
+```python
+pares = [("A capital da França é Paris", "The capital of France is Paris")]  # + 4 pares seus
+for pt_f, en_f in pares:
+    n_pt, n_en = len(tok(pt_f)["input_ids"]), len(tok(en_f)["input_ids"])
+    print(f"PT={n_pt:2} | EN={n_en:2} | {100*(n_pt-n_en)/n_en:+.0f}% | {pt_f}")
+for palavra in ["tokenização", "paralelepípedo", "strawberry"]:  # 3 exemplos de subpalavras
+    print(palavra, "→", tok.convert_ids_to_tokens(tok(palavra)["input_ids"]))
+```
+
+✅ **Checkpoint:** tabela com 5 linhas e percentuais impressa, e 3 palavras exibindo suas subpalavras.
+
+**Etapa 3 — Logits: top-10 de 3 prompts, com gráfico (35 min)**
+
+1. Transforme o passo 4 do lab em uma função e aplique a 3 prompts variados (fato, início de história, aritmética):
+
+```python
+import matplotlib.pyplot as plt
+def top10(prompt):
+    ids = tok(prompt, return_tensors="pt")
+    with torch.no_grad():
+        probs = torch.softmax(model(**ids).logits[0, -1], dim=-1)
+    top = torch.topk(probs, 10)
+    return [tok.decode(i) for i in top.indices], top.values.tolist()
+for prompt in ["The capital of France is", "Once upon a time", "2 + 2 ="]:
+    tokens, probs = top10(prompt)
+    plt.figure(); plt.bar(tokens, probs); plt.xticks(rotation=45); plt.title(prompt); plt.show()
+```
+
+✅ **Checkpoint:** 3 gráficos de barra na tela, cada um com 10 candidatos e suas probabilidades (isso já cumpre o critério do gráfico).
+
+**Etapa 4 — Amostragem: temperatura e top-p (1h)**
+
+1. Fixe um prompt e varra as 4 temperaturas do enunciado, com 3 gerações cada:
+
+```python
+ids_prompt = tok("Once upon a time", return_tensors="pt")
+for T in [0.2, 0.7, 1.0, 1.5]:
+    print(f"\n=== T={T} ===")
+    for i in range(3):  # 3 gerações por temperatura
+        g = model.generate(**ids_prompt, max_new_tokens=40, do_sample=True,
+                           temperature=T, pad_token_id=tok.eos_token_id)
+        print(f"[{i+1}]", tok.decode(g[0], skip_special_tokens=True))
+```
+
+2. Comente a diferença qualitativa numa célula Markdown (reveja a seção 5.6: T baixa afia a distribuição, T alta achata). Depois copie a célula de código, fixe `temperature=1.0` e troque a varredura por `for p in [0.5, 0.9, 1.0]`, passando `top_p=p` ao `generate` — e comente o efeito (p=0.5 corta a cauda; p=1.0 não corta nada).
+
+✅ **Checkpoint:** 12 gerações de temperatura + 9 de top-p impressas, cada varredura com seu comentário em Markdown.
+
+**Etapa 5 — Base vs. Instruct (40 min)**
+
+1. Faça a mesma pergunta ao `gpt2` (base) e a um modelo instruído pequeno. Da família Qwen, que você conheceu na seção 5.8, a versão de 0.5B cabe no Colab:
+
+```python
+from transformers import pipeline
+pergunta = "What is the capital of France?"
+base = pipeline("text-generation", model="gpt2")
+print("BASE:", base(pergunta, max_new_tokens=40)[0]["generated_text"])
+chat = pipeline("text-generation", model="Qwen/Qwen2.5-0.5B-Instruct")
+msgs = [{"role": "user", "content": pergunta}]
+print("INSTRUCT:", chat(msgs, max_new_tokens=40)[0]["generated_text"][-1]["content"])
+```
+
+2. Numa célula Markdown, explique a diferença usando a seção 5.7: o base só continua texto (pré-treino); o instruído responde como assistente porque passou por SFT + RLHF/RLAIF.
+
+✅ **Checkpoint:** as duas saídas visíveis lado a lado e a explicação cita SFT e RLHF.
+
+**Etapa 6 — Conclusão e entrega (40 min)**
+
+1. Na seção `## Conclusão`, escreva 10-15 linhas conectando o que você **mediu** à teoria: a tabela PT vs. EN com a seção 5.1 (BPE, custo por token), as varreduras com a 5.6 e o contraste base vs. instruct com a 5.7. Cite explicitamente "temperatura", "top-p" e "pós-treino" — os critérios de aceite cobram.
+2. Confira se todo bloco de código tem comentários em português e rode *Ambiente de execução → Reiniciar e executar tudo*; se qualquer célula falhar, conserte antes de seguir.
+3. Baixe o notebook (*Arquivo → Fazer download → .ipynb*) e faça commit no seu repositório `academia-ia`.
+
+✅ **Checkpoint:** todos os critérios de aceite abaixo marcados.
+
+**🆘 Se travar:** o Colab caiu ou travou ao carregar o modelo instruído → é download/RAM; reinicie a sessão (*Ambiente de execução → Reiniciar sessão*), rode só as células da Etapa 5 e, se persistir, troque por um modelo instruído ainda menor (a dica do enunciado vale: menos de 1B de parâmetros); aviso ou erro de `pad_token` no `generate` → o GPT-2 não tem pad token, por isso os trechos acima passam `pad_token_id=tok.eos_token_id` — não remova; as 3 gerações saíram idênticas → confira `do_sample=True` e não chame `torch.manual_seed()` antes de cada geração (seed fixa a cada chamada zera a variação); travou 30+ minutos em qualquer etapa → pergunte ao seu assistente de IA colando o erro completo e dizendo em qual etapa está (mas peça a *explicação*, não só a resposta — o objetivo é treinar).
+
 **Critérios de aceite:**
 
 - [ ] Notebook roda de ponta a ponta no Colab sem intervenção.

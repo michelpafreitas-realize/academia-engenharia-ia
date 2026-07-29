@@ -236,6 +236,100 @@ plt.legend(); plt.title("Learning rate: lento, bom, e no limite"); plt.show()
 2. **Gradiente**: refaça a tabela de descida do gradiente de `f(w) = (w−3)²` à mão para 5 passos com `lr = 0.2` e confirme os valores com um loop em NumPy.
 3. **Probabilidade**: monte um cenário de Bayes do seu cotidiano (spam, exame, alarme falso) com números escolhidos por você; resolva pelo método das contagens e implemente `softmax` aplicada a 4 logits, mostrando que a saída soma 1.
 
+### 🧭 Passo a passo
+
+Reserve ~3h no total (pode dividir em 2 sessões). Siga na ordem — cada etapa termina com um **checkpoint**; só avance quando ele passar.
+
+**Etapa 1 — Criar o notebook no repositório (15 min)**
+
+No terminal, dentro do seu repositório `academia-ia` (mesmo ritual do Módulo 1; se preferir o Colab, crie o notebook lá e baixe o `.ipynb` para o repositório no final):
+
+```bash
+uv init modulo02-matematica
+cd modulo02-matematica
+uv add numpy jupyter
+uv run jupyter lab
+```
+
+Crie um notebook `matematica.ipynb`. Na primeira célula (tipo *Markdown*, não código), escreva o título "Matemática da IA com meus próprios números" e crie as seções `## 1. Semelhança`, `## 2. Gradiente` e `## 3. Probabilidade`.
+
+✅ **Checkpoint:** `uv run python -c "import numpy"` roda sem erro e o notebook tem as 3 seções criadas.
+
+**Etapa 2 — Escolher os 5 itens e inventar os embeddings (20 min)**
+
+1. Escolha um domínio que você conhece de cor: filmes, músicas, pratos, jogos.
+2. Invente 3 a 4 **dimensões com significado** — cada número responde "quanto disso o item tem?", de 0 a 1. Ex. para filmes: `[ação, romance, comédia]`. Atribua os valores de cabeça, sem sofrer com precisão: o que importa é que itens parecidos ganhem vetores parecidos.
+3. Registre tudo numa célula Markdown, assim:
+
+```text
+Dimensões: [ação, romance, comédia]
+Matrix    = [0.9, 0.2, 0.1]    (muita ação, quase nada de romance)
+John Wick = [0.95, 0.1, 0.1]
+... (complete os 5)
+```
+
+✅ **Checkpoint:** 5 itens listados, todos com o mesmo número de dimensões, e você sabe dizer o que cada dimensão mede.
+
+**Etapa 3 — Seção 1: similaridade à mão e em NumPy (40 min)**
+
+1. Escolha o par que você **aposta** ser o mais parecido e calcule a similaridade de cosseno à mão numa célula Markdown — texto simples serve, sem precisar de fórmula bonita:
+
+```text
+Matrix · John Wick = 0.9·0.95 + 0.2·0.1 + 0.1·0.1 = 0.885
+|Matrix| = raiz(0.81 + 0.04 + 0.01) ≈ 0.927   |John Wick| ≈ 0.961
+similaridade = 0.885 / (0.927 · 0.961) ≈ 0.993 -> quase idênticos, como eu apostava
+```
+
+2. Na célula de código logo abaixo, monte os 5 vetores com `np.array`, copie a função `similaridade_cosseno` da seção 2 do módulo e gere a matriz 5×5 com um `for` dentro de outro.
+3. Numa célula Markdown, comente o par mais e o menos parecido — e se algum resultado te surpreendeu.
+
+✅ **Checkpoint:** a diagonal da matriz é toda 1 e o valor do seu par bate com a conta à mão (2 casas decimais).
+
+**Etapa 4 — Seção 2: gradiente à mão e conferido em NumPy (45 min)**
+
+1. Refaça a tabela da seção 5 do módulo, agora com `lr = 0.2`, partindo de `w = 0`, por 5 passos, numa célula Markdown. As duas primeiras linhas, por extenso:
+
+```text
+Passo 1: w = 0    gradiente = 2·(0 − 3) = −6      w novo = 0 − 0.2·(−6) = 1.2
+Passo 2: w = 1.2  gradiente = 2·(1.2 − 3) = −3.6  w novo = 1.2 − 0.2·(−3.6) = 1.92
+```
+
+2. Na célula de código abaixo, confira com um loop (é o loop do lab guiado, sem os dados) e compare linha a linha com a sua tabela:
+
+```python
+w, lr = 0.0, 0.2
+for passo in range(1, 6):
+    grad = 2 * (w - 3)
+    w = w - lr * grad
+    print(f"passo {passo}: w = {w:.4f}")
+```
+
+✅ **Checkpoint:** os 5 valores impressos batem com a tabela à mão — e você percebeu que com `lr = 0.2` o `w` corre para 3 mais rápido que na tabela do texto (`lr = 0.1`).
+
+**Etapa 5 — Seção 3: Bayes por contagens (30 min)**
+
+1. Monte um cenário do seu cotidiano (spam, exame, alarme de carro) com 3 números escolhidos por você — taxa base, taxa de detecção e taxa de falso alarme — e resolva pelo método das 1.000 pessoas (seção 7 do módulo) numa célula Markdown:
+
+```text
+Cenário: spam. Taxa base: 20% dos e-mails são spam; o filtro pega 95% deles e marca 3% dos legítimos por engano.
+De 1000 e-mails: 200 spam -> 190 marcados; 800 legítimos -> 24 marcados por engano.
+P(spam | marcado) = 190 / (190 + 24) ≈ 0.89
+```
+
+2. Confira as contagens numa célula de código (aritmética simples em Python) e feche a seção com a conclusão em uma frase, citando a taxa base.
+
+✅ **Checkpoint:** conta à mão e código dão a mesma probabilidade, e a taxa base aparece explícita na conclusão.
+
+**Etapa 6 — Seção 3: softmax + entrega (25 min)**
+
+1. Copie a função `softmax` da seção 8 do módulo, invente 4 logits (ex.: scores do seu filtro de spam imaginário para 4 categorias) e imprima a saída.
+2. Prove que é uma distribuição: `assert np.isclose(softmax(z).sum(), 1.0)`.
+3. Rode *Restart & Run All*; conserte qualquer célula que falhar. Depois: `git add . && git commit -m "Módulo 2: matemática com meus números" && git push`.
+
+✅ **Checkpoint:** todos os critérios de aceite abaixo marcados.
+
+**🆘 Se travar:** erro de shape na similaridade → os 5 vetores precisam ter o mesmo tamanho, confira com `.shape`; diagonal dando `0.9999999` em vez de 1 → arredondamento de ponto flutuante, compare com `np.isclose`; tabela do gradiente divergindo do loop → 90% das vezes é sinal trocado (o passo é `w − lr·grad`; com gradiente negativo, isso **soma**); travou 30+ minutos em qualquer etapa → pergunte ao seu assistente de IA colando a conta ou o erro e dizendo em qual etapa está (mas peça a *explicação*, não só a resposta — o objetivo é treinar).
+
 **Critérios de aceite:**
 
 - [ ] Toda conta à mão bate com o resultado NumPy (mostre os dois lados)

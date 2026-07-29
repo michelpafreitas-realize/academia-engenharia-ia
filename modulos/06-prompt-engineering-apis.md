@@ -218,6 +218,97 @@ print(f"\nTokens de input da 1ª chamada (medidos sem custo): {contagem.input_to
 5. Relatório: acurácia por campo, custo médio por chamada e custo projetado para 10 mil documentos, para cada versão.
 6. Tratamento de erros com as exceções tipadas do SDK e streaming em pelo menos um caminho interativo do código.
 
+### 🧭 Passo a passo
+
+Reserve ~4h30 no total (pode dividir em 2 ou 3 sessões). Siga na ordem — cada etapa termina com um **checkpoint**; só avance quando ele passar.
+
+**Etapa 1 — Preparar o projeto e a chave (20 min)**
+
+1. Crie a pasta `modulo06-extrator` no seu repositório e instale as dependências: `pip install anthropic pydantic`.
+2. Gere sua chave no console do provedor (para a Anthropic: [console.anthropic.com](https://console.anthropic.com) → *API Keys*) e exporte no shell — **nunca** no código nem no Git (seção 6.7): `export ANTHROPIC_API_KEY="sua-chave"`. Se usar arquivo `.env`, adicione-o ao `.gitignore` AGORA, antes do primeiro commit.
+3. Confirme a conexão sem gastar nada, com `count_tokens` (seção 6.6): `python -c "import anthropic; c = anthropic.Anthropic(); print(c.messages.count_tokens(model='claude-opus-4-8', messages=[{'role': 'user', 'content': 'oi'}]).input_tokens)"`
+
+✅ **Checkpoint:** o comando imprime um número de tokens, sem erro de autenticação.
+
+**Etapa 2 — Escrever o schema Pydantic (20 min)**
+
+Crie `extrator.py` começando pelo contrato, igual ao passo 2 do lab guiado (a seção 6.3 explica o porquê):
+
+```python
+from pydantic import BaseModel
+from typing import Literal
+
+class Curriculo(BaseModel):
+    nome: str
+    cargo: str
+    skills: list[str]
+    anos_experiencia: int
+    senioridade: Literal["junior", "pleno", "senior"]
+```
+
+✅ **Checkpoint:** `Curriculo(nome="Ana", cargo="Dev", skills=["python"], anos_experiencia=3, senioridade="pleno")` roda; trocar para `senioridade="chefe"` levanta `ValidationError`.
+
+**Etapa 3 — Gerar os 15 textos e montar o gabarito (45 min)**
+
+1. Use o próprio LLM para os textos: peça (no chat ou via API) "escreva 15 mini-currículos fictícios em português, variados em área e senioridade, 4-6 linhas cada". Salve como lista de strings em `dados/curriculos.json`.
+2. O **gabarito é seu**: leia cada texto e preencha à mão `dados/gabarito.json` — lista de 15 objetos com exatamente os campos do schema. Cuidado com a grafia do `Literal` ("senior" sem acento, igual ao schema).
+
+✅ **Checkpoint:** um script de 5 linhas com `json.load` valida os 15 itens com `Curriculo(**item)` sem erro.
+
+**Etapa 4 — Função de extração com structured output (30 min)**
+
+Adapte a `classificar()` do lab guiado (passo 3), reaproveitando o setup dele (`client`, `MODEL`, preços): mesmo esqueleto, trocando o schema e a tag XML (seção 6.2):
+
+```python
+def extrair(texto: str, system: str) -> tuple[Curriculo, float]:
+    resp = client.messages.parse(
+        model=MODEL, max_tokens=1024, system=system,
+        messages=[{"role": "user", "content": f"<curriculo>\n{texto}\n</curriculo>"}],
+        output_format=Curriculo,
+    )
+    custo = resp.usage.input_tokens * PRECO_INPUT + resp.usage.output_tokens * PRECO_OUTPUT
+    return resp.parsed_output, custo
+```
+
+✅ **Checkpoint:** `extrair(curriculos[0], "Extraia os dados do currículo.")` devolve um objeto `Curriculo` validado, impresso no terminal.
+
+**Etapa 5 — Escrever as duas versões do prompt (30 min)**
+
+1. `SYSTEM_V1`: o mais ingênuo possível, 2-3 linhas descrevendo a tarefa. Resista a melhorá-lo — a graça é *medir* a diferença.
+2. `SYSTEM_V2`: o mesmo texto + 3 exemplos few-shot entrada → saída dentro de `<exemplos>` (seção 6.2). Use 3 currículos que **não** estão no conjunto de teste.
+3. Meça cada versão com `count_tokens` antes do lote (é critério de aceite) e anote os números.
+
+✅ **Checkpoint:** as duas constantes existem no código e você sabe quantos tokens de input cada versão custa.
+
+**Etapa 6 — Avaliar as duas versões no MESMO conjunto (45 min)**
+
+Crie `avaliar.py`: para cada versão, rode `extrair()` nos 15 textos, compare campo a campo com o gabarito (para `skills`, compare como conjuntos: `set(previsto) == set(esperado)`) e acumule acertos por campo e custo. Envolva a chamada nas exceções tipadas da seção 6.7:
+
+```python
+try:
+    previsto, custo = extrair(texto, system)
+except anthropic.RateLimitError:
+    time.sleep(30); continue      # e registre o caso pulado
+# trate também APIStatusError e APIConnectionError, como na seção 6.7
+```
+
+✅ **Checkpoint:** o script percorre os 15 exemplos nas duas versões sem morrer no meio e imprime acertos por campo e custo total.
+
+**Etapa 7 — Relatório v1 × v2 (30 min)**
+
+Monte `relatorio.md` com uma tabela: uma linha por campo, colunas acurácia v1 / acurácia v2; abaixo, custo médio por chamada de cada versão e custo projetado para 10 mil documentos (`custo_medio × 10_000`, seção 6.6). Feche com um parágrafo dizendo qual versão venceu e **pelos números** de quais campos.
+
+✅ **Checkpoint:** a tabela responde "qual versão vai para produção?" sem precisar de opinião.
+
+**Etapa 8 — Streaming, README e entrega (30 min)**
+
+1. Adicione um caminho interativo: um modo em que você cola um currículo no terminal e vê um resumo do candidato ser transmitido token a token com `client.messages.stream` (copie a estrutura da seção 6.5), antes ou depois da extração estruturada.
+2. Escreva o README curto (instalar, variáveis de ambiente, como rodar), confira que nenhuma chave vazou (`git log -p | grep -i "sk-"` deve voltar vazio) e faça commit e push.
+
+✅ **Checkpoint:** todos os critérios de aceite abaixo marcados.
+
+**🆘 Se travar:** `ValidationError` do Pydantic no gabarito ou na avaliação → quase sempre é grafia fora do `Literal` ("sênior"/"Senior" em vez de "senior") ou campo faltando no JSON — alinhe gabarito e schema letra a letra; erro de autenticação ("could not resolve authentication method" / 401) → a chave não está no ambiente **deste** shell: confira com `echo $ANTHROPIC_API_KEY` e re-exporte; 429 ou orçamento estourando → teste com 3 exemplos antes do lote completo, reduza `max_tokens` e, se precisar, rode a avaliação no free tier do Google AI Studio deixando só a rodada final na API paga (dica do módulo). Travou 30+ minutos em qualquer etapa → pergunte ao seu assistente de IA colando o erro completo e dizendo em qual etapa está (mas peça a *explicação*, não só a resposta — o objetivo é treinar).
+
 **Critérios de aceite:**
 
 - [ ] 100% das saídas validam contra o schema (é o ponto do structured output).

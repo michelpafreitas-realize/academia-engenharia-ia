@@ -270,6 +270,97 @@ trainer.train()
 - Eval de tarefa: nos exemplos de teste, medir % de saídas que são JSON válido e % com campos corretos — para o modelo base e para o fine-tuned.
 - Publicação do adaptador no Hugging Face Hub com model card completa (base, dados, hiperparâmetros, tabela de resultados, limitações).
 
+### 🧭 Passo a passo
+
+Reserve ~6h no total (dá para dividir em 3 sessões: dados, treino+eval, publicação). Siga na ordem — cada etapa termina com um **checkpoint**; só avance quando ele passar.
+
+**Etapa 1 — Definir o esquema e gerar rascunhos com um LLM forte (1h)**
+
+1. Fixe os valores permitidos antes de gerar qualquer exemplo: `intencao` ∈ {duvida, compra, reclamacao, cancelamento}, `urgencia` ∈ {baixa, media, alta}, `produto` texto livre, `resumo` com até 15 palavras.
+2. Peça rascunhos a um LLM forte (o assistente de IA que você já usa) em lotes de 20, variando tom e tema a cada lote: *"Gere 20 pares `mensagem do cliente → JSON` para treinar um formatador. Mensagens de clientes de [tema do lote: telefonia / e-commerce / academia...], em tom [formal / com gírias / irritado / cheio de erros de digitação]. O JSON tem exatamente os campos intencao (duvida|compra|reclamacao|cancelamento), produto, urgencia (baixa|media|alta) e resumo (até 15 palavras)."*
+3. Repita trocando tema e tom até juntar ~180 rascunhos — sobra para os cortes da revisão.
+
+✅ **Checkpoint:** ~180 pares num arquivo de rascunho, com pelo menos 5 combinações diferentes de tom/tema.
+
+**Etapa 2 — Revisar TODOS à mão e salvar `dataset.jsonl` (1h30)**
+
+A revisão manual é o requisito inegociável: LLMs geram exemplos inconsistentes, e é exatamente isso que o seu modelo aprenderia. Para **cada** rascunho pergunte: o JSON é válido? Os campos batem com a mensagem? Corrija ou apague. Salve uma linha por exemplo no formato da seção 7, usando o **mesmo system** em todas as linhas — a resposta do assistant é o JSON *como string*:
+
+```json
+{"messages": [{"role": "system", "content": "Converta a mensagem do cliente em JSON com os campos intencao, produto, urgencia e resumo."}, {"role": "user", "content": "oi, meu plano ta caro dms, quero cancelar logo isso"}, {"role": "assistant", "content": "{\"intencao\": \"cancelamento\", \"produto\": \"plano\", \"urgencia\": \"alta\", \"resumo\": \"Cliente acha o plano caro e pede cancelamento.\"}"}]}
+```
+
+✅ **Checkpoint:** `python -c "import json; L = [json.loads(l) for l in open('dataset.jsonl', encoding='utf-8')]; [json.loads(x['messages'][2]['content']) for x in L]; print(len(L))"` imprime ≥ 150 sem erro.
+
+**Etapa 3 — Split 80/10/10 antes do treino (15 min)**
+
+Crie `split.py` na pasta do dataset e rode uma única vez. A partir daqui, `teste.jsonl` fica lacrado — só o eval (Etapas 4 e 5) pode abri-lo — e `validacao.jsonl` fica de reserva para ajustes de hiperparâmetros:
+
+```python
+import random
+linhas = open("dataset.jsonl", encoding="utf-8").read().splitlines()
+random.seed(42); random.shuffle(linhas)
+n = len(linhas); c1, c2 = int(n * 0.8), int(n * 0.9)
+for nome, parte in [("treino", linhas[:c1]), ("validacao", linhas[c1:c2]), ("teste", linhas[c2:])]:
+    open(f"{nome}.jsonl", "w", encoding="utf-8").write("\n".join(parte) + "\n")
+```
+
+✅ **Checkpoint:** três arquivos criados e a soma das linhas dos três bate com o total do `dataset.jsonl`.
+
+**Etapa 4 — Subir para o Colab e medir o "antes" (1h15)**
+
+1. Abra [colab.research.google.com](https://colab.research.google.com), crie um notebook, ligue a GPU (menu *Runtime → Change runtime type → T4 GPU → Save*) e envie os três `.jsonl` pelo ícone de pasta da barra lateral esquerda (botão de upload).
+2. Instale e carregue copiando os Passos 1 e 2 do Lab guiado, Parte B (`!pip install unsloth`, `FastLanguageModel.from_pretrained` com um base de 1B–3B em 4 bits, `get_peft_model`).
+3. Meça o modelo base **agora**: o adaptador recém-criado nasce neutro, então antes do treino o modelo se comporta como o base. No código abaixo, `do_sample=False` é a temperatura 0 das Dicas; as métricas usam os campos categóricos (`produto` e `resumo` são texto livre — avalie-os por leitura).
+
+```python
+import json
+teste = [json.loads(l) for l in open("teste.jsonl", encoding="utf-8")]
+def avaliar(model, tokenizer):
+    FastLanguageModel.for_inference(model)
+    validos = corretos = 0
+    for ex in teste:
+        prompt = tokenizer.apply_chat_template(ex["messages"][:2], tokenize=False, add_generation_prompt=True)
+        entrada = tokenizer(prompt, return_tensors="pt").to("cuda")
+        gerado = model.generate(**entrada, max_new_tokens=200, do_sample=False)[0]
+        saida = tokenizer.decode(gerado[entrada["input_ids"].shape[1]:], skip_special_tokens=True)
+        try:
+            obtido, esperado = json.loads(saida.strip()), json.loads(ex["messages"][2]["content"])
+            validos += 1
+            corretos += int(obtido.get("intencao") == esperado["intencao"] and obtido.get("urgencia") == esperado["urgencia"])
+        except (json.JSONDecodeError, AttributeError):
+            pass
+    print(f"JSON válido: {100*validos/len(teste):.0f}% | campos corretos: {100*corretos/len(teste):.0f}%")
+avaliar(model, tokenizer)  # anote os números: é a linha "base" da tabela
+```
+
+✅ **Checkpoint:** duas porcentagens anotadas para o modelo base (baixas — é exatamente o esperado).
+
+**Etapa 5 — Treinar o QLoRA e medir o "depois" (1h15)**
+
+1. Volte ao modo de treino com `FastLanguageModel.for_training(model)` e treine copiando os Passos 3 e 4 do Lab guiado, Parte B, trocando `dados.jsonl` por `treino.jsonl` — o chat template entra ali via `apply_chat_template` (seção 7); nunca monte a string na mão.
+2. Loss caindo bonito ainda não prova nada (seção 8): terminado o treino, rode `avaliar(model, tokenizer)` de novo — agora com o adaptador treinado.
+3. Monte numa célula Markdown a tabela antes/depois: linhas Base e Fine-tuned, colunas "JSON válido (%)" e "campos corretos (%)".
+
+✅ **Checkpoint:** treino terminou no Colab sem OOM e o fine-tuned supera o base em pelo menos uma métrica (se não superou, veja o 🆘 antes de publicar).
+
+**Etapa 6 — Publicar no Hub com model card completa (45 min)**
+
+1. Crie sua conta em [huggingface.co](https://huggingface.co) e pegue o token: clique no seu avatar (canto superior direito) → *Settings* → *Access Tokens* → *Create new token* → tipo **Write** → copie o valor (começa com `hf_`). No Colab, autentique e publique:
+
+```python
+from huggingface_hub import login
+login(token="hf_...")  # cole o seu token Write
+model.push_to_hub("seu-usuario/formatador-especialista-lora")
+tokenizer.push_to_hub("seu-usuario/formatador-especialista-lora")
+```
+
+2. Na página do modelo no Hub, edite o `README.md` (a model card) com o roteiro da seção 8: modelo base, descrição dos dados, hiperparâmetros (`r`, `alpha`, épocas, learning rate), a tabela antes/depois da Etapa 5, limitações — e a seção "quando NÃO usar este modelo".
+
+✅ **Checkpoint:** a URL pública do modelo abre com a model card completa — e todos os critérios de aceite abaixo marcados.
+
+**🆘 Se travar:** `CUDA out of memory` no Colab → *Runtime → Restart runtime* e treine com `per_device_train_batch_size=1` e `max_seq_length=1024` (as mensagens deste projeto são curtas, sobra folga); o fine-tuned gera JSON quebrado ou texto que não para → suspeito nº 1 é chat template errado — volte à seção 7 e confira que **tudo** passa por `apply_chat_template`, inclusive o prompt do eval; o loss não desce (ou despenca para perto de zero) → exemplos repetidos ou template aplicado duas vezes — imprima `ds[0]["text"]` e leia a string com os próprios olhos; travou 30+ minutos em qualquer etapa → pergunte ao seu assistente de IA colando o erro completo e dizendo em qual etapa está (mas peça a *explicação*, não só a resposta — o objetivo é treinar).
+
 **Critérios de aceite**:
 - [ ] Dataset revisado manualmente, com os 3 splits separados antes do treino
 - [ ] Treino conclui no Colab grátis sem OOM (ajuste batch size/seq length se preciso)

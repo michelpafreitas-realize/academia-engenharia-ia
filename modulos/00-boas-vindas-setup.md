@@ -194,6 +194,97 @@ plt.show()
 3. Um notebook `modulo00.ipynb` com o gráfico do lab e um parágrafo (em Markdown, no próprio notebook) explicando com suas palavras a diferença entre engenheiro de IA, cientista de dados e ML engineer.
 4. Contas criadas: GitHub, Hugging Face e Google AI Studio (adicione ao README os links dos seus perfis públicos — nunca as chaves!).
 
+### 🧭 Passo a passo
+
+Reserve ~2h no total (pode dividir em 2 sessões). Siga na ordem — cada etapa termina com um **checkpoint**; só avance quando ele passar.
+
+**Etapa 1 — Criar as três contas (20 min)**
+
+1. GitHub: entre em [github.com](https://github.com), clique em **Sign up**, use um e-mail que você acessa sempre e escolha um nome de usuário profissional — ele vira a URL do seu portfólio.
+2. Hugging Face: em [huggingface.co](https://huggingface.co), clique em **Sign Up** e confirme o e-mail.
+3. Google AI Studio: em [aistudio.google.com](https://aistudio.google.com), entre com sua conta Google, clique em **Get API key** → **Create API key**. Guarde a chave num gerenciador de senhas ou anotação local **fora** de qualquer pasta com Git — volte à seção 7: chave de API é senha, nunca vai para o código nem para o GitHub.
+
+✅ **Checkpoint:** você consegue fazer login nas três plataformas e sabe onde a chave do AI Studio está guardada (e não é dentro de um repositório).
+
+**Etapa 2 — Criar o repositório `academia-ia` no site do GitHub (10 min)**
+
+1. Logado no GitHub, clique no botão verde **New** (canto superior esquerdo da página inicial) — ou acesse direto [github.com/new](https://github.com/new).
+2. Em *Repository name*, digite exatamente `academia-ia` e marque **Public** — é seu portfólio, precisa ser visível.
+3. Marque a caixa **Add a README file** e clique em **Create repository**.
+
+✅ **Checkpoint:** a página `github.com/SEU-USUARIO/academia-ia` abre e mostra um README quase vazio.
+
+**Etapa 3 — Clonar e escrever o README com seu plano semanal (35 min)**
+
+```bash
+git clone https://github.com/SEU-USUARIO/academia-ia.git
+cd academia-ia
+```
+
+Abra a pasta no VS Code (`code .`) e substitua o conteúdo do `README.md`. Esqueleto sugerido — copie e preencha:
+
+```markdown
+# Academia de Engenharia de IA — diário de bordo
+
+Sou [nome], [o que faço hoje], estudando IA porque [sua razão real].
+
+## Plano semanal de estudos
+| Dia | Horário | O quê |
+|-----|---------|-------|
+| Ter | 19h30–21h | Aulas + lab do módulo atual |
+| Sáb | 9h–10h30 | Mini-projeto + quiz + flashcards |
+
+## Meus perfis
+- GitHub: https://github.com/SEU-USUARIO
+- Hugging Face: https://huggingface.co/SEU-USUARIO
+```
+
+Salve e faça o primeiro commit (o ciclo da seção 6):
+
+```bash
+git add README.md
+git commit -m "README: apresentação e plano semanal de estudos"
+git push
+```
+
+✅ **Checkpoint:** o README atualizado aparece no site do GitHub, com dias e horários concretos (não "quando der").
+
+**Etapa 4 — `check_setup.py` rodando dentro do repositório (15 min)**
+
+```bash
+# dentro de academia-ia
+uv init .                              # transforma a pasta num projeto uv
+uv add numpy pandas matplotlib jupyter
+echo ".venv/" >> .gitignore            # garante que o ambiente virtual fica fora do Git
+cp ../academia-lab/check_setup.py .    # ou recrie o arquivo copiando do Passo 3 do lab
+uv run python check_setup.py
+```
+
+✅ **Checkpoint:** a saída mostra todos os `[ok]` e termina com "Ambiente pronto. Bem-vindo(a) à Academia!".
+
+**Etapa 5 — Notebook `modulo00.ipynb` no Colab (25 min)**
+
+1. Abra [colab.research.google.com](https://colab.research.google.com), clique em **New notebook** e renomeie clicando no título ("Untitled0.ipynb") para `modulo00.ipynb`.
+2. Na primeira célula, cole o código do gráfico do lab (Passo 4) e execute com Shift+Enter.
+3. Clique em **+ Text** e escreva um parágrafo, com suas palavras, sobre a diferença entre engenheiro de IA, cientista de dados e ML engineer. Escreva de memória primeiro (active recall!); só depois confira na seção 3.
+4. Rode **Runtime → Run all** para provar que executa de ponta a ponta; então **File → Download → Download .ipynb** e mova o arquivo para a pasta `academia-ia`.
+
+✅ **Checkpoint:** o notebook roda inteiro no Colab (gráfico + parágrafo) e o arquivo `modulo00.ipynb` está na pasta do repositório.
+
+**Etapa 6 — Segundo commit e revisão final (15 min)**
+
+Rode `git status` e confira a lista: nenhum `.env`, nenhuma chave, nada de `.venv`. Então entregue:
+
+```bash
+git add .
+git commit -m "Módulo 0: check_setup, notebook e projeto uv"
+git push
+```
+
+✅ **Checkpoint:** a página do repositório mostra README, `check_setup.py`, `modulo00.ipynb` e pelo menos 2 commits — percorra os critérios de aceite abaixo marcando um a um.
+
+**🆘 Se travar:** `uv: command not found` → o terminal foi aberto antes da instalação; feche e reabra, ou refaça o Passo 1 do lab guiado; `ModuleNotFoundError: No module named 'numpy'` → você rodou `python check_setup.py` direto; use sempre `uv run python check_setup.py`, dentro da pasta do projeto; `git push` recusado pedindo login → siga a autenticação que o próprio GitHub abre no navegador (senha no terminal não funciona mais). Travou 30+ minutos em qualquer etapa → pergunte ao seu assistente de IA colando o erro completo e dizendo em qual etapa está (mas peça a *explicação*, não só a resposta — o objetivo é treinar).
+
 **Critérios de aceite:**
 
 - [ ] Repositório público no GitHub com pelo menos 2 commits de mensagens descritivas

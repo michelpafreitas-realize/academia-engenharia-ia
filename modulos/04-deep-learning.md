@@ -256,6 +256,97 @@ for epoca in range(5):
 5. Testar pelo menos 2 arquiteturas (ex.: MLP raso vs. fundo, com/sem dropout) e comparar em tabela.
 6. Reportar a acurácia final no conjunto de teste.
 
+### 🧭 Passo a passo
+
+Reserve ~3h no total (dá para dividir em 2 sessões). Siga na ordem — cada etapa termina com um **checkpoint**; só avance quando ele passar. Regra de ouro: este projeto é o lab guiado deste módulo com upgrades — copie de lá, não digite do zero.
+
+**Etapa 1 — Abrir o Colab e ligar a GPU (10 min)**
+
+1. Entre em [colab.research.google.com](https://colab.research.google.com) e crie um notebook novo chamado `modulo04-fashion-mnist.ipynb`.
+2. Menu *Ambiente de execução* → *Alterar tipo de ambiente de execução* → **GPU T4** → Salvar. Depois cole e rode a célula 1 do lab guiado (imports + `device`).
+
+✅ **Checkpoint:** a célula imprime `Treinando em: cuda`.
+
+**Etapa 2 — Fashion-MNIST + split de validação de 10% (20 min)**
+
+Copie a célula 2 do lab e faça duas mudanças: `MNIST` vira `FashionMNIST` (a "troca de uma linha" do requisito 1) — mantenha o `transform`, só trocando a normalização por `transforms.Normalize((0.2860,), (0.3530,))`, a média/desvio do Fashion-MNIST — e separe 10% do treino para validação:
+
+```python
+train_full = datasets.FashionMNIST("data", train=True, download=True, transform=transform)
+test_ds = datasets.FashionMNIST("data", train=False, download=True, transform=transform)
+train_ds, val_ds = torch.utils.data.random_split(train_full, [54000, 6000])  # 90% / 10%
+train_dl = DataLoader(train_ds, batch_size=128, shuffle=True)
+val_dl = DataLoader(val_ds, batch_size=256)
+test_dl = DataLoader(test_ds, batch_size=256)
+```
+
+✅ **Checkpoint:** `print(len(train_ds), len(val_ds), len(test_ds))` imprime `54000 6000 10000`.
+
+**Etapa 3 — Duas arquiteturas + sanity check do batch único (25 min)**
+
+1. Copie a célula 3 do lab renomeando a classe `MLP` para `ModeloA` (raso: 784→256→10, com dropout) e ajuste a linha `model = ModeloA().to(device)`.
+2. Crie `ModeloB` copiando `ModeloA` e trocando só o `nn.Sequential` por uma versão mais funda: `nn.Flatten(), nn.Linear(784, 512), nn.ReLU(), nn.Dropout(0.2), nn.Linear(512, 256), nn.ReLU(), nn.Dropout(0.2), nn.Linear(256, 10)`.
+3. Cole a célula 4 do lab (sanity check do batch único) sem mudar nada — rodar isso ANTES do treino completo é critério de aceite.
+
+✅ **Checkpoint:** o `assert loss.item() < 0.1` passa. Se não passar, o bug é de código — use o checklist da seção 4.8.
+
+**Etapa 4 — Loop de treino à mão com validação + early stopping (45 min)**
+
+É o loop da célula 5 do lab (a liturgia da seção 4.8) com duas adições: loss de validação a cada época e o early stopping da seção 4.7, guardando `best_val_loss` e o `state_dict` do melhor modelo:
+
+```python
+def loss_valid(model, dl):  # igual à avalia() do lab, mas somando a loss
+    model.eval()
+    with torch.no_grad():
+        soma = sum(criterion(model(x.to(device)), y.to(device)).item() for x, y in dl)
+    model.train(); return soma / len(dl)
+def treina(model, epocas=30, paciencia=3):   # esqueleto do early stopping (seção 4.7)
+    optimizer = torch.optim.AdamW(model.parameters(), lr=1e-3, weight_decay=0.01)
+    best_val_loss, best_state, sem_melhora = float("inf"), None, 0
+    hist_treino, hist_val = [], []
+    for epoca in range(epocas):
+        soma = 0.0
+        for x, y in train_dl:  # os 5 passos da seção 4.8, sem mudança
+            x, y = x.to(device), y.to(device)
+            optimizer.zero_grad()
+            loss = criterion(model(x), y); loss.backward(); optimizer.step()
+            soma += loss.item()
+        val_loss = loss_valid(model, val_dl)
+        hist_treino.append(soma / len(train_dl)); hist_val.append(val_loss)
+        print(f"Época {epoca+1}: treino {hist_treino[-1]:.4f} | val {val_loss:.4f}")
+        if val_loss < best_val_loss:   # melhorou → guarda o melhor modelo
+            best_val_loss, sem_melhora = val_loss, 0
+            best_state = {k: v.clone() for k, v in model.state_dict().items()}
+        else:
+            sem_melhora += 1
+            if sem_melhora >= paciencia: print(f"Early stopping na época {epoca+1}"); break
+    model.load_state_dict(best_state)  # restaura o melhor checkpoint
+    return hist_treino, hist_val
+```
+
+✅ **Checkpoint:** `model_a = ModeloA().to(device)` seguido de `hist_treino, hist_val = treina(model_a)` imprime as duas losses a cada época, e o treino para sozinho (ou chega às 30 épocas) restaurando o melhor modelo.
+
+**Etapa 5 — Curvas de aprendizado em matplotlib (15 min)**
+
+```python
+import matplotlib.pyplot as plt
+plt.plot(hist_treino, label="treino"); plt.plot(hist_val, label="validação")
+plt.xlabel("época"); plt.ylabel("loss"); plt.title("Fashion-MNIST — ModeloA"); plt.legend(); plt.show()
+```
+
+✅ **Checkpoint:** gráfico com as duas curvas e legenda, mais uma célula de texto sua com 2-3 linhas comentando: há overfitting? A partir de qual época as curvas se separam? (Na dúvida, volte à seção 4.7.)
+
+**Etapa 6 — Tabela comparativa, acurácia final e entrega (30 min)**
+
+1. Repita as etapas 4-5 com `ModeloB` (e, se quiser, variações com/sem dropout), guardando os históricos com outros nomes.
+2. Meça a acurácia de teste de cada modelo com a `avalia()` da célula 5 do lab: `avalia(model_a, test_dl)`.
+3. Monte em uma célula Markdown a tabela `| Modelo | Épocas até parar | Melhor val loss | Acurácia teste |` e escreva 1 linha reportando o vencedor. Meta: ≥ 88% (abaixo disso, releia as Dicas — normalização e learning rate).
+4. *Ambiente de execução* → *Reiniciar e executar tudo*: precisa rodar de ponta a ponta sem edição manual.
+
+✅ **Checkpoint:** todos os critérios de aceite abaixo marcados.
+
+**🆘 Se travar:** os três tropeços clássicos aqui são: (1) *shape mismatch* (`mat1 and mat2 shapes cannot be multiplied`) → os tamanhos das `nn.Linear` do `ModeloB` precisam se encaixar em cadeia (784→512→256→10); (2) loss que não desce ou vira `NaN` → rode o checklist da seção 4.8 (learning rate 10× menor, `zero_grad()` presente, dados normalizados); (3) early stopping disparando já na época 2-3 → validação oscilando: diminua o learning rate ou aumente `paciencia`. Travou 30+ minutos em qualquer etapa → pergunte ao seu assistente de IA colando o erro completo e dizendo em qual etapa está — e peça a *explicação*, não só a resposta, porque o objetivo é treinar.
+
 **Critérios de aceite:**
 
 - [ ] Acurácia de teste ≥ 88%.

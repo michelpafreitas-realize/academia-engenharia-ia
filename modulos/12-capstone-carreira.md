@@ -98,6 +98,67 @@ A estratégia prática: construa o portfólio bilíngue (README em inglês), est
 
 Escolha **pelo menos dois** para o portfólio (idealmente todos os quatro ao longo do tempo). Cada um deve virar um repositório público com README completo. Estes são os projetos que você mostra numa entrevista.
 
+### 🧭 Como tirar um capstone do papel — passo a passo
+
+O que separa quem publica um capstone de quem fica na intenção não é talento — é roteiro. O passo a passo abaixo serve para **qualquer** um dos quatro projetos; siga na ordem, e só avance quando o **checkpoint** passar.
+
+**Etapa 1 — Escolher UM projeto (30 min)**
+
+Dois critérios, nessa ordem: qual módulo você mais curtiu fazer (RAG → Projeto 1; agentes → Projeto 2; fine-tuning → Projeto 3; LLMOps → Projeto 4) e qual história você quer contar numa entrevista. Escolha **um** e escreva o nome dele; os outros ficam para depois — dois capstones pela metade valem menos que um inteiro.
+
+✅ **Checkpoint:** você escreveu qual projeto vai fazer e consegue dizer em uma frase por que esse.
+
+**Etapa 2 — Escopar o MVP em 1 parágrafo (30 min)**
+
+Escreva UM parágrafo descrevendo o que o sistema faz na **demo de 2 minutos**: quem usa, o que entra, o que sai. Exemplo (Projeto 1): "O usuário sobe 3 PDFs, faz uma pergunta em linguagem natural e recebe a resposta com o trecho da fonte citado; para uma pergunta fora da base, o sistema admite que não sabe." Regra de ouro: **tudo que não estiver nesse parágrafo fica fora da v1** — inclusive as extensões bônus.
+
+✅ **Checkpoint:** o parágrafo está salvo (crie o repositório agora e cole-o no topo do README rascunho).
+
+**Etapa 3 — Quebrar em marcos semanais (30 min)**
+
+Planeje 3–4 semanas, cada uma com um entregável *verificável*, não "avançar em X":
+
+- **Semana 1** — o caminho feliz roda de ponta a ponta na sua máquina (Etapa 4).
+- **Semana 2** — os requisitos técnicos do seu projeto implementados (evals, guardrails, observabilidade — conforme a lista dele).
+- **Semana 3** — todos os critérios de aceite marcados.
+- **Semana 4** — README, demo em GIF/vídeo e publicação (Etapas 7 e 8).
+
+Adapte livremente, mas mantenha a regra: **toda semana termina com algo demonstrável e commitado**.
+
+✅ **Checkpoint:** você tem 3–4 marcos escritos, cada um com um entregável verificável.
+
+**Etapa 4 — Fatia vertical: o caminho feliz primeiro (semana 1)**
+
+Faça o fluxo principal funcionar de ponta a ponta o quanto antes — **feio, mas completo**. No Projeto 1, por exemplo: 1 PDF → 1 pergunta → 1 resposta com citação, mesmo com chunking ingênuo e sem UI. Nunca "perfeição por camada" (uma semana polindo a ingestão antes de existir uma resposta): um sistema completo e tosco melhora aos poucos; camadas perfeitas e desconexas nunca viram demo.
+
+✅ **Checkpoint:** um único comando (ou script) executa o cenário do seu parágrafo de MVP de ponta a ponta, sem intervenção manual no meio.
+
+**Etapa 5 — Diário de decisões (10 min por sessão, contínuo)**
+
+Crie um `DECISIONS.md` no repositório e, a cada escolha técnica, anote três linhas: **decisão** (o que escolhi), **alternativa descartada** e **porquê**. Ex.: "Chunking por parágrafo; descartei tamanho fixo; os docs têm seções curtas e o retrieval melhorou nos meus casos de teste." É esse arquivo que vira a seção "por que escolhi X" do README e as respostas prontas da entrevista ("por que RAG aqui?").
+
+✅ **Checkpoint:** o `DECISIONS.md` existe e tem ao menos 3 entradas ao final da semana 2.
+
+**Etapa 6 — Fechar os critérios de aceite (semanas 2–3)**
+
+Volte à lista de critérios de aceite do seu projeto e trate-a como contrato: implemente o que falta, um checkbox por vez, sempre commitando. Os critérios com números (ex.: "≥ 10 perguntas", "mínimo 25 casos") são os que provam rigor — não pule os evals para "ganhar tempo": a tabela de métricas é exatamente o que o recrutador procura.
+
+✅ **Checkpoint:** todos os checkboxes dos critérios de aceite do seu projeto marcados.
+
+**Etapa 7 — README que recruta olha (meio dia)**
+
+Monte o README na ordem que a seção "Portfólio no GitHub" deste módulo manda: **demo (GIF/vídeo curto) no topo**, o problema em 2 frases, como rodar em 5 minutos (`.env.example`, dependências fixadas), diagrama da arquitetura, tabela de resultados com números e a seção de decisões (copie do `DECISIONS.md`).
+
+✅ **Checkpoint:** alguém (ou você, numa máquina ou pasta limpa) roda o projeto em 5 minutos seguindo só o README.
+
+**Etapa 8 — Publicar e coletar feedback (1h)**
+
+Torne o repositório público e poste no LinkedIn (print da demo + o que aprendeu + link, como manda a seção de marca pessoal). Compartilhe também nas comunidades do módulo — Hugging Face Discord e r/LocalLLaMA, quando fizer sentido — e responda os comentários: cada pergunta que aparecer é um ensaio grátis de entrevista.
+
+✅ **Checkpoint:** repositório público, post no ar e ao menos um feedback externo recebido.
+
+**🆘 Se travar:** as três armadilhas que matam capstones são **escopo crescendo** ("só mais uma feature" — releia o parágrafo do MVP: se não está lá, não entra na v1), **semanas sem commit** (o marco estava grande demais — corte-o pela metade e entregue a metade que roda) e **polir antes de funcionar** (UI bonita sem backend, chunking "perfeito" sem resposta — volte à fatia vertical da Etapa 4). E a regra de sempre: travou 30+ minutos num erro → pergunte ao seu assistente de IA colando o erro completo e dizendo em qual etapa está — mas peça a *explicação*, não só a resposta; o objetivo é você saber defender cada linha na entrevista.
+
 ### Projeto 1 — Assistente de documentos (RAG completo)
 
 **Contexto de negócio**: uma empresa tem centenas de documentos (manuais, políticas, contratos) e quer que funcionários façam perguntas em linguagem natural e recebam respostas *com citação da fonte*, sem alucinação.

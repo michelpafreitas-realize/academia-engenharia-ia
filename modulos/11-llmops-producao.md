@@ -268,6 +268,97 @@ docker run -p 8000:8000 -e ANTHROPIC_API_KEY="$ANTHROPIC_API_KEY" llm-gateway
 - FinOps: um endpoint `/custos` (ou uma página) que agrega o custo total e por rota a partir dos logs.
 - Deploy num container, subido em Railway/Render/Fly (ou rodando localmente via Docker com instruções claras).
 
+### 🧭 Passo a passo
+
+Reserve ~3h30 no total (pode dividir em 2 sessões). Siga na ordem — cada etapa termina com um **checkpoint**; só avance quando ele passar.
+
+**Etapa 1 — Partir do gateway do lab (15 min)**
+
+Copie o projeto do Lab guiado (Passos 1 a 4) para uma pasta nova: `cp -r llm-gateway servico-ia && cd servico-ia`. Suba com `uvicorn app:app --reload` e repita o `curl -N` do Passo 3 do lab.
+
+✅ **Checkpoint:** a resposta chega token a token e o servidor imprime o log JSON com tokens, custo e latência.
+
+**Etapa 2 — Duas rotas de IA com streaming e roteamento (45 min)**
+
+Acrescente um parâmetro `rota` a `stream_modelo` e inclua-o no `log.info`; troque o cliente por `client = anthropic.Anthropic(timeout=30, max_retries=2)` — timeout explícito + retries com backoff do próprio SDK (seção 4). Depois, extraia o streaming+fallback de `/perguntar` para reutilizar nas rotas novas:
+
+```python
+def responder(rota: str, prompt: str, modelo: str = MODELO_PRIMARIO):
+    def gerar():
+        try:
+            yield from stream_modelo(modelo, prompt, rota)
+        except anthropic.APIStatusError as e:
+            if e.status_code < 500 and e.status_code != 429:
+                raise  # 4xx do cliente não cai no fallback (seção 4)
+            yield from stream_modelo(MODELO_FALLBACK, prompt, rota)
+    return StreamingResponse(gerar(), media_type="text/plain")
+
+@app.post("/resumir")
+def resumir(p: Pergunta):
+    return responder("resumir", f"Resuma em 3 frases:\n{p.texto}")
+@app.post("/classificar")
+def classificar(p: Pergunta):
+    modelo = MODELO_PRIMARIO if len(p.texto) > 400 else MODELO_FALLBACK  # roteamento (seção 3)
+    return responder("classificar", f"Sentimento em 1 palavra (positivo/negativo/neutro):\n{p.texto}", modelo)
+```
+
+✅ **Checkpoint:** `curl -N -X POST http://localhost:8000/resumir -H "Content-Type: application/json" -d '{"texto":"Streaming derruba o time-to-first-token."}'` retorna 200 com a resposta chegando aos poucos; o mesmo curl em `/classificar` também.
+
+**Etapa 3 — Observabilidade persistida (40 min)**
+
+O `/custos` da Etapa 6 precisa dos registros guardados ("se não está instrumentado, não existe", seção 5). Em `stream_modelo`, acumule os pedaços numa string `resposta`, acrescente `trace_id=None` à assinatura e, junto ao `log.info`, chame `registrar(rota, modelo, texto, resposta, u, c, dur, trace_id)` — com `import sqlite3` no topo. Prefere um painel pronto? A aula 3 (Langfuse) faz o mesmo com decorador; aqui a biblioteca padrão basta:
+
+```python
+def registrar(rota, modelo, prompt, resposta, u, c, dur, trace_id=None):
+    con = sqlite3.connect("registros.db")
+    con.execute("CREATE TABLE IF NOT EXISTS registros(ts REAL, rota TEXT, modelo TEXT, prompt TEXT, resposta TEXT, input_tokens INT, output_tokens INT, custo_usd REAL, latencia_s REAL, trace_id TEXT)")
+    con.execute("INSERT INTO registros VALUES(?,?,?,?,?,?,?,?,?,?)", (time.time(), rota, modelo, prompt, resposta, u.input_tokens, u.output_tokens, c, dur, trace_id))
+    con.commit(); con.close()
+```
+
+✅ **Checkpoint:** após um curl com texto curto e outro com 500+ caracteres em `/classificar`, `python -c "import sqlite3; print(sqlite3.connect('registros.db').execute('SELECT rota, modelo, custo_usd FROM registros').fetchall())"` mostra linhas com modelos **diferentes** na mesma rota — roteamento comprovado.
+
+**Etapa 4 — Provar o fallback retryável (20 min)**
+
+Repita o Passo 5 do lab guiado: com `MODELO_PRIMARIO` trocado por um id inexistente, o 404 deve estourar **sem** acionar o fallback; com um 429/5xx simulado (stub da exceção), a resposta deve vir do modelo B. Desfaça a troca ao terminar.
+
+✅ **Checkpoint:** no caso 429/5xx a resposta chega e o SQLite registra o modelo de fallback; no caso 404 nenhuma linha nova aparece.
+
+**Etapa 5 — Cadeia com trace de 2 passos (30 min)**
+
+Crie a rota `/analisar`: resume e depois classifica o resumo — dois passos com o mesmo `trace_id` (`import uuid` no topo do arquivo):
+
+```python
+@app.post("/analisar")
+def analisar(p: Pergunta):
+    tid = str(uuid.uuid4())
+    resumo = "".join(stream_modelo(MODELO_FALLBACK, f"Resuma em 1 frase:\n{p.texto}", "analisar", tid))
+    sentimento = "".join(stream_modelo(MODELO_FALLBACK, f"Sentimento em 1 palavra:\n{resumo}", "analisar", tid))
+    return {"resumo": resumo, "sentimento": sentimento, "trace_id": tid}
+```
+
+✅ **Checkpoint:** `python -c "import sqlite3; print(sqlite3.connect('registros.db').execute('SELECT trace_id, COUNT(*) FROM registros WHERE trace_id IS NOT NULL GROUP BY trace_id').fetchall())"` mostra 1 trace com 2 passos — o tracing da seção 5 em versão mínima.
+
+**Etapa 6 — FinOps: endpoint /custos (20 min)**
+
+```python
+@app.get("/custos")
+def custos():
+    por_rota = dict(sqlite3.connect("registros.db").execute("SELECT rota, ROUND(SUM(custo_usd), 6) FROM registros GROUP BY rota"))
+    return {"total_usd": round(sum(por_rota.values()), 6), "por_rota": por_rota}
+```
+
+✅ **Checkpoint:** `curl http://localhost:8000/custos` retorna o total e o custo por rota, coerentes com as chamadas que você fez até aqui.
+
+**Etapa 7 — Container, deploy e entrega (40 min)**
+
+1. Reaproveite o `Dockerfile` e o `requirements.txt` do Passo 4 do lab (nada novo a instalar — `sqlite3` e `uuid` são da biblioteca padrão): `docker build -t servico-ia .` e depois `docker run -p 8000:8000 -e ANTHROPIC_API_KEY="$ANTHROPIC_API_KEY" servico-ia`. Repita os curls das Etapas 2, 5 e 6 contra o container (o `registros.db` nasce zerado dentro dele — chame as rotas de IA antes do `/custos`).
+2. Quer público? Suba o container em Railway/Render/Fly (seção 7), com `ANTHROPIC_API_KEY` no painel do serviço — nunca no Dockerfile. Feche com um README explicando como subir e testar cada rota, e rode a suite de evals do Módulo 10 contra o serviço como gate.
+
+✅ **Checkpoint:** todas as rotas respondem no container (ou na URL pública) e todos os critérios de aceite abaixo estão marcados.
+
+**🆘 Se travar:** `Address already in use` na porta 8000 → o uvicorn da Etapa 1 ainda está rodando; encerre-o (Ctrl+C) antes do `docker run`, ou use `-p 8001:8000`. Erro 401/`authentication_error` só dentro do container → a `ANTHROPIC_API_KEY` não entra sozinha: falta o `-e` no `docker run` (ou a variável no painel do PaaS). A resposta chega inteira de uma vez em vez de em streaming → falta o `-N` no curl (é ele que desliga o buffer do lado do cliente). Travou 30+ minutos em qualquer etapa → pergunte ao seu assistente de IA colando o erro completo e dizendo em qual etapa está (mas peça a *explicação*, não só a resposta — o objetivo é treinar).
+
 **Critérios de aceite**:
 - [ ] Duas rotas de IA funcionando, com streaming onde aplicável
 - [ ] Cada request registra prompt, resposta, tokens, custo, latência e modelo (Langfuse ou logs estruturados)

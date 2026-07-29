@@ -231,6 +231,98 @@ print(responder("Vocês entregam fora do Brasil?"))
 5. Uma melhoria de retrieval implementada e medida no MESMO conjunto: overlap diferente, k diferente, chunking por seção, ou BM25 híbrido (bônus).
 6. Relatório curto: tabela antes/depois e diagnóstico usando o vocabulário da seção 7.8 (foi falha de chunk, de retrieval ou de geração?).
 
+### 🧭 Passo a passo
+
+Reserve ~5h no total (pode dividir em 2 ou 3 sessões). Siga na ordem — cada etapa termina com um **checkpoint**; só avance quando ele passar.
+
+**Etapa 1 — Montar a base e o projeto (30 min)**
+
+1. Crie a pasta `modulo07-rag` no mesmo ambiente do lab (sentence-transformers, numpy e anthropic instalados), com uma subpasta `docs/`, e copie o código do lab guiado (seção 💻) para um arquivo `rag.py` — o projeto inteiro é evolução dele. `ANTHROPIC_API_KEY` fica no ambiente, nunca no código.
+2. Escolha a base: mínimo 10 documentos ou 50 chunks. Opção concreta já disponível: os próprios `.md` dos módulos desta academia — copie-os para `docs/`. Você conhece bem esse conteúdo, e avaliar fidelidade (etapa 5) exige saber a resposta certa.
+
+✅ **Checkpoint:** `ls docs/` mostra ≥ 10 arquivos `.md` e `rag.py` roda exatamente como no lab.
+
+**Etapa 2 — Carga real e chunking com overlap (45 min)**
+
+Substitua o dicionário `documentos` fixo (passo 2 do lab) pela leitura da pasta e troque o `chunkar` por uma versão com overlap:
+
+```python
+from pathlib import Path
+
+def chunkar(pasta: str = "docs", tam: int = 3, passo: int = 2) -> list[dict]:
+    chunks = []  # janelas de 3 parágrafos, passo 2 → 1 parágrafo de overlap
+    for p in Path(pasta).glob("*.md"):
+        pars = [s.strip() for s in p.read_text(encoding="utf-8").split("\n\n") if s.strip()]
+        for i in range(0, len(pars), passo):
+            chunks.append({"fonte": p.name, "par": i, "texto": "\n\n".join(pars[i:i + tam])})
+    return chunks
+
+chunks = chunkar(); print(len(chunks))
+```
+
+✅ **Checkpoint:** ≥ 50 chunks, e 3 chunks sorteados lidos com os olhos são legíveis — nenhum corta tabela ou bloco de código ao meio (falha nº 1 da seção 7.8).
+
+**Etapa 3 — Persistir o índice (30 min)**
+
+O passo 4 do lab re-embeda tudo a cada execução. Envolva-o em salvar/carregar (`np.save` + JSON; se preferir migrar para Chroma, justifique no relatório com a tabela da seção 7.4):
+
+```python
+import json
+if Path("indice.npy").exists():
+    X, chunks = np.load("indice.npy"), json.loads(Path("chunks.json").read_text())
+else:
+    X = emb_model.encode([c["texto"] for c in chunks], normalize_embeddings=True)
+    np.save("indice.npy", X)
+    Path("chunks.json").write_text(json.dumps(chunks, ensure_ascii=False))
+```
+
+✅ **Checkpoint:** a segunda execução não re-embeda nada (termina em segundos, não em minutos).
+
+**Etapa 4 — Conjunto de avaliação (45 min)**
+
+Crie `avaliacao.json` à mão, com 15 itens: 10 respondíveis escritas com **paráfrases** (sem copiar as palavras do documento, senão o teste fica fácil demais) e 5 **não respondíveis** plausíveis (mesmo assunto, mas resposta ausente da base). Cada item traz `pergunta`, `doc` (arquivo-gabarito que contém a resposta) e `respondivel`:
+
+```json
+[
+  {"pergunta": "quando o cosseno vira um simples produto escalar?", "doc": "07-rag.md", "respondivel": true},
+  {"pergunta": "qual nota mínima a academia exige para o certificado?", "doc": null, "respondivel": false}
+]
+```
+
+✅ **Checkpoint:** `json.load` lê o arquivo e a contagem confere: 10 respondíveis + 5 não respondíveis.
+
+**Etapa 5 — Medir o baseline (1h)**
+
+Crie `avaliar.py`; a fidelidade (métrica c) é manual: imprima as 10 respostas com os trechos recuperados e marque, uma a uma, se a resposta se sustenta no que citou com os [n] e o arquivo certos.
+
+```python
+import json
+from pathlib import Path
+from rag import buscar, responder
+
+itens = json.loads(Path("avaliacao.json").read_text())
+respondiveis = [i for i in itens if i["respondivel"]]
+recall = sum(i["doc"] in {r["fonte"] for r in buscar(i["pergunta"], 3)} for i in respondiveis)
+recusa = sum("não encontr" in responder(i["pergunta"]).lower() for i in itens if not i["respondivel"])
+print(f"recall top-3: {recall}/10 | recusa correta: {recusa}/5")
+```
+
+✅ **Checkpoint:** três números anotados — recall X/10, recusa Y/5, fidelidade Z/10. Essa é a linha "antes" da sua tabela.
+
+**Etapa 6 — UMA melhoria de retrieval, medida (1h)**
+
+Escolha **uma só**: chunking por seção (quebrar em `"\n## "` em vez de janelas de parágrafos), outro `tam`/`passo` (overlap), outro `k`, ou o bônus híbrido com `rank_bm25`. Se mudou o chunking, apague `indice.npy` e `chunks.json` antes de reindexar — o índice salvo é do chunking antigo. Rode o MESMO `avaliar.py`, sem tocar no `avaliacao.json`.
+
+✅ **Checkpoint:** os três números "depois" anotados, e recall ≥ 8/10 no top-3.
+
+**Etapa 7 — Relatório e diagnóstico (30 min)**
+
+Escreva `RELATORIO.md` com a tabela antes/depois (3 métricas × 2 colunas) e, para cada pergunta que ainda falha, uma linha de diagnóstico no vocabulário da seção 7.8: foi chunk ruim, retrieval que não achou, ou geração que ignorou o contexto? Commit e push — confira antes que nenhuma chave de API foi parar no código.
+
+✅ **Checkpoint:** todos os critérios de aceite abaixo marcados.
+
+**🆘 Se travar:** recall baixo → imprima os chunks recuperados antes de culpar o modelo; 8 em 10 vezes eles estão grandes ou ilegíveis (falha nº 1 da 7.8) — reduza `tam` ou quebre por seção. Modelo respondendo perguntas não respondíveis → confira se o `system` ainda exige "APENAS os trechos" com a frase de recusa da seção 7.6, e se as 5 perguntas são mesmo impossíveis de responder com a base. Números que não mudam após a melhoria → você esqueceu de apagar `indice.npy`/`chunks.json` e está buscando no índice antigo. Travou 30+ minutos em qualquer etapa → pergunte ao seu assistente de IA colando o erro completo e dizendo em qual etapa está (mas peça a *explicação*, não só a resposta — o objetivo é treinar).
+
 **Critérios de aceite:**
 
 - [ ] Recall de retrieval ≥ 80% no top-3 após a melhoria.

@@ -270,6 +270,103 @@ Feche com *Restart & Run All*: se tudo executa de ponta a ponta sem erro, o lab 
 5. Uma função pura com docstring, tipos e 2 `assert`s de teste, extraída para um arquivo `utils.py` e importada no notebook.
 6. Seção final "Conclusões" respondendo as 3 perguntas com números.
 
+### 🧭 Passo a passo
+
+Reserve ~4h no total (pode dividir em 2 ou 3 sessões). Siga na ordem — cada etapa termina com um **checkpoint**; só avance quando ele passar.
+
+**Etapa 1 — Escolher o dataset e escrever as 3 perguntas (30 min)**
+
+1. Entre em [kaggle.com/datasets](https://www.kaggle.com/datasets) e busque um tema que te interesse ("movies", "brasileirao", "housing", "spotify"...).
+2. Antes de baixar, abra a aba *Data* do dataset e confira: tem 500+ linhas? Tem pelo menos uma coluna numérica (preço, nota, valor) e uma categórica (gênero, cidade, time)? Se não, escolha outro.
+3. Baixe o CSV (botão *Download*).
+4. **Antes de abrir os dados**, escreva num bloco de notas 3 perguntas que esse dataset pode responder. Use os moldes: "Qual grupo tem maior...?", "Como X varia com Y?", "Existe relação entre X e Y?".
+
+✅ **Checkpoint:** você tem um `.csv` baixado e 3 perguntas escritas.
+
+**Etapa 2 — Criar o projeto com uv (15 min)**
+
+No terminal, dentro do seu repositório `academia-ia`:
+
+```bash
+cd academia-ia
+uv init modulo01-analise
+cd modulo01-analise
+uv add pandas matplotlib jupyter
+mkdir dados
+# mova o CSV baixado para a pasta dados/ (ajuste o caminho do seu download)
+mv ~/Downloads/seu_arquivo.csv dados/
+uv run jupyter lab
+```
+
+O navegador abre o Jupyter. Crie um notebook novo chamado `analise.ipynb`.
+
+✅ **Checkpoint:** `uv run python -c "import pandas"` roda sem erro e o Jupyter abre no navegador.
+
+**Etapa 3 — Estruturar o notebook antes de codar (10 min)**
+
+Na primeira célula (tipo *Markdown*, não código), escreva o título e as 3 perguntas. Depois crie células Markdown vazias com os títulos das seções: `## 1. Carga e raio-X`, `## 2. Limpeza`, `## 3. Análise`, `## 4. Gráficos`, `## Conclusões`. Isso é o esqueleto — agora é só preencher.
+
+✅ **Checkpoint:** o notebook tem as 3 perguntas no topo e as 5 seções criadas.
+
+**Etapa 4 — Carga e raio-X (20 min)**
+
+Repita o ritual do lab do Titanic, agora no seu dataset:
+
+```python
+import pandas as pd
+df = pd.read_csv("dados/seu_arquivo.csv")
+print(df.shape)
+df.head()
+df.info()
+df.describe()
+df.isna().sum().sort_values(ascending=False)
+```
+
+Leia a saída com calma: quantas linhas? Quais colunas têm nulos? Alguma data foi lida como texto?
+
+✅ **Checkpoint:** você sabe dizer, sem olhar, quantas linhas o dataset tem e quais são as 2 colunas mais problemáticas.
+
+**Etapa 5 — Limpeza documentada (40 min)**
+
+Para **cada** coluna com nulos ou problema, decida (descartar? preencher com mediana/moda?) e escreva a decisão como comentário na própria célula, igual ao lab:
+
+```python
+df = df.drop(columns=["coluna_x"])                 # 80% nulo: inaproveitável
+df["nota"] = df["nota"].fillna(df["nota"].median())  # mediana resiste a outliers
+df = df.drop_duplicates()
+assert df["nota"].isna().sum() == 0                # prova da limpeza
+```
+
+✅ **Checkpoint:** a célula de limpeza termina com pelo menos um `assert` passando.
+
+**Etapa 6 — Responder as 3 perguntas (1h)**
+
+Uma seção por pergunta. Para cada uma: um `groupby`/filtro que gera o número, e um gráfico com título e eixos nomeados. Se travar em "como pergunto isso em Pandas?", volte à seção 5 do módulo — quase toda pergunta vira `df.groupby("categoria")["valor"].mean()` ou um filtro booleano.
+
+✅ **Checkpoint:** cada pergunta tem pelo menos um número concreto e um gráfico legível respondendo-a.
+
+**Etapa 7 — Extrair a função pura para `utils.py` (30 min)**
+
+Identifique um trecho de lógica que você usou mais de uma vez (ex.: converter preço em faixa, limpar texto de coluna). Crie `utils.py` na pasta do projeto com a função + docstring + tipos + 2 `assert`s no final do arquivo. No notebook, importe e use: `from utils import minha_funcao`.
+
+✅ **Checkpoint:** `uv run python utils.py` roda sem erro (os `assert`s passam) e o notebook usa a função importada.
+
+**Etapa 8 — Conclusões e entrega (25 min)**
+
+1. Na seção "Conclusões", responda as 3 perguntas em texto, cada uma com o número que a sustenta.
+2. Rode *Restart & Run All*. Se qualquer célula falhar, conserte antes de seguir.
+3. Commit e push:
+
+```bash
+git add .
+git commit -m "Módulo 1: análise exploratória de [seu dataset]"
+git push
+```
+
+✅ **Checkpoint:** todos os critérios de aceite abaixo marcados.
+
+**🆘 Se travar:** erro de `FileNotFoundError` → confira o caminho do CSV com `ls dados/`; erro de shape/tipo → imprima `df.dtypes` e `df.shape`; travou 30+ minutos em qualquer etapa → pergunte ao seu assistente de IA colando o erro completo e dizendo em qual etapa está (mas peça a *explicação*, não só a resposta — o objetivo é treinar).
+
 **Critérios de aceite:**
 
 - [ ] *Restart & Run All* executa sem erros

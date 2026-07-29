@@ -262,6 +262,100 @@ if __name__ == "__main__":
 - Interface de linha de comando: o usuário digita perguntas em loop (`while True: input()`), com histórico mantido entre perguntas.
 - Log de cada chamada de tool (nome + input + primeiros 100 chars da saída) e do total de tokens da sessão ao final.
 
+### 🧭 Passo a passo
+
+Reserve ~1h30 no total (pode dividir em 2 sessões). Siga na ordem — cada etapa termina com um **checkpoint**; só avance quando ele passar.
+
+**Etapa 1 — Preparar o projeto e o CSV (10 min)**
+
+1. Crie a pasta do projeto, copie o `agente.py` do lab para ela como `analista.py` (você vai evoluí-lo, não começar do zero) e rode `pip install anthropic pandas` (a `ANTHROPIC_API_KEY` do lab continua valendo).
+2. Salve um CSV real na pasta como `dados.csv` — vendas exportadas de uma planilha sua servem; precisa de ao menos 1 coluna numérica e 1 categórica.
+
+✅ **Checkpoint:** `python -c "import pandas as pd; print(pd.read_csv('dados.csv').shape)"` imprime as dimensões do seu CSV.
+
+**Etapa 2 — As 3 funções pandas, ainda sem LLM (25 min)**
+
+Em `analista.py`, apague `calculadora` e `busca_arquivo` e escreva as 3 funções dos Requisitos. Toda tool devolve **string** — o modelo lê texto, não DataFrame:
+
+```python
+import pandas as pd
+df = pd.read_csv("dados.csv")
+
+def listar_colunas() -> str:
+    return "\n".join(f"{c}: {t}" for c, t in df.dtypes.astype(str).items())
+
+def estatisticas(coluna: str) -> str:
+    s = df[coluna]  # KeyError se a coluna não existir — a Etapa 4 trata isso
+    return f"média={s.mean():.2f} min={s.min()} max={s.max()} soma={s.sum():.2f}"
+
+def filtrar(coluna: str, valor: str) -> str:
+    achados = df[df[coluna].astype(str) == str(valor)].head(20)
+    return achados.to_string() if len(achados) else "Nenhuma linha encontrada."
+```
+
+Antes de envolver o modelo, teste cada uma com uma chamada direta no fim do arquivo: `print(listar_colunas())`, `print(estatisticas("valor"))`, `print(filtrar("cidade", "Fortaleza"))` — trocando pelos nomes de colunas do SEU CSV.
+
+✅ **Checkpoint:** `python analista.py` imprime as 3 saídas corretas, sem nenhuma chamada de API.
+
+**Etapa 3 — Schemas das tools e loop do lab (20 min)**
+
+Troque a lista `TOOLS` do lab por 3 schemas (mesmo formato JSON da seção 2) e seja prescritivo nas descriptions — é o fator nº 1 de acerto:
+
+- `listar_colunas`: "Lista nomes e tipos das colunas do CSV. Chame SEMPRE antes de qualquer outra tool, para saber quais colunas existem." Sem parâmetros: `"properties": {}` e `"required": []`.
+- `estatisticas`: parâmetro `coluna` (string); "média, min, max e soma de uma coluna numérica".
+- `filtrar`: parâmetros `coluna` e `valor` (strings); "retorna até 20 linhas onde coluna == valor".
+
+Atualize `executar_tool` para despachar pelos 3 nomes novos (mesmo `if nome == ...` do lab), apague os prints de teste da Etapa 2 e troque a pergunta do `__main__` por uma sobre o seu CSV. `rodar_agente`, `MODELO` e `MAX_ITERACOES` ficam exatamente como no lab (a seção 3 explica cada linha do loop).
+
+✅ **Checkpoint:** `python analista.py` mostra no log o modelo chamando `listar_colunas` e depois `estatisticas`, e a resposta final bate com o número que você viu na Etapa 2.
+
+**Etapa 4 — Erro vira `tool_result` com `is_error` (15 min)**
+
+Hoje uma coluna errada derruba o programa com `KeyError`. Dentro do loop de `rodar_agente`, envolva a execução e sinalize o erro para o modelo:
+
+```python
+try:
+    saida = executar_tool(bloco.name, bloco.input)
+    erro = False
+except Exception as e:
+    saida, erro = f"Erro: {e}", True
+resultados.append({"type": "tool_result", "tool_use_id": bloco.id,
+                   "content": saida, "is_error": erro})
+```
+
+✅ **Checkpoint:** pergunte por uma coluna que não existe; o programa NÃO quebra — o log mostra o erro devolvido e o modelo chamando `listar_colunas` para se corrigir.
+
+**Etapa 5 — CLI com histórico entre perguntas (15 min)**
+
+Mude a assinatura para `rodar_agente(messages)` (apague a linha que criava `messages` lá dentro — o resto do loop fica igual) e substitua o `__main__` por:
+
+```python
+messages = []
+while True:
+    pergunta = input("\nPergunta (ou 'sair'): ").strip()
+    if pergunta.lower() == "sair":
+        break
+    messages.append({"role": "user", "content": pergunta})
+    print(rodar_agente(messages))
+```
+
+✅ **Checkpoint:** pergunte "qual coluna tem os valores de venda?" e depois "e qual a média dela?" — a segunda resposta usa o contexto da primeira.
+
+**Etapa 6 — Log das tools e total de tokens (10 min)**
+
+O lab já imprime cada chamada de tool; ajuste o print da saída para `saida[:100]`. Para os tokens, crie `total_tokens = 0` no topo do arquivo e, após cada `client.messages.create(...)`, some `total_tokens += resp.usage.input_tokens + resp.usage.output_tokens` (declare `global total_tokens` na função). Ao sair da CLI (`break`), imprima `f"Total de tokens da sessão: {total_tokens}"`.
+
+✅ **Checkpoint:** ao digitar "sair", o total de tokens aparece — e cresce a cada pergunta extra (a seção 8 explica por quê).
+
+**Etapa 7 — Bater os critérios de aceite + README (15 min)**
+
+1. Faça 5 perguntas distintas, incluindo uma que exija 2+ tools encadeadas ("qual a média de valor das linhas da cidade X?"), e teste o limite de iterações com uma pergunta impossível ("qual será a venda de 2030?").
+2. Escreva um `README.md` curto: como instalar, como rodar, e uma sessão de exemplo colada do terminal.
+
+✅ **Checkpoint:** todos os critérios de aceite abaixo marcados.
+
+**🆘 Se travar:** o modelo chama tool com coluna inexistente → esperado; confirme que o erro volta com `is_error: true` e reforce na description de `listar_colunas` que ela vem PRIMEIRO; o agente repete a mesma tool em círculo até estourar `MAX_ITERACOES` → a saída da tool não está respondendo o que ele precisa (imprima-a inteira e leia como se você fosse o modelo); a API dá erro logo após um `tool_use` → você esqueceu de devolver o `tool_result` correspondente (todo pedido de tool exige resposta no turno seguinte de usuário); travou 30+ minutos em qualquer etapa → pergunte ao seu assistente de IA colando o erro completo e a etapa em que está — e peça a *explicação*, não só a resposta.
+
 **Critérios de aceite**:
 - [ ] Responde corretamente a pelo menos 5 perguntas distintas sobre o CSV, incluindo uma que exija 2+ tools encadeadas
 - [ ] Erro de tool (ex.: coluna inexistente) não derruba o programa — o agente recebe o erro e se corrige
