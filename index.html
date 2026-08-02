@@ -6,6 +6,8 @@
 <meta name="theme-color" content="#8C1515">
 <title>Academia de Engenharia de IA</title>
 <meta name="description" content="Programa completo de formação em Engenharia de IA — currículo, quizzes, flashcards com repetição espaçada e projetos.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
@@ -68,6 +70,17 @@ main{max-width:1240px;min-height:62vh;margin:0 auto;padding:42px 24px 88px}
 .pp code{font-family:ui-monospace,"Cascadia Mono",monospace;font-size:.85em;background:#efece5;padding:1px 6px;border-radius:5px}.pp pre code{background:none;padding:0;font-size:inherit}
 .pp .ck{background:var(--okbg);border-left:4px solid var(--ok);padding:11px 14px;border-radius:0 9px 9px 0}
 .pp .sos{background:var(--errbg);border-left:4px solid var(--err);padding:11px 14px;border-radius:0 9px 9px 0}
+.pp blockquote{border-left:4px solid var(--line);padding:2px 14px;color:var(--mut);font-style:italic;margin:10px 0}
+.pp .tblwrap{overflow-x:auto;margin:12px 0}.pp table{border-collapse:collapse;font-size:.88rem}
+.pp th,.pp td{border:1px solid var(--line);padding:7px 11px;text-align:left;vertical-align:top}.pp th{background:#efece5;white-space:nowrap}
+.pp ul ul,.pp ol ul{margin:4px 0 4px 18px}
+details.mdsec{padding:0}details.mdsec+details.mdsec{margin-top:12px}
+details.mdsec summary{cursor:pointer;padding:16px 22px;font-weight:700;font-size:1.02rem;font-family:"Source Serif 4",Georgia,serif;color:var(--navy);list-style:none;display:flex;justify-content:space-between;align-items:center;gap:10px}
+details.mdsec summary::-webkit-details-marker{display:none}
+details.mdsec summary::after{content:'+';font-size:1.4rem;color:var(--mut);font-family:"Source Sans 3",sans-serif}
+details.mdsec[open] summary::after{content:'–'}
+details.mdsec .pp{padding:0 22px 18px}
+button.chip{cursor:pointer;background:#fff;font:inherit;font-size:.78rem}
 .qopt{display:block;width:100%;text-align:left;background:#fff;border:1.5px solid var(--line);border-radius:11px;padding:14px 16px;margin:9px 0}.qopt:hover{border-color:var(--navy)}.qopt.ok{background:var(--okbg);border-color:var(--ok)}.qopt.err{background:var(--errbg);border-color:var(--err)}.qopt:disabled{cursor:default}.explain{border-left:4px solid var(--navy);background:#faf0ef;padding:12px 15px;border-radius:0 10px 10px 0;margin-top:12px}
 .fcard{min-height:310px;display:flex;align-items:center;justify-content:center;text-align:center;padding:40px;font-size:1.22rem;cursor:pointer;border:1.5px solid #c8a09d;position:relative;background:linear-gradient(145deg,#fff,#faf6ef)}.fcard .hint{position:absolute;bottom:14px;left:0;right:0;font-size:.75rem;color:var(--mut)}.fcard .verso{color:var(--navy);font-weight:600}
 .cert{border:14px double var(--navy);background:#fffdf5;padding:46px 40px;text-align:center;position:relative}.cert h2{font-size:1.9rem;color:var(--navy);letter-spacing:.06em}.cert .nome{font-family:"Source Serif 4",Georgia,serif;font-size:2rem;color:var(--navy);border-bottom:2px solid var(--navy);display:inline-block;padding:0 30px 4px;margin:16px 0}.cert .marca{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:3rem;color:rgba(179,38,30,.16);transform:rotate(-18deg);font-weight:800;pointer-events:none}.assin{display:flex;justify-content:center;gap:80px;margin-top:40px}.assin div{border-top:1.5px solid var(--ink);padding-top:6px;font-size:.85rem;min-width:190px}
@@ -190,7 +203,12 @@ const MODS=[
    'O AI Studio tem free tier generoso para estudo. Anthropic e OpenAI são pagas (baratas para aprender, mas pagas).'],
   ['Por que a Academia insiste em projetos e não só em vídeos?',
    ['Vídeos são sempre ruins','Porque conhecimento passivo não vira habilidade — só construir consolida','Projetos dão certificado do Coursera','Para gastar mais tempo'],1,
-   'A sensação de aprender assistindo é ilusória. O que fica é o que você constrói, quebra e conserta.']],
+   'A sensação de aprender assistindo é ilusória. O que fica é o que você constrói, quebra e conserta.'],
+  ["Você criou sua chave de API no Google AI Studio. Onde ela deve ficar guardada?",["Direto no código, para facilitar os testes","No README do repositório, desde que ele seja privado","Num comentário do notebook, ao lado do código que a usa","Em variável de ambiente ou arquivo .env listado no .gitignore, fora do versionamento"],3,"Chave de API é senha: qualquer chave commitada deve ser considerada vazada (mesmo em repositório privado) e revogada. O .env fora do Git mantém o segredo fora do histórico do projeto."],
+  ["Você rodou uv add numpy com sucesso, mas python check_setup.py falha com ModuleNotFoundError. Qual a causa mais provável?",["O comando chamou o Python do sistema, fora do ambiente do projeto — o certo é uv run python check_setup.py, dentro da pasta","O Python 3.12 removeu o NumPy e é preciso voltar para o 3.11","Scripts .py não conseguem importar NumPy; só notebooks conseguem","O uv instala pacotes de forma temporária, que expira ao fechar o terminal"],0,"O uv instala as dependências no ambiente virtual do projeto; o python \"solto\" usa a instalação global, que não as tem. O uv run garante que o script roda dentro da caixinha certa."],
+  ["Qual a diferença entre git commit e git push?",["São sinônimos: os dois salvam o projeto na nuvem","O commit envia ao GitHub e o push cria a versão local","O commit registra uma fotografia local do projeto; o push envia essas fotografias para o GitHub","O push só funciona depois de criar uma branch nova"],2,"O commit grava a versão na sua máquina, com mensagem descritiva; nada sai dela até o push, que sincroniza com o repositório remoto. Por isso dá para commitar offline várias vezes e enviar tudo depois."],
+  ["O que é o Hugging Face, uma das contas criadas neste módulo?",["Um framework de treino de redes neurais, concorrente do PyTorch","O \"GitHub dos modelos\": um hub aberto com milhares de modelos, datasets e demos","Um serviço pago de aluguel de GPUs na nuvem","O editor de código recomendado para projetos de IA"],1,"Assim como o GitHub hospeda código, o Hugging Face hospeda modelos, datasets e demos abertos — é de lá que você vai baixar modelos e publicar demos nos próximos módulos."],
+  ["Sobre a rotina de estudos, o que o módulo recomenda?",["Maratonas de fim de semana para adiantar vários módulos de uma vez","Estudar sempre que sobrar um tempo livre, sem compromisso fixo","Blocos fixos no calendário toda semana — constância vence intensidade","Assistir todos os vídeos da formação primeiro e deixar os projetos para o final"],2,"8h por semana durante meses supera maratonas seguidas de abandono. Blocos agendados, divididos em pomodoros de 25 minutos, tornam o progresso previsível."]],
  cards:[['AI Engineer','Profissional que constrói produtos sobre modelos de fundação (APIs, RAG, agentes, evals) — sem precisar treinar modelos do zero'],
   ['Active recall','Aprender testando-se (quiz, explicar de cabeça) em vez de reler passivamente'],
   ['Repetição espaçada','Revisar em intervalos crescentes, na véspera de esquecer — memória de longo prazo'],
@@ -222,7 +240,12 @@ const MODS=[
    'Notebook = explorar e comunicar; script/módulo = código testável, versionável e executável em produção.'],
   ['Para que serve um ambiente virtual (venv/uv)?',
    ['Acelerar o Python','Isolar as dependências de cada projeto','Proteger contra vírus','Rodar código na nuvem'],1,
-   'Cada projeto tem suas versões de bibliotecas sem conflitar com os outros — higiene básica de engenharia.']],
+   'Cada projeto tem suas versões de bibliotecas sem conflitar com os outros — higiene básica de engenharia.'],
+  ["O que caracteriza uma função pura — e por que ela é fácil de testar?",["Ter no máximo cinco linhas de código","Mesmo input produz sempre o mesmo output, sem alterar nada fora dela — um assert simples basta para testá-la","Não ter parâmetros de entrada","Nunca levantar exceções em produção"],1,"Sendo determinística e sem efeitos colaterais, basta comparar entrada e saída: assert taxa_conversao(100, 5) == 0.05. É o teste mínimo que toda função não-trivial merece."],
+  ["Ao consumir uma API com requests, por que definir timeout e chamar raise_for_status()?",["Sem timeout o programa pode travar para sempre; sem checar o status, erros 4xx/5xx viram falhas silenciosas","Os dois deixam a requisição mais rápida","Sem eles o JSON da resposta não é decodificado","Eles fazem a autenticação automática da chamada"],0,"Rede trava e servidores falham: o timeout limita a espera e o raise_for_status() transforma erro HTTP em exceção visível — falha silenciosa é bug escondido."],
+  ["No lab do Titanic, os nulos de idade são preenchidos com a mediana, e não com a média. Por quê?",["A mediana é mais rápida de calcular em datasets grandes","A média não aceita valores decimais","A mediana resiste a outliers — uma única idade absurda arrastaria a média","A mediana mantém registrado quais valores eram nulos"],2,"Valores extremos (ex.: 999) distorcem a média, mas quase não mexem na mediana. E lembre: preencher ou descartar nulos é decisão de modelagem — documente sempre o porquê."],
+  ["Um colega clonou seu projeto feito com uv. O que garante que ele reproduza exatamente o mesmo ambiente?",["Commitar a pasta .venv junto com o código","Ele instalar com pip, de memória, as bibliotecas que o notebook importa","O par pyproject.toml + uv.lock versionado: um único uv sync recria o ambiente idêntico","Usar exatamente o mesmo sistema operacional que o seu"],2,"As dependências e suas versões exatas ficam registradas nesses dois arquivos; a .venv em si nunca vai para o Git. É o fim do \"funciona na minha máquina\": o ambiente é parte do código."],
+  ["Antes de dar um notebook por concluído, por que rodar Restart &amp; Run All?",["Para liberar a memória ocupada pelos gráficos","Porque o Git só aceita notebooks com kernel reiniciado","Para atualizar as bibliotecas do ambiente","Para provar que o código executa de cima a baixo, sem depender de células rodadas fora de ordem"],3,"Células executadas fora de ordem criam estados fantasma: variáveis com valores que o código visível não explica. Reiniciar e rodar tudo é o antídoto — se passar, o notebook é reproduzível."]],
  cards:[['Vetorização','Operar arrays inteiros de uma vez (em C), sem loop Python — 10–100× mais rápido'],
   ['Broadcasting','Regra do NumPy que expande dimensões de tamanho 1 para operar shapes compatíveis'],
   ['DataFrame','Tabela do Pandas: colunas nomeadas + índice, com filtros, joins e agregações'],
@@ -254,7 +277,12 @@ const MODS=[
    'Passos longos demais "pulam" o vale do mínimo — a loss oscila ou explode. É dos bugs mais comuns de treino.'],
   ['O que a função softmax faz?',
    ['Zera valores negativos','Converte uma lista de scores em probabilidades que somam 1','Normaliza vetores para tamanho 1','Calcula a média dos scores'],1,
-   'É a última etapa de um classificador — e de um LLM prevendo o próximo token: scores viram distribuição de probabilidade.']],
+   'É a última etapa de um classificador — e de um LLM prevendo o próximo token: scores viram distribuição de probabilidade.'],
+  ["Multiplicando matrizes de shapes (5, 3) e (3, 2), o resultado é:",["Uma matriz (5, 2) — o 3 do meio precisa bater e desaparece","Uma matriz (3, 3)","Uma matriz (5, 3)","Erro: os shapes são incompatíveis"],0,"A regra é (m, n) @ (n, p) → (m, p): cada elemento é o produto escalar de uma linha da primeira com uma coluna da segunda. Uma rede neural é uma pilha dessas multiplicações."],
+  ["No lab, mesmo com learning rate FIXO, os passos da descida do gradiente encurtam ao se aproximar do mínimo. Por quê?",["O NumPy reduz o passo automaticamente para ganhar precisão","O passo é lr × gradiente, e o gradiente tende a zero perto do mínimo","O learning rate decai a cada iteração por padrão","A função de perda muda de formato durante o treino"],1,"Perto do vale a inclinação diminui, então lr·gradiente encolhe naturalmente — o algoritmo \"freia\" sozinho ao chegar perto da resposta, sem ninguém mexer no lr."],
+  ["Doença atinge 1% da população; o teste detecta 90% dos doentes e dá falso positivo em 5% dos saudáveis. Por que um positivo significa só ~15% de chance real de doença?",["Porque o teste é tecnicamente defeituoso","Porque a sensibilidade de 90% é considerada baixa","Porque a doença é rara: os falsos positivos dos muitos saudáveis (≈49,5 em mil) superam os verdadeiros positivos (9 em mil)","Porque Bayes só vale para amostras grandes"],2,"A intuição falha por ignorar a taxa base: em 1.000 pessoas só 10 são doentes, então mesmo um teste bom gera mais alarmes falsos que acertos. A mesma armadilha reaparece em classificadores de eventos raros."],
+  ["O que a temperatura de um LLM faz, matematicamente?",["Controla a velocidade com que os tokens são gerados","Remove do vocabulário as palavras menos prováveis","Multiplica as probabilidades finais por um fator fixo","Divide os logits antes da softmax: alta achata a distribuição (mais variedade), baixa a afunila (mais determinismo)"],3,"Como a softmax exponencia os scores, dividi-los muda o contraste da distribuição: temperatura alta aproxima as probabilidades dos tokens (mais criatividade), baixa concentra quase tudo no mais provável."],
+  ["Um bilhete custa R$ 5 e paga R$ 100 com probabilidade de 3%. Qual o valor esperado do ganho por bilhete?",["+R$ 3","−R$ 2","+R$ 95","R$ 0"],1,"Esperança é a média ponderada pelas probabilidades: 0,03·100 − 5 = −R$ 2 — no longo prazo, prejuízo. É a mesma ideia por trás da loss em ML: minimizamos a esperança do erro sobre os dados."]],
  cards:[['Produto escalar','Soma dos produtos elemento a elemento; mede alinhamento/semelhança entre vetores'],
   ['Gradiente','Vetor de derivadas parciais; aponta a direção de maior crescimento da função'],
   ['Descida do gradiente','Atualizar parâmetros no sentido oposto ao gradiente: θ = θ − lr·∇L'],
@@ -287,7 +315,12 @@ const MODS=[
    'Treina/valida k vezes em partições diferentes e tira a média — menos sorte/azar de uma única divisão.'],
   ['O que é um random forest?',
    ['Uma árvore muito profunda','Muitas árvores treinadas em amostras aleatórias, com voto conjunto','Uma rede neural para tabelas','Um algoritmo de agrupamento'],1,
-   'Bagging: cada árvore vê uma amostra dos dados/colunas; o conjunto reduz variância e é forte em dados tabulares.']],
+   'Bagging: cada árvore vê uma amostra dos dados/colunas; o conjunto reduz variância e é forte em dados tabulares.'],
+  ["Apesar do nome, a regressão logística serve para:",["Prever valores contínuos, como o preço de um imóvel","Classificar: a sigmoide espreme a saída linear numa probabilidade entre 0 e 1","Agrupar clientes parecidos sem usar rótulos","Reduzir o número de dimensões dos dados"],1,"O nome engana: ela é um classificador. E é o baseline clássico — se seu modelo sofisticado não a supera, o problema está nos dados ou na formulação, não no modelo."],
+  ["Qual a diferença central entre Random Forest e Gradient Boosting?",["O Random Forest só aceita features numéricas","O boosting treina uma única árvore, porém muito mais profunda","O Random Forest é sempre mais preciso em dados tabulares","No boosting, as árvores vêm em sequência, cada nova corrigindo os erros das anteriores; na floresta, são independentes e votam"],3,"Floresta é um comitê de 300 médicos independentes votando; boosting é um médico estudando exatamente os casos que os anteriores erraram. Por isso XGBoost/LightGBM são o padrão-ouro do dado tabular."],
+  ["No Titanic, extrair o título do nome (Mr., Mrs., Master) prevê melhor que a idade crua. O que isso ilustra?",["Que colunas de texto valem mais que colunas numéricas","Feature engineering: criar representações que tornam o padrão visível ao modelo vale mais que trocar de algoritmo","Que o modelo descobriria isso sozinho se tivesse mais dados","Que a idade nunca deve entrar como feature"],1,"\"Master\" identifica meninos — conhecimento de domínio que a idade cheia de nulos esconde. O modelo só enxerga as colunas que você entrega; feature boa nasce de entender o problema, não de força bruta."],
+  ["Além de organizar o código, que papel de SEGURANÇA o Pipeline do scikit-learn cumpre?",["Garante que imputação e escala sejam ajustadas só nos dados de treino de cada fold — um dispositivo contra data leakage","Acelera o treino executando as etapas em paralelo","Salva o melhor modelo automaticamente em disco","Impede que o modelo sofra overfitting"],0,"Encadeando pré-processamento e modelo num objeto só, o fit das transformações acontece apenas no treino da vez — estatísticas do teste nunca vazam. Pipeline não é frescura de organização."],
+  ["Num filtro de spam, jogar e-mail legítimo na caixa de spam é o erro mais caro. Qual métrica priorizar?",["Recall, para que nenhum spam escape","F1, que equilibra os dois erros automaticamente","Precisão: dos e-mails marcados como spam, maximizar a fração que realmente é","Acurácia, já que basta acertar a maioria"],2,"Escolher métrica é decisão de negócio: aqui o falso positivo é o erro caro, e precisão é exatamente a métrica que o penaliza. Em triagem de câncer a lógica inverte — recall manda."]],
  cards:[['Overfitting','Decorar o treino e falhar em dados novos; detecta-se com validação'],
   ['Viés × variância','Modelo simples demais erra sempre (viés); complexo demais decora (variância)'],
   ['Precisão','Dos que o modelo disse positivos, quantos realmente eram'],
@@ -320,7 +353,12 @@ const MODS=[
    'Força a rede a não depender de neurônios específicos — menos overfitting. Desliga-se na inferência.'],
   ['Em PyTorch, o autograd:',
    ['Escolhe a arquitetura sozinho','Registra as operações e calcula os gradientes automaticamente no backward()','Acelera a GPU','Salva o modelo em disco'],1,
-   'Você escreve o forward; loss.backward() devolve os gradientes de todos os tensores com requires_grad.']],
+   'Você escreve o forward; loss.backward() devolve os gradientes de todos os tensores com requires_grad.'],
+  ["No lab do MNIST, seu classificador deu probabilidade 0.9 à classe correta em um exemplo e 0.1 em outro. Como a cross-entropy trata esses dois casos?",["Pune os dois igualmente, já que a distância até 1.0 é simétrica","Ignora o primeiro caso, porque acertos não entram no cálculo da loss","Dá loss baixa (≈0.105) ao primeiro e loss alta (≈2.30) ao segundo: estar confiantemente errado custa muito mais","Converte as probabilidades em acurácia antes de calcular o gradiente"],2,"A cross-entropy é -ln(p da classe correta): -ln(0.9) ≈ 0.105 e -ln(0.1) ≈ 2.30. A assimetria é proposital: o treino castiga confiança na resposta errada muito mais do que dúvida."],
+  ["No modelo do lab, a última camada é nn.Linear(256, 10) sem softmax. Por que isso está certo?",["Porque nn.CrossEntropyLoss já embute o softmax — aplicá-lo também no modelo seria softmax duas vezes, um bug clássico","Porque softmax só se usa em regressão, nunca em classificação","Porque com 10 classes o softmax é desnecessário: os logits já somam 1","Porque o softmax deixaria o treino lento demais para a GPU gratuita do Colab"],0,"No PyTorch, a nn.CrossEntropyLoss recebe os logits crus e aplica o softmax internamente. Colocar outro softmax no modelo espreme as probabilidades duas vezes e distorce os gradientes."],
+  ["Você muda o learning rate para 1.0 (experimento do lab) e em poucos passos a loss explode e vira NaN. Qual é o diagnóstico e a correção?",["O modelo é raso demais; adicione mais camadas para estabilizar","Os dados baixaram corrompidos; refaça o download do MNIST","Faltou regularização; adicione nn.Dropout(0.5) ao modelo","Learning rate alto demais: cada passo salta além do mínimo e o erro cresce até estourar — divida o lr por 10 até estabilizar"],3,"Com passo grande demais, os pesos ultrapassam o vale da loss e o erro se amplifica a cada atualização até virar NaN. A receita do módulo: divergiu, divida o learning rate por 10."],
+  ["No Colab, você fez model.to(device), mas o treino quebra com um erro dizendo que os tensores estão em devices diferentes (cuda vs cpu). O que faltou?",["Reinstalar o PyTorch com suporte a GPU","Mover também cada batch dentro do loop — x.to(device) e y.to(device) — pois o modelo na GPU não opera sobre dados que ficaram na CPU","Ativar a GPU no menu do Colab, que ainda estava em modo CPU","Chamar model.train() antes de iniciar o loop de treino"],1,"model.to(device) move só os pesos; os dados continuam na CPU, onde o DataLoader os entrega. Por isso o loop do lab move cada batch para o mesmo device do modelo antes do forward."],
+  ["No mini-projeto, por que separar 10% do treino como validação em vez de usar o conjunto de teste para decidir o early stopping?",["Porque o conjunto de teste é pequeno demais para calcular uma loss estável","Porque a loss de validação converge mais rápido que a de teste","Porque usar o teste para decidir quando parar contamina a avaliação final: ele deixa de ser uma medida honesta de generalização","Porque o teste não pode ser normalizado com as mesmas estatísticas do treino"],2,"Toda decisão tomada olhando um conjunto (quando parar, qual arquitetura escolher) ajusta o modelo a ele. Quem orienta o treino é a validação; o teste fica intocado até o fim para estimar a generalização de verdade."]],
  cards:[['Backpropagation','Regra da cadeia de trás para frente: gradiente da loss para cada peso'],
   ['Função de ativação','Não-linearidade (ex. ReLU) que dá à rede poder de representação'],
   ['Loss function','Número que mede o quão errada está a predição — o que o treino minimiza'],
@@ -354,7 +392,12 @@ const MODS=[
    'O modelo base "completa texto"; SFT + RLHF o transformam num assistente que conversa e obedece instruções.'],
   ['Para que serve o KV cache na geração?',
    ['Guardar o histórico do chat no disco','Evitar recomputar a atenção dos tokens anteriores a cada novo token','Comprimir o modelo','Aumentar a criatividade'],1,
-   'Sem ele, gerar o token N custaria reprocessar os N−1 anteriores. É por isso que contexto longo consome tanta memória.']],
+   'Sem ele, gerar o token N custaria reprocessar os N−1 anteriores. É por isso que contexto longo consome tanta memória.'],
+  ["No lab, a frase 'A capital da França é' gastou mais tokens que 'The capital of France is'. Qual é a melhor explicação?",["O tokenizador traduz o português para inglês antes de contar, adicionando tokens extras","O vocabulário BPE foi aprendido num corpus com muito mais inglês, então palavras em português quebram em mais subpalavras — e custam mais caro por chamada","Acentos exigem tokens especiais de controle no início da frase","Tokens têm tamanho fixo de 4 caracteres, e frases em português são mais longas"],1,"O BPE funde os pares mais frequentes do corpus de treino; o que é raro no corpus vira mais pedaços. Como APIs cobram por token, o mesmo conteúdo em PT sai ~20-30% mais caro que em EN."],
+  ["Sem positional encoding, o que aconteceria com as frases 'João ama Maria' e 'Maria ama João' dentro do transformer?",["Teriam a mesma representação: a attention sozinha trata a entrada como um saco de tokens, sem noção de ordem","Nada mudaria: a máscara causal já garante que o modelo processa os tokens em ordem","Ficariam iguais só na primeira camada; as seguintes recuperam a ordem sozinhas","O treino não convergiria, porque os gradientes dependem da posição"],0,"Attention calcula relações entre pares de tokens sem saber quem vem antes. A ordem entra no modelo injetada nos próprios vetores (senos/cossenos ou RoPE em Q e K), não na arquitetura."],
+  ["As probabilidades do próximo token são: gato 0.55, cão 0.30, peixe 0.10 e o resto 0.05. Com top-p = 0.9, quais tokens podem ser sorteados?",["Apenas gato, o único acima da média","Apenas gato e cão, que juntos somam 0.85","Todos os tokens, pois top-p apenas reordena as probabilidades","Gato, cão e peixe: o menor conjunto cuja probabilidade acumulada atinge 0.9"],3,"O nucleus sampling inclui tokens do mais provável ao menos provável até a soma alcançar p: 0.55 + 0.30 = 0.85 ainda não chega a 0.9, então peixe entra (0.95) e o resto da cauda é cortado."],
+  ["No lab, rodar a geração greedy (do_sample=False) 3 vezes dá sempre o mesmo texto, e com do_sample=True cada rodada sai diferente. Por quê?",["A greedy usa temperatura 1.0, que é a configuração mais estável","A greedy escolhe sempre o token mais provável a cada passo — sem sorteio, o resultado é determinístico; com sampling, cada passo sorteia da distribuição","A greedy fixa a seed aleatória automaticamente antes de cada geração","O KV cache guarda a primeira resposta e a reutiliza nas chamadas seguintes"],1,"Greedy é argmax puro: mesma entrada, mesma cadeia de escolhas, mesmo texto. do_sample=True transforma cada passo num sorteio ponderado pelas probabilidades, por isso a variação entre rodadas."],
+  ["Dentro de um bloco do transformer decoder-only, qual é a divisão de trabalho entre attention e MLP?",["A attention gera os logits finais e o MLP escolhe o próximo token","O MLP mistura informação entre os tokens e a attention processa cada um isoladamente","A attention mistura informação entre tokens; o MLP processa cada token individualmente e concentra boa parte do conhecimento do modelo","A attention só atua no treino e o MLP só na inferência"],2,"É a dupla que se repete N vezes: a attention (com máscara causal) deixa os tokens trocarem informação, e o MLP — as mesmas camadas densas do Módulo 4 — transforma cada posição sozinho, guardando muito do conhecimento."]],
  cards:[['Token','Unidade de subpalavra que o modelo realmente processa (via BPE)'],
   ['Self-attention','Cada token pondera os demais (Q, K, V) para construir sua nova representação'],
   ['Temperatura','Escala os logits: 0 = determinístico, alta = criativo/aleatório'],
@@ -387,7 +430,12 @@ const MODS=[
    'Por isso resposta enxuta economiza, e prompt caching desconta prefixos repetidos de input.'],
   ['Onde guardar a chave de API?',
    ['Direto no código, por praticidade','Em variável de ambiente ou secret manager, nunca no código','Num comentário do repositório','No prompt do sistema'],1,
-   'Chave commitada = chave vazada (bots varrem o GitHub em minutos). Use .env fora do versionamento.']],
+   'Chave commitada = chave vazada (bots varrem o GitHub em minutos). Use .env fora do versionamento.'],
+  ["No lab, a avaliação do cliente vai para o modelo dentro de &lt;avaliacao&gt;...&lt;/avaliacao&gt;. Qual é o ganho real dessas tags?",["Elas comprimem o texto, reduzindo os tokens cobrados","Elas ativam um modo especial de parsing na API","Elas separam dado de instrução: o modelo para de confundir o conteúdo com comandos (inclusive tentativas de injection), e fica fácil extrair a resposta","Elas são obrigatórias para o structured output funcionar"],2,"Delimitadores dizem ao modelo onde o dado começa e termina, evitando que texto do usuário seja lido como instrução. Tags XML são particularmente bem interpretadas pelos modelos Claude."],
+  ["Seu system prompt de 3 mil tokens é idêntico entre chamadas, mas você colocou a data e hora atuais na primeira linha dele. O que acontece com o prompt caching?",["O cache nunca acerta: caching exige prefixo idêntico byte a byte, e o timestamp muda o início a cada chamada — conteúdo variável deve ir para o final","Nada muda: o cache ignora números e datas automaticamente","O cache continua valendo para o restante do prompt depois do timestamp","O caching só falha se o timestamp mudar o número total de tokens"],0,"O cache casa por prefixo exato: qualquer byte diferente no começo invalida tudo dali em diante. Daí a regra do módulo: conteúdo estável primeiro (system, exemplos, documentos), conteúdo variável no fim."],
+  ["Em qual destes cenários fazer retry da chamada de API é um ERRO?",["Depois de um HTTP 429 (rate limit)","Depois de um erro de conexão de rede intermitente","Depois de um HTTP 529 (servidor sobrecarregado)","Depois de um erro 4xx de validação (request malformado)"],3,"Um request inválido continua inválido na segunda tentativa — repetir só queima cota. Erros transitórios (429, 5xx/529, rede) merecem retry com backoff exponencial, que os SDKs oficiais já fazem sozinhos."],
+  ["Quando usar streaming numa aplicação com LLM?",["Sempre que a resposta for JSON, para validar token a token","Quando há um humano esperando na tela: ele vê o texto surgir em vez de encarar um spinner — e respostas longas escapam de timeouts HTTP","Apenas em pipelines batch, para processar vários documentos em paralelo","Somente com modelos pequenos, os únicos que suportam stream"],1,"A regra prática do módulo: humano na ponta → sempre streaming; pipeline batch → pode ser síncrono. Além da percepção de velocidade, transmitir aos poucos evita estourar timeouts em respostas longas."],
+  ["Você reescreveu o prompt do extrator e as 3 primeiras respostas parecem melhores. O que fazer antes de promover a v2 para produção?",["Promover logo: 3 acertos seguidos já indicam melhora real","Perguntar ao próprio modelo qual das duas versões é melhor","Rodar v1 e v2 sobre o MESMO conjunto de teste com gabarito e comparar acurácia por campo, custo e latência — só promover se os números vencerem","Aumentar a temperatura e testar mais alguns exemplos variados"],2,"Impressão com meia dúzia de exemplos não é métrica: duas versões podem parecer iguais no olho e diferir 15 pontos de acurácia no conjunto de teste. Nunca troque um prompt em produção sem rodar o conjunto de teste antes."]],
  cards:[['System prompt','Instruções de papel e regras, separadas da conversa do usuário'],
   ['Few-shot','Exemplos resolvidos dentro do prompt guiam formato e estilo'],
   ['Chain-of-thought','Pedir raciocínio passo a passo antes da resposta final'],
@@ -420,7 +468,12 @@ const MODS=[
    'Nomes, códigos e siglas favorecem a busca lexical; paráfrases favorecem a vetorial. Juntas cobrem os dois casos.'],
   ['A métrica faithfulness (Ragas) mede:',
    ['A velocidade da resposta','Se a resposta se sustenta no contexto recuperado, sem inventar','A cobertura do índice','O custo do pipeline'],1,
-   'Resposta bonita que ignora o contexto é alucinação com aparência de RAG — faithfulness pega exatamente isso.']],
+   'Resposta bonita que ignora o contexto é alucinação com aparência de RAG — faithfulness pega exatamente isso.'],
+  ["Por que os pipelines de RAG normalizam os embeddings (norma 1) na hora de indexar?",["Para reduzir o número de dimensões do vetor","Para economizar memória no vector store","Porque com vetores normalizados a similaridade de cosseno vira um simples produto escalar, mais rápido de calcular","Porque as APIs de embedding exigem vetores normalizados"],2,"cos(a,b) = a·b/(|a||b|); com norma 1 o denominador some e sobra o produto escalar — é exatamente o que as bibliotecas fazem por baixo do índice."],
+  ["No pipeline com reranker, qual é a ordem correta das etapas?",["Recuperar 25-50 candidatos com busca barata, rerankear com cross-encoder e enviar só os 3-5 melhores ao LLM","Enviar todos os candidatos ao LLM e deixar que ele escolha os relevantes","Rerankear todos os chunks da base antes de qualquer busca","Gerar a resposta primeiro e usar o reranker para conferir as citações"],0,"O retrieval inicial é rápido e aproximado; o cross-encoder lê pergunta + chunk juntos e dá nota fina só aos candidatos — costuma ser a melhoria de qualidade mais barata do pipeline."],
+  ["No conjunto de avaliação de um RAG, por que incluir perguntas que a base NÃO consegue responder?",["Para aumentar o tamanho do conjunto de teste","Para medir a velocidade do retrieval em casos difíceis","Para dar exemplos negativos ao modelo de embedding","Para testar se o sistema recusa corretamente (diz que não encontrou) em vez de inventar uma resposta"],3,"É o teste anti-alucinação: sem a instrução de recusa no prompt, o modelo responde do próprio conhecimento com toda a confiança — e são essas perguntas que revelam isso."],
+  ["Seu RAG tem context precision alta, mas faithfulness baixa. Onde está o problema?",["No retrieval — os chunks recuperados são irrelevantes","Na geração — os trechos certos chegam, mas o modelo responde ignorando o contexto","No chunking — os pedaços estão grandes demais","No conjunto de teste — faltam perguntas"],1,"Precision alta diz que a busca trouxe os trechos certos; se mesmo assim a resposta não se sustenta neles, a engrenagem doente é a geração — endureça o prompt (APENAS os trechos) e exija citações."],
+  ["Você persistiu o índice em disco, mudou a estratégia de chunking, rodou a avaliação — e as métricas não mudaram nada. A causa mais provável é:",["A melhoria de chunking realmente não teve efeito","O modelo de embedding precisa ser retreinado","A busca ainda usa o índice salvo do chunking antigo — é preciso apagar e reindexar","As perguntas do conjunto de teste ficaram desatualizadas"],2,"Índice persistido é um cache: mudou o chunking sem reindexar, você continua buscando nos chunks antigos. Métricas idênticas demais após uma mudança são o sintoma clássico."]],
  cards:[['RAG','Buscar trechos relevantes e injetá-los no prompt antes de responder'],
   ['Embedding','Vetor denso que captura o significado de um texto'],
   ['Similaridade de cosseno','Cosseno do ângulo entre vetores; 1 = significado quase idêntico'],
@@ -452,7 +505,12 @@ const MODS=[
    'Complexidade de agente só se paga quando a tarefa é realmente aberta. Na dúvida, comece com um workflow fixo.'],
   ['Antes de o agente executar uma ação irreversível (enviar e-mail, deletar), a prática correta é:',
    ['Deixar executar, agentes são confiáveis','Exigir confirmação humana (humano no loop)','Aumentar a temperatura','Rodar duas vezes para conferir'],1,
-   'Allowlist de tools + aprovação humana para ações críticas é o guardrail mínimo de produção.']],
+   'Allowlist de tools + aprovação humana para ações críticas é o guardrail mínimo de produção.'],
+  ["Por que o custo em tokens de um agente cresce a cada volta do loop?",["Porque o provedor cobra uma taxa extra por chamada de tool","Porque a API é stateless: cada iteração reenvia o histórico inteiro, e cada tool_result engorda o contexto das seguintes","Porque o modelo aumenta a temperatura conforme itera","Porque tokens de saída ficam mais caros em respostas longas"],1,"O histórico só cresce e é reenviado a cada rodada. As mitigações são prompt caching no prefixo estável, tool results enxutos e limite de iterações."],
+  ["Durante o loop, uma tool lança uma exceção (ex.: coluna inexistente no CSV). A prática correta é:",["Deixar o programa quebrar — errar rápido é melhor","Repetir a mesma chamada automaticamente até funcionar","Encerrar o loop e devolver uma resposta parcial ao usuário","Capturar o erro e devolvê-lo como tool_result com is_error, para o modelo ler a mensagem e tentar outro caminho"],3,"O erro vira feedback: o modelo lê a mensagem, consulta quais colunas existem e se corrige sozinho — em vez de derrubar o programa inteiro."],
+  ["Seu agente ignora uma tool ou a usa na hora errada. Qual é o primeiro ajuste a fazer?",["Reescrever a description da tool de forma prescritiva — é ela que o modelo lê para decidir quando chamar","Trocar para um framework de agentes com roteamento automático","Aumentar o max_tokens para o modelo pensar mais","Adicionar um segundo agente para supervisionar o primeiro"],0,"A qualidade da description é o fator nº 1 de acerto: use esta ferramenta SEMPRE que a pergunta envolver preços atuais funciona melhor que um vago busca preços."],
+  ["No loop escrito à mão, como o seu código sabe que o agente terminou e pode devolver a resposta final?",["O modelo envia uma tool especial de finalização","A API encerra a conexão automaticamente","O stop_reason da resposta deixa de ser tool_use — o modelo respondeu sem pedir ferramenta","O texto da resposta contém a palavra FIM"],2,"Enquanto quer ferramentas, o modelo para com stop_reason tool_use; quando responde sem pedir nenhuma, é a resposta final e o loop quebra."],
+  ["Qual benefício REAL justifica uma arquitetura multi-agente (orquestrador + subagentes)?",["Isolamento de contexto: um subagente lê 50 arquivos e devolve só a conclusão, sem entupir a janela do orquestrador","Mais agentes conversando produzem respostas mais inteligentes","Multi-agente dispensa guardrails e supervisão","Dividir qualquer tarefa em papéis (pesquisador, escritor, revisor) sempre melhora a qualidade"],0,"Multi-agente se paga com paralelismo real ou contexto que estoura a janela; dividir uma tarefa linear em personagens só multiplica tokens, latência e modos de falha."]],
  cards:[['Agente','LLM em loop: pensa → chama ferramenta → observa resultado → repete'],
   ['Tool use','O modelo pede uma chamada de função com argumentos JSON; seu código executa'],
   ['ReAct','Padrão que alterna raciocínio e ação, com observações a cada passo'],
@@ -484,7 +542,12 @@ const MODS=[
    'Quantização é o que permite rodar um 8B num notebook. Q4 é o equilíbrio usual entre memória e qualidade.'],
   ['Depois do fine-tuning, a avaliação correta é:',
    ['Olhar o loss de treino','Rodar um eval da SUA tarefa comparando antes × depois','Perguntar ao próprio modelo se melhorou','Confiar no leaderboard público'],1,
-   'Loss baixo não significa tarefa resolvida — e ainda há risco de esquecimento catastrófico. Meça a tarefa real.']],
+   'Loss baixo não significa tarefa resolvida — e ainda há risco de esquecimento catastrófico. Meça a tarefa real.'],
+  ["Sua GPU tem 8 GB. Entre um modelo de 3B em FP16 (~6 GB) e um de 8B em Q4 (~4,7 GB), a regra prática manda escolher:",["O 3B em FP16 — precisão completa sempre vence","Nenhum dos dois — 8 GB não roda LLM","Tanto faz — o desempenho será idêntico","O 8B em Q4 — no mesmo orçamento de memória, os parâmetros extras valem mais que os bits extras"],3,"A perda do Q4 é pequena, e um modelo maior quantizado costuma superar um menor em precisão cheia. Só lembre de somar ~10-20% de VRAM para o KV cache."],
+  ["Depois do fine-tuning, o modelo fala sozinho, não para de gerar ou ignora o system prompt. O suspeito nº 1 é:",["Chat template errado no preparo dos dados — a string de treino deve sair de apply_chat_template, nunca ser montada à mão","Learning rate alto demais","Dataset pequeno demais","Quantização agressiva do modelo base"],0,"Cada família de modelo usa tokens especiais próprios para demarcar system/user/assistant; treinar com o template errado quebra exatamente o comportamento de conversa."],
+  ["No QLoRA, por que quantizar o modelo base em 4 bits durante o treino quase não prejudica a qualidade?",["Porque 4 bits guardam a mesma informação que 16","Porque o otimizador corrige os erros de quantização a cada passo","Porque o base fica congelado — quem aprende são os adaptadores LoRA, mantidos em 16 bits","Porque a quantização só é aplicada depois do treino"],2,"A precisão baixa só doeria se os pesos do base fossem atualizados; como só os adaptadores treinam, um 8B cabe em ~6 GB de VRAM — Colab grátis."],
+  ["Ao gerar exemplos de treino com um LLM forte, por que a revisão manual de TODOS eles é inegociável?",["Porque LLMs não sabem gerar JSON","Porque exemplos inconsistentes seriam exatamente o que o seu modelo aprenderia — em dataset, qualidade esmaga quantidade","Porque o Hugging Face Hub rejeita datasets sintéticos","Porque a revisão acelera o treino no Colab"],1,"500-1.000 exemplos limpos e consistentes batem 50 mil sujos: o fine-tune copia o que vê, inclusive os erros e as inconsistências do gerador."],
+  ["Por que o conjunto de teste é separado ANTES do treino e fica lacrado até a avaliação final?",["Para o treino rodar mais rápido com menos dados","Porque o Colab limita o tamanho dos arquivos enviados","Para reaproveitá-lo numa segunda época de treino","Porque se o teste vazar para o treino ou para os ajustes, a métrica infla — você mede memorização, não a tarefa"],3,"Eval só vale em dados que o modelo nunca viu: é o que separa medir generalização de medir decoreba — e o motivo de o loss de treino não provar nada."]],
  cards:[['LoRA','Adaptadores de baixo rank ao lado dos pesos congelados; treina ~1% dos parâmetros'],
   ['QLoRA','LoRA sobre modelo quantizado em 4 bits — fine-tuning que cabe no Colab grátis'],
   ['Quantização','Reduzir a precisão dos pesos (ex. Q4) para caber em menos memória'],
@@ -516,7 +579,12 @@ const MODS=[
    'Servem para escolher o modelo de partida. A qualidade do seu produto exige um eval do seu caso de uso.'],
   ['Qual é o guardrail mínimo para um agente com ferramentas perigosas?',
    ['Um prompt pedindo cuidado','Allowlist de tools + confirmação humana para ações irreversíveis','Rodar em produção e observar','Temperatura zero'],1,
-   'Prompt não é barreira de segurança. Limite o que o agente PODE fazer e exija aprovação no que é crítico.']],
+   'Prompt não é barreira de segurança. Limite o que o agente PODE fazer e exija aprovação no que é crítico.'],
+  ["Seu extrator de dados vai ganhar uma suite de evals. De onde devem vir os primeiros casos do dataset?",["De um benchmark público como MMLU, que já vem pronto","De centenas de casos sintéticos gerados por outro LLM","Dos erros reais que o sistema cometeu em logs e testes — cada tropeço vira um caso","Da documentação oficial do modelo escolhido"],2,"Hamel Husain resume o ciclo: olhe os dados, construa evals a partir dos erros reais, itere. Vinte casos nascidos de falhas verdadeiras valem mais que quinhentos imaginados ou genéricos."],
+  ["O critério é: a saída deve ser JSON válido e conter o e-mail presente no texto. Qual tipo de eval usar?",["Asserção de código — o critério é verificável mecanicamente, barato e 100% reproduzível","LLM-as-judge, porque a saída vem de um LLM","Avaliação humana, que é o padrão-ouro para tudo","Nenhum: formato não se testa, só qualidade subjetiva"],0,"Sempre que o critério for mecânico (formato, contém X, tamanho), use código: rápido e determinístico. Reserve o LLM-juiz para o subjetivo (tom, fidelidade) e o humano para calibrar o juiz e os casos críticos."],
+  ["Seu RAG respondeu errado. Como descobrir se a culpa é do retriever ou do gerador?",["Não dá para separar: RAG é uma caixa-preta","Trocando por um modelo maior e vendo se melhora","Aumentando a temperatura para variar as respostas","Com métricas dedicadas como as do Ragas: context precision/recall medem a recuperação; faithfulness mede se a resposta se sustenta no contexto"],3,"Se o contexto recuperado não trazia a informação, o problema é o retriever; se trazia e a resposta saiu do trilho, o gerador alucinou. Sem métricas dedicadas esse diagnóstico é impossível."],
+  ["Você rotulou 10 saídas à mão e o seu LLM-juiz só concordou com você em 5. O que isso indica?",["Que avaliação humana não funciona para IA","Que a rubrica do juiz está vaga — reescreva com critérios objetivos e valide de novo antes de confiar nele","Que o juiz sempre precisa de um modelo maior","Que 5 em 10 já basta para aprovar o juiz"],1,"O teste de sanidade essencial é validar o juiz contra rótulos humanos ANTES de confiar nele. Concordância baixa quase sempre denuncia rubrica genérica ('a resposta é boa?') em vez de critérios objetivos."],
+  ["Durante o red teaming, um dos seus ataques de injection funcionou. Qual é o próximo passo profissional?",["Comemorar que os outros falharam e encerrar o teste","Trocar de modelo e considerar o problema resolvido","Aplicar uma mitigação, re-executar para provar o bloqueio e manter o ataque na suite como caso de regressão","Remover o caso da suite para o painel voltar a ficar verde"],2,"Red teaming não é evento único: cada ataque bem-sucedido vira caso permanente do dataset de eval. A correção só conta quando a re-execução mostra o antes/depois."]],
  cards:[['Eval','Teste automatizado da qualidade do sistema de IA na SUA tarefa'],
   ['LLM-as-judge','Um LLM avalia as saídas de outro; barato, mas com vieses de posição e verbosidade'],
   ['Prompt injection','Dados externos que sequestram as instruções do modelo'],
@@ -548,7 +616,12 @@ const MODS=[
    'API gerenciada vence em simplicidade e qualidade de fronteira; servir o próprio vence em custo por token em escala e controle.'],
   ['Observabilidade específica de LLM significa logar:',
    ['Só os erros 500','Prompt, resposta, tokens, custo e latência por request, com tracing de cadeias','Apenas o uso de CPU','Nada, por privacidade'],1,
-   'Sem isso você não consegue depurar qualidade, medir custo por feature nem montar datasets de eval a partir de erros reais.']],
+   'Sem isso você não consegue depurar qualidade, medir custo por feature nem montar datasets de eval a partir de erros reais.'],
+  ["Por que a chave da API do LLM nunca deve ficar no frontend?",["Porque o navegador não suporta chaves longas","Porque qualquer usuário poderia extraí-la e gastar sua cota — a chave vive no gateway, o único ponto que fala com o provedor","Porque o provedor recusa requisições vindas de navegador","Porque o frontend não consegue fazer streaming"],1,"O gateway no backend detém as chaves e centraliza autenticação, rate limit por usuário, guardrails e troca de modelo. Sem ele, você vaza credenciais e perde todos os pontos de controle."],
+  ["Sua chamada ao provedor retornou erro 400 (requisição malformada). O que o gateway deve fazer?",["Retry com backoff exponencial até passar","Acionar o fallback para outro modelo","Aumentar o timeout e tentar de novo","Falhar de vez: 4xx é bug do SEU request — retry e fallback só valem para 429 e 5xx"],3,"Repetir uma requisição malformada devolve o mesmo erro e mascara o bug. O profissional separa erro retryável (429, 5xx, rede) de não-retryável (400, 401, 404) e trata cada classe de um jeito."],
+  ["Você precisa classificar 200 mil textos sem pressa, num processamento noturno. Qual alavanca rende mais?",["A API de batch do provedor: lotes assíncronos por cerca de metade do preço","Streaming, para os resultados aparecerem mais cedo","Aumentar o max_tokens de cada chamada","Subir a temperatura para o modelo responder mais rápido"],0,"Batching é a alavanca para trabalho assíncrono em massa: classificação, embeddings, evals noturnos. Streaming melhora a experiência de quem espera uma resposta interativa — num job noturno não muda nada."],
+  ["Qual é a diferença entre roteamento e cascata de modelos?",["Na prática são sinônimos","Roteamento serve só para modelos abertos; cascata, só para APIs","No roteamento um classificador escolhe o modelo ANTES da chamada; na cascata tenta-se o barato e só se escala para o caro se a resposta reprovar num teste de qualidade","Cascata roda todos os modelos em paralelo e vota na melhor resposta"],2,"Os dois cortam custo mandando cada request para o menor modelo que resolve; o que muda é o momento da decisão: antes de chamar (roteamento) ou depois de tentar (cascata)."],
+  ["Uma demo de portfólio em Gradio, a API de um produto e a inferência do seu próprio modelo em GPU: o deploy típico de cada uma é:",["Kubernetes próprio para as três, desde o dia 1","Demo no HF Spaces; API em container num PaaS (Railway/Render/Fly); GPU serverless no Modal ou vLLM em nuvem","As três no Hugging Face Spaces, que é grátis","API direto no frontend; demo e modelo no Modal"],1,"A escolha segue a carga: Spaces hospeda demos de graça, um PaaS sobe o container da API em minutos, e o Modal cobra GPU só pelo tempo de execução — sem manter placa ligada 24/7."]],
  cards:[['vLLM','Servidor de inferência de alta vazão para modelos abertos'],
   ['Streaming','Enviar tokens conforme são gerados — latência percebida mínima'],
   ['Roteamento de modelos','Mandar cada tarefa para o menor modelo que a resolve'],
@@ -579,7 +652,12 @@ const MODS=[
    'Ferramenta é consequência. Entrevistador quer ver raciocínio: requisitos → arquitetura → trade-offs → custos.'],
   ['Segundo o programa, o diferencial nº 1 do profissional sobre o amador é:',
    ['Saber mais frameworks','Evals + observabilidade — engenharia mensurável em volta do modelo','Ter GPU em casa','Prompts secretos'],1,
-   'Qualquer um faz demo com API. Produto confiável, medido e sustentável é trabalho de engenharia — o seu.']],
+   'Qualquer um faz demo com API. Produto confiável, medido e sustentável é trabalho de engenharia — o seu.'],
+  ["Na divisão proposta em 'Rise of the AI Engineer', o que faz o AI Engineer?",["Constrói produtos sobre modelos de fundação já treinados — prompts, RAG, agentes, evals e LLMOps","Treina modelos do zero em clusters de GPU","Dedica-se à pesquisa acadêmica e à publicação de papers","Prepara e anota datasets para as equipes de treino"],0,"Treinar do zero é território do ML Engineer/Researcher. O AI Engineer transforma modelos prontos (via API ou abertos) em produto confiável, avaliado e barato — exatamente o recorte deste programa."],
+  ["Na semana 1 do capstone, a estratégia recomendada é:",["Polir a ingestão de dados até ficar perfeita antes de gerar a primeira resposta","Começar pela UI, que é o que aparece na demo","Fazer o caminho feliz rodar de ponta a ponta, mesmo feio — a fatia vertical completa","Escrever o README inteiro antes de codar"],2,"Um sistema completo e tosco melhora aos poucos; camadas perfeitas e desconexas nunca viram demo. 'Perfeição por camada' é uma das três armadilhas que matam capstones."],
+  ["Qual é o papel do diário de decisões (DECISIONS.md) no capstone?",["Substituir os testes automatizados do projeto","Registrar as horas trabalhadas em cada etapa","Listar os bugs ainda abertos","Anotar cada escolha técnica com a alternativa descartada e o porquê — vira a seção de decisões do README e as respostas prontas da entrevista"],3,"Recrutadores procuram julgamento, não só código que roda. 'Por que RAG aqui?' é pergunta certa de entrevista — e quem anotou a decisão na hora responde com convicção, sem reconstruir depois."],
+  ["No meio do capstone surge a ideia de 'só mais uma feature'. O que decide se ela entra na v1?",["Ser rápida de implementar","Estar descrita no parágrafo do MVP escrito no início — o que não está lá fica para depois de publicar","Usar o framework mais recente","Caber em um único commit"],1,"Escopo crescendo é a armadilha nº 1 que mata capstones. O parágrafo do MVP (quem usa, o que entra, o que sai na demo de 2 minutos) é o contrato da v1 — até as extensões bônus esperam a publicação."],
+  ["No capstone de fine-tuning, como provar que o modelo especialista valeu a pena?",["Com a tabela antes/depois: métricas da TAREFA no split de teste, com o fine-tuned superando o base em algo relevante","Mostrando que o loss de treino caiu bastante","Publicando no Hub e contando os downloads","Comparando o tamanho em GB dos dois modelos"],0,"Loss baixo não garante utilidade — pode até ser overfitting. O que convence (e o que o recrutador procura) é a comparação base vs fine-tuned na mesma tarefa, medida em dados de teste que o treino nunca viu."]],
  cards:[['Capstone','Projeto de portfólio completo: deployado, documentado e com evals'],
   ['README que recruta lê','Problema, demo (GIF), arquitetura, decisões técnicas, como rodar'],
   ['Stack do AI Engineer','APIs, RAG, agentes, evals, observabilidade e deploy'],
@@ -665,8 +743,14 @@ const titOk=t=>TITULOS_RAROS.includes(t)||Object.values(TEMPORADAS).some(x=>t===
 const SKEY=USER?'academia:u:'+USER:'academia'; // sem conta = modo visitante (chave antiga)
 const DEV=localStorage.getItem('academia_dev')||Math.random().toString(36).slice(2,8);
 localStorage.setItem('academia_dev',DEV); // id deste aparelho — cada um só escreve o próprio contador *By
-const S=Object.assign({name:'',lessons:{},proj:{},quiz:{},cards:{},xp:0,days:[],reviews:0,xpBy:{}},
+const S=Object.assign({name:'',lessons:{},proj:{},quiz:{},cards:{},xp:0,days:[],reviews:0,xpBy:{},gr:{}},
   JSON.parse(localStorage.getItem(SKEY)||'{}'));
+S.gr=S.gr||{};
+if(!S.grSeeded){ // migração: itens já marcados contam como premiados — XP paga UMA vez por aula/projeto
+  for(const k in S.lessons)(S.lessons[k]||[]).forEach((v,j)=>{if(v)S.gr[k+'_'+j]=1});
+  for(const k in S.proj)if(S.proj[k])S.gr['p'+k]=1;
+  S.grSeeded=1;
+}
 /* g = estado do sistema de crescimento (dia, semana/liga, temporada/passe) */
 S.g=Object.assign({d:'',m:[0,0,0],fv:'',bau:'',boost:'',wk:'',pl:0,plBy:{},liga:0,shields:0,sdays:[],
   w:{l:0,c:0,x:0},lw:null,se:'',sxp:0,sxpBy:{},tier:0,titles:[],title:'',aug:-1,rota:-1},S.g||{});
@@ -841,7 +925,7 @@ function nivel(){let cur=NIVEIS[0],next=null;for(const nv of NIVEIS){if(S.xp>=nv
 /* progresso: itens = aulas + quiz + projeto */
 function modProg(i){
   const m=MODS[i],les=(S.lessons['m'+i]||[]).filter(Boolean).length;
-  const q=S.quiz['m'+i]!=null?1:0,p=S.proj['m'+i]?1:0;
+  const q=(S.quiz['m'+i]??-1)>=3?1:0,p=S.proj['m'+i]?1:0; // quiz só conta aprovado (3+/5)
   return{done:les+q+p,total:m.aulas.length+2};
 }
 const modPct=i=>{const p=modProg(i);return Math.round(100*p.done/p.total)};
@@ -897,15 +981,20 @@ function vPainel(){
   const st=streak(),hojeOk=S.days.includes(hoje()),L=LIGAS[S.g.liga];
   const hrs=Math.max(1,Math.ceil((new Date(hoje()+'T00:00:00Z').getTime()+864e5-Date.now())/36e5));
   const pil=PILULAS[Math.floor(Date.now()/864e5)%PILULAS.length];
+  const novato=!S.days.length&&!S.xp; // recém-chegado: painel simples até a 1ª atividade acender a gamificação
+  const semBackup=!novato&&st>=7&&(!S.lastSync||(new Date(hoje())-new Date(S.lastSync))/864e5>=7);
   // próxima ação: primeira aula pendente do primeiro módulo incompleto
   let nx=null;
   for(let i=0;i<MODS.length&&!nx;i++){
     if(modPct(i)<100){const arr=S.lessons['m'+i]||[];
       const li=MODS[i].aulas.findIndex((_,j)=>!arr[j]);
-      nx={mi:i,txt:li>=0?MODS[i].aulas[li][1]:(S.quiz['m'+i]==null?'Fazer o quiz':'Concluir o projeto')};}
+      nx={mi:i,txt:li>=0?MODS[i].aulas[li][1]:((S.quiz['m'+i]??-1)<3?'Fazer o quiz':'Concluir o projeto')};}
   }
   app.innerHTML=`
-  <section class="hoje noprint">
+  ${novato?`<section class="card noprint" style="text-align:center;padding:34px 24px"><div style="font-size:2.6rem">🎓</div>
+    <h3 class="serif" style="color:var(--navy);margin:8px 0;font-size:1.5rem">Bem-vindo(a) à Academia!</h3>
+    <p class="mut" style="max-width:540px;margin:0 auto 16px">Comece pelo Módulo 0 — sua primeira atividade acende as missões diárias, a liga semanal e o passe da temporada.</p>
+    <button class="btn gold" onclick="location.hash='#/mod/0'">Começar pelo Módulo 0 →</button></section>`:`<section class="hoje noprint">
     <div class="card">
       <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
         <h3 class="serif" style="color:var(--navy)">⚔️ Missões de hoje</h3>
@@ -937,7 +1026,8 @@ function vPainel(){
         :`<p style="margin-top:8px;font-size:.85rem">🧭 Rota ${ROTAS[S.g.rota][0]} <b>${ROTAS[S.g.rota][1]}</b> ativa nesta temporada</p>`}
       <a href="#/crescimento" style="display:inline-block;margin-top:12px;font-size:.85rem;font-weight:700">Ver sistema de crescimento →</a>
     </div>
-  </section>
+  </section>`}
+  ${semBackup?`<div class="aviso noprint" style="margin-bottom:16px">💾 Streak de ${st} dias e nenhum backup há uma semana — seu progresso vive só neste navegador. <a href="#/sync">Gere o link de sync</a> e mande para você mesmo: 30 segundos que protegem tudo.</div>`:''}
   <section class="card hero">
     <div class="hero-content">
       <div class="eyebrow">${S.name?`Bom ter você de volta, ${S.name}`:'Sua jornada em Engenharia de IA'}${S.g.title?` · 🏵️ ${S.g.title}`:''}</div>
@@ -1017,63 +1107,102 @@ function vMod(i){
   <section class="module-layout"><div class="module-main">
     <div class="secttl"><h2>Vídeo-aula do módulo</h2><span class="mut">o conteúdo essencial narrado, em poucos minutos</span></div>
     <div class="card" style="padding:10px">
-      <video controls preload="metadata" style="width:100%;display:block;border-radius:8px;background:#242321"
-        src="${VID(i)}">Seu navegador não reproduz vídeo — <a href="${VID(i)}">baixe a vídeo-aula</a>.</video>
+      <video controls playsinline preload="metadata" style="width:100%;display:block;border-radius:8px;background:#242321"
+        src="${VID(i)}"><track kind="captions" srclang="pt" label="Português" src="videos/legendas/mod${String(i).padStart(2,'0')}.vtt">Seu navegador não reproduz vídeo — <a href="${VID(i)}">baixe a vídeo-aula</a>.</video>
     </div>
     <div class="secttl"><h2>Plano de aprendizagem</h2><span class="mut">marque cada etapa e veja o progresso acontecer</span></div>
     <div class="card" style="padding:7px 16px">${m.aulas.map((a,j)=>`<label class="lesson ${arr[j]?'done':''}">
       <input type="checkbox" ${arr[j]?'checked':''} onchange="tickLesson(${i},${j},this.checked)"><span>${a[0]}</span><span class="lt">${a[1]}</span>
       <a href="${a[2]}" target="_blank" rel="noopener">abrir ↗</a></label>`).join('')}</div>
+    <div class="secttl"><h2>Material do módulo</h2><span class="mut">o guia completo para estudar aqui mesmo, sem sair do site</span></div>
+    <div id="mat"><div class="card"><p class="mut">Carregando o material…</p></div></div>
     <div class="secttl"><h2>Projeto do módulo</h2><span class="mut">do enunciado ao push no GitHub — tudo nesta página</span></div>
     <div class="card pp" id="pp"><p class="mut">Carregando o passo a passo…</p></div>
   </div><aside class="module-side">
     <div class="secttl"><h2>Próximas ações</h2></div>
-    <div class="card"><span class="chip gold">Active recall · +50 XP</span><h3 style="margin-top:12px">${q!=null?'Supere seu recorde':'Consolide o módulo'}</h3><p class="mut">Um quiz curto revela lacunas antes que elas virem obstáculos.</p><div class="module-actions"><button class="btn" onclick="startQuiz(${i})">${q!=null?'Refazer quiz':'Fazer quiz'}</button><button class="btn sec" onclick="startCards(${i})">Flashcards</button></div></div>
+    <div class="card"><span class="chip gold">Active recall · +50 XP</span><h3 style="margin-top:12px">${q!=null?'Supere seu recorde':'Consolide o módulo'}</h3><p class="mut">5 perguntas sorteadas do banco do módulo. Acerte 3+ para concluir o item — teclas 1–4 respondem.</p><div class="module-actions"><button class="btn" onclick="startQuiz(${i})">${q!=null?'Refazer quiz':'Fazer quiz'}</button><button class="btn sec" onclick="startCards(${i})">Flashcards</button></div></div>
     <div class="card project-card"><div class="eyebrow" style="color:#e9aaa7">Entrega do módulo · +100 XP</div><h3 style="margin-top:12px">${m.proj}</h3><p class="mut">Enunciado, passo a passo e critérios de aceite estão nesta página. Fechou tudo e deu o push? Marque a entrega.</p><label class="lesson" style="border:0;margin-top:12px;padding:4px 0"><input type="checkbox" ${S.proj['m'+i]?'checked':''} onchange="tickProj(${i},this.checked)"><span>🚀</span><span class="lt">${S.proj['m'+i]?'Projeto entregue':'Marcar como entregue'}</span></label></div>
     <a class="btn sec" target="_blank" rel="noopener" href="${MD(m.slug)}">Material completo ↗</a>
   </aside></section>`;
-  loadPP(i);
+  loadMd(i);
 }
 
-/* ---------- passo a passo do projeto: renderiza a seção Mini-projeto do .md na própria página ---------- */
-const PPC={};
+/* ---------- material do módulo: renderiza as seções do .md na própria página ---------- */
+const MDC={}; // cache por slug: {chave da seção → html}
 const escMd=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 const inlMd=s=>escMd(s).replace(/`([^`]+)`/g,'<code>$1</code>')
   .replace(/\*\*([^*]+)\*\*/g,'<b>$1</b>').replace(/\*([^*\s][^*]*)\*/g,'<i>$1</i>')
   .replace(/\[([^\]]+)\]\((https?:[^)\s]+)\)/g,'<a href="$2" target="_blank" rel="noopener">$1</a>');
-function mdProj(txt){
-  const L=txt.split('\n');let a=-1,b=L.length,f=0;
-  for(let k=0;k<L.length;k++){
-    if(/^```/.test(L[k])){f^=1;continue}
-    if(f)continue;
-    if(a<0){if(/^## .*(Mini-projeto|Capstone)/i.test(L[k]))a=k+1}
-    else if(/^## /.test(L[k])){b=k;break}
-  }
-  if(a<0)throw new Error('seção do projeto não encontrada');
-  let h='',i=a;
+const liMd=x=>inlMd(x.replace(/^\[[ xX]\] */,'☐ '));
+function mdRender(L){
+  let h='',i=0;const b=L.length;
+  const lista=(re,tag)=>{ // itens + filhos indentados (1 nível) + continuações
+    const its=[];
+    while(i<b&&re.test(L[i])){
+      const it={t:L[i].replace(re,''),sub:[]};i++;
+      while(i<b&&/^ {2,}\S/.test(L[i])){
+        const s=L[i].trim();
+        if(/^([-*]|\d+\.) /.test(s))it.sub.push(s.replace(/^([-*]|\d+\.) /,''));
+        else it.t+=' '+s;
+        i++;
+      }
+      its.push(it);
+    }
+    h+=`<${tag}>${its.map(it=>`<li>${liMd(it.t)}${it.sub.length?`<ul>${it.sub.map(s=>`<li>${liMd(s)}</li>`).join('')}</ul>`:''}</li>`).join('')}</${tag}>`;
+  };
   while(i<b){
     const l=L[i];
     if(/^```/.test(l)){const c=[];i++;while(i<b&&!/^```/.test(L[i]))c.push(L[i++]);i++;h+=`<pre><code>${escMd(c.join('\n'))}</code></pre>`;continue}
     if(!l.trim()){i++;continue}
     const t=l.match(/^#{3,4} +(.*)/);
     if(t){h+=`<h3>${inlMd(t[1])}</h3>`;i++;continue}
-    if(/^[-*] /.test(l)){const li=[];while(i<b&&/^[-*] /.test(L[i]))li.push(L[i++].replace(/^[-*] /,''));
-      h+=`<ul>${li.map(x=>`<li>${inlMd(x.replace(/^\[[ xX]\] */,'☐ '))}</li>`).join('')}</ul>`;continue}
-    if(/^\d+\. /.test(l)){const li=[];while(i<b&&/^\d+\. /.test(L[i]))li.push(L[i++].replace(/^\d+\. /,''));
-      h+=`<ol>${li.map(x=>`<li>${inlMd(x)}</li>`).join('')}</ol>`;continue}
-    const p=[];while(i<b&&L[i].trim()&&!/^(```|#|[-*] |\d+\. )/.test(L[i]))p.push(L[i++]);
+    if(/^> ?/.test(l)){const q=[];while(i<b&&/^> ?/.test(L[i]))q.push(L[i++].replace(/^> ?/,''));h+=`<blockquote>${inlMd(q.join(' '))}</blockquote>`;continue}
+    if(/^\|/.test(l)){const rows=[];while(i<b&&/^\|/.test(L[i]))rows.push(L[i++]);
+      const cells=r=>r.replace(/^\||\|$/g,'').split('|').map(c=>c.trim());
+      const sep=rows[1]&&/^[\s:|-]+$/.test(rows[1]);
+      const head=sep?cells(rows[0]):null,body=(sep?rows.slice(2):rows).map(cells);
+      h+=`<div class="tblwrap"><table>${head?`<tr>${head.map(c=>`<th>${inlMd(c)}</th>`).join('')}</tr>`:''}${body.map(r=>`<tr>${r.map(c=>`<td>${inlMd(c)}</td>`).join('')}</tr>`).join('')}</table></div>`;continue}
+    if(/^[-*] /.test(l)){lista(/^[-*] /,'ul');continue}
+    if(/^\d+\. /.test(l)){lista(/^\d+\. /,'ol');continue}
+    const p=[];while(i<b&&L[i].trim()&&!/^(```|#|>|\||[-*] |\d+\. | {2,})/.test(L[i]))p.push(L[i++]);
+    if(!p.length){i++;continue} // linha indentada órfã
     const s=p.join(' ');
     h+=`<p${/^✅/.test(s)?' class="ck"':/^(\*\*)?🆘/.test(s)?' class="sos"':''}>${inlMd(s)}</p>`;
   }
   return h;
 }
-async function loadPP(i){
-  const m=MODS[i],el=document.getElementById('pp');if(!el)return;
+/* fatia o .md por títulos ## (fence-aware) e renderiza só as seções que a página usa */
+const SECOES=[['obj',/Objetivos/,'🎯 Objetivos'],['pq',/Por que isso importa/,'🗺️ Por que isso importa'],
+  ['ce',/Conteúdo essencial/,'🧠 Conteúdo essencial'],['lab',/Lab guiado/,'💻 Lab guiado'],
+  ['ck',/Checklist de conclusão/,'☑️ Checklist de conclusão'],['proj',/Mini-projeto|Capstone/i,'🚀 Projeto']];
+function mdSecs(txt){
+  const L=txt.split('\n'),out={};let f=0,cur=null,ini=0;
+  const fecha=k=>{if(cur)out[cur]=mdRender(L.slice(ini,k))};
+  for(let k=0;k<L.length;k++){
+    if(/^```/.test(L[k])){f^=1;continue}
+    if(f)continue;
+    const m=L[k].match(/^## +(.*)/);
+    if(m){fecha(k);cur=null;
+      const s=SECOES.find(s=>s[1].test(m[1]));
+      if(s){cur=s[0];ini=k+1;}}
+  }
+  fecha(L.length);
+  return out;
+}
+async function loadMd(i){
+  const m=MODS[i],mat=document.getElementById('mat'),pp=document.getElementById('pp');
+  if(!mat&&!pp)return;
+  const link=`<p class="mut">Não deu para carregar aqui — <a href="${MD(m.slug)}" target="_blank" rel="noopener">abra o material no GitHub ↗</a>.</p>`;
   try{
-    if(!PPC[m.slug]){const r=await fetch('modulos/'+m.slug+'.md');if(!r.ok)throw new Error(r.status);PPC[m.slug]=mdProj(await r.text())}
-    el.innerHTML=PPC[m.slug];
+    if(!MDC[m.slug]){const r=await fetch('modulos/'+m.slug+'.md');if(!r.ok)throw new Error(r.status);MDC[m.slug]=mdSecs(await r.text())}
+    const sec=MDC[m.slug];
+    if(pp)pp.innerHTML=sec.proj||link;
+    if(mat)mat.innerHTML=SECOES.filter(s=>s[0]!=='proj'&&sec[s[0]]).map(([k,,tt],ix)=>
+      `<details class="card mdsec"${ix===0?' open':''}><summary>${tt}</summary><div class="pp">${sec[k]}</div></details>`).join('')||`<div class="card">${link}</div>`;
   }catch(e){/* aberto via file:// ou fora do Pages: cai no link do GitHub */
-    el.innerHTML=`<p class="mut">Não deu para carregar aqui — <a href="${MD(m.slug)}" target="_blank" rel="noopener">abra o passo a passo no GitHub ↗</a>.</p>`}
+    if(pp)pp.innerHTML=link;
+    if(mat)mat.innerHTML=`<div class="card">${link}</div>`;
+  }
 }
 
 window.matricular=()=>{
@@ -1084,14 +1213,16 @@ window.matricular=()=>{
 
 window.tickLesson=(i,j,v)=>{
   S.lessons['m'+i][j]=v;save();
-  if(v){addXP(10,'aula concluída','aula');mission(0);S.g.w.l++;save();}
-  else{S.xp=Math.max(0,S.xp-10);save();renderHeader();}
+  const k='m'+i+'_'+j; // cada aula premia UMA vez — desmarcar/remarcar não cria nem devolve XP
+  if(v&&!S.gr[k]){S.gr[k]=1;save();addXP(10,'aula concluída','aula');mission(0);S.g.w.l++;save();}
+  else renderHeader();
   vMod(i);
 };
 window.tickProj=(i,v)=>{
   S.proj['m'+i]=v;save();
-  if(v)addXP(100,'projeto entregue! 🚀','proj');
-  else{const d=Math.min(100,S.xp);S.xp-=d;S.xpBy[DEV]=(S.xpBy[DEV]||0)-d;save();renderHeader();} // contador do aparelho pode ficar negativo: é o saldo líquido dele
+  const k='pm'+i;
+  if(v&&!S.gr[k]){S.gr[k]=1;save();addXP(100,'projeto entregue! 🚀','proj');}
+  else renderHeader();
   vMod(i);
 };
 
@@ -1157,39 +1288,48 @@ window.excluirConta=()=>{
 
 /* ---------- quiz ---------- */
 let Q={};
-window.startQuiz=i=>{Q={mi:i,idx:0,score:0};location.hash='#/quiz';};
+const embaralha=a=>{a=[...a];for(let k=a.length-1;k>0;k--){const r=Math.floor(Math.random()*(k+1));[a[k],a[r]]=[a[r],a[k]];}return a;};
+window.startQuiz=i=>{ // 5 sorteadas do banco do módulo, alternativas embaralhadas — refazer nunca repete a mesma prova
+  Q={mi:i,idx:0,score:0,err:[],qs:embaralha(MODS[i].quiz).slice(0,5).map(([p,ops,ok,ex])=>{
+    const ord=embaralha([0,1,2,3]);
+    return [p,ord.map(o=>ops[o]),ord.indexOf(ok),ex];
+  })};
+  location.hash='#/quiz';
+};
 function vQuiz(){
   if(Q.mi==null){location.hash='#/curriculo';return;}
-  const m=MODS[Q.mi];
-  if(Q.idx>=m.quiz.length){ // resultado
+  if(Q.idx>=Q.qs.length){ // resultado
     const prev=S.quiz['m'+Q.mi]??-1;
     if(Q.score>prev){const ganho=(Q.score-Math.max(prev,0))*10;S.quiz['m'+Q.mi]=Q.score;save();addXP(ganho,'novo recorde no quiz','quiz');}
-    app.innerHTML=`<div class="card" style="text-align:center;max-width:560px;margin:30px auto">
+    app.innerHTML=`<div class="card" style="text-align:center;max-width:640px;margin:30px auto">
       <div style="font-size:3rem">${Q.score===5?'🏆':Q.score>=3?'🎉':'📚'}</div>
       <h2 class="serif" style="color:var(--navy)">${Q.score}/5 acertos</h2>
-      <p class="mut" style="margin:10px 0">${Q.score===5?'Impecável. Nota máxima!':Q.score>=3?'Aprovado! Revise os erros no material.':'Reprove agora, aprove depois: releia o material e volte.'}</p>
+      <p class="mut" style="margin:10px 0">${Q.score===5?'Impecável. Nota máxima!':Q.score>=3?'Aprovado! Revise abaixo o que errou.':'Reprove agora, aprove depois: revise abaixo, releia o material e volte — 3+ acertos concluem o quiz do módulo.'}</p>
+      ${Q.err.length?`<div style="text-align:left;margin:14px 0"><b class="serif" style="color:var(--navy)">O que revisar:</b>${Q.err.map(e=>`<div class="explain" style="margin-top:10px"><b>${e.p}</b><br>✔️ ${e.c}<br><small class="mut">${e.e}</small></div>`).join('')}</div>`:''}
       <button class="btn" onclick="location.hash='#/mod/${Q.mi}'">Voltar ao módulo</button>
-      <button class="btn sec" onclick="startQuiz(${Q.mi})">Refazer</button>
+      <button class="btn sec" onclick="startQuiz(${Q.mi})">Refazer (novo sorteio)</button>
     </div>`;
     return;
   }
-  const [perg,ops,ok,exp]=m.quiz[Q.idx];
+  const [perg,ops,ok,exp]=Q.qs[Q.idx];
   app.innerHTML=`<div class="card" style="max-width:680px;margin:10px auto">
     <div style="display:flex;justify-content:space-between;align-items:center">
-      <span class="chip gold">Quiz · Módulo ${Q.mi}</span><span class="mut">${Q.idx+1} de ${m.quiz.length}</span></div>
-    <div class="bar" style="margin:12px 0"><i style="width:${Math.round(100*Q.idx/m.quiz.length)}%"></i></div>
+      <span class="chip gold">Quiz · Módulo ${Q.mi}</span><span class="mut">${Q.idx+1} de ${Q.qs.length}</span></div>
+    <div class="bar" style="margin:12px 0"><i style="width:${Math.round(100*Q.idx/Q.qs.length)}%"></i></div>
     <h3 class="serif" style="color:var(--navy);margin:14px 0">${perg}</h3>
     <div id="ops">${ops.map((o,j)=>`<button class="qopt" onclick="answer(${j},${ok})"><b>${'ABCD'[j]})</b> ${o}</button>`).join('')}</div>
     <div id="fb"></div>
+    <small class="mut" style="display:block;margin-top:10px">teclas 1–4 (ou A–D) respondem · Enter avança</small>
   </div>`;
 }
 window.answer=(j,ok)=>{
-  const m=MODS[Q.mi],[,,,exp]=m.quiz[Q.idx];
+  const [perg,ops,,exp]=Q.qs[Q.idx];
   document.querySelectorAll('.qopt').forEach((b,k)=>{b.disabled=true;if(k===ok)b.classList.add('ok');else if(k===j)b.classList.add('err');});
   if(j===ok){Q.score++;mission(2);}
+  else Q.err.push({p:perg,c:ops[ok],e:exp});
   document.getElementById('fb').innerHTML=`
     <div class="explain"><b>${j===ok?'✓ Correto!':'✗ Não foi dessa vez.'}</b> ${exp}</div>
-    <button class="btn" style="margin-top:12px" onclick="Q.idx++;vQuiz()">${Q.idx+1<m.quiz.length?'Próxima →':'Ver resultado'}</button>`;
+    <button class="btn" style="margin-top:12px" onclick="Q.idx++;vQuiz()">${Q.idx+1<Q.qs.length?'Próxima →':'Ver resultado'}</button>`;
 };
 
 /* ---------- flashcards ---------- */
@@ -1199,23 +1339,26 @@ window.startCards=mi=>{ // sessão só do módulo (inclui não-devidos, sem alte
   location.hash='#/revisao';
 };
 function vRevisao(){
-  if(!R.fila){R={fila:dueCards().slice(0,20),i:0,flip:false,ok:0};}
-  if(!R.fila.length){app.innerHTML=`<div class="card" style="text-align:center;max-width:520px;margin:40px auto">
+  if(!R.fila){const due=dueCards();R={fila:due.slice(0,20),resto:Math.max(0,due.length-20),i:0,flip:false,ok:0};}
+  if(!R.fila.length){app.innerHTML=`<div class="card" style="text-align:center;max-width:560px;margin:40px auto">
     <div style="font-size:2.6rem">🌿</div><h2 class="serif" style="color:var(--navy)">Nada para revisar agora</h2>
-    <p class="mut" style="margin:10px 0">A repetição espaçada agenda cada card para a véspera do esquecimento. Volte amanhã — ou avance nas aulas.</p>
+    <p class="mut" style="margin:10px 0">A repetição espaçada agenda cada card para a véspera do esquecimento. Volte amanhã — ou revise um módulo por conta própria:</p>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:16px">${MODS.map((m,i)=>`<button class="chip" onclick="startCards(${i})" title="${m.t}">${m.ic} M${i}</button>`).join('')}</div>
     <button class="btn" onclick="location.hash='#/curriculo'">Ir ao currículo</button></div>`;R={};return;}
   if(R.i>=R.fila.length){ // fim de sessão
     const n=R.fila.length;S.reviews+=n;save();addXP(n,'sessão de revisão','cards');
+    const sobra=dueCards().length; // a sessão corta em 20 — o que sobrou continua devido
     app.innerHTML=`<div class="card" style="text-align:center;max-width:520px;margin:40px auto">
       <div style="font-size:2.6rem">🧠</div><h2 class="serif" style="color:var(--navy)">Sessão concluída</h2>
       <p class="mut" style="margin:10px 0">${R.ok}/${n} de primeira. Cards errados voltam mais cedo; acertados, mais tarde.</p>
-      <button class="btn" onclick="R={};render()">Voltar ao painel</button></div>`;
+      ${sobra?`<button class="btn" onclick="R={};vRevisao()">Revisar mais ${sobra} →</button> `:''}
+      <button class="btn ${sobra?'sec':''}" onclick="R={};render()">Voltar ao painel</button></div>`;
     R={fila:[],feito:true};renderHeader();updDue();return;
   }
   const c=R.fila[R.i];
   app.innerHTML=`<div style="max-width:620px;margin:10px auto">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-      <span class="chip gold">🃏 ${c.mod}</span><span class="mut">${R.i+1} de ${R.fila.length}</span></div>
+      <span class="chip gold">🃏 ${c.mod}</span><span class="mut">${R.i+1} de ${R.fila.length}${R.resto?` · +${R.resto} esperando`:''}</span></div>
     <div class="card fcard" onclick="R.flip=!R.flip;vRevisao()">
       ${R.flip?`<div class="verso">${c.verso}</div>`:`<div class="serif" style="font-size:1.3rem;color:var(--navy)">${c.frente}</div>`}
       <div class="hint">${R.flip?'':'clique (ou espaço) para virar'}</div>
@@ -1254,6 +1397,7 @@ function vSync(){
   <p class="mut" style="margin-top:14px;font-size:.88rem">💡 Como funciona: o progresso fica salvo no navegador de cada aparelho. O link é um retrato do seu progresso — gere no aparelho onde você estudou e abra no outro sempre que quiser conciliar os dois.</p>`;
 }
 window.exportarSync=async()=>{
+  S.lastSync=hoje();save(); // o link é o backup do aluno — registrar p/ o painel saber quando lembrar
   const code='AIA1.'+btoa(unescape(encodeURIComponent(JSON.stringify(S))));
   const url=location.href.split('#')[0]+'#s='+code;
   const ta=document.getElementById('expcode');ta.value=url;ta.style.display='block';
@@ -1286,6 +1430,9 @@ function mesclar(raw){ // aceita o link #s=… ou o código puro; retorna false 
   for(const k in dados.lessons||{}){const a=S.lessons[k]||[],b=dados.lessons[k]||[];
     S.lessons[k]=Array.from({length:Math.max(a.length,b.length)},(_,i)=>!!(a[i]||b[i]));}
   for(const k in dados.proj||{})S.proj[k]=S.proj[k]||dados.proj[k];
+  if(dados.gr)for(const k in dados.gr){if(dados.gr[k])S.gr[String(k).slice(0,40)]=1;}
+  else{for(const k in dados.lessons||{})(dados.lessons[k]||[]).forEach((v,j)=>{if(v)S.gr[k+'_'+j]=1});
+    for(const k in dados.proj||{})if(dados.proj[k])S.gr['p'+k]=1;} // estado antigo: marca o que veio feito como já premiado
   for(const k in dados.quiz||{})S.quiz[k]=Math.max(S.quiz[k]??-1,dados.quiz[k]);
   for(const k in dados.cards||{}){const a=S.cards[k],b=dados.cards[k];if(!a||(b&&b.d>a.d))S.cards[k]=b;}
   [S.xp,S.xpBy]=mesclaCtr(S.xp,S.xpBy,dados.xp,dados.xpBy);
@@ -1308,6 +1455,7 @@ function mesclar(raw){ // aceita o link #s=… ou o código puro; retorna false 
     if(!a.title&&titOk(b.title))a.title=b.title;
     checarTier();} // se a soma cruzou um tier que nenhum aparelho tinha, o prêmio sai aqui (uma vez só)
   if(!S.name&&dados.name)S.name=limpo(dados.name);
+  S.lastSync=hoje(); // sincronizou = backup em dia
   save();return true;
 }
 
@@ -1440,15 +1588,24 @@ function render(){
 document.getElementById('ghlink').href=REPO;
 document.getElementById('fnav').innerHTML=PERIODOS.map(p=>`<div><h4>${p.nome}</h4>${
   p.mods.map(i=>`<a href="#/mod/${i}">${MODS[i].ic} Módulo ${i} — ${MODS[i].t}</a>`).join('')}</div>`).join('');
-addEventListener('keydown',e=>{ // atalhos da revisão: espaço vira, 1 errei, 2 acertei
-  if(!location.hash.startsWith('#/revisao')||!R.fila||!R.fila.length||R.i>=R.fila.length)return;
+addEventListener('keydown',e=>{ // atalhos: revisão (espaço vira, 1 errei, 2 acertei) e quiz (1-4/A-D respondem, Enter avança)
   if(/INPUT|TEXTAREA/.test(e.target.tagName))return;
-  if(e.code==='Space'){e.preventDefault();R.flip=!R.flip;vRevisao();}
-  else if(R.flip&&e.key==='1')grade(false);
-  else if(R.flip&&e.key==='2')grade(true);
+  if(location.hash.startsWith('#/revisao')&&R.fila&&R.fila.length&&R.i<R.fila.length){
+    if(e.code==='Space'){e.preventDefault();R.flip=!R.flip;vRevisao();}
+    else if(R.flip&&e.key==='1')grade(false);
+    else if(R.flip&&e.key==='2')grade(true);
+    return;
+  }
+  if(location.hash.startsWith('#/quiz')&&Q.qs){
+    const ops=[...document.querySelectorAll('.qopt')];
+    const n='1234'.includes(e.key)?+e.key-1:'abcd'.indexOf(e.key.toLowerCase());
+    if(ops.length&&!ops[0].disabled&&n>=0&&ops[n])ops[n].click();
+    else if(e.key==='Enter'){const b=document.querySelector('#fb .btn');if(b)b.click();}
+  }
 });
 window.addEventListener('hashchange',render);
 rollo();renderHeader();render();
+if(typeof navigator!=='undefined'&&'serviceWorker'in navigator&&String(location.protocol||'').startsWith('http'))navigator.serviceWorker.register('sw.js'); // offline: aulas, quiz e cards funcionam sem rede (vídeos não)
 </script>
 </body>
 </html>

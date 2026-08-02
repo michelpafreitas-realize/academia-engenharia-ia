@@ -1,0 +1,221 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:02.604
+Chegamos ao módulo doze, o último da Academia:
+
+2
+00:00:02.604 --> 00:00:03.736
+Capstone e Carreira.
+
+3
+00:00:03.736 --> 00:00:09.962
+Aqui você prova que sabe montar tudo o que aprendeu, escolhendo um projeto de portfólio de nível profissional.
+
+4
+00:00:09.962 --> 00:00:12.396
+Você sai com um plano de carreira concreto:
+
+5
+00:00:12.396 --> 00:00:15.792
+como se posicionar, onde estar e como passar em entrevistas.
+
+6
+00:00:16.067 --> 00:00:19.252
+No mercado de IA, portfólio vale mais que diploma.
+
+7
+00:00:19.252 --> 00:00:25.114
+Um recrutador confia mais em três projetos que roda e lê do que em qualquer lista de cursos.
+
+8
+00:00:25.114 --> 00:00:33.971
+O termo Engenheiro de IA foi cunhado por Swyx para descrever quem constrói produtos sobre modelos de fundação — demanda maior que a oferta.
+
+9
+00:00:34.267 --> 00:00:36.525
+O ML Engineer treina modelos:
+
+10
+00:00:36.525 --> 00:00:38.395
+matemática, dados, GPUs.
+
+11
+00:00:38.395 --> 00:00:44.938
+O engenheiro de IA constrói produtos sobre modelos já treinados, via API ou abertos.
+
+12
+00:00:44.938 --> 00:00:51.792
+Você não precisa treinar do zero — precisa dominar prompt, RAG, agentes, evals e LLMOps.
+
+13
+00:00:51.792 --> 00:00:54.051
+É o que esta Academia cobriu.
+
+14
+00:00:54.051 --> 00:00:55.531
+Você é essa pessoa.
+
+15
+00:00:55.800 --> 00:00:58.557
+Um recrutador gasta segundos por repositório.
+
+16
+00:00:58.557 --> 00:01:02.294
+Abra o README com uma demo em vídeo ou GIF — ver é acreditar.
+
+17
+00:01:02.294 --> 00:01:06.644
+Documente as decisões técnicas e mostre uma tabela de métricas de eval.
+
+18
+00:01:06.644 --> 00:01:08.605
+Foque em poucos projetos fortes:
+
+19
+00:01:08.605 --> 00:01:10.872
+três completos batem dez pela metade.
+
+20
+00:01:11.167 --> 00:01:16.331
+No LinkedIn, coloque Engenheiro de IA na headline e ligue os projetos ao GitHub.
+
+21
+00:01:16.331 --> 00:01:19.237
+Poste um resumo por projeto conforme termina:
+
+22
+00:01:19.237 --> 00:01:21.173
+print da demo, o que aprendeu.
+
+23
+00:01:21.173 --> 00:01:24.079
+Ensinar é a melhor prova de que você entende.
+
+24
+00:01:24.367 --> 00:01:26.754
+Três comunidades valem sua presença.
+
+25
+00:01:26.754 --> 00:01:30.400
+Hugging Face Discord é o coração do ecossistema aberto.
+
+26
+00:01:30.400 --> 00:01:35.042
+R barra LocalLLaMA é referência em modelos abertos e inferência local.
+
+27
+00:01:35.042 --> 00:01:40.015
+E o canal AI Engineer no YouTube traz quem opera IA em produção de verdade.
+
+28
+00:01:40.300 --> 00:01:44.215
+O campo publica mais numa semana do que dá para ler num ano.
+
+29
+00:01:44.215 --> 00:01:46.694
+Assine três newsletters de alto sinal:
+
+30
+00:01:46.694 --> 00:01:49.435
+Latent Space, Ahead of AI e Interconnects.
+
+31
+00:01:49.435 --> 00:01:53.023
+Leia papers só quando forem relevantes ao seu trabalho.
+
+32
+00:01:53.023 --> 00:01:55.372
+Duas a três horas por semana bastam.
+
+33
+00:01:55.667 --> 00:01:58.618
+A peça central é o system design de um sistema LLM:
+
+34
+00:01:58.618 --> 00:02:05.215
+RAG versus fine-tuning, arquitetura de gateway e guardrails, eval, custo e segurança — verbalizando os trade-offs.
+
+35
+00:02:05.215 --> 00:02:11.291
+Pratique as perguntas conceituais em voz alta e prepare-se para defender cada decisão dos seus capstones.
+
+36
+00:02:11.567 --> 00:02:15.149
+O mercado brasileiro paga acima da média pela raridade do perfil.
+
+37
+00:02:15.149 --> 00:02:17.684
+Mas a maior alavanca é o remoto internacional:
+
+38
+00:02:17.684 --> 00:02:22.645
+empresas dos Estados Unidos e da Europa pagam em dólar, multiplicando seu poder de compra.
+
+39
+00:02:22.645 --> 00:02:26.999
+O passaporte é um portfólio bilíngue e presença nas comunidades internacionais.
+
+40
+00:02:27.267 --> 00:02:30.678
+São quatro capstones, e você escolhe pelo menos dois.
+
+41
+00:02:30.678 --> 00:02:34.281
+O assistente de documentos faz RAG com citação da fonte.
+
+42
+00:02:34.281 --> 00:02:39.108
+O agente operacional usa três ferramentas, uma via MCP, com humano no loop.
+
+43
+00:02:39.108 --> 00:02:42.519
+O modelo especialista compara base contra fine-tuned.
+
+44
+00:02:42.519 --> 00:02:46.059
+O produto em produção tem deploy, streaming e Langfuse.
+
+45
+00:02:46.333 --> 00:02:49.748
+O mini-projeto é publicar dois capstones profissionais:
+
+46
+00:02:49.748 --> 00:02:54.528
+repositório público, README com demo, decisões documentadas e tabela de eval.
+
+47
+00:02:54.528 --> 00:02:55.956
+Depois monte a vitrine:
+
+48
+00:02:55.956 --> 00:03:01.357
+LinkedIn com Engenheiro de IA na headline, repositórios ligados, e um post por projeto.
+
+49
+00:03:01.633 --> 00:03:02.572
+Recapitulando:
+
+50
+00:03:02.572 --> 00:03:14.032
+dois capstones públicos com README forte, LinkedIn ligado aos repositórios, presença em comunidades, rotina sustentável de atualização, e system design de LLM em voz alta.
+
+51
+00:03:14.032 --> 00:03:16.110
+Este é o fim da trilha inteira.
+
+52
+00:03:16.110 --> 00:03:23.415
+Você não precisa saber tudo — precisa saber construir, avaliar, colocar em produção e explicar suas escolhas.
+
+53
+00:03:23.415 --> 00:03:24.957
+A Academia te deu isso.
+
+54
+00:03:24.957 --> 00:03:26.431
+Agora o roteiro é seu:
+
+55
+00:03:26.431 --> 00:03:30.385
+publique, poste, candidate-se — parabéns, engenheiro de IA.

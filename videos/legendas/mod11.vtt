@@ -1,0 +1,253 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:01.780
+Bem-vindo ao módulo onze:
+
+2
+00:00:01.780 --> 00:00:03.417
+LLMOps, IA em produção.
+
+3
+00:00:03.417 --> 00:00:07.262
+Você vai aprender o que separa o protótipo do produto:
+
+4
+00:00:07.262 --> 00:00:10.039
+gateway, custo, latência e resiliência.
+
+5
+00:00:10.039 --> 00:00:17.016
+No fim, você constrói um serviço de LLM em container, com streaming, fallback e métricas de custo.
+
+6
+00:00:17.300 --> 00:00:21.076
+Escrever o protótipo de um app de IA é a parte fácil.
+
+7
+00:00:21.076 --> 00:00:25.352
+O que separa o protótipo do produto é o que acontece depois:
+
+8
+00:00:25.352 --> 00:00:27.133
+aguenta dez mil usuários?
+
+9
+00:00:27.133 --> 00:00:30.909
+Quando um provedor cai, o serviço degrada ou explode?
+
+10
+00:00:30.909 --> 00:00:35.612
+LLMOps responde isso, e é onde a maioria dos projetos de IA morre.
+
+11
+00:00:35.900 --> 00:00:39.892
+Nenhum app sério chama a API do LLM direto do frontend.
+
+12
+00:00:39.892 --> 00:00:41.489
+O padrão é uma cadeia:
+
+13
+00:00:41.489 --> 00:00:45.626
+cliente, gateway, guardrails, o LLM, guardrails, cliente.
+
+14
+00:00:45.626 --> 00:00:47.368
+O gateway é seu backend:
+
+15
+00:00:47.368 --> 00:00:51.578
+detém as chaves de API e aplica autenticação e roteamento.
+
+16
+00:00:51.578 --> 00:00:53.756
+Logs e evals medem cada etapa.
+
+17
+00:00:54.033 --> 00:00:57.197
+A decisão é hospedar o modelo ou alugar a inferência.
+
+18
+00:00:57.197 --> 00:01:00.361
+vLLM é o servidor de referência para modelos abertos:
+
+19
+00:01:00.361 --> 00:01:06.390
+o PagedAttention gerencia o KV cache em páginas de memória, multiplicando as requisições simultâneas.
+
+20
+00:01:06.390 --> 00:01:07.225
+Regra prática:
+
+21
+00:01:07.225 --> 00:01:10.329
+comece gerenciado, migre quando o volume justificar.
+
+22
+00:01:10.600 --> 00:01:12.902
+Quatro alavancas de custo e latência.
+
+23
+00:01:12.902 --> 00:01:18.065
+Streaming não muda custo nem tempo total, mas derruba o tempo até o primeiro token.
+
+24
+00:01:18.065 --> 00:01:21.611
+Prompt caching lê o prefixo estável a um décimo do preço.
+
+25
+00:01:21.611 --> 00:01:23.975
+Batching processa em lote mais barato.
+
+26
+00:01:23.975 --> 00:01:27.832
+Escolha o menor modelo que resolve, com roteamento ou cascata.
+
+27
+00:01:28.100 --> 00:01:29.242
+Prompts são código:
+
+28
+00:01:29.242 --> 00:01:32.007
+vivem no repositório, com histórico de versão.
+
+29
+00:01:32.007 --> 00:01:37.897
+Todo pull request que toca prompt, modelo ou pipeline dispara a suite de evals do módulo anterior.
+
+30
+00:01:37.897 --> 00:01:42.284
+O eval gate barra o merge se a qualidade cair, igual a um teste quebrado.
+
+31
+00:01:42.567 --> 00:01:46.023
+APIs caem, dão timeout e retornam erro de limite de taxa.
+
+32
+00:01:46.023 --> 00:01:49.540
+Em erros transitórios, tente de novo com espera crescente.
+
+33
+00:01:49.540 --> 00:01:54.392
+Defina um teto por request; se o provedor falhar, redirecione para outro modelo.
+
+34
+00:01:54.392 --> 00:01:59.607
+Fallback só vale para limite de taxa ou falha de servidor, nunca para erro do cliente.
+
+35
+00:01:59.900 --> 00:02:03.608
+No lab você constrói um gateway em FastAPI na frente do LLM.
+
+36
+00:02:03.608 --> 00:02:08.118
+A função de streaming devolve os tokens e loga custo e latência ao final.
+
+37
+00:02:08.118 --> 00:02:14.298
+O endpoint tenta o modelo principal; se der limite de taxa ou erro de servidor, cai para o fallback.
+
+38
+00:02:14.298 --> 00:02:16.028
+Erro do cliente sobe direto.
+
+39
+00:02:16.300 --> 00:02:18.564
+Empacote o serviço num container:
+
+40
+00:02:18.564 --> 00:02:21.309
+reprodutível e portátil, base do deploy.
+
+41
+00:02:21.309 --> 00:02:24.602
+Um Dockerfile de app FastAPI é curto, como este.
+
+42
+00:02:24.602 --> 00:02:28.101
+Suba num PaaS como Railway, Render ou Fly ponto io:
+
+43
+00:02:28.101 --> 00:02:30.091
+do git push ao ar em minutos.
+
+44
+00:02:30.091 --> 00:02:33.796
+Modal entra quando você serve o próprio modelo em GPU.
+
+45
+00:02:34.067 --> 00:02:39.660
+Para cada request, registre prompt, resposta, tokens, custo, latência e modelo.
+
+46
+00:02:39.660 --> 00:02:41.500
+Para agentes, use tracing:
+
+47
+00:02:41.500 --> 00:02:44.544
+qual ferramenta rodou e quanto tempo levou.
+
+48
+00:02:44.544 --> 00:02:48.155
+Langfuse, LangSmith e W&B Weave fazem isso prontos.
+
+49
+00:02:48.155 --> 00:02:50.350
+Com esses logs, monte o FinOps:
+
+50
+00:02:50.350 --> 00:02:52.403
+custo por rota e por usuário.
+
+51
+00:02:52.700 --> 00:02:54.006
+Guarde este princípio:
+
+52
+00:02:54.006 --> 00:02:56.261
+se não está instrumentado, não existe.
+
+53
+00:02:56.261 --> 00:03:00.238
+Você não otimiza custo, latência ou qualidade daquilo que não mede.
+
+54
+00:03:00.238 --> 00:03:05.996
+É a observabilidade que diz onde aplicar cache e qual feature consome a maior fatia do orçamento.
+
+55
+00:03:06.267 --> 00:03:10.736
+O mini-projeto evolui o gateway do lab para um serviço observável.
+
+56
+00:03:10.736 --> 00:03:12.836
+Duas rotas de IA com streaming.
+
+57
+00:03:12.836 --> 00:03:19.472
+Cada request registrado com prompt, resposta, tokens, custo e latência, e um trace de dois passos.
+
+58
+00:03:19.472 --> 00:03:25.635
+Fallback só em erros retryáveis, roteamento comprovado, custos por rota, tudo em container.
+
+59
+00:03:25.933 --> 00:03:26.865
+Recapitulando:
+
+60
+00:03:26.865 --> 00:03:38.044
+você sabe desenhar o gateway até o LLM, decidir entre vLLM e API gerenciada, aplicar as quatro alavancas de custo e latência e construir resiliência com fallback certo.
+
+61
+00:03:38.044 --> 00:03:40.040
+No próximo módulo, o capstone:
+
+62
+00:03:40.040 --> 00:03:42.436
+entrega final e entrada na carreira.
+
+63
+00:03:42.436 --> 00:03:42.901
+Até lá.

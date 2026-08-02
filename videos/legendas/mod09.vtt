@@ -1,0 +1,213 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:01.653
+Bem-vindo ao módulo nove:
+
+2
+00:00:01.653 --> 00:00:03.637
+fine-tuning e modelos abertos.
+
+3
+00:00:03.637 --> 00:00:09.389
+Você vai aprender quando vale treinar um modelo, e quando basta um prompt melhor e RAG.
+
+4
+00:00:09.389 --> 00:00:16.464
+Vai rodar modelos abertos com Ollama, entender quantização, treinar um LoRA e publicar no Hugging Face Hub.
+
+5
+00:00:16.733 --> 00:00:24.302
+Vamos treinar nosso próprio modelo é uma frase comum, e quase sempre errada, em reuniões de produto com IA.
+
+6
+00:00:24.302 --> 00:00:30.103
+Na maioria dos casos, um prompt melhor ou um RAG resolvem por uma fração do custo.
+
+7
+00:00:30.103 --> 00:00:34.205
+O engenheiro de IA sabe dizer quando fine-tuning compensa.
+
+8
+00:00:34.500 --> 00:00:35.634
+Grave esta ordem:
+
+9
+00:00:35.634 --> 00:00:38.834
+cada degrau custa dez vezes mais que o anterior.
+
+10
+00:00:38.834 --> 00:00:41.768
+Prompt resolve a maioria dos casos em horas.
+
+11
+00:00:41.768 --> 00:00:45.635
+RAG traz para o contexto o conhecimento que muda, em dias.
+
+12
+00:00:45.635 --> 00:00:49.236
+Só depois, fine-tuning muda o comportamento do modelo.
+
+13
+00:00:49.533 --> 00:00:56.311
+Fine-tuning serve para estilo, formato rígido, domínio estreito, ou destilar um modelo grande num pequeno.
+
+14
+00:00:56.311 --> 00:00:58.165
+Não serve para injetar fatos:
+
+15
+00:00:58.165 --> 00:01:02.065
+eles ficam congelados nos pesos e custam caro para atualizar.
+
+16
+00:01:02.065 --> 00:01:02.512
+Slogan:
+
+17
+00:01:02.512 --> 00:01:05.709
+RAG dá conhecimento, fine-tuning dá comportamento.
+
+18
+00:01:06.000 --> 00:01:08.885
+Três ferramentas, um motor por baixo.
+
+19
+00:01:08.885 --> 00:01:13.720
+Ollama serve o modelo por uma API local compatível com OpenAI.
+
+20
+00:01:13.720 --> 00:01:17.462
+Llama ponto cpp é o motor em C que criou o GGUF.
+
+21
+00:01:17.462 --> 00:01:20.192
+LM Studio dá uma interface gráfica.
+
+22
+00:01:20.192 --> 00:01:25.104
+Rodar local significa privacidade, custo zero e controle total.
+
+23
+00:01:25.400 --> 00:01:28.691
+Cada peso treinado ocupa dois bytes.
+
+24
+00:01:28.691 --> 00:01:34.085
+Quantizar armazena com menos bits, perdendo pouca precisão.
+
+25
+00:01:34.085 --> 00:01:41.124
+Q4_K_M usa cerca de quatro bits por peso, o ponto ideal de custo e qualidade.
+
+26
+00:01:41.124 --> 00:01:47.432
+Para estimar a VRAM, some vinte por cento ao tamanho do arquivo GGUF.
+
+27
+00:01:47.700 --> 00:01:50.430
+O Hub é o GitHub dos modelos:
+
+28
+00:01:50.430 --> 00:02:00.221
+pesos versionados com model cards, datasets numa linha de código, e Spaces, demos ótimas para portfólio.
+
+29
+00:02:00.221 --> 00:02:04.834
+Sempre leia a model card antes de usar um modelo:
+
+30
+00:02:04.834 --> 00:02:08.412
+nem todo aberto permite uso comercial.
+
+31
+00:02:08.700 --> 00:02:19.085
+LoRA congela a matriz W e aprende duas matrizes finas, A e B, menos de um por cento dos parâmetros.
+
+32
+00:02:19.085 --> 00:02:28.526
+Rank dezesseis treina cento e trinta e um mil parâmetros numa camada de dezesseis milhões.
+
+33
+00:02:28.526 --> 00:02:32.407
+QLoRA quantiza a base em quatro bits:
+
+34
+00:02:32.407 --> 00:02:39.540
+um modelo de oito bilhões treina em seis gigabytes, no Colab grátis.
+
+35
+00:02:39.833 --> 00:02:44.903
+A biblioteca PEFT implementa isso em poucas linhas:
+
+36
+00:02:44.903 --> 00:02:56.633
+defina o rank, o alpha e as camadas alvo, chame get_peft_model, e print_trainable_parameters mostra a fração treinada.
+
+37
+00:02:56.900 --> 00:03:02.286
+O formato dos dados é onde fine-tunes morrem.
+
+38
+00:03:02.286 --> 00:03:11.740
+Cada linha do JSONL é uma conversa com papéis de sistema, usuário e assistente.
+
+39
+00:03:11.740 --> 00:03:17.485
+O modelo espera tokens especiais da sua família:
+
+40
+00:03:17.485 --> 00:03:23.828
+use apply_chat_template, nunca monte a string na mão.
+
+41
+00:03:24.100 --> 00:03:28.284
+Loss descendo é hipnótico e não prova nada:
+
+42
+00:03:28.284 --> 00:03:33.928
+só mostra que o modelo prevê os tokens do próprio dataset.
+
+43
+00:03:33.928 --> 00:03:43.172
+O que vale é o eval de tarefa, em dados nunca vistos, comparando base e fine-tuned lado a lado.
+
+44
+00:03:43.172 --> 00:03:47.356
+Publique no Hub com uma model card honesta.
+
+45
+00:03:47.633 --> 00:03:51.440
+O mini-projeto é o formatador especialista:
+
+46
+00:03:51.440 --> 00:04:00.823
+um QLoRA que transforma mensagens informais em JSON padronizado, com intenção, produto, urgência e resumo.
+
+47
+00:04:00.823 --> 00:04:07.904
+Monte um dataset de cento e cinquenta exemplos revisados à mão, com três splits.
+
+48
+00:04:07.904 --> 00:04:16.313
+Meça JSON válido e campos corretos, base contra fine-tuned, e publique com model card completa.
+
+49
+00:04:16.600 --> 00:04:17.909
+Recapitulando:
+
+50
+00:04:17.909 --> 00:04:35.579
+você navega a árvore prompt, RAG, fine-tuning, roda modelos abertos e escolhe a quantização certa, explica LoRA e QLoRA com as matrizes na mão, e avalia um fine-tune sem confiar só no loss.
+
+51
+00:04:35.579 --> 00:04:37.262
+No próximo módulo:
+
+52
+00:04:37.262 --> 00:04:41.002
+avaliação e segurança de sistemas de IA.
+
+53
+00:04:41.002 --> 00:04:41.656
+Até lá.

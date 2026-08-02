@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 70">
+  <rect width="60" height="70" fill="none"/>
+  <path d="M30 2 56 12v22c0 16-11 28-26 34C15 62 4 50 4 34V12Z" fill="#8C1515" stroke="#820000" stroke-width="2.5"/>
+  <text x="30" y="34" text-anchor="middle" fill="#fff" font-family="Georgia, serif" font-size="18" font-weight="bold">IA</text>
+  <text x="30" y="50" text-anchor="middle" fill="#f4d5d5" font-family="Georgia, serif" font-size="8">MMXXVI</text>
+</svg>

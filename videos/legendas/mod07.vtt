@@ -1,0 +1,233 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:01.573
+Bem-vindo ao módulo sete:
+
+2
+00:00:01.573 --> 00:00:04.027
+RAG, geração aumentada por recuperação.
+
+3
+00:00:04.027 --> 00:00:10.697
+É a arquitetura de LLM mais construída nas empresas, porque o modelo não conhece seus documentos internos.
+
+4
+00:00:10.697 --> 00:00:17.304
+Você vai construir um pipeline de RAG do zero, sem framework, com busca, citações e avaliação de verdade.
+
+5
+00:00:17.600 --> 00:00:24.449
+O modelo não sabe o que não estava no treino, o conhecimento congela no corte, e ninguém confia em resposta sem fonte.
+
+6
+00:00:24.449 --> 00:00:26.132
+RAG ataca os três de uma vez:
+
+7
+00:00:26.132 --> 00:00:30.311
+busca os trechos certos, entrega como contexto e permite citar a origem.
+
+8
+00:00:30.311 --> 00:00:33.968
+Demo de RAG leva uma tarde; RAG bom leva engenharia de verdade.
+
+9
+00:00:34.267 --> 00:00:35.843
+O pipeline tem três passos:
+
+10
+00:00:35.843 --> 00:00:44.889
+a pergunta dispara uma busca nos documentos, os trechos mais relevantes viram contexto no prompt, e o modelo responde citando de onde tirou cada afirmação.
+
+11
+00:00:44.889 --> 00:00:45.590
+O resultado:
+
+12
+00:00:45.590 --> 00:00:49.267
+conhecimento privado, atualizado e citável, sem retreinar nada.
+
+13
+00:00:49.533 --> 00:00:54.610
+A régua de proximidade entre vetores é a similaridade de cosseno, o ângulo entre eles.
+
+14
+00:00:54.610 --> 00:00:57.680
+Varia de zero, nada a ver, a um, mesmíssimo assunto.
+
+15
+00:00:57.680 --> 00:01:06.357
+Com vetores normalizados para norma um, o cosseno vira um simples produto escalar, mais rápido, e é o que as bibliotecas fazem por baixo dos panos.
+
+16
+00:01:06.633 --> 00:01:12.043
+PDF inteiro vira um embedding média de tudo, bom em nada, por isso fatiamos em chunks.
+
+17
+00:01:12.043 --> 00:01:13.113
+Ponto de partida:
+
+18
+00:01:13.113 --> 00:01:17.391
+trezentos a oitocentos tokens, com dez a vinte por cento de overlap.
+
+19
+00:01:17.391 --> 00:01:22.234
+O upgrade que mais paga é quebrar por estrutura, nunca no meio de uma tabela.
+
+20
+00:01:22.234 --> 00:01:23.304
+Guarde metadados:
+
+21
+00:01:23.304 --> 00:01:25.065
+viabilizam a citação depois.
+
+22
+00:01:25.333 --> 00:01:29.910
+Vector store indexa milhões de vetores para busca em milissegundos.
+
+23
+00:01:29.910 --> 00:01:31.413
+Protótipo, use Chroma.
+
+24
+00:01:31.413 --> 00:01:37.015
+Empresa que já roda Postgres, use pgvector, vetores ao lado dos dados relacionais.
+
+25
+00:01:37.015 --> 00:01:39.338
+Escala extrema ou pesquisa, FAISS.
+
+26
+00:01:39.338 --> 00:01:43.573
+E para poucos milhares de chunks, uma matriz NumPy já resolve.
+
+27
+00:01:43.867 --> 00:01:49.659
+Busca vetorial é ótima em semântica e ruim em termos exatos, como código de produto ou sigla.
+
+28
+00:01:49.659 --> 00:01:50.655
+BM25 é o oposto.
+
+29
+00:01:50.655 --> 00:01:55.762
+O retrieval híbrido roda os dois e combina os resultados, padrão de produção hoje.
+
+30
+00:01:55.762 --> 00:02:01.555
+O reranker depois reordena com nota fina, e você manda só os três a cinco melhores ao modelo.
+
+31
+00:02:01.833 --> 00:02:04.339
+A resposta precisa apontar de onde veio.
+
+32
+00:02:04.339 --> 00:02:09.599
+Numere os trechos no prompt e exija a citação no formato colchete um, colchete dois.
+
+33
+00:02:09.599 --> 00:02:11.791
+A instrução mais importante do RAG:
+
+34
+00:02:11.791 --> 00:02:15.487
+se não estiver nos trechos, o modelo diz que não encontrou.
+
+35
+00:02:15.487 --> 00:02:17.553
+Essa é a válvula anti-alucinação.
+
+36
+00:02:17.833 --> 00:02:20.180
+RAG tem duas partes que falham à parte:
+
+37
+00:02:20.180 --> 00:02:21.143
+busca e geração.
+
+38
+00:02:21.143 --> 00:02:23.129
+O Ragas padronizou três métricas:
+
+39
+00:02:23.129 --> 00:02:34.201
+faithfulness, a resposta é fiel aos trechos; answer relevancy, ela respondeu à pergunta; context precision, os chunks eram relevantes, apontando se o problema é de busca ou de geração.
+
+40
+00:02:34.500 --> 00:02:36.799
+Corpus pequeno que cabe no contexto:
+
+41
+00:02:36.799 --> 00:02:39.609
+long context com prompt caching pode bastar.
+
+42
+00:02:39.609 --> 00:02:41.014
+Base grande e mutável:
+
+43
+00:02:41.014 --> 00:02:41.270
+RAG.
+
+44
+00:02:41.270 --> 00:02:43.313
+Mudar o comportamento do modelo:
+
+45
+00:02:43.313 --> 00:02:47.975
+fine-tuning, quase sempre combinado com RAG, nunca substituto para fatos.
+
+46
+00:02:47.975 --> 00:02:49.061
+Falhas clássicas:
+
+47
+00:02:49.061 --> 00:02:53.340
+chunk ruim, retrieval que não acha, resposta que ignora o contexto.
+
+48
+00:02:53.633 --> 00:02:59.000
+Construa um assistente sobre uma base real sua, mínimo dez documentos ou cinquenta chunks:
+
+49
+00:02:59.000 --> 00:03:02.995
+pipeline sem framework com overlap, embeddings, cosseno e citações.
+
+50
+00:03:02.995 --> 00:03:10.150
+Monte quinze perguntas, dez respondíveis e cinco sem resposta, e implemente uma melhoria de retrieval no mesmo conjunto.
+
+51
+00:03:10.150 --> 00:03:10.448
+Meta:
+
+52
+00:03:10.448 --> 00:03:12.833
+oitenta por cento de recall no top-três.
+
+53
+00:03:13.100 --> 00:03:15.147
+Você construiu um RAG do zero:
+
+54
+00:03:15.147 --> 00:03:22.037
+chunking, cosseno, a escolha entre FAISS, Chroma e pgvector, citação de fontes e avaliação com Ragas.
+
+55
+00:03:22.037 --> 00:03:27.905
+RAG resolve conhecimento privado e atualizado, mas não muda o comportamento do modelo.
+
+56
+00:03:27.905 --> 00:03:29.133
+No próximo módulo:
+
+57
+00:03:29.133 --> 00:03:30.838
+agentes de IA e tool use.
+
+58
+00:03:30.838 --> 00:03:31.316
+Até lá.

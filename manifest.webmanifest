@@ -1,0 +1,12 @@
+{
+  "name": "Academia de Engenharia de IA",
+  "short_name": "Academia IA",
+  "description": "Formação em Engenharia de IA — 13 módulos, quizzes, flashcards e projetos.",
+  "lang": "pt-BR",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7f5ef",
+  "theme_color": "#8C1515",
+  "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}

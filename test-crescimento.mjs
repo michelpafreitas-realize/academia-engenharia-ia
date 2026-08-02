@@ -113,8 +113,34 @@ vm.runInContext(`{
   assert(mesclar(cod({xp:500}))); // código antigo (sem contadores) entra como base independente
   assert.equal(S.xp,740);
 
+  // XP premia UMA vez por aula/projeto: tick→untick→tick não cria XP do nada
+  S.lessons['m0']=Array(MODS[0].aulas.length).fill(false);
+  S.g.fv=hoje(); // 1ª vitória já usada — medição limpa
+  const x0=S.xp,pl0=S.g.pl;
+  tickLesson(0,0,true);const ganho1=S.xp-x0;
+  assert(ganho1>0);
+  tickLesson(0,0,false);tickLesson(0,0,true);tickLesson(0,0,false);tickLesson(0,0,true);
+  assert.equal(S.xp-x0,ganho1);      // re-marcar não re-premia
+  assert.equal(S.g.pl-pl0,ganho1);   // liga/passe também não inflam
+  tickProj(0,true);const gp=S.xp-x0-ganho1;assert(gp>0);
+  tickProj(0,false);tickProj(0,true);
+  assert.equal(S.xp-x0,ganho1+gp);
+
+  // quiz só conta no progresso do módulo com 3+/5
+  S.quiz['m3']=2;const d3=modProg(3).done;
+  S.quiz['m3']=3;assert.equal(modProg(3).done,d3+1);
+
+  // quiz sorteia 5 do banco de 10 e embaralha alternativas preservando a correta
+  startQuiz(0);
+  assert.equal(Q.qs.length,5);
+  assert(MODS[0].quiz.length>=10);
+  for(const [p,ops,ok] of Q.qs){
+    const orig=MODS[0].quiz.find(q=>q[0]===p);
+    assert.equal(ops[ok],orig[1][orig[2]]);
+  }
+
   // as views novas renderizam sem explodir
   vCrescimento();vPainel();
 
-  console.log('✓ sistema de crescimento: dia, semana e temporada ok');
+  console.log('✓ sistema de crescimento: dia, semana, temporada, XP-uma-vez e quiz ok');
 }`,sandbox);

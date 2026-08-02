@@ -1,0 +1,237 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:01.523
+Bem-vindo ao módulo um:
+
+2
+00:00:01.523 --> 00:00:02.517
+Python para IA.
+
+3
+00:00:02.517 --> 00:00:07.814
+Aqui você troca o Python de faculdade pelo Python que processa dados de verdade:
+
+4
+00:00:07.814 --> 00:00:10.728
+NumPy, Pandas, Matplotlib e chamadas de API.
+
+5
+00:00:10.728 --> 00:00:15.960
+No fim, você conduz uma análise exploratória completa, do dado cru à conclusão.
+
+6
+00:00:16.233 --> 00:00:22.283
+Python é a ferramenta número um do engenheiro de IA — o Python vetorizado do NumPy e do Pandas.
+
+7
+00:00:22.283 --> 00:00:28.333
+Boa parte do tempo de um projeto de IA é gasto limpando dados; este módulo treina esse músculo.
+
+8
+00:00:28.333 --> 00:00:30.944
+Notebook bagunçado não vai para produção:
+
+9
+00:00:30.944 --> 00:00:33.873
+times contratam quem entrega código confiável.
+
+10
+00:00:34.167 --> 00:00:35.922
+Python tem um jeito próprio:
+
+11
+00:00:35.922 --> 00:00:36.548
+pythônico.
+
+12
+00:00:36.548 --> 00:00:44.321
+Em vez de loop com índice e append, uma list comprehension resolve em uma linha — o mesmo vale para dicionários e conjuntos.
+
+13
+00:00:44.321 --> 00:00:46.013
+Outras marcas do dia a dia:
+
+14
+00:00:46.013 --> 00:00:48.834
+desempacotamento, enumerate, zip e f-strings.
+
+15
+00:00:48.834 --> 00:00:53.535
+Use comprehension quando cabe numa linha legível; senão, volte para o loop.
+
+16
+00:00:53.833 --> 00:00:55.374
+Compare as duas versões.
+
+17
+00:00:55.374 --> 00:00:58.519
+A de cima é o loop clássico, com índice e append.
+
+18
+00:00:58.519 --> 00:01:01.151
+A de baixo é a mesma lógica em uma linha:
+
+19
+00:01:01.151 --> 00:01:04.552
+comprehension com condição, mais curta e mais rápida.
+
+20
+00:01:04.552 --> 00:01:07.633
+O padrão se repete para dicionários e conjuntos.
+
+21
+00:01:07.900 --> 00:01:11.299
+Uma função boa faz uma coisa só e declara seus tipos.
+
+22
+00:01:11.299 --> 00:01:13.287
+A docstring explica o contrato:
+
+23
+00:01:13.287 --> 00:01:16.238
+o que entra, o que sai, o que pode dar errado.
+
+24
+00:01:16.238 --> 00:01:17.264
+A função é pura:
+
+25
+00:01:17.264 --> 00:01:22.972
+mesmo input, mesmo output, sem efeito colateral — por isso um assert já basta como teste.
+
+26
+00:01:23.267 --> 00:01:29.456
+NumPy guarda números em arrays contínuos na memória e opera sobre todos de uma vez, em C — isso é vetorização.
+
+27
+00:01:29.456 --> 00:01:35.926
+Multiplicar um array, ou filtrar com uma condição booleana, roda ordens de grandeza mais rápido que um loop Python.
+
+28
+00:01:35.926 --> 00:01:40.427
+Antes de escrever um for sobre um array, pergunte se existe um jeito vetorizado.
+
+29
+00:01:40.700 --> 00:01:45.819
+Multiplicar o array de preços por zero vírgula nove aplica desconto a todos de uma vez.
+
+30
+00:01:45.819 --> 00:01:49.585
+Filtrar com preços maior que cinquenta devolve só os que passam.
+
+31
+00:01:49.585 --> 00:01:54.586
+Broadcasting estica o array menor para casar com o maior, como no peso de cada prova.
+
+32
+00:01:54.586 --> 00:01:55.057
+A regra:
+
+33
+00:01:55.057 --> 00:01:57.116
+cada dimensão deve ser igual ou um.
+
+34
+00:01:57.400 --> 00:02:00.706
+O DataFrame do Pandas é uma tabela com superpoderes:
+
+35
+00:02:00.706 --> 00:02:03.122
+cada coluna é um array NumPy com nome.
+
+36
+00:02:03.122 --> 00:02:04.075
+O fluxo básico:
+
+37
+00:02:04.075 --> 00:02:06.873
+ler, espiar as linhas, checar tipos e nulos.
+
+38
+00:02:06.873 --> 00:02:11.069
+O groupby divide em grupos, calcula por grupo e junta o resultado.
+
+39
+00:02:11.069 --> 00:02:14.374
+Preencher ou descartar nulos é escolha de modelagem:
+
+40
+00:02:14.374 --> 00:02:15.328
+anote o porquê.
+
+41
+00:02:15.600 --> 00:02:18.375
+Quatro gráficos cobrem quase toda exploração:
+
+42
+00:02:18.375 --> 00:02:20.656
+histograma, dispersão, barra e linha.
+
+43
+00:02:20.656 --> 00:02:23.862
+Gráfico sem título e eixos é adivinhação com estilo.
+
+44
+00:02:23.862 --> 00:02:31.570
+Notebook é ótimo para explorar, mas células fora de ordem criam estado fantasma — rode Restart and Run All antes de encerrar.
+
+45
+00:02:31.570 --> 00:02:34.776
+Depois, extraia partes reutilizáveis para um script.
+
+46
+00:02:35.067 --> 00:02:38.208
+Muitos dados, e todos os LLMs, chegam por API.
+
+47
+00:02:38.208 --> 00:02:41.350
+Defina sempre um timeout, porque a rede trava.
+
+48
+00:02:41.350 --> 00:02:46.404
+Chame sempre raise for status, para erro virar exceção em vez de silêncio.
+
+49
+00:02:46.404 --> 00:02:51.459
+Nunca confie no formato da resposta — use get quando o campo puder faltar.
+
+50
+00:02:51.733 --> 00:02:52.633
+O mini-projeto:
+
+51
+00:02:52.633 --> 00:02:56.893
+análise exploratória completa, num dataset real que não seja o Titanic.
+
+52
+00:02:56.893 --> 00:03:04.333
+Escreva três perguntas antes de olhar os dados, documente cada decisão de limpeza, use um groupby e três gráficos com eixos.
+
+53
+00:03:04.333 --> 00:03:08.713
+Extraia uma função pura, com tipos e asserts, num arquivo utils ponto pi.
+
+54
+00:03:08.713 --> 00:03:11.293
+Feche respondendo as perguntas com números.
+
+55
+00:03:11.567 --> 00:03:12.428
+Recapitulando:
+
+56
+00:03:12.428 --> 00:03:22.214
+Python idiomático com comprehensions, NumPy com broadcasting, Pandas com groupby, gráficos com título e eixos, e chamadas de API com timeout e status checados.
+
+57
+00:03:22.214 --> 00:03:25.722
+Você fechou o ciclo completo de uma análise exploratória.
+
+58
+00:03:25.722 --> 00:03:29.784
+No próximo módulo, a matemática essencial por trás de todo modelo.
+
+59
+00:03:29.784 --> 00:03:30.215
+Até lá.

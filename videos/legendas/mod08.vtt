@@ -1,0 +1,261 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:01.513
+Bem-vindo ao módulo oito:
+
+2
+00:00:01.513 --> 00:00:04.298
+agentes de inteligência artificial e tool use.
+
+3
+00:00:04.298 --> 00:00:09.503
+Você vai aprender o mecanismo por trás de sistemas que fazem coisas, não só respondem:
+
+4
+00:00:09.503 --> 00:00:12.530
+consultam bancos, abrem tickets, cruzam planilhas.
+
+5
+00:00:12.530 --> 00:00:16.464
+Ao final, você escreve um loop de agente completo, sem framework.
+
+6
+00:00:16.733 --> 00:00:21.034
+Agentes são a fronteira mais quente da engenharia de IA nas empresas.
+
+7
+00:00:21.034 --> 00:00:26.020
+O chatbot que só responde virou commodity — o que vale caro é o sistema que age.
+
+8
+00:00:26.020 --> 00:00:31.007
+Mas a maioria dos problemas não precisa de agente, e sim de um workflow simples.
+
+9
+00:00:31.007 --> 00:00:33.437
+É esse critério que este módulo ensina.
+
+10
+00:00:33.733 --> 00:00:35.524
+Três níveis de autonomia.
+
+11
+00:00:35.524 --> 00:00:36.527
+Chamada única:
+
+12
+00:00:36.527 --> 00:00:38.317
+um prompt, um texto, fim.
+
+13
+00:00:38.317 --> 00:00:38.962
+Workflow:
+
+14
+00:00:38.962 --> 00:00:41.612
+seu código decide a ordem das etapas.
+
+15
+00:00:41.612 --> 00:00:42.114
+Agente:
+
+16
+00:00:42.114 --> 00:00:47.557
+o próprio modelo decide, escolhendo ferramenta e próximo passo até concluir.
+
+17
+00:00:47.833 --> 00:00:49.937
+O workflow é uma linha de montagem:
+
+18
+00:00:49.937 --> 00:00:51.140
+previsível e barata.
+
+19
+00:00:51.140 --> 00:00:54.806
+O agente é um estagiário com acesso ao computador da empresa:
+
+20
+00:00:54.806 --> 00:00:58.173
+resolve o imprevisto, mas pode dar voltas e custar caro.
+
+21
+00:00:58.173 --> 00:01:00.577
+Escolha conforme o problema, não a moda.
+
+22
+00:01:00.867 --> 00:01:05.956
+Toda ferramenta é declarada com nome, descrição e um schema dos parâmetros, em JSON.
+
+23
+00:01:05.956 --> 00:01:09.046
+O modelo lê a descrição para decidir quando chamar.
+
+24
+00:01:09.046 --> 00:01:14.499
+Descrição vaga gera erro; prescritiva, tipo use isto para qualquer conta, funciona melhor.
+
+25
+00:01:14.767 --> 00:01:15.874
+Quatro passos.
+
+26
+00:01:15.874 --> 00:01:18.089
+Você declara as ferramentas.
+
+27
+00:01:18.089 --> 00:01:23.311
+O modelo responde com um bloco tool_use — um pedido, não execução.
+
+28
+00:01:23.311 --> 00:01:25.289
+Seu código roda a função.
+
+29
+00:01:25.289 --> 00:01:29.245
+Você devolve como tool_result e o modelo continua.
+
+30
+00:01:29.245 --> 00:01:30.669
+Várias de uma vez?
+
+31
+00:01:30.669 --> 00:01:32.647
+Tudo numa única mensagem.
+
+32
+00:01:32.933 --> 00:01:35.600
+Todo agente se reduz a este esqueleto.
+
+33
+00:01:35.600 --> 00:01:40.303
+Chama o modelo num laço; se stop_reason não for tool_use, terminou.
+
+34
+00:01:40.303 --> 00:01:44.935
+Senão, roda cada tool e devolve os resultados numa única mensagem.
+
+35
+00:01:44.935 --> 00:01:46.549
+Proteções obrigatórias:
+
+36
+00:01:46.549 --> 00:01:50.549
+limite de iterações e erro como tool_result com is_error.
+
+37
+00:01:50.833 --> 00:01:53.338
+ReAct descreve o mesmo loop de outro jeito:
+
+38
+00:01:53.338 --> 00:01:58.989
+Thought, quando raciocina, Action, quando chama a ferramenta, Observation, quando lê o resultado.
+
+39
+00:01:58.989 --> 00:02:04.873
+O tool use nativo cumpre o Action, mas o vocabulário ReAct segue onipresente em papers e entrevistas.
+
+40
+00:02:05.167 --> 00:02:11.528
+Building Effective Agents organiza cinco padrões de workflow, do encadear prompts ao orquestrador que delega.
+
+41
+00:02:11.528 --> 00:02:13.804
+Só no agente o modelo decide o caminho.
+
+42
+00:02:13.804 --> 00:02:14.621
+Regra de ouro:
+
+43
+00:02:14.621 --> 00:02:18.415
+comece pelo mais simples e só suba de complexidade com evidência.
+
+44
+00:02:18.700 --> 00:02:22.977
+Cada ferramenta precisava de integração própria em cada app de IA:
+
+45
+00:02:22.977 --> 00:02:24.403
+um problema M vezes N.
+
+46
+00:02:24.403 --> 00:02:28.292
+O MCP vira isso em M mais N, como o USB fez com periféricos.
+
+47
+00:02:28.292 --> 00:02:32.764
+O server expõe tools e dados; o client, seu agente, se conecta e usa.
+
+48
+00:02:32.764 --> 00:02:36.004
+Procure um server pronto antes de integrar na mão.
+
+49
+00:02:36.300 --> 00:02:44.033
+Multi-agente vale com subtarefas independentes ou contexto que estoura a janela — não para dividir tarefa linear em personagens.
+
+50
+00:02:44.033 --> 00:02:45.121
+A API é stateless:
+
+51
+00:02:45.121 --> 00:02:48.081
+cada iteração reenvia o histórico, que só cresce.
+
+52
+00:02:48.081 --> 00:02:49.713
+Mitigue com prompt caching.
+
+53
+00:02:49.713 --> 00:02:53.700
+E use framework só quando souber explicar o que ele faz por baixo.
+
+54
+00:02:53.967 --> 00:02:56.221
+O mini-projeto é o Analista de CSV:
+
+55
+00:02:56.221 --> 00:03:00.730
+um agente que responde perguntas sobre um CSV, com loop escrito à mão.
+
+56
+00:03:00.730 --> 00:03:01.889
+Mínimo três tools:
+
+57
+00:03:01.889 --> 00:03:03.886
+colunas, estatísticas e filtro.
+
+58
+00:03:03.886 --> 00:03:08.330
+Precisa de limite de iterações e tratar erro sem derrubar o programa.
+
+59
+00:03:08.330 --> 00:03:11.487
+Entregue com CLI, log e total de tokens ao final.
+
+60
+00:03:11.767 --> 00:03:12.684
+Recapitulando:
+
+61
+00:03:12.684 --> 00:03:18.318
+você diferencia chamada única, workflow e agente, e escreveu o loop de tool use à mão.
+
+62
+00:03:18.318 --> 00:03:24.541
+Você sabe quando um agente se justifica, o que é MCP e por que tokens custam caro sem critério.
+
+63
+00:03:24.541 --> 00:03:25.721
+No próximo módulo:
+
+64
+00:03:25.721 --> 00:03:28.996
+fine-tuning e modelos abertos, LoRA e quantização.
+
+65
+00:03:28.996 --> 00:03:29.455
+Até lá.

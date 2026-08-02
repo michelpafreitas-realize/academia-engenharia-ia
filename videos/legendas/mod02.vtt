@@ -1,0 +1,205 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:01.663
+Bem-vindo ao módulo dois:
+
+2
+00:00:01.663 --> 00:00:03.060
+matemática essencial.
+
+3
+00:00:03.060 --> 00:00:09.578
+Você constrói intuição sobre vetores, derivadas e probabilidade — a base de toda engenharia de IA.
+
+4
+00:00:09.578 --> 00:00:13.968
+Cada ideia vem com uma conta calculada à mão e conferida em NumPy.
+
+5
+00:00:14.267 --> 00:00:21.453
+Você não precisa de mestrado em matemática, só de intuição sobre um punhado de ideias — tudo na área é construído sobre elas.
+
+6
+00:00:21.453 --> 00:00:26.340
+Embeddings são vetores, semelhança é produto escalar, treinar é descida do gradiente.
+
+7
+00:00:26.340 --> 00:00:29.387
+Sem essa base você trava no primeiro erro inesperado.
+
+8
+00:00:29.667 --> 00:00:31.959
+Um vetor é duas coisas ao mesmo tempo:
+
+9
+00:00:31.959 --> 00:00:34.492
+uma lista de números e uma seta no espaço.
+
+10
+00:00:34.492 --> 00:00:40.826
+Essa dupla identidade é o truque central da IA — o que você descreve com números vira um ponto no espaço.
+
+11
+00:00:40.826 --> 00:00:45.411
+Um cliente vira vetor de idade, renda e compras; uma palavra vira embedding.
+
+12
+00:00:45.700 --> 00:00:49.563
+O produto escalar multiplica coordenada a coordenada e soma tudo.
+
+13
+00:00:49.563 --> 00:00:54.556
+Mesma direção dá valor grande e positivo, perpendicular dá zero, oposta dá negativo.
+
+14
+00:00:54.556 --> 00:00:59.668
+É assim que a busca semântica funciona — vence quem tem maior similaridade de cosseno.
+
+15
+00:00:59.967 --> 00:01:03.033
+Guarde essa frase, ela volta o módulo inteiro:
+
+16
+00:01:03.033 --> 00:01:06.099
+produto escalar é a régua de semelhança da IA.
+
+17
+00:01:06.099 --> 00:01:12.231
+Busca semântica, recomendação, embeddings parecidos — por baixo é sempre essa conta simples.
+
+18
+00:01:12.500 --> 00:01:17.772
+Uma matriz é uma grade de números e, geometricamente, uma transformação do espaço.
+
+19
+00:01:17.772 --> 00:01:21.373
+Multiplicar matrizes compõe transformações em sequência.
+
+20
+00:01:21.373 --> 00:01:22.402
+Regra de shapes:
+
+21
+00:01:22.402 --> 00:01:26.324
+m por n vezes n por p dá m por p — o n do meio precisa bater.
+
+22
+00:01:26.600 --> 00:01:27.822
+A derivada responde:
+
+23
+00:01:27.822 --> 00:01:31.242
+se eu mexer um tiquinho na entrada, quanto mexe a saída?
+
+24
+00:01:31.242 --> 00:01:33.991
+Sinal indica direção, magnitude indica força.
+
+25
+00:01:33.991 --> 00:01:40.832
+Com bilhões de entradas, empacotamos essa sensibilidade num gradiente, que aponta para a maior subida da função.
+
+26
+00:01:41.100 --> 00:01:44.765
+Treinar um modelo é achar os parâmetros que minimizam a perda.
+
+27
+00:01:44.765 --> 00:01:45.356
+A receita:
+
+28
+00:01:45.356 --> 00:01:50.735
+calcule o gradiente e ande na direção contrária, w menos o learning rate vezes o gradiente.
+
+29
+00:01:50.735 --> 00:01:55.404
+Os passos encurtam perto do mínimo; learning rate alto demais faz o w explodir.
+
+30
+00:01:55.700 --> 00:02:01.152
+Uma distribuição diz quanto de crença vai para cada resultado, e tudo soma um.
+
+31
+00:02:01.152 --> 00:02:02.061
+Dado honesto:
+
+32
+00:02:02.061 --> 00:02:03.878
+um sexto por face; normal:
+
+33
+00:02:03.878 --> 00:02:04.927
+extremos raros.
+
+34
+00:02:04.927 --> 00:02:10.868
+Esperança é a média ponderada — em IA, a perda que minimizamos é a esperança do erro.
+
+35
+00:02:11.167 --> 00:02:12.051
+Bayes responde:
+
+36
+00:02:12.051 --> 00:02:15.646
+dado que vi uma evidência, quanto devo acreditar na hipótese?
+
+37
+00:02:15.646 --> 00:02:16.883
+Pense em mil pessoas:
+
+38
+00:02:16.883 --> 00:02:25.134
+numa doença de um por cento, com teste de noventa por cento de acerto, a chance real de estar doente após um positivo é só quinze por cento.
+
+39
+00:02:25.134 --> 00:02:26.431
+A taxa base muda tudo.
+
+40
+00:02:26.700 --> 00:02:31.558
+Um classificador produz logits, scores brutos como dois, um e zero vírgula um.
+
+41
+00:02:31.558 --> 00:02:38.035
+A softmax exponencia cada valor, acentuando diferenças, e divide pela soma, garantindo que tudo some um.
+
+42
+00:02:38.035 --> 00:02:41.460
+É o que um modelo de linguagem faz a cada token gerado.
+
+43
+00:02:41.733 --> 00:02:42.606
+O mini-projeto:
+
+44
+00:02:42.606 --> 00:02:46.504
+um notebook com três seções calculadas à mão e conferidas em NumPy.
+
+45
+00:02:46.504 --> 00:02:51.158
+Crie embeddings de cinco itens seus e monte a matriz de similaridade de cosseno.
+
+46
+00:02:51.158 --> 00:02:56.277
+Refaça o gradiente para cinco passos e monte um cenário de Bayes com softmax somando um.
+
+47
+00:02:56.567 --> 00:02:57.390
+Recapitulando:
+
+48
+00:02:57.390 --> 00:03:06.153
+você entende vetores e embeddings, calcula produto escalar como régua de semelhança, domina as regras de shape, e rodou a descida do gradiente à mão.
+
+49
+00:03:06.153 --> 00:03:09.094
+No próximo módulo entra machine learning clássico:
+
+50
+00:03:09.094 --> 00:03:13.387
+regressão, classificação e seu primeiro modelo treinado do início ao fim.
+
+51
+00:03:13.387 --> 00:03:13.799
+Até lá.

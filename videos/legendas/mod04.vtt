@@ -1,0 +1,221 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:01.621
+Bem-vindo ao módulo quatro:
+
+2
+00:00:01.621 --> 00:00:03.123
+deep learning na prática.
+
+3
+00:00:03.123 --> 00:00:07.086
+Aqui você abre a caixa-preta das redes neurais com números na mão.
+
+4
+00:00:07.086 --> 00:00:13.752
+Ao final, você treina uma rede em PyTorch do zero, na GPU do Colab, e sabe diagnosticar quando o treino quebra.
+
+5
+00:00:14.033 --> 00:00:19.323
+Todo modelo de IA, do classificador de churn ao LLM gigante, é por baixo a mesma máquina:
+
+6
+00:00:19.323 --> 00:00:22.354
+camadas de neurônios treinadas por backpropagation.
+
+7
+00:00:22.354 --> 00:00:26.693
+Empresas pagam melhor quem entende o que acontece quando o treino quebra:
+
+8
+00:00:26.693 --> 00:00:30.377
+loss que vira NaN, modelo que decora, GPU que estoura memória.
+
+9
+00:00:30.667 --> 00:00:35.861
+Um neurônio multiplica cada entrada por um peso, soma com um bias e passa por uma ativação.
+
+10
+00:00:35.861 --> 00:00:37.630
+É como um comitê de empréstimo:
+
+11
+00:00:37.630 --> 00:00:42.310
+o presidente confia mais no analista, peso alto, do que no estagiário, peso baixo.
+
+12
+00:00:42.310 --> 00:00:44.251
+Os pesos são o que a rede aprende.
+
+13
+00:00:44.533 --> 00:00:48.753
+Empilhar camadas lineares sem ativação ainda dá uma função linear:
+
+14
+00:00:48.753 --> 00:00:50.351
+dez camadas viram uma só.
+
+15
+00:00:50.351 --> 00:00:51.821
+A ativação quebra isso.
+
+16
+00:00:51.821 --> 00:00:59.365
+ReLU é o padrão; sigmoid espreme entre zero e um; tanh centra em zero; softmax vira uma distribuição de probabilidade.
+
+17
+00:00:59.633 --> 00:01:02.357
+Passamos uma entrada por uma rede mínima:
+
+18
+00:01:02.357 --> 00:01:05.944
+duas entradas, dois neurônios ReLU, uma saída sigmoid.
+
+19
+00:01:05.944 --> 00:01:08.268
+O modelo previu zero vírgula cinco:
+
+20
+00:01:08.268 --> 00:01:10.195
+não sei, cinquenta por cento.
+
+21
+00:01:10.195 --> 00:01:15.641
+Todo forward pass, até de um GPT, é essa mesma mecânica repetida bilhões de vezes.
+
+22
+00:01:15.933 --> 00:01:20.027
+A loss resume o erro do modelo; treinar é minimizar essa loss.
+
+23
+00:01:20.027 --> 00:01:23.856
+MSE serve para regressão e pune erros grandes ao quadrado.
+
+24
+00:01:23.856 --> 00:01:28.214
+Cross-entropy serve para classificação e castiga confiança errada.
+
+25
+00:01:28.214 --> 00:01:32.109
+No PyTorch ela já embute o softmax; não aplique duas vezes.
+
+26
+00:01:32.400 --> 00:01:33.736
+A pergunta do treino é:
+
+27
+00:01:33.736 --> 00:01:36.873
+se eu mexer este peso, a loss sobe ou desce, e quanto?
+
+28
+00:01:36.873 --> 00:01:42.391
+Backpropagation calcula essa derivada para todos os pesos de uma vez, usando a regra da cadeia:
+
+29
+00:01:42.391 --> 00:01:45.528
+como uma corrente que se percorre de trás para frente.
+
+30
+00:01:45.800 --> 00:01:51.710
+O gradiente dá a direção; o otimizador decide o passo.
+
+31
+00:01:51.710 --> 00:01:56.854
+SGD usa um passo fixo, geralmente com momentum.
+
+32
+00:01:56.854 --> 00:02:02.217
+Adam adapta o passo sozinho e é o padrão em 2026.
+
+33
+00:02:02.217 --> 00:02:09.768
+Learning rate alto explode a loss; baixo demais, o treino se arrasta.
+
+34
+00:02:09.768 --> 00:02:12.176
+Comece com um por mil.
+
+35
+00:02:12.467 --> 00:02:18.096
+Overfitting é loss de treino baixa e validação alta:
+
+36
+00:02:18.096 --> 00:02:19.936
+o modelo decorou.
+
+37
+00:02:19.936 --> 00:02:25.565
+Dropout desliga neurônios ao acaso durante o treino.
+
+38
+00:02:25.565 --> 00:02:29.461
+Weight decay penaliza pesos grandes.
+
+39
+00:02:29.461 --> 00:02:38.771
+Early stopping para o treino, ou guarda o melhor checkpoint, quando a validação piora.
+
+40
+00:02:39.067 --> 00:02:45.495
+O loop de treino sempre segue a mesma liturgia:
+
+41
+00:02:45.495 --> 00:02:55.069
+zera gradientes, forward, calcula a loss, backward, atualiza os pesos.
+
+42
+00:02:55.069 --> 00:03:00.540
+Esquecer o zero_grad é o bug mais comum.
+
+43
+00:03:00.540 --> 00:03:06.831
+Se a loss não desce, treine em um único batch:
+
+44
+00:03:06.831 --> 00:03:13.123
+uma rede saudável decora; se não, o bug é seu.
+
+45
+00:03:13.400 --> 00:03:18.489
+O mini-projeto é treinar o Fashion-MNIST do zero:
+
+46
+00:03:18.489 --> 00:03:23.370
+dados, modelo e loop à mão, sem Trainer pronto.
+
+47
+00:03:23.370 --> 00:03:35.728
+Separe dez por cento para validação com early stopping, plote as curvas de loss e compare pelo menos duas arquiteturas.
+
+48
+00:03:35.728 --> 00:03:36.247
+Meta:
+
+49
+00:03:36.247 --> 00:03:41.024
+acurácia de teste de oitenta e oito por cento.
+
+50
+00:03:41.300 --> 00:03:42.446
+Recapitulando:
+
+51
+00:03:42.446 --> 00:03:54.397
+você domina o forward pass à mão, entende backpropagation pela regra da cadeia e sabe diagnosticar loss que não desce ou modelo que decora demais.
+
+52
+00:03:54.397 --> 00:03:57.999
+Treinou uma rede em PyTorch na GPU do Colab.
+
+53
+00:03:57.999 --> 00:04:02.419
+No próximo módulo, você abre o Transformer por dentro:
+
+54
+00:04:02.419 --> 00:04:06.839
+atenção, embeddings e como um LLM funciona de verdade.
+
+55
+00:04:06.839 --> 00:04:07.412
+Até lá.

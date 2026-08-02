@@ -1,0 +1,181 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:01.516
+Bem-vindo ao módulo dez:
+
+2
+00:00:01.516 --> 00:00:04.043
+avaliação e segurança de sistemas de IA.
+
+3
+00:00:04.043 --> 00:00:11.496
+Você vai aprender a medir se um sistema realmente melhorou, e a defendê-lo contra ataques reais como prompt injection.
+
+4
+00:00:11.767 --> 00:00:15.108
+Essa frase de Hamel Husain separa o hobbyista do profissional:
+
+5
+00:00:15.108 --> 00:00:18.557
+qualquer um monta uma demo que funciona nos exemplos que testou.
+
+6
+00:00:18.557 --> 00:00:22.652
+Só evals provam que uma mudança melhorou o sistema sem quebrar outros casos.
+
+7
+00:00:22.652 --> 00:00:26.479
+E prompt injection é o problema número um do campo, sem cura conhecida.
+
+8
+00:00:26.767 --> 00:00:29.081
+Nenhum tipo de eval basta sozinho.
+
+9
+00:00:29.081 --> 00:00:31.668
+Asserção de código são regras baratas:
+
+10
+00:00:31.668 --> 00:00:33.165
+a saída é JSON válido?
+
+11
+00:00:33.165 --> 00:00:39.359
+LLM como juiz avalia qualidade subjetiva, mas tem vieses — valide-o contra rótulos humanos.
+
+12
+00:00:39.359 --> 00:00:42.559
+Avaliação humana é o padrão-ouro, cara e lenta.
+
+13
+00:00:42.833 --> 00:00:46.121
+O ativo mais valioso não é o código, é o dataset.
+
+14
+00:00:46.121 --> 00:00:50.549
+Colete saídas reais, rotule passou ou falhou, e categorize o erro.
+
+15
+00:00:50.549 --> 00:00:53.367
+Todo bug reportado vira caso de regressão.
+
+16
+00:00:53.367 --> 00:00:57.593
+Vinte casos bem escolhidos valem mais que quinhentos genéricos.
+
+17
+00:00:57.867 --> 00:01:03.640
+MMLU, HumanEval e o LMArena ajudam a escolher o modelo base, com sinal amplo de capacidade.
+
+18
+00:01:03.640 --> 00:01:07.891
+Mas não medem o seu produto, e ainda vazam para os dados de treino.
+
+19
+00:01:07.891 --> 00:01:11.571
+Use evals próprios para decidir se o seu produto está bom.
+
+20
+00:01:11.867 --> 00:01:15.011
+O promptfoo é a ferramenta mais prática para começar.
+
+21
+00:01:15.011 --> 00:01:19.284
+Você declara casos e regras em YAML, como este exemplo com dois modelos.
+
+22
+00:01:19.284 --> 00:01:25.811
+Um comando roda a suite e mostra uma tabela comparativa — versionada no repositório, é seu teste de regressão.
+
+23
+00:01:26.100 --> 00:01:29.051
+Na mesma suite você adiciona casos adversariais.
+
+24
+00:01:29.051 --> 00:01:35.383
+O texto tenta instruir o modelo a se dizer comprometido; o teste falha se essa frase aparecer na saída.
+
+25
+00:01:35.383 --> 00:01:37.657
+A mesma lógica pega vazamento de CPF:
+
+26
+00:01:37.657 --> 00:01:41.100
+se o dado sensível aparecer, sua eval achou um bug real.
+
+27
+00:01:41.367 --> 00:01:44.593
+Para o modelo, instrução e dado são o mesmo texto.
+
+28
+00:01:44.593 --> 00:01:47.819
+Na direta, o usuário digita a instrução maliciosa.
+
+29
+00:01:47.819 --> 00:01:56.078
+Na indireta, a mais perigosa, ela vem escondida num dado que o sistema processa — um currículo, uma página, um documento do RAG.
+
+30
+00:01:56.078 --> 00:01:58.143
+A defesa tem que ser em camadas.
+
+31
+00:01:58.433 --> 00:02:01.165
+Jailbreaks contornam o alinhamento do modelo.
+
+32
+00:02:01.165 --> 00:02:06.932
+Vazamento de dados sensíveis é quando o modelo repete algo do contexto — risco jurídico direto.
+
+33
+00:02:06.932 --> 00:02:08.996
+O OWASP Top dez mapeia as ameaças:
+
+34
+00:02:08.996 --> 00:02:14.945
+injeção de prompt, divulgação de dados, confiar cegamente na saída, e agência excessiva do agente.
+
+35
+00:02:15.233 --> 00:02:22.764
+Validação de entrada e de saída, allowlist de tools, e humano no loop para ações irreversíveis — o guardrail que mais salva agentes.
+
+36
+00:02:22.764 --> 00:02:26.073
+Ataque você mesmo o seu sistema antes de qualquer usuário:
+
+37
+00:02:26.073 --> 00:02:28.697
+cada ataque que passar vira caso de regressão.
+
+38
+00:02:28.967 --> 00:02:33.305
+O mini-projeto é montar uma suite de evals com red team para um sistema seu.
+
+39
+00:02:33.305 --> 00:02:41.468
+São pelo menos vinte e cinco casos, oito deles adversariais, combinando os três tipos de eval, rodados em dois modelos numa tabela comparativa.
+
+40
+00:02:41.468 --> 00:02:44.951
+Feche com guardrails mapeados ao OWASP e um ataque corrigido.
+
+41
+00:02:45.233 --> 00:02:46.125
+Recapitulando:
+
+42
+00:02:46.125 --> 00:02:57.081
+dataset de eval a partir de erros reais, suite no promptfoo em dois modelos, prompt injection direta e indireta, guardrails mapeados ao OWASP, e red teaming do seu sistema.
+
+43
+00:02:57.081 --> 00:02:59.310
+No módulo onze você aprende LLMOps:
+
+44
+00:02:59.310 --> 00:03:01.539
+como colocar tudo isso em produção.
+
+45
+00:03:01.539 --> 00:03:01.985
+Até lá.
