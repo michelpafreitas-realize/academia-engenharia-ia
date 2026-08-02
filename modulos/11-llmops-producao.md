@@ -354,8 +354,15 @@ def custos():
 
 1. Reaproveite o `Dockerfile` e o `requirements.txt` do Passo 4 do lab (nada novo a instalar — `sqlite3` e `uuid` são da biblioteca padrão): `docker build -t servico-ia .` e depois `docker run -p 8000:8000 -e ANTHROPIC_API_KEY="$ANTHROPIC_API_KEY" servico-ia`. Repita os curls das Etapas 2, 5 e 6 contra o container (o `registros.db` nasce zerado dentro dele — chame as rotas de IA antes do `/custos`).
 2. Quer público? Suba o container em Railway/Render/Fly (seção 7), com `ANTHROPIC_API_KEY` no painel do serviço — nunca no Dockerfile. Feche com um README explicando como subir e testar cada rota, e rode a suite de evals do Módulo 10 contra o serviço como gate.
+3. Entregue no seu repositório `academia-ia` — Dockerfile e README vão junto; `registros.db` e chave de API ficam fora (confira o `.gitignore` com `git status` antes):
 
-✅ **Checkpoint:** todas as rotas respondem no container (ou na URL pública) e todos os critérios de aceite abaixo estão marcados.
+```bash
+git add .
+git commit -m "Módulo 11: serviço de IA com logs, custos, fallback e container"
+git push
+```
+
+✅ **Checkpoint:** todas as rotas respondem no container (ou na URL pública), o projeto aparece no seu GitHub e todos os critérios de aceite abaixo estão marcados.
 
 **🆘 Se travar:** `Address already in use` na porta 8000 → o uvicorn da Etapa 1 ainda está rodando; encerre-o (Ctrl+C) antes do `docker run`, ou use `-p 8001:8000`. Erro 401/`authentication_error` só dentro do container → a `ANTHROPIC_API_KEY` não entra sozinha: falta o `-e` no `docker run` (ou a variável no painel do PaaS). A resposta chega inteira de uma vez em vez de em streaming → falta o `-N` no curl (é ele que desliga o buffer do lado do cliente). Travou 30+ minutos em qualquer etapa → pergunte ao seu assistente de IA colando o erro completo e dizendo em qual etapa está (mas peça a *explicação*, não só a resposta — o objetivo é treinar).
 
@@ -368,6 +375,7 @@ def custos():
 - [ ] Endpoint/painel de custos agregando por rota
 - [ ] Container roda e o README explica como subir e testar
 - [ ] (Liga com Módulo 10) A suite de evals roda contra o serviço como gate
+- [ ] Projeto no seu repositório `academia-ia` no GitHub — Dockerfile e README inclusos, chave de API e `registros.db` fora
 
 **Dicas**: comece do lab e adicione uma rota por vez. Para o trace de cadeia, um mini-agente com 2 tools do Módulo 8 já serve. No roteamento, uma heurística boba (comprimento da entrada, presença de palavras-chave) já demonstra o conceito — o importante é o mecanismo. Guarde os custos num arquivo/SQLite simples; não precisa de banco de verdade para o exercício.
 

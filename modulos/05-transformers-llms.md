@@ -304,7 +304,7 @@ print("INSTRUCT:", chat(msgs, max_new_tokens=40)[0]["generated_text"][-1]["conte
 
 1. Na seção `## Conclusão`, escreva 10-15 linhas conectando o que você **mediu** à teoria: a tabela PT vs. EN com a seção 5.1 (BPE, custo por token), as varreduras com a 5.6 e o contraste base vs. instruct com a 5.7. Cite explicitamente "temperatura", "top-p" e "pós-treino" — os critérios de aceite cobram.
 2. Confira se todo bloco de código tem comentários em português e rode *Ambiente de execução → Reiniciar e executar tudo*; se qualquer célula falhar, conserte antes de seguir.
-3. Baixe o notebook (*Arquivo → Fazer download → .ipynb*) e faça commit no seu repositório `academia-ia`.
+3. Baixe o notebook (*Arquivo → Fazer download → .ipynb*), mova-o para a pasta do seu repositório `academia-ia` e faça commit e push — o projeto só conta entregue quando aparece no seu GitHub.
 
 ✅ **Checkpoint:** todos os critérios de aceite abaixo marcados.
 
@@ -318,6 +318,7 @@ print("INSTRUCT:", chat(msgs, max_new_tokens=40)[0]["generated_text"][-1]["conte
 - [ ] Ao menos um gráfico (ex.: barra das probabilidades top-10, ou efeito de T).
 - [ ] Comentários em português explicando cada bloco de código.
 - [ ] Conclusão referencia explicitamente temperatura, top-p e pós-treino.
+- [ ] Notebook no seu repositório `academia-ia` no GitHub (commit + push).
 
 **Dicas:** use `torch.manual_seed()` para gerações reproduzíveis quando quiser comparar; para o gráfico, `matplotlib` com `plt.bar` resolve; se o Colab reclamar de memória com o modelo instruído, escolha um com menos de 1B de parâmetros.
 

@@ -63,6 +63,11 @@ main{max-width:1240px;min-height:62vh;margin:0 auto;padding:42px 24px 88px}
 .module-hero{padding:0;overflow:hidden;display:grid;grid-template-columns:58% 42%;min-height:385px;background:var(--navy);color:#fff;border:0;box-shadow:var(--shadow)}.module-hero-copy{padding:45px;display:flex;flex-direction:column}.module-hero .eyebrow{color:#efb9b5}.module-hero h2{font-size:2.75rem;line-height:1.05;font-weight:600;margin-top:13px}.module-hero p{color:#f0d5d2;font-size:1rem;margin-top:14px}.module-meta{display:flex;gap:9px;flex-wrap:wrap;margin-top:auto}.module-meta span{padding:7px 11px;border:1px solid rgba(255,255,255,.22);border-radius:99px;background:rgba(255,255,255,.08);font-size:.72rem}.module-hero-photo{background:linear-gradient(90deg,rgba(140,21,21,.24),transparent),url('https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=1100&q=86') center/cover}
 .module-layout{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:20px}.module-side{display:flex;flex-direction:column;gap:16px}.module-side .card h3{font-size:1.35rem}.module-side .card p{font-size:.84rem;margin-top:8px}.project-card{background:#2b2926;color:#fff;border-color:#2b2926}.project-card .mut{color:#d4d0c8}.module-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:18px}
 .lesson{display:grid;grid-template-columns:22px 24px minmax(0,1fr) auto;gap:11px;align-items:center;min-height:70px;padding:11px 7px;border-bottom:1px solid var(--line)}.lesson:last-child{border-bottom:none}.lesson input{width:19px;height:19px;accent-color:var(--navy)}.lesson.done .lt{text-decoration:line-through;color:var(--mut)}.lesson a{font-size:.78rem!important;font-weight:700}.project-card .lesson{grid-template-columns:22px 24px minmax(0,1fr)}
+.pp h3{color:var(--navy);font-size:1.22rem;margin:24px 0 2px}.pp p{margin:10px 0}.pp ol,.pp ul{margin:10px 0 14px 24px}.pp li{margin:6px 0}
+.pp pre{background:#242321;color:#efece5;padding:13px 16px;border-radius:9px;overflow-x:auto;font-size:.82rem;line-height:1.55;margin:12px 0}
+.pp code{font-family:ui-monospace,"Cascadia Mono",monospace;font-size:.85em;background:#efece5;padding:1px 6px;border-radius:5px}.pp pre code{background:none;padding:0;font-size:inherit}
+.pp .ck{background:var(--okbg);border-left:4px solid var(--ok);padding:11px 14px;border-radius:0 9px 9px 0}
+.pp .sos{background:var(--errbg);border-left:4px solid var(--err);padding:11px 14px;border-radius:0 9px 9px 0}
 .qopt{display:block;width:100%;text-align:left;background:#fff;border:1.5px solid var(--line);border-radius:11px;padding:14px 16px;margin:9px 0}.qopt:hover{border-color:var(--navy)}.qopt.ok{background:var(--okbg);border-color:var(--ok)}.qopt.err{background:var(--errbg);border-color:var(--err)}.qopt:disabled{cursor:default}.explain{border-left:4px solid var(--navy);background:#faf0ef;padding:12px 15px;border-radius:0 10px 10px 0;margin-top:12px}
 .fcard{min-height:310px;display:flex;align-items:center;justify-content:center;text-align:center;padding:40px;font-size:1.22rem;cursor:pointer;border:1.5px solid #c8a09d;position:relative;background:linear-gradient(145deg,#fff,#faf6ef)}.fcard .hint{position:absolute;bottom:14px;left:0;right:0;font-size:.75rem;color:var(--mut)}.fcard .verso{color:var(--navy);font-weight:600}
 .cert{border:14px double var(--navy);background:#fffdf5;padding:46px 40px;text-align:center;position:relative}.cert h2{font-size:1.9rem;color:var(--navy);letter-spacing:.06em}.cert .nome{font-family:"Source Serif 4",Georgia,serif;font-size:2rem;color:var(--navy);border-bottom:2px solid var(--navy);display:inline-block;padding:0 30px 4px;margin:16px 0}.cert .marca{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:3rem;color:rgba(179,38,30,.16);transform:rotate(-18deg);font-weight:800;pointer-events:none}.assin{display:flex;justify-content:center;gap:80px;margin-top:40px}.assin div{border-top:1.5px solid var(--ink);padding-top:6px;font-size:.85rem;min-width:190px}
@@ -1019,12 +1024,56 @@ function vMod(i){
     <div class="card" style="padding:7px 16px">${m.aulas.map((a,j)=>`<label class="lesson ${arr[j]?'done':''}">
       <input type="checkbox" ${arr[j]?'checked':''} onchange="tickLesson(${i},${j},this.checked)"><span>${a[0]}</span><span class="lt">${a[1]}</span>
       <a href="${a[2]}" target="_blank" rel="noopener">abrir ↗</a></label>`).join('')}</div>
+    <div class="secttl"><h2>Projeto do módulo</h2><span class="mut">do enunciado ao push no GitHub — tudo nesta página</span></div>
+    <div class="card pp" id="pp"><p class="mut">Carregando o passo a passo…</p></div>
   </div><aside class="module-side">
     <div class="secttl"><h2>Próximas ações</h2></div>
     <div class="card"><span class="chip gold">Active recall · +50 XP</span><h3 style="margin-top:12px">${q!=null?'Supere seu recorde':'Consolide o módulo'}</h3><p class="mut">Um quiz curto revela lacunas antes que elas virem obstáculos.</p><div class="module-actions"><button class="btn" onclick="startQuiz(${i})">${q!=null?'Refazer quiz':'Fazer quiz'}</button><button class="btn sec" onclick="startCards(${i})">Flashcards</button></div></div>
-    <div class="card project-card"><div class="eyebrow" style="color:#e9aaa7">Entrega do módulo · +100 XP</div><h3 style="margin-top:12px">${m.proj}</h3><p class="mut">O enunciado completo e os critérios de aceite estão no material do módulo.</p><label class="lesson" style="border:0;margin-top:12px;padding:4px 0"><input type="checkbox" ${S.proj['m'+i]?'checked':''} onchange="tickProj(${i},this.checked)"><span>🚀</span><span class="lt">${S.proj['m'+i]?'Projeto entregue':'Marcar como entregue'}</span></label></div>
+    <div class="card project-card"><div class="eyebrow" style="color:#e9aaa7">Entrega do módulo · +100 XP</div><h3 style="margin-top:12px">${m.proj}</h3><p class="mut">Enunciado, passo a passo e critérios de aceite estão nesta página. Fechou tudo e deu o push? Marque a entrega.</p><label class="lesson" style="border:0;margin-top:12px;padding:4px 0"><input type="checkbox" ${S.proj['m'+i]?'checked':''} onchange="tickProj(${i},this.checked)"><span>🚀</span><span class="lt">${S.proj['m'+i]?'Projeto entregue':'Marcar como entregue'}</span></label></div>
     <a class="btn sec" target="_blank" rel="noopener" href="${MD(m.slug)}">Material completo ↗</a>
   </aside></section>`;
+  loadPP(i);
+}
+
+/* ---------- passo a passo do projeto: renderiza a seção Mini-projeto do .md na própria página ---------- */
+const PPC={};
+const escMd=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const inlMd=s=>escMd(s).replace(/`([^`]+)`/g,'<code>$1</code>')
+  .replace(/\*\*([^*]+)\*\*/g,'<b>$1</b>').replace(/\*([^*\s][^*]*)\*/g,'<i>$1</i>')
+  .replace(/\[([^\]]+)\]\((https?:[^)\s]+)\)/g,'<a href="$2" target="_blank" rel="noopener">$1</a>');
+function mdProj(txt){
+  const L=txt.split('\n');let a=-1,b=L.length,f=0;
+  for(let k=0;k<L.length;k++){
+    if(/^```/.test(L[k])){f^=1;continue}
+    if(f)continue;
+    if(a<0){if(/^## .*(Mini-projeto|Capstone)/i.test(L[k]))a=k+1}
+    else if(/^## /.test(L[k])){b=k;break}
+  }
+  if(a<0)throw new Error('seção do projeto não encontrada');
+  let h='',i=a;
+  while(i<b){
+    const l=L[i];
+    if(/^```/.test(l)){const c=[];i++;while(i<b&&!/^```/.test(L[i]))c.push(L[i++]);i++;h+=`<pre><code>${escMd(c.join('\n'))}</code></pre>`;continue}
+    if(!l.trim()){i++;continue}
+    const t=l.match(/^#{3,4} +(.*)/);
+    if(t){h+=`<h3>${inlMd(t[1])}</h3>`;i++;continue}
+    if(/^[-*] /.test(l)){const li=[];while(i<b&&/^[-*] /.test(L[i]))li.push(L[i++].replace(/^[-*] /,''));
+      h+=`<ul>${li.map(x=>`<li>${inlMd(x.replace(/^\[[ xX]\] */,'☐ '))}</li>`).join('')}</ul>`;continue}
+    if(/^\d+\. /.test(l)){const li=[];while(i<b&&/^\d+\. /.test(L[i]))li.push(L[i++].replace(/^\d+\. /,''));
+      h+=`<ol>${li.map(x=>`<li>${inlMd(x)}</li>`).join('')}</ol>`;continue}
+    const p=[];while(i<b&&L[i].trim()&&!/^(```|#|[-*] |\d+\. )/.test(L[i]))p.push(L[i++]);
+    const s=p.join(' ');
+    h+=`<p${/^✅/.test(s)?' class="ck"':/^(\*\*)?🆘/.test(s)?' class="sos"':''}>${inlMd(s)}</p>`;
+  }
+  return h;
+}
+async function loadPP(i){
+  const m=MODS[i],el=document.getElementById('pp');if(!el)return;
+  try{
+    if(!PPC[m.slug]){const r=await fetch('modulos/'+m.slug+'.md');if(!r.ok)throw new Error(r.status);PPC[m.slug]=mdProj(await r.text())}
+    el.innerHTML=PPC[m.slug];
+  }catch(e){/* aberto via file:// ou fora do Pages: cai no link do GitHub */
+    el.innerHTML=`<p class="mut">Não deu para carregar aqui — <a href="${MD(m.slug)}" target="_blank" rel="noopener">abra o passo a passo no GitHub ↗</a>.</p>`}
 }
 
 window.matricular=()=>{

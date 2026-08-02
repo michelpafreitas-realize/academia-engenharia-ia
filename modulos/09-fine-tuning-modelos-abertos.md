@@ -356,8 +356,9 @@ tokenizer.push_to_hub("seu-usuario/formatador-especialista-lora")
 ```
 
 2. Na página do modelo no Hub, edite o `README.md` (a model card) com o roteiro da seção 8: modelo base, descrição dos dados, hiperparâmetros (`r`, `alpha`, épocas, learning rate), a tabela antes/depois da Etapa 5, limitações — e a seção "quando NÃO usar este modelo".
+3. Código também é entrega: **apague o token da célula de `login`** (deixe só `login()`, que pede o token na hora), baixe o notebook (*Arquivo → Fazer download → .ipynb*), mova-o para a pasta do seu repositório `academia-ia` e faça commit e push — modelo no Hub, código no GitHub.
 
-✅ **Checkpoint:** a URL pública do modelo abre com a model card completa — e todos os critérios de aceite abaixo marcados.
+✅ **Checkpoint:** a URL pública do modelo abre com a model card completa, o notebook aparece no seu GitHub sem nenhum token `hf_` — e todos os critérios de aceite abaixo marcados.
 
 **🆘 Se travar:** `CUDA out of memory` no Colab → *Runtime → Restart runtime* e treine com `per_device_train_batch_size=1` e `max_seq_length=1024` (as mensagens deste projeto são curtas, sobra folga); o fine-tuned gera JSON quebrado ou texto que não para → suspeito nº 1 é chat template errado — volte à seção 7 e confira que **tudo** passa por `apply_chat_template`, inclusive o prompt do eval; o loss não desce (ou despenca para perto de zero) → exemplos repetidos ou template aplicado duas vezes — imprima `ds[0]["text"]` e leia a string com os próprios olhos; travou 30+ minutos em qualquer etapa → pergunte ao seu assistente de IA colando o erro completo e dizendo em qual etapa está (mas peça a *explicação*, não só a resposta — o objetivo é treinar).
 
@@ -368,6 +369,7 @@ tokenizer.push_to_hub("seu-usuario/formatador-especialista-lora")
 - [ ] Fine-tuned supera o modelo base em pelo menos uma das duas métricas
 - [ ] Modelo publicado no Hub com model card preenchida
 - [ ] Uma seção "quando NÃO usar este modelo" na model card
+- [ ] Notebook no seu repositório `academia-ia` no GitHub, sem nenhum token `hf_` no código
 
 **Dicas**: use temperatura 0 no eval para resultados reproduzíveis. Se o JSON sair quebrado no fine-tuned, o suspeito nº 1 é chat template errado no preparo dos dados. Se o modelo "esquecer" instruções gerais, seu dataset provavelmente é homogêneo demais — misture variações de fraseado.
 

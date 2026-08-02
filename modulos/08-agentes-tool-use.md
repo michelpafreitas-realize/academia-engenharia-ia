@@ -351,8 +351,15 @@ O lab já imprime cada chamada de tool; ajuste o print da saída para `saida[:10
 
 1. Faça 5 perguntas distintas, incluindo uma que exija 2+ tools encadeadas ("qual a média de valor das linhas da cidade X?"), e teste o limite de iterações com uma pergunta impossível ("qual será a venda de 2030?").
 2. Escreva um `README.md` curto: como instalar, como rodar, e uma sessão de exemplo colada do terminal.
+3. Entregue no seu repositório `academia-ia` — antes do push, rode `git status` e confira que a chave de API (`.env`) não vai junto:
 
-✅ **Checkpoint:** todos os critérios de aceite abaixo marcados.
+```bash
+git add .
+git commit -m "Módulo 8: agente-analista de CSV com tool use"
+git push
+```
+
+✅ **Checkpoint:** o projeto aparece no seu GitHub (sem nenhuma chave no código) e todos os critérios de aceite abaixo estão marcados.
 
 **🆘 Se travar:** o modelo chama tool com coluna inexistente → esperado; confirme que o erro volta com `is_error: true` e reforce na description de `listar_colunas` que ela vem PRIMEIRO; o agente repete a mesma tool em círculo até estourar `MAX_ITERACOES` → a saída da tool não está respondendo o que ele precisa (imprima-a inteira e leia como se você fosse o modelo); a API dá erro logo após um `tool_use` → você esqueceu de devolver o `tool_result` correspondente (todo pedido de tool exige resposta no turno seguinte de usuário); travou 30+ minutos em qualquer etapa → pergunte ao seu assistente de IA colando o erro completo e a etapa em que está — e peça a *explicação*, não só a resposta.
 
@@ -362,6 +369,7 @@ O lab já imprime cada chamada de tool; ajuste o print da saída para `saida[:10
 - [ ] Limite de iterações funciona (teste com uma pergunta impossível)
 - [ ] Tokens totais da sessão impressos ao final
 - [ ] README com instruções de execução e um exemplo de sessão colado
+- [ ] Projeto no seu repositório `academia-ia` no GitHub, sem nenhuma chave de API no código
 
 **Dicas**: comece copiando o lab e trocando as tools. Devolva os resultados de tool como texto compacto (o modelo lê texto, não DataFrames). Se o agente "alucinar" colunas, melhore a description de `listar_colunas` dizendo para chamá-la *antes* de qualquer outra tool.
 

@@ -342,8 +342,15 @@ plt.xlabel("época"); plt.ylabel("loss"); plt.title("Fashion-MNIST — ModeloA")
 2. Meça a acurácia de teste de cada modelo com a `avalia()` da célula 5 do lab: `avalia(model_a, test_dl)`.
 3. Monte em uma célula Markdown a tabela `| Modelo | Épocas até parar | Melhor val loss | Acurácia teste |` e escreva 1 linha reportando o vencedor. Meta: ≥ 88% (abaixo disso, releia as Dicas — normalização e learning rate).
 4. *Ambiente de execução* → *Reiniciar e executar tudo*: precisa rodar de ponta a ponta sem edição manual.
+5. Baixe o notebook (*Arquivo → Fazer download → .ipynb*), mova-o para a pasta do seu repositório `academia-ia` e entregue:
 
-✅ **Checkpoint:** todos os critérios de aceite abaixo marcados.
+```bash
+git add .
+git commit -m "Módulo 4: MLP no Fashion-MNIST — comparativo de arquiteturas"
+git push
+```
+
+✅ **Checkpoint:** o notebook aparece no seu GitHub e todos os critérios de aceite abaixo estão marcados.
 
 **🆘 Se travar:** os três tropeços clássicos aqui são: (1) *shape mismatch* (`mat1 and mat2 shapes cannot be multiplied`) → os tamanhos das `nn.Linear` do `ModeloB` precisam se encaixar em cadeia (784→512→256→10); (2) loss que não desce ou vira `NaN` → rode o checklist da seção 4.8 (learning rate 10× menor, `zero_grad()` presente, dados normalizados); (3) early stopping disparando já na época 2-3 → validação oscilando: diminua o learning rate ou aumente `paciencia`. Travou 30+ minutos em qualquer etapa → pergunte ao seu assistente de IA colando o erro completo e dizendo em qual etapa está — e peça a *explicação*, não só a resposta, porque o objetivo é treinar.
 
@@ -355,6 +362,7 @@ plt.xlabel("época"); plt.ylabel("loss"); plt.title("Fashion-MNIST — ModeloA")
 - [ ] Early stopping funcionando (o treino para ou restaura o melhor checkpoint).
 - [ ] Tabela comparando as arquiteturas testadas.
 - [ ] Código roda de ponta a ponta no Colab sem edição manual.
+- [ ] Notebook commitado e pushado no seu repositório `academia-ia` no GitHub.
 
 **Dicas:** Fashion-MNIST satura por volta de 89-91% com MLP; se quiser passar disso, experimente uma CNN pequena (`Conv2d → ReLU → MaxPool` duas vezes e uma `Linear` no final). Normalização dos dados importa. Se a validação oscilar muito, diminua o learning rate.
 
