@@ -35,10 +35,10 @@ Além disso, aprender a aprender é a habilidade com maior retorno da sua carrei
 
 Cada módulo da Academia combina cinco formatos, de propósito:
 
-1. **Vídeo e leitura** — para o primeiro contato com o conceito.
+1. **Vídeo e leitura** — para o primeiro contato com o conceito. A vídeo-aula narrada (com legendas) e o guia completo do módulo estão na própria página do Campus — nada de sair do site para estudar.
 2. **Lab guiado** — você digita e executa o código junto; ninguém aprende IA só assistindo.
-3. **Quiz** — força você a *lembrar* do conteúdo, não só reconhecê-lo.
-4. **Flashcards** — revisão em doses pequenas ao longo das semanas.
+3. **Quiz** — força você a *lembrar* do conteúdo, não só reconhecê-lo. Cada tentativa sorteia 5 perguntas do banco do módulo e embaralha as alternativas (decorar posição não funciona); **3+ acertos** concluem o item.
+4. **Flashcards** — revisão em doses pequenas ao longo das semanas; a aba Revisão avisa o que vence a cada dia.
 5. **Mini-projeto** — a prova real: construir algo do zero, sem gabarito.
 
 A regra de ouro: **nenhum módulo está concluído sem o mini-projeto entregue**. Assistir 10 horas de vídeo dá sensação de progresso; entregar um projeto dá progresso de verdade.
@@ -48,7 +48,7 @@ A regra de ouro: **nenhum módulo está concluído sem o mini-projeto entregue**
 Três descobertas da ciência cognitiva sustentam o desenho da Academia:
 
 - **Active recall (recuperação ativa)**: o cérebro fixa melhor aquilo que ele se esforça para *puxar da memória*. Reler um texto parece produtivo, mas é passivo. Fechar o texto e tentar explicar com suas palavras — isso consolida. Os quizzes existem para isso: errar no quiz é *bom*, porque o erro seguido da correção grava mais forte que o acerto fácil.
-- **Spaced repetition (repetição espaçada)**: revisar um conceito em intervalos crescentes (1 dia, 3 dias, 1 semana, 1 mês) combate a curva do esquecimento. Os flashcards de cada módulo devem ser revisados nesse ritmo — 10 minutos por dia bastam.
+- **Spaced repetition (repetição espaçada)**: revisar um conceito em intervalos crescentes (1, 3, 7, 14 e 30 dias) combate a curva do esquecimento. O Campus agenda os flashcards nesse ritmo sozinho — a aba Revisão mostra o que vence hoje; 10 minutos por dia bastam.
 - **Projetos > consumo passivo**: conhecimento que nunca virou código evapora. Cada mini-projeto força você a integrar tudo que viu no módulo em algo que funciona. É também o que você mostra em entrevistas: recrutador não pergunta "quantos vídeos você assistiu", pergunta "o que você já construiu".
 
 Uma analogia: assistir aula é como ver alguém dirigir. Quiz é o simulado do Detran. Projeto é pegar o carro e ir até a padaria. Só a terceira te torna motorista.
@@ -119,7 +119,8 @@ Regra de segurança inegociável: **chave de API é senha**. Nunca cole no códi
 
 - **Pomodoro**: 25 minutos de foco total (celular longe) + 5 de pausa; a cada 4 ciclos, pausa longa. A carga de cada módulo já é estimada em horas — divida em pomodoros e vire previsível.
 - **Plano semanal**: reserve blocos fixos no calendário (ex.: 3 sessões de 1h30 por semana). Constância vence intensidade: 8h por semana durante meses supera maratonas de fim de semana seguidas de abandono.
-- **No app da Academia**: marque as aulas concluídas, faça o quiz ao final do módulo (não durante — deixe o cérebro esquecer um pouco primeiro) e revise os flashcards nos intervalos de 1, 3, 7 e 30 dias.
+- **No app da Academia**: marque as aulas concluídas, faça o quiz ao final do módulo (não durante — deixe o cérebro esquecer um pouco primeiro; 3+ de 5 aprova) e revise os flashcards quando a aba Revisão indicar — os intervalos de 1, 3, 7, 14 e 30 dias são agendados por você automaticamente.
+- **No celular e sem internet**: o Campus instala como app (adicionar à tela inicial) e funciona offline — só os vídeos pedem rede. E uma vez por semana gere o link da aba **Sincronizar** e mande para você mesmo: é o seu backup e o jeito de somar o progresso entre aparelhos.
 
 ## 💻 Lab guiado
 
@@ -358,4 +359,4 @@ A) No código, para facilitar B) Num comentário do notebook C) Em variável de 
 - [ ] Contas criadas: GitHub, Hugging Face e Google AI Studio
 - [ ] Repositório `academia-ia` publicado com o mini-projeto completo
 - [ ] Plano semanal de estudos escrito no README
-- [ ] Quiz respondido e flashcards agendados para revisão (1, 3, 7, 30 dias)
+- [ ] Quiz aprovado (3+ de 5) e primeira sessão de flashcards feita — o Campus agenda as revisões seguintes sozinho

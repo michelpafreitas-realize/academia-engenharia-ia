@@ -27,14 +27,14 @@ Cada módulo combina **várias formas de aprendizado** — porque consumir conte
 
 | Forma | O que é | Por quê |
 |---|---|---|
-| 🎥 **Aulas em vídeo** | Os melhores cursos do mundo, curados | Intuição visual de quem explica melhor |
-| 📖 **Leitura guiada** | Guias didáticos em pt-BR neste repositório | Profundidade no seu ritmo |
+| 🎥 **Aulas em vídeo** | Vídeo-aula própria por módulo (com legendas) + os melhores cursos do mundo, curados | Intuição visual de quem explica melhor |
+| 📖 **Leitura guiada** | Guias didáticos em pt-BR, na própria página de cada módulo | Profundidade no seu ritmo, sem sair do site |
 | 💻 **Labs guiados** | Código completo, passo a passo | Aprender fazendo |
-| 📝 **Quizzes** | Perguntas com feedback e explicação | *Active recall* — testar-se consolida |
-| 🃏 **Flashcards** | Repetição espaçada (sistema Leitner) | Revisar na véspera de esquecer |
-| 🚀 **Projetos** | Um por módulo + 4 capstones de portfólio | O que fica é o que você constrói |
+| 📝 **Quizzes** | Banco de 10 perguntas por módulo — cada tentativa sorteia 5 e embaralha as alternativas | *Active recall* — testar-se consolida (3+ acertos aprovam) |
+| 🃏 **Flashcards** | Repetição espaçada (sistema Leitner: 1, 3, 7, 14, 30 dias) | Revisar na véspera de esquecer |
+| 🚀 **Projetos** | Um por módulo + 4 capstones de portfólio, com passo a passo executável | O que fica é o que você constrói — e todo projeto termina publicado no seu GitHub |
 
-E para dar **vontade de voltar todo dia**: XP, níveis (de *Calouro* a *Staff AI Engineer*), streak de estudo, condecorações e certificado de conclusão — tudo no [**Campus Virtual**](https://michelpafreitas-realize.github.io/academia-engenharia-ia/), que roda no navegador e salva seu progresso localmente.
+E para dar **vontade de voltar todo dia**: XP, níveis (de *Calouro* a *Staff AI Engineer*), streak de estudo, missões diárias, ligas semanais, passe de temporada, condecorações e certificado de conclusão — tudo no [**Campus Virtual**](https://michelpafreitas-realize.github.io/academia-engenharia-ia/), que roda no navegador, instala como app no celular, funciona offline (só os vídeos pedem rede) e salva seu progresso localmente — com sincronização entre aparelhos por link, que também serve de backup.
 
 ## 📚 Currículo
 
@@ -83,10 +83,10 @@ E para dar **vontade de voltar todo dia**: XP, níveis (de *Calouro* a *Staff AI
 
 1. Abra o [**Campus Virtual**](https://michelpafreitas-realize.github.io/academia-engenharia-ia/) e matricule-se (é só digitar seu nome — o progresso fica salvo no seu navegador).
 2. Comece pelo [Módulo 0](modulos/00-boas-vindas-setup.md).
-3. Marque as aulas, faça o quiz, revise os flashcards e **entregue o projeto** de cada módulo.
+3. Marque as aulas, faça o quiz (3+ de 5 aprova), revise os flashcards e **entregue o projeto** de cada módulo seguindo o passo a passo da própria página — o fecho é sempre um `git push` para o seu portfólio.
 4. Ao final: 4 capstones para o portfólio e o certificado do programa.
 
-Prefere só ler? Todo o conteúdo está nos arquivos Markdown de [`modulos/`](modulos/) — o Campus é opcional (mas é onde mora a diversão).
+Prefere só ler? Todo o conteúdo está nos arquivos Markdown de [`modulos/`](modulos/) — o mesmo material que o Campus mostra na página de cada módulo, lá com quiz, flashcards e progresso por cima.
 
 ## ❓ Perguntas frequentes
 
@@ -96,7 +96,7 @@ Prefere só ler? Todo o conteúdo está nos arquivos Markdown de [`modulos/`](mo
 
 **Preciso de GPU?** Não — Google Colab dá GPU grátis, e os módulos locais usam modelos pequenos.
 
-**Meu progresso fica salvo onde?** No `localStorage` do seu navegador. Nada sai da sua máquina.
+**Meu progresso fica salvo onde?** No `localStorage` do seu navegador — nada sai da sua máquina. Por isso, gere de vez em quando o link da aba **Sincronizar** e mande para você mesmo: é o backup do seu progresso (e o jeito de somá-lo entre computador e celular). O próprio Campus lembra você disso quando o streak cresce.
 
 **Em quanto tempo consigo trabalhar na área?** Com o ritmo intensivo e os 4 capstones publicados no GitHub, você terá portfólio competitivo em ~4-6 meses.
 
