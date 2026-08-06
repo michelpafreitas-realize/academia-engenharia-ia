@@ -1,14 +1,19 @@
-# Módulo 7 — RAG: Retrieval-Augmented Generation
+# Módulo 7 — RAG
 
-> 🏛️ Período 3 · ⏱️ Carga estimada: 12h · 📋 Pré-requisitos: Módulo 6 (Prompt Engineering & APIs de LLM)
+> 🏛️ Período 3 — Sistemas com LLMs · ⏱️ Carga estimada: 12h · 📋 Pré-requisitos: Módulo 6 (Como LLMs Funcionam)
 
 ## 🎯 Objetivos
 
 - Ao final, você será capaz de explicar por que RAG existe e quando ele vence long context e fine-tuning (e quando perde).
 - Ao final, você será capaz de gerar embeddings de sentença, calcular similaridade de cosseno e projetar uma estratégia de chunking adequada aos documentos.
 - Ao final, você será capaz de escolher entre FAISS, Chroma e pgvector com critérios de engenharia, não de moda.
-- Ao final, você será capaz de construir um pipeline RAG completo do zero, sem framework, com citação de fontes.
-- Ao final, você será capaz de avaliar um sistema RAG com métricas (faithfulness, answer relevancy, context precision) e diagnosticar as falhas comuns.
+- Ao final, você será capaz de construir um pipeline RAG completo do zero, sem framework, com citação de fontes — dirigindo a IA a partir de uma spec sua.
+- Ao final, você será capaz de avaliar um sistema RAG com métricas e números (recall de retrieval, taxa de recusa, faithfulness — via Ragas ou suite própria) e diagnosticar as falhas comuns.
+- Ao final, você será capaz de defender cada decisão do pipeline (chunking, k, modelo de embedding) com dados do seu próprio eval.
+
+## 🎛️ Núcleo manual deste módulo
+
+À mão, você escreve o **conjunto de avaliação** (as perguntas, os gabaritos, as perguntas-armadilha não respondíveis) e **julga a fidelidade das respostas com os próprios olhos** — é aí que se forma o critério de quem sabe dizer se um RAG funciona. Também vale calcular uma similaridade de cosseno num exemplo pequeno, uma vez, para a geometria grudar. Todo o resto — pipeline, persistência, scripts de eval — você pode e deve construir dirigindo seu assistente de IA.
 
 ## 🗺️ Por que isso importa
 
@@ -28,7 +33,8 @@ O detalhe que o mercado aprendeu a duras penas: fazer um demo de RAG leva uma ta
 | 6 | Trilhas de aprendizado sobre busca vetorial | 📖 leitura | [weaviate.io/learn](https://weaviate.io/learn) | 1h00 |
 | 7 | Ragas: métricas de avaliação de RAG | 📖 leitura | [github.com/explodinggradients/ragas](https://github.com/explodinggradients/ragas) | 0h45 |
 | 8 | Lab guiado: RAG do zero, sem framework | 💻 lab | Seção 💻 abaixo | 3h00 |
-| 9 | Depois de entender: como os frameworks fazem | 📖 leitura | [docs.llamaindex.ai](https://docs.llamaindex.ai) · [python.langchain.com](https://python.langchain.com) | 1h00 |
+| 9 | Sessão de Direção: da spec ao RAG medido | 🎛️ sessão de direção | Seção 🎛️ abaixo | 1h00 |
+| 10 | Depois de entender: como os frameworks fazem | 📖 leitura | [docs.llamaindex.ai](https://docs.llamaindex.ai) · [python.langchain.com](https://python.langchain.com) | 1h00 |
 
 ## 🧠 Conteúdo essencial
 
@@ -109,7 +115,7 @@ RAG tem duas partes que falham independentemente (busca e geração), então "ol
 - **Answer relevancy**: a resposta de fato responde à pergunta feita (em vez de tangenciar)?
 - **Context precision**: dos chunks recuperados, quantos eram realmente relevantes? Mede a qualidade da *busca*, isolada da geração.
 
-O diagnóstico vem do cruzamento: context precision baixa → problema de retrieval (chunking, embeddings, híbrido); precision alta mas faithfulness baixa → problema de geração (prompt, modelo ignorando contexto). Monte um conjunto de 20-50 perguntas com respostas esperadas e rode a cada mudança — é o mesmo hábito do Módulo 6, agora com duas engrenagens para vigiar.
+O diagnóstico vem do cruzamento: context precision baixa → problema de retrieval (chunking, embeddings, híbrido); precision alta mas faithfulness baixa → problema de geração (prompt, modelo ignorando contexto). Monte um conjunto de 20-50 perguntas com respostas esperadas e rode a cada mudança — é o mesmo hábito do Módulo 2, agora com duas engrenagens para vigiar.
 
 ### 7.8 RAG vs. long context vs. fine-tuning — e as falhas clássicas
 
@@ -218,33 +224,45 @@ print(responder("Vocês entregam fora do Brasil?"))
 
 **Experimentos obrigatórios:** (a) faça 5 perguntas com paráfrases (sem as palavras dos documentos) e anote os scores; (b) quebre de propósito o chunking (um chunk único por documento) e compare a qualidade; (c) remova a instrução "APENAS os trechos" do system e repita o teste anti-alucinação — observe a diferença.
 
+## 🎛️ Sessão de Direção
+
+A prática de direção deste módulo é transformar o lab no mini-projeto **sem digitar o pipeline você mesmo**:
+
+1. **Especifique**: escreva o `SPEC.md` do seu assistente antes de qualquer código — qual base de documentos, formato dos chunks (estrutura + overlap), como o índice persiste, formato da resposta com citações [n], e **as metas numéricas de eval** (ex.: recall top-3 ≥ 80%, recusa correta ≥ 4/5).
+2. **Dirija**: entregue a spec + o `rag.py` do lab ao seu assistente de IA (Claude Code, Cursor ou o chat que você usa) e conduza a evolução em etapas pequenas, revisando cada diff. Peça uma coisa por vez; recuse código que você não entende até entender.
+3. **Verifique**: rode a SUA suite de avaliação (a IA não escreve as perguntas nem julga fidelidade por você — isso é o núcleo manual) e confronte os números com as metas da spec.
+
+**Entregável:** o `SPEC.md` e um resumo da sessão no `DECISIONS.md` (o que a IA propôs, o que você aceitou, o que recusou e por quê). Esse material entra no repositório do mini-projeto abaixo.
+
 ## 🚀 Mini-projeto
 
-**Enunciado:** construa um **assistente de perguntas e respostas sobre uma base de documentos real sua** (apostilas do curso, documentação de um projeto, políticas da empresa, artigos — mínimo 10 documentos ou 50 chunks), com avaliação de qualidade antes/depois de uma melhoria de retrieval.
+**Enunciado:** construa, dirigindo a IA, um **assistente de perguntas e respostas sobre uma base de documentos real sua** (apostilas do curso, documentação de um projeto, políticas da empresa, artigos — mínimo 10 documentos ou 50 chunks), com **evals obrigatórios**: números antes/depois de uma melhoria de retrieval, via Ragas ou suite própria.
 
 **Requisitos:**
 
-1. Pipeline sem framework (evolução do lab): chunking por estrutura com overlap, embeddings, busca por cosseno, resposta com citações [n].
-2. Persistência do índice (salvar/carregar a matriz e os metadados — `np.save` + JSON basta, ou migre para Chroma e justifique).
-3. Conjunto de avaliação com ≥ 15 perguntas: 10 respondíveis (com gabarito de qual documento contém a resposta) e 5 **não respondíveis** pela base.
-4. Métricas reportadas: (a) recall de retrieval — o documento certo veio no top-k? (b) taxa de recusa correta nas perguntas não respondíveis; (c) avaliação manual de fidelidade das respostas (a resposta se sustenta nos trechos?).
+1. `SPEC.md` escrito **antes** do código, com as metas numéricas de eval (critério universal a).
+2. Pipeline sem framework (evolução do lab): chunking por estrutura com overlap, embeddings, busca por cosseno, resposta com citações [n]. Pode ser inteiro escrito pela IA — desde que você explique cada peça.
+3. Persistência do índice (salvar/carregar a matriz e os metadados — `np.save` + JSON basta, ou migre para Chroma e justifique no DECISIONS.md).
+4. **Evals com números** (critério universal b): conjunto com ≥ 15 perguntas — 10 respondíveis (com gabarito de qual documento contém a resposta) e 5 **não respondíveis** — reportando (i) recall de retrieval no top-k, (ii) taxa de recusa correta, (iii) fidelidade das respostas (julgamento manual, ou faithfulness do Ragas se preferir a suite pronta).
 5. Uma melhoria de retrieval implementada e medida no MESMO conjunto: overlap diferente, k diferente, chunking por seção, ou BM25 híbrido (bônus).
-6. Relatório curto: tabela antes/depois e diagnóstico usando o vocabulário da seção 7.8 (foi falha de chunk, de retrieval ou de geração?).
+6. `DECISIONS.md` (critério universal c) com a tabela antes/depois e o diagnóstico no vocabulário da seção 7.8 (foi falha de chunk, de retrieval ou de geração?).
+7. Defesa (critério universal d): ser capaz de responder "por quê?" sobre qualquer linha do repositório — e passar na Defesa do módulo no Campus.
 
 ### 🧭 Passo a passo
 
 Reserve ~5h no total (pode dividir em 2 ou 3 sessões). Siga na ordem — cada etapa termina com um **checkpoint**; só avance quando ele passar.
 
-**Etapa 1 — Montar a base e o projeto (30 min)**
+**Etapa 1 — SPEC.md, base e projeto (45 min)**
 
-1. Crie a pasta `modulo07-rag` no mesmo ambiente do lab (sentence-transformers, numpy e anthropic instalados), com uma subpasta `docs/`, e copie o código do lab guiado (seção 💻) para um arquivo `rag.py` — o projeto inteiro é evolução dele. `ANTHROPIC_API_KEY` fica no ambiente, nunca no código.
-2. Escolha a base: mínimo 10 documentos ou 50 chunks. Opção concreta já disponível: os próprios `.md` dos módulos desta academia — copie-os para `docs/`. Você conhece bem esse conteúdo, e avaliar fidelidade (etapa 5) exige saber a resposta certa.
+1. Escreva o `SPEC.md` **antes de qualquer código** (é a Sessão de Direção, passo 1): base escolhida, estratégia de chunking, persistência, formato da resposta e as metas numéricas de eval. Duas frases por item bastam — spec é contrato, não redação.
+2. Crie a pasta `modulo07-rag` no mesmo ambiente do lab (sentence-transformers, numpy e anthropic instalados), com uma subpasta `docs/`, e copie o código do lab guiado (seção 💻) para um arquivo `rag.py` — o projeto inteiro é evolução dele. `ANTHROPIC_API_KEY` fica no ambiente, nunca no código.
+3. Escolha a base: mínimo 10 documentos ou 50 chunks. Opção concreta já disponível: os próprios `.md` dos módulos desta academia — copie-os para `docs/`. Você conhece bem esse conteúdo, e avaliar fidelidade (etapa 5) exige saber a resposta certa.
 
-✅ **Checkpoint:** `ls docs/` mostra ≥ 10 arquivos `.md` e `rag.py` roda exatamente como no lab.
+✅ **Checkpoint:** `SPEC.md` no repositório com metas numéricas, `ls docs/` mostra ≥ 10 arquivos `.md` e `rag.py` roda exatamente como no lab.
 
 **Etapa 2 — Carga real e chunking com overlap (45 min)**
 
-Substitua o dicionário `documentos` fixo (passo 2 do lab) pela leitura da pasta e troque o `chunkar` por uma versão com overlap:
+Daqui até a Etapa 6, dirija seu assistente de IA com a spec em mãos — uma etapa por vez, revisando cada diff. Substitua o dicionário `documentos` fixo (passo 2 do lab) pela leitura da pasta e troque o `chunkar` por uma versão com overlap:
 
 ```python
 from pathlib import Path
@@ -280,7 +298,7 @@ else:
 
 **Etapa 4 — Conjunto de avaliação (45 min)**
 
-Crie `avaliacao.json` à mão, com 15 itens: 10 respondíveis escritas com **paráfrases** (sem copiar as palavras do documento, senão o teste fica fácil demais) e 5 **não respondíveis** plausíveis (mesmo assunto, mas resposta ausente da base). Cada item traz `pergunta`, `doc` (arquivo-gabarito que contém a resposta) e `respondivel`:
+Este é o núcleo manual do módulo: **você** escreve as perguntas e os gabaritos — a IA não conhece a sua base nem o seu critério. Crie `avaliacao.json` à mão, com 15 itens: 10 respondíveis escritas com **paráfrases** (sem copiar as palavras do documento, senão o teste fica fácil demais) e 5 **não respondíveis** plausíveis (mesmo assunto, mas resposta ausente da base). Cada item traz `pergunta`, `doc` (arquivo-gabarito que contém a resposta) e `respondivel`:
 
 ```json
 [
@@ -315,26 +333,31 @@ Escolha **uma só**: chunking por seção (quebrar em `"\n## "` em vez de janela
 
 ✅ **Checkpoint:** os três números "depois" anotados, e recall ≥ 8/10 no top-3.
 
-**Etapa 7 — Relatório e diagnóstico (30 min)**
+**Etapa 7 — DECISIONS.md, publicação e defesa (30 min)**
 
-Escreva `RELATORIO.md` com a tabela antes/depois (3 métricas × 2 colunas) e, para cada pergunta que ainda falha, uma linha de diagnóstico no vocabulário da seção 7.8: foi chunk ruim, retrieval que não achou, ou geração que ignorou o contexto? Commit e push — confira antes que nenhuma chave de API foi parar no código.
+Escreva o `DECISIONS.md` com a tabela antes/depois (3 métricas × 2 colunas), o resumo da Sessão de Direção (o que a IA propôs, o que você recusou) e, para cada pergunta que ainda falha, uma linha de diagnóstico no vocabulário da seção 7.8: foi chunk ruim, retrieval que não achou, ou geração que ignorou o contexto? Atualize o `SPEC.md` se as metas mudaram no caminho. Commit e push — confira antes que nenhuma chave de API foi parar no código. Feche passando na Defesa do módulo no Campus.
 
-✅ **Checkpoint:** todos os critérios de aceite abaixo marcados.
+✅ **Checkpoint:** SPEC.md e DECISIONS.md atualizados no GitHub e todos os critérios de aceite abaixo marcados.
 
-**🆘 Se travar:** recall baixo → imprima os chunks recuperados antes de culpar o modelo; 8 em 10 vezes eles estão grandes ou ilegíveis (falha nº 1 da 7.8) — reduza `tam` ou quebre por seção. Modelo respondendo perguntas não respondíveis → confira se o `system` ainda exige "APENAS os trechos" com a frase de recusa da seção 7.6, e se as 5 perguntas são mesmo impossíveis de responder com a base. Números que não mudam após a melhoria → você esqueceu de apagar `indice.npy`/`chunks.json` e está buscando no índice antigo. Travou 30+ minutos em qualquer etapa → pergunte ao seu assistente de IA colando o erro completo e dizendo em qual etapa está (mas peça a *explicação*, não só a resposta — o objetivo é treinar).
+**🆘 Se travar:** trabalhar com seu assistente de IA É o método — cole o erro completo, diga em qual etapa está, peça hipóteses e entenda a causa antes de aceitar a correção. Pistas específicas deste projeto: recall baixo → imprima os chunks recuperados antes de culpar o modelo (8 em 10 vezes estão grandes ou ilegíveis — falha nº 1 da 7.8); modelo respondendo perguntas não respondíveis → confira o "APENAS os trechos" no system; números que não mudam após a melhoria → você esqueceu de apagar `indice.npy`/`chunks.json`. Travou de verdade (30+ min sem entender nem com IA)? Anote a dúvida no seu DECISIONS.md e leve para a comunidade.
 
 **Critérios de aceite:**
 
-- [ ] Recall de retrieval ≥ 80% no top-3 após a melhoria.
+- [ ] `SPEC.md` escrito antes do código, com metas numéricas (critério universal a).
+- [ ] Evals com números: recall de retrieval ≥ 80% no top-3 após a melhoria (critério universal b).
 - [ ] Taxa de recusa correta ≥ 4/5 nas perguntas não respondíveis.
 - [ ] Toda resposta exibe as citações [n] com o nome do arquivo de origem.
 - [ ] Índice persistido: rodar duas vezes não re-embeda tudo.
 - [ ] Tabela antes/depois da melhoria, sobre o mesmo conjunto de perguntas.
-- [ ] Nenhuma chave de API no código ou no Git (hábito do Módulo 6 valendo aqui).
+- [ ] `DECISIONS.md` com trade-offs e diagnóstico (critério universal c).
+- [ ] Passei na Defesa do módulo no Campus (critério universal d).
+- [ ] Nenhuma chave de API no código ou no Git (hábito do Módulo 2 valendo aqui).
 
-**Dicas:** escolha documentos que você conhece bem — avaliar fidelidade exige saber a resposta certa; as perguntas não respondíveis são o teste mais revelador do sistema; se o recall estiver baixo, imprima os chunks recuperados antes de culpar o modelo — 8 em 10 vezes o problema é o chunking; para o híbrido bônus, a biblioteca `rank_bm25` é suficiente.
+**Dicas:** escolha documentos que você conhece bem — avaliar fidelidade exige saber a resposta certa; as perguntas não respondíveis são o teste mais revelador do sistema; para o híbrido bônus, a biblioteca `rank_bm25` é suficiente.
 
-## ✅ Quiz
+> **Regra de ouro:** você pode usar IA para escrever qualquer código. Você não pode entregar nada que não consiga explicar e defender.
+
+## 🧠 Quiz de fixação
 
 1. Qual problema o RAG resolve que o fine-tuning resolve mal?
    - A) Mudar o tom de escrita do modelo
@@ -415,10 +438,14 @@ Escreva `RELATORIO.md` com a tabela antes/depois (3 métricas × 2 colunas) e, p
 ## ☑️ Checklist de conclusão
 
 - [ ] Sei explicar em 1 minuto por que RAG existe e quando perde para long context ou fine-tuning
-- [ ] Calculei similaridade de cosseno à mão em um exemplo pequeno
+- [ ] Calculei similaridade de cosseno à mão em um exemplo pequeno (núcleo manual)
 - [ ] Rodei o lab completo, incluindo o teste anti-alucinação e os 3 experimentos
+- [ ] Fiz a Sessão de Direção: SPEC.md antes do código e diffs revisados um a um
 - [ ] Sei justificar a escolha entre FAISS, Chroma e pgvector para 3 cenários diferentes
 - [ ] Entendi o papel do retrieval híbrido e do reranker no pipeline de produção
-- [ ] Entreguei o mini-projeto com avaliação antes/depois e diagnóstico de falhas
-- [ ] Li a documentação de um framework (LlamaIndex ou LangChain) reconhecendo cada peça que construí à mão
+- [ ] Entreguei o mini-projeto com evals numéricos antes/depois e diagnóstico de falhas no DECISIONS.md
+- [ ] Passei na Defesa do módulo no Campus
+- [ ] Li a documentação de um framework (LlamaIndex ou LangChain) reconhecendo cada peça do meu pipeline
 - [ ] Acertei pelo menos 6 de 8 no quiz
+
+**🆘 Se travar:** trabalhar com seu assistente de IA É o método deste módulo — cole o erro, cole os chunks recuperados, peça hipóteses (chunk? retrieval? geração?) e entenda a causa antes de aceitar a correção. Travou de verdade (30+ min sem entender nem com IA)? Anote a dúvida no seu DECISIONS.md e leve para a comunidade.

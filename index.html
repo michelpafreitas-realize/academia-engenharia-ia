@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#8C1515">
 <title>Academia de Engenharia de IA</title>
-<meta name="description" content="Programa completo de formação em Engenharia de IA — currículo, quizzes, flashcards com repetição espaçada e projetos.">
+<meta name="description" content="Programa completo de formação em Engenharia de IA — você especifica, dirige e verifica sistemas construídos com IA. Currículo, quizzes, flashcards, defesas e projetos.">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -128,13 +128,13 @@ footer{background:#292826;color:#c9c5bd;font-size:.82rem;text-align:center;paddi
 </head>
 <body>
 
-<div class="util"><div class="topo"><span>Programa aberto de formação profissional</span><span>13 módulos · aproximadamente 160 horas</span></div></div>
+<div class="util"><div class="topo"><span>Programa aberto de formação profissional</span><span>13 módulos + trilha optativa · ~160 horas</span></div></div>
 <header>
   <div class="topo">
     <svg class="crest" viewBox="0 0 60 70"><path d="M30 2 56 12v22c0 16-11 28-26 34C15 62 4 50 4 34V12Z" fill="#fff"/><text x="30" y="34" text-anchor="middle" fill="#8C1515" font-family="Georgia" font-size="18" font-weight="bold">IA</text><text x="30" y="50" text-anchor="middle" fill="#820000" font-family="Georgia" font-size="8">MMXXVI</text></svg>
     <div class="brand">
       <h1>Academia de Engenharia de IA</h1>
-      <small>Aprender · Construir · Entregar</small>
+      <small>Pensar · Dirigir · Verificar · Entregar</small>
     </div>
     <div class="hstats">
       <span>⭐ <b id="hxp">0</b> XP</span>
@@ -161,111 +161,222 @@ footer{background:#292826;color:#c9c5bd;font-size:.82rem;text-align:center;paddi
 <div id="toast"></div>
 <footer>
   <div class="fnav" id="fnav"></div>
-  <b>Academia de Engenharia de IA</b>Aprender · Construir · Entregar<br>conteúdo aberto sob licença MIT · seu progresso permanece neste navegador
+  <b>Academia de Engenharia de IA</b>Pensar · Dirigir · Verificar · Entregar<br>conteúdo aberto sob licença MIT · seu progresso permanece neste navegador
 </footer>
 
 <script>
 /* ================= DADOS ================= */
 const REPO='https://github.com/michelpafreitas-realize/academia-engenharia-ia';
 const MD=s=>`${REPO}/blob/main/modulos/${s}.md`;
-const VID=i=>`${REPO}/releases/download/videos-v1/mod${String(i).padStart(2,'0')}.mp4`;
+const VID=i=>MODS[i].vid?`${REPO}/releases/download/videos-v1/${MODS[i].vid}.mp4`:null; // vid = vídeo gravado que cobre o módulo (nomes antigos); null = em regravação
 
 const PERIODOS=[
-  {nome:'Período 1 — Fundamentos',mods:[0,1,2,3]},
-  {nome:'Período 2 — Deep Learning & LLMs',mods:[4,5]},
-  {nome:'Período 3 — Construindo com IA',mods:[6,7,8,9]},
-  {nome:'Período 4 — Produção & Carreira',mods:[10,11,12]},
+  {nome:'Período 1 — Construir com IA desde o dia 1',mods:[0,1,2,3]},
+  {nome:'Período 2 — Fundamentos que geram critério',mods:[4,5,6]},
+  {nome:'Período 3 — Sistemas com LLMs',mods:[7,8,9]},
+  {nome:'Período 4 — Qualidade, produção e prova',mods:[10,11,12]},
+  {nome:'⭐ Trilha optativa — Por Dentro da Máquina',mods:[13],opt:1},
 ];
 
 /* aulas: [tipo, título, url] · quiz: [pergunta,[opções],idxCorreta,explicação] · cards: [frente,verso] */
 const MODS=[
-{slug:'00-boas-vindas-setup',ic:'🏛️',t:'Boas-vindas & Setup',h:4,
- r:'Como a Academia funciona, o que faz um engenheiro de IA em 2026 e a montagem completa do seu ambiente.',
- aulas:[['📖','Manifesto do programa (README)',REPO+'#readme'],
+{slug:'00-boas-vindas-setup',ic:'🏛️',t:'Boas-vindas, Setup & Primeiro Produto',h:6,vid:'mod00',
+ r:'O método da casa (regra de ouro + especificar→dirigir→verificar), a bancada completa com ferramenta de agentic coding e seu primeiro produto real entregue dirigindo a IA.',
+ aulas:[['📖','Manifesto do programa (README)','https://github.com/michelpafreitas-realize/academia-engenharia-ia#readme'],
   ['🎥','Rise of the AI Engineer — o papel da profissão','https://www.latent.space/p/ai-engineer'],
   ['💻','Instalar Python 3.12+ e uv','https://docs.astral.sh/uv/'],
   ['💻','Primeiro notebook no Google Colab','https://colab.research.google.com'],
   ['💻','Criar contas: GitHub, Hugging Face e Google AI Studio','https://aistudio.google.com'],
-  ['📖','Guia completo do Módulo 0',MD('00-boas-vindas-setup')]],
- proj:'Ambiente montado + repositório "meu-diario-de-ia" criado no GitHub',
+  ['💻','Instalar sua ferramenta de agentic coding (Gemini CLI grátis, Claude Code ou Cursor)','https://github.com/google-gemini/gemini-cli'],
+  ['🎛️','Sessão de Direção: primeiro produto dirigindo a IA','https://github.com/michelpafreitas-realize/academia-engenharia-ia/blob/main/modulos/00-boas-vindas-setup.md'],
+  ['📖','Guia completo do Módulo 0','https://github.com/michelpafreitas-realize/academia-engenharia-ia/blob/main/modulos/00-boas-vindas-setup.md']],
+ proj:'Primeiro produto real (utilitário ou página pessoal) especificado em SPEC.md, construído dirigindo a IA e publicado no GitHub com DECISIONS.md',
  quiz:[
-  ['Qual é a diferença central entre um engenheiro de IA e um cientista de dados clássico?',
-   ['O engenheiro de IA treina modelos matemáticos do zero','O engenheiro de IA constrói produtos sobre modelos prontos (APIs, RAG, agentes)','São o mesmo papel com nomes diferentes','O engenheiro de IA só cuida de infraestrutura'],1,
-   'O termo (de "Rise of the AI Engineer") descreve quem constrói aplicações sobre modelos de fundação — a maior parte do valor hoje está na engenharia em volta do modelo.'],
+  ['Qual é a regra de ouro da Academia sobre uso de IA?',
+   ['IA é proibida nos mini-projetos, para garantir o aprendizado','Pode usar IA para escrever qualquer código, mas nada pode ser entregue sem que você saiba explicar e defender','IA só é liberada a partir do Período 3','IA só pode ser usada para corrigir erros, nunca para criar'],1,
+   'A regra libera a execução e cobra a compreensão: nada de proibir ferramenta, tudo de exigir critério. A Defesa no Campus é o que verifica isso.'],
+  ['Qual é a ordem correta do ciclo de trabalho da casa?',
+   ['Dirigir → especificar → verificar','Especificar → dirigir → verificar','Verificar → dirigir → especificar','Codificar → testar → documentar'],1,
+   'Primeiro pensar e escrever o que se quer (spec), depois conduzir a IA na construção, por fim testar/ler/medir o resultado. É o esqueleto de toda atividade prática do programa.'],
+  ['Para que serve o SPEC.md escrito ANTES do código?',
+   ['Documentar o código depois de pronto','Transformar intenção vaga em requisitos verificáveis — para você e para a IA','Substituir o README do repositório','Registrar as dependências do projeto'],1,
+   'Se você não consegue escrever o que quer, a IA não consegue adivinhar. A spec antes do código é critério universal de todo projeto da Academia — e o histórico do Git prova que ela veio primeiro.'],
+  ['O que vai no DECISIONS.md de cada projeto?',
+   ['A lista de bugs abertos','O log bruto do terminal da sessão','As decisões, os trade-offs e o que você rejeitou da IA (e por quê)','As chaves de API usadas no projeto'],2,
+   'É o diário de decisões: escolhas, rejeições e aprendizados. É a sua munição para a Defesa e um hábito de todo time sênior.'],
+  ['Qual regra de bancada vale ao usar uma ferramenta de agentic coding (Claude Code, Cursor, Gemini CLI)?',
+   ['Aceitar os diffs rapidamente para não perder o ritmo','Nunca aceitar um diff que você não leu','Pedir código sem dar contexto, para não enviesar a IA','Trocar de ferramenta a cada módulo'],1,
+   'A ferramenta propõe; você decide. Aceitar sem ler é supervisão sem critério — aprovação automática. A IA multiplica quem tem critério e afunda quem não tem.'],
+  ['Qual opção de ferramenta agentic permite começar sem gastar nada?',
+   ['Claude Code, que é totalmente gratuito','O Gemini CLI, gratuito com conta Google','Nenhuma — todas exigem assinatura','Só rodando um modelo local em GPU própria'],1,
+   'O Gemini CLI usa a mesma conta Google do AI Studio, com uso gratuito. Claude Code é pago (assinatura ou API) e o Cursor tem plano gratuito limitado.'],
+  ['O que caracteriza o engenheiro de IA de 2026, segundo o programa?',
+   ['Digita código mais rápido que a IA','Treina modelos de fundação do zero','Especifica, dirige e verifica sistemas construídos por e com IA — e responde pela qualidade do resultado','Não precisa mais entender de código'],2,
+   'A execução foi absorvida pelas ferramentas de agentic coding; o valor migrou para a direção com julgamento. Por isso o lema: Pensar · Dirigir · Verificar · Entregar.'],
   ['Qual técnica de estudo tem mais evidência científica de eficácia?',
    ['Reler o material várias vezes','Grifar as partes importantes','Testar-se ativamente (active recall)','Assistir a aula em velocidade 2x'],2,
-   'Recuperar a informação da memória (quiz, flashcards, explicar em voz alta) consolida muito mais que releitura passiva.'],
-  ['Para que serve a repetição espaçada?',
-   ['Estudar muitas horas seguidas','Revisar em intervalos crescentes, perto do momento de esquecer','Decorar sem entender','Substituir os projetos práticos'],1,
-   'Revisar pouco antes de esquecer fortalece a memória de longo prazo — é o que o sistema de flashcards daqui faz por você.'],
-  ['Qual opção permite praticar chamadas de LLM de graça?',
-   ['A API da OpenAI, sempre gratuita','O Google AI Studio (Gemini), com cota gratuita','Só rodando um datacenter próprio','Nenhuma — é tudo pago'],1,
-   'O AI Studio tem free tier generoso para estudo. Anthropic e OpenAI são pagas (baratas para aprender, mas pagas).'],
-  ['Por que a Academia insiste em projetos e não só em vídeos?',
-   ['Vídeos são sempre ruins','Porque conhecimento passivo não vira habilidade — só construir consolida','Projetos dão certificado do Coursera','Para gastar mais tempo'],1,
-   'A sensação de aprender assistindo é ilusória. O que fica é o que você constrói, quebra e conserta.'],
-  ["Você criou sua chave de API no Google AI Studio. Onde ela deve ficar guardada?",["Direto no código, para facilitar os testes","No README do repositório, desde que ele seja privado","Num comentário do notebook, ao lado do código que a usa","Em variável de ambiente ou arquivo .env listado no .gitignore, fora do versionamento"],3,"Chave de API é senha: qualquer chave commitada deve ser considerada vazada (mesmo em repositório privado) e revogada. O .env fora do Git mantém o segredo fora do histórico do projeto."],
-  ["Você rodou uv add numpy com sucesso, mas python check_setup.py falha com ModuleNotFoundError. Qual a causa mais provável?",["O comando chamou o Python do sistema, fora do ambiente do projeto — o certo é uv run python check_setup.py, dentro da pasta","O Python 3.12 removeu o NumPy e é preciso voltar para o 3.11","Scripts .py não conseguem importar NumPy; só notebooks conseguem","O uv instala pacotes de forma temporária, que expira ao fechar o terminal"],0,"O uv instala as dependências no ambiente virtual do projeto; o python \"solto\" usa a instalação global, que não as tem. O uv run garante que o script roda dentro da caixinha certa."],
-  ["Qual a diferença entre git commit e git push?",["São sinônimos: os dois salvam o projeto na nuvem","O commit envia ao GitHub e o push cria a versão local","O commit registra uma fotografia local do projeto; o push envia essas fotografias para o GitHub","O push só funciona depois de criar uma branch nova"],2,"O commit grava a versão na sua máquina, com mensagem descritiva; nada sai dela até o push, que sincroniza com o repositório remoto. Por isso dá para commitar offline várias vezes e enviar tudo depois."],
-  ["O que é o Hugging Face, uma das contas criadas neste módulo?",["Um framework de treino de redes neurais, concorrente do PyTorch","O \"GitHub dos modelos\": um hub aberto com milhares de modelos, datasets e demos","Um serviço pago de aluguel de GPUs na nuvem","O editor de código recomendado para projetos de IA"],1,"Assim como o GitHub hospeda código, o Hugging Face hospeda modelos, datasets e demos abertos — é de lá que você vai baixar modelos e publicar demos nos próximos módulos."],
-  ["Sobre a rotina de estudos, o que o módulo recomenda?",["Maratonas de fim de semana para adiantar vários módulos de uma vez","Estudar sempre que sobrar um tempo livre, sem compromisso fixo","Blocos fixos no calendário toda semana — constância vence intensidade","Assistir todos os vídeos da formação primeiro e deixar os projetos para o final"],2,"8h por semana durante meses supera maratonas seguidas de abandono. Blocos agendados, divididos em pomodoros de 25 minutos, tornam o progresso previsível."]],
- cards:[['AI Engineer','Profissional que constrói produtos sobre modelos de fundação (APIs, RAG, agentes, evals) — sem precisar treinar modelos do zero'],
+   'Recuperar a informação da memória (quiz, flashcards, explicar de cabeça) consolida muito mais que releitura passiva — e a Defesa é active recall aplicado ao seu próprio projeto.'],
+  ['Você criou sua chave de API no Google AI Studio. Onde ela deve ficar guardada?',
+   ['Direto no código, para facilitar os testes','No README do repositório, desde que ele seja privado','Num comentário do notebook, ao lado do código que a usa','Em variável de ambiente ou arquivo .env listado no .gitignore, fora do versionamento'],3,
+   'Chave de API é senha: qualquer chave commitada deve ser considerada vazada (mesmo em repositório privado) e revogada. O .env fora do Git mantém o segredo fora do histórico.'],
+  ['Sobre a rotina de estudos, o que o módulo recomenda?',
+   ['Maratonas de fim de semana para adiantar vários módulos de uma vez','Estudar sempre que sobrar um tempo livre, sem compromisso fixo','Blocos fixos no calendário toda semana — constância vence intensidade','Assistir todos os vídeos da formação primeiro e deixar os projetos para o final'],2,
+   '8h por semana durante meses supera maratonas seguidas de abandono. Blocos agendados, divididos em pomodoros de 25 minutos, tornam o progresso previsível.']],
+ cards:[['Regra de ouro da Academia','Pode usar IA para escrever qualquer código; não pode entregar nada que não consiga explicar e defender'],
+  ['Ciclo de trabalho da casa','Especificar → dirigir → verificar: pensar antes de pedir, conduzir a IA, testar/ler/medir o resultado'],
+  ['Lema da Academia','Pensar · Dirigir · Verificar · Entregar'],
+  ['SPEC.md','Especificação escrita ANTES do código: objetivo, requisitos verificáveis, restrições e critérios de aceite'],
+  ['DECISIONS.md','Diário de decisões e trade-offs: o que você escolheu, o que rejeitou da IA e por quê — munição para a Defesa'],
+  ['Ferramenta de agentic coding','Agente que lê o projeto, edita arquivos e roda comandos sob sua direção — Gemini CLI (grátis), Claude Code, Cursor'],
+  ['Regra nº 1 da bancada agentic','Nunca aceite um diff que você não leu — a ferramenta propõe, você decide'],
   ['Active recall','Aprender testando-se (quiz, explicar de cabeça) em vez de reler passivamente'],
   ['Repetição espaçada','Revisar em intervalos crescentes, na véspera de esquecer — memória de longo prazo'],
-  ['uv','Gerenciador moderno e rápido de pacotes e ambientes Python'],
-  ['Google Colab','Notebooks no navegador com GPU gratuita — o laboratório padrão do curso'],
-  ['Free tier para praticar LLM','Google AI Studio (Gemini) tem cota gratuita de API']]},
+  ['Aviso do Módulo 0','A IA multiplica quem tem critério e afunda quem não tem — o programa existe para construir o critério']]},
 
-{slug:'01-python-para-ia',ic:'🐍',t:'Python para IA',h:12,
- r:'Python idiomático, NumPy, Pandas e Matplotlib — o ferramental diário de quem trabalha com dados e modelos.',
- aulas:[['💻','Curso Python (Kaggle Learn, grátis)','https://www.kaggle.com/learn/python'],
-  ['💻','Curso Pandas (Kaggle Learn)','https://www.kaggle.com/learn/pandas'],
+{slug:'01-direcao-de-ia',ic:'🎛️',t:'Direção de IA: spec, contexto e verificação',h:10,vid:null,
+ r:'O coração da reforma: escrever specs executáveis, dirigir sessões de agentic coding com contexto bem gerido e verificar o que a IA entrega — por leitura, teste ou eval.',
+ aulas:[['📖','Claude Code: best practices for agentic coding (Anthropic)','https://www.anthropic.com/engineering/claude-code-best-practices'],
+  ['📖','Documentação do Claude Code (workflows, CLAUDE.md, contexto)','https://docs.claude.com'],
+  ['📖','Documentação do Cursor (rules, contexto, review)','https://docs.cursor.com'],
+  ['📖','Building effective agents (Anthropic)','https://www.anthropic.com/research/building-effective-agents'],
+  ['📖','Effective context engineering for AI agents (Anthropic)','https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents'],
+  ['💻','Lab guiado: o mesmo sistema duas vezes (prompt vago × spec)','https://github.com/michelpafreitas-realize/academia-engenharia-ia/blob/main/modulos/01-direcao-de-ia.md'],
+  ['🎛️','Sessão de Direção: evoluir o sistema com contexto gerido','https://github.com/michelpafreitas-realize/academia-engenharia-ia/blob/main/modulos/01-direcao-de-ia.md'],
+  ['💻','Mini-projeto: O Code Review Reverso','https://github.com/michelpafreitas-realize/academia-engenharia-ia/blob/main/modulos/01-direcao-de-ia.md']],
+ proj:'O Code Review Reverso: parecer técnico sobre 3 implementações geradas por IA (2 com defeitos plantados) + testes que provam cada defeito.',
+ quiz:[['O que torna uma especificação "executável"?',['Estar escrita em inglês técnico','Critérios de aceite verificáveis, restrições e exemplos — dá para implementar sem adivinhar','Conter o código de referência da solução','Ter sido gerada por um LLM'],1,'A régua é: outra pessoa (ou IA) implementa sem perguntar nada. Critérios verificáveis + restrições + exemplos concretos.'],
+  ['Ao decompor um problema para dirigir uma IA, o tamanho certo de tarefa é:',['O sistema inteiro de uma vez','Uma linha por vez','Uma fatia com "pronto quando" observável e diff pequeno o bastante para revisar','Tudo que couber na janela de contexto'],2,'Uma tarefa, um diff revisável (~15–30 min de trabalho da IA). Diff grande demais = a decomposição errou.'],
+  ['Numa sessão longa, a IA ressuscita uma abordagem já rejeitada e edita trechos que não existem mais. Causa e remédio:',['Modelo ruim; troque de ferramenta','Context rot: contexto acumulou lixo; limpe a sessão e recomece colando a spec','Falta de memória RAM','A abordagem rejeitada era a correta'],1,'Tentativas mortas e versões antigas no contexto confundem o modelo. Recomeçar limpo com o SPEC.md custa pouco e cura.'],
+  ['Por que ir para arquivos (SPEC.md, DECISIONS.md) o que foi decidido na conversa?',['Para gastar menos tokens na hora','Porque decisões na conversa morrem com a sessão; em arquivo sobrevivem e viram contexto da próxima','Porque a IA não lê a própria conversa','Por exigência do Git'],1,'Externalizar o que precisa durar: os arquivos são a memória entre sessões — e o contexto perfeito para a próxima.'],
+  ['Os testes passam e a explicação da IA é convincente. Por que isso não basta para aceitar o diff?',['Testes são inúteis','A IA explica código errado com a mesma fluência que código certo, e o teste pode cobrir só o caminho feliz','Diffs devem ser rejeitados por padrão','Explicações devem vir de humanos'],1,'Fluência não é evidência. Revise contra a spec, comece pelas bordas e leia o teste com o mesmo rigor que o código.'],
+  ['Ao revisar um diff gerado por IA, por onde começar?',['Pelo caminho feliz, que é o mais usado','Pelos comentários','Pelas bordas: entrada vazia, None, inválidos, limites — onde os defeitos moram','Pela formatação'],2,'O caminho feliz a IA quase sempre acerta; os defeitos moram nas bordas. Releia o critério de aceite antes do diff.'],
+  ['O código gerado chama uma função com nome plausível que não existe no SDK. Que modo de falha é esse e qual a defesa?',['Concordância servil; pedir desculpas','Alucinação de API; conferir na doc oficial ou rodar o código','Complexidade desnecessária; deletar','Caso de borda; escrever teste'],1,'Alucinação de API é o modo de falha mais comum: nome plausível, comportamento inventado. Verificação externa ao modelo.'],
+  ['Você afirma com confiança algo errado e a IA implementa com entusiasmo ("Ótima ideia!"). Isso é:',['Concordância servil — nunca use a concordância da IA como validação; teste contra números','Alucinação de API','Overfitting','Um recurso, não um problema'],0,'O modelo é treinado para agradar. Peça ativamente "quais os problemas desta abordagem?" e valide fora do modelo.'],
+  ['Validação de entrada e uso de segredos num diff se verificam primariamente por:',['Eval estatístico','Leitura (revisão humana) — a vulnerabilidade não aparece no teste que você não pensou em escrever','Rodar uma vez e ver se funciona','Perguntar à IA se o código é seguro'],1,'Segurança é estrutural e única: quem acha é quem lê perguntando "e se a entrada for maliciosa?".'],
+  ['Quando um eval (e não um teste) é a ferramenta de verificação certa?',['Para funções puras com resposta única','Para escolher nomes de variáveis','Para comportamento probabilístico sem resposta única, medido sobre um conjunto de casos','Nunca; testes bastam'],2,'Resposta única → teste; julgamento único → leitura; distribuição de comportamento (saída de LLM) → eval. Vira disciplina no Módulo 10.']],
+ cards:[['Especificação executável','Objetivo + critérios de aceite verificáveis + restrições + exemplos; implementável sem adivinhar'],
+  ['Régua de qualidade de uma spec','"Outra pessoa (ou IA) implementa sem me perguntar nada?"'],
+  ['Tarefa verificável','Fatia de 15–30 min de trabalho da IA com "pronto quando" observável e diff revisável'],
+  ['Context rot','Contexto envelhecido confunde o modelo; remédio: sessão limpa + colar a spec de novo'],
+  ['CLAUDE.md / rules','Contexto persistente do projeto: stack, convenções, comandos de teste — o manual de bordo da IA'],
+  ['Protocolo de revisão de diff','Reler o critério → bordas primeiro → conferir APIs → desconfiar do não pedido → explicação contra o código'],
+  ['4 modos de falha da IA','Alucinação de API · passa no teste errado · complexidade desnecessária · concordância servil'],
+  ['Passa no teste errado','A implementação satisfaz o teste, não a intenção; leia o teste com o rigor do código'],
+  ['Concordância servil','A IA endossa seu erro com entusiasmo; nunca usar a concordância dela como validação'],
+  ['Leitura × teste × eval','Julgamento único → leitura; resposta certa conhecida → teste; comportamento probabilístico → eval']]},
+
+{slug:'02-prompt-engineering-apis',ic:'💬',t:'Prompt Engineering & APIs',h:10,vid:'mod06',
+ r:'Do prompt profissional ao código: SDKs, structured output, streaming, custo por token e caching — o prompt é a spec.',
+ aulas:[['💻','Prompt Engineering Interactive Tutorial (Anthropic, open source)','https://github.com/anthropics/courses'],
+  ['📖','Documentação da Claude API','https://docs.claude.com'],
+  ['📖','OpenAI Cookbook — receitas práticas','https://cookbook.openai.com'],
+  ['📖','Prompting Guide (DAIR.AI)','https://www.promptingguide.ai'],
+  ['🎥','Short courses gratuitos da DeepLearning.AI','https://www.deeplearning.ai/short-courses/'],
+  ['💻','Praticar de graça no Google AI Studio','https://aistudio.google.com'],
+  ['🎛️','Sessão de Direção + guia completo do Módulo 2','https://github.com/michelpafreitas-realize/academia-engenharia-ia/blob/main/modulos/02-prompt-engineering-apis.md']],
+ proj:'Extrator estruturado via API com SPEC.md antes do código, avaliação v1 × v2 por números e custo medido',
+ quiz:[
+  ['Para que serve o system prompt?',
+   ['Acelerar a resposta','Definir papel e regras persistentes, separado da entrada do usuário','Armazenar o histórico','Reduzir o custo'],1,
+   'Separar instruções (system) de dados do usuário (user) organiza o prompt e é a primeira linha de defesa contra injection.'],
+  ['O que é few-shot prompting?',
+   ['Usar poucos tokens','Incluir exemplos resolvidos no prompt para guiar formato e estilo','Fazer várias chamadas seguidas','Usar um modelo pequeno'],1,
+   'Dois ou três bons exemplos costumam melhorar mais que parágrafos de instrução abstrata.'],
+  ['O que o structured output (JSON com schema) garante?',
+   ['Respostas mais criativas','Saída num formato validável que seu código consegue consumir com segurança','Custo zero','Que o conteúdo está sempre correto'],1,
+   'Garante a FORMA (JSON válido no schema) — o conteúdo ainda precisa de validação e evals (Módulo 10).'],
+  ['Sobre o custo das APIs de LLM:',
+   ['Só o input é cobrado','Input e output são cobrados separadamente, e output costuma ser mais caro','É um valor fixo por chamada','Tokens de saída são gratuitos'],1,
+   'Por isso resposta enxuta economiza, e prompt caching desconta prefixos repetidos de input.'],
+  ['Onde guardar a chave de API?',
+   ['Direto no código, por praticidade','Em variável de ambiente ou secret manager, nunca no código','Num comentário do repositório','No prompt do sistema'],1,
+   'Chave commitada = chave vazada (bots varrem o GitHub em minutos). Use .env fora do versionamento.'],
+  ['No lab, a avaliação do cliente vai para o modelo dentro de &lt;avaliacao&gt;...&lt;/avaliacao&gt;. Qual é o ganho real dessas tags?',
+   ['Elas comprimem o texto, reduzindo os tokens cobrados','Elas ativam um modo especial de parsing na API','Elas separam dado de instrução: o modelo para de confundir o conteúdo com comandos (inclusive tentativas de injection), e fica fácil extrair a resposta','Elas são obrigatórias para o structured output funcionar'],2,
+   'Delimitadores dizem ao modelo onde o dado começa e termina, evitando que texto do usuário seja lido como instrução. Tags XML são particularmente bem interpretadas pelos modelos Claude.'],
+  ['Seu system prompt de 3 mil tokens é idêntico entre chamadas, mas você colocou a data e hora atuais na primeira linha dele. O que acontece com o prompt caching?',
+   ['O cache nunca acerta: caching exige prefixo idêntico byte a byte, e o timestamp muda o início a cada chamada — conteúdo variável deve ir para o final','Nada muda: o cache ignora números e datas automaticamente','O cache continua valendo para o restante do prompt depois do timestamp','O caching só falha se o timestamp mudar o número total de tokens'],0,
+   'O cache casa por prefixo exato: qualquer byte diferente no começo invalida tudo dali em diante. Daí a regra do módulo: conteúdo estável primeiro (system, exemplos, documentos), conteúdo variável no fim.'],
+  ['Em qual destes cenários fazer retry da chamada de API é um ERRO?',
+   ['Depois de um HTTP 429 (rate limit)','Depois de um erro de conexão de rede intermitente','Depois de um HTTP 529 (servidor sobrecarregado)','Depois de um erro 4xx de validação (request malformado)'],3,
+   'Um request inválido continua inválido na segunda tentativa — repetir só queima cota. Erros transitórios (429, 5xx/529, rede) merecem retry com backoff exponencial, que os SDKs oficiais já fazem sozinhos.'],
+  ['Quando usar streaming numa aplicação com LLM?',
+   ['Sempre que a resposta for JSON, para validar token a token','Quando há um humano esperando na tela: ele vê o texto surgir em vez de encarar um spinner — e respostas longas escapam de timeouts HTTP','Apenas em pipelines batch, para processar vários documentos em paralelo','Somente com modelos pequenos, os únicos que suportam stream'],1,
+   'A regra prática do módulo: humano na ponta → sempre streaming; pipeline batch → pode ser síncrono. Além da percepção de velocidade, transmitir aos poucos evita estourar timeouts em respostas longas.'],
+  ['No mini-projeto deste módulo, o que é o núcleo manual — a parte que você NÃO delega à IA?',
+   ['Digitar todo o código Python, célula por célula','Escrever à mão os prompts (SYSTEM_V1/V2) e o gabarito: o prompt É a especificação de comportamento','Instalar as dependências sem consultar a documentação','Formatar o relatório final em markdown'],1,
+   'A regra da casa: a IA pode escrever o código de suporte (dirigido por sua spec), mas a especificação de comportamento — os prompts e o gabarito — é o trabalho que forma o critério e não se delega.']],
+ cards:[['System prompt','Instruções de papel e regras, separadas da conversa do usuário'],
+  ['Few-shot','Exemplos resolvidos dentro do prompt guiam formato e estilo'],
+  ['Chain-of-thought','Pedir raciocínio passo a passo antes da resposta final'],
+  ['Structured output','Saída JSON validada por schema — a ponte entre LLM e código'],
+  ['Prompt caching','Prefixo repetido do prompt (system + docs) é reaproveitado: menos custo e latência'],
+  ['Prefill','Começar a resposta do assistente para forçar o formato (nota histórica: removido nos Claude 4.6+, use structured output)'],
+  ['Núcleo manual do módulo','Escrever os prompts à mão — o prompt é a especificação; o código de suporte pode ser dirigido com IA']]},
+
+{slug:'03-python-dados',ic:'🐍',t:'Python & Dados para quem dirige IA',h:6,vid:'mod01',
+ r:'Ler e revisar o Python que a IA escreve: vetorização como conceito, Pandas split-apply-combine e EDA dirigida com verificação.',
+ aulas:[['📖','Tutorial oficial de Python em português (cap. 3–5)','https://docs.python.org/pt-br/3/tutorial/'],
   ['📖','NumPy — trilha oficial de aprendizado','https://numpy.org/learn/'],
-  ['📖','Tutorial oficial de Python em português','https://docs.python.org/pt-br/3/tutorial/'],
-  ['💻','Lab: análise exploratória do Titanic','https://www.kaggle.com/c/titanic'],
-  ['📖','Guia completo do Módulo 1',MD('01-python-para-ia')]],
- proj:'Análise exploratória completa do Titanic publicada no seu GitHub',
+  ['📖','10 minutes to pandas','https://pandas.pydata.org'],
+  ['📖','Projetos e dependências com uv','https://docs.astral.sh/uv'],
+  ['💻','Lab: sentir a vetorização na mão (loop vs NumPy)','https://github.com/michelpafreitas-realize/academia-engenharia-ia/blob/main/modulos/03-python-dados.md'],
+  ['🎛️','Sessão de Direção: EDA do Titanic dirigida por você','https://github.com/michelpafreitas-realize/academia-engenharia-ia/blob/main/modulos/03-python-dados.md'],
+  ['📖','Guia completo do Módulo 3',MD('03-python-dados')]],
+ proj:'EDA dirigida com IA de um dataset à sua escolha, com SPEC.md, verificação escrita de cada achado e DECISIONS.md',
  quiz:[
   ['Por que operações vetorizadas do NumPy são muito mais rápidas que loops Python?',
    ['Porque usam a GPU automaticamente','Porque executam em C sobre o array inteiro, sem o custo do interpretador por item','Porque usam menos memória RAM','Não são mais rápidas, só mais bonitas'],1,
-   'Um loop Python paga o custo do interpretador a cada elemento; a vetorização faz o trabalho em código C compilado.'],
+   'Um loop Python paga o custo do interpretador a cada elemento; a vetorização faz o trabalho em código C compilado sobre memória contígua.'],
   ['No broadcasting do NumPy, somar um array (3,1) com um (1,4) resulta em:',
    ['Erro de dimensão','Um array (3,4)','Um array (3,1)','Um escalar'],1,
-   'Dimensões de tamanho 1 são "esticadas" para casar: (3,1)+(1,4) → (3,4). É a base de muito código de ML.'],
+   'Dimensões de tamanho 1 são esticadas para casar: (3,1)+(1,4) → (3,4). É a base de muito código de ML — e de muitos bugs de shape que você vai revisar.'],
   ['Para que serve o groupby do Pandas?',
    ['Ordenar o DataFrame','Dividir por categoria, aplicar uma agregação e combinar o resultado','Remover valores nulos','Converter tipos de coluna'],1,
-   'O padrão split-apply-combine: ex. df.groupby("cidade")["venda"].mean() — média de vendas por cidade.'],
+   'O padrão split-apply-combine: ex. df.groupby("uf")["valor"].mean() — média de valor por UF. Se você verbaliza o groupby em uma frase, você lê Pandas.'],
+  ['Num notebook gerado por IA você encontra um loop com df.iterrows() criando uma coluna nova. Qual a leitura correta?',
+   ['Está ótimo, loops são mais legíveis','É red flag: 100x mais lento e não-idiomático — peça a versão vetorizada e a explicação da diferença','É erro de sintaxe do Pandas','Só é problema se o DataFrame tiver nulos'],1,
+   'iterrows() é o red flag clássico de código traduzido de outra linguagem. Você não precisa digitar a versão vetorizada — precisa saber exigi-la e entendê-la.'],
+  ['A IA preencheu nulos com fillna(0) sem nenhum comentário. Qual a atitude de quem dirige?',
+   ['Aceitar: zero é um valor neutro','Trocar sempre pela média','Tratar como achado de revisão: exigir justificativa, porque tratamento de nulo muda as estatísticas','Apagar a coluna inteira'],2,
+   'Preencher ou descartar nulos é decisão de modelagem, nunca detalhe. Escolha silenciosa sem justificativa é exatamente o que sua revisão existe para pegar.'],
+  ['O notebook gerado conclui: "o grupo X comprou 40% mais". Antes de aceitar, você deve:',
+   ['Conferir se a frase está bem redigida','Localizar a célula cujo output numérico sustenta exatamente essa afirmação','Perguntar à IA se ela tem certeza','Rodar o notebook duas vezes'],1,
+   'A IA propõe, o dado dispõe: nenhuma conclusão entra no relatório sem o número que a prova, numa célula que você entendeu e explicou.'],
+  ['Por que rodar Restart & Run All é ainda mais importante num notebook gerado por IA?',
+   ['Porque a IA gera células mais lentas','Porque você não viu o notebook nascer célula a célula — só a execução de ponta a ponta prova que não há estado fantasma','Porque o Git exige kernel reiniciado','Para liberar a memória dos gráficos'],1,
+   'Células fora de ordem criam variáveis que o código visível não explica. Quem só leu o resultado final precisa da execução limpa como prova de reprodutibilidade.'],
+  ['Ao revisar um filtro como df = df[df["ano"] > 2020], o que exigir do notebook?',
+   ['Nada, filtros são sempre seguros','Que o shape seja impresso antes e depois — a conclusão pode estar vindo de uma fração dos dados','Que o filtro use loc obrigatoriamente','Que o filtro venha antes de qualquer gráfico'],1,
+   'Um filtro que descarta linhas silenciosamente é red flag: se sobrou 10% do dataset, toda estatística seguinte muda de significado. Shape antes/depois torna o corte visível.'],
   ['Quando preferir um script .py a um notebook?',
    ['Nunca, notebook serve para tudo','Em código de produção/reutilizável; notebook é para exploração','Sempre, notebooks são obsoletos','Só quando não há gráficos'],1,
-   'Notebook = explorar e comunicar; script/módulo = código testável, versionável e executável em produção.'],
-  ['Para que serve um ambiente virtual (venv/uv)?',
-   ['Acelerar o Python','Isolar as dependências de cada projeto','Proteger contra vírus','Rodar código na nuvem'],1,
-   'Cada projeto tem suas versões de bibliotecas sem conflitar com os outros — higiene básica de engenharia.'],
-  ["O que caracteriza uma função pura — e por que ela é fácil de testar?",["Ter no máximo cinco linhas de código","Mesmo input produz sempre o mesmo output, sem alterar nada fora dela — um assert simples basta para testá-la","Não ter parâmetros de entrada","Nunca levantar exceções em produção"],1,"Sendo determinística e sem efeitos colaterais, basta comparar entrada e saída: assert taxa_conversao(100, 5) == 0.05. É o teste mínimo que toda função não-trivial merece."],
-  ["Ao consumir uma API com requests, por que definir timeout e chamar raise_for_status()?",["Sem timeout o programa pode travar para sempre; sem checar o status, erros 4xx/5xx viram falhas silenciosas","Os dois deixam a requisição mais rápida","Sem eles o JSON da resposta não é decodificado","Eles fazem a autenticação automática da chamada"],0,"Rede trava e servidores falham: o timeout limita a espera e o raise_for_status() transforma erro HTTP em exceção visível — falha silenciosa é bug escondido."],
-  ["No lab do Titanic, os nulos de idade são preenchidos com a mediana, e não com a média. Por quê?",["A mediana é mais rápida de calcular em datasets grandes","A média não aceita valores decimais","A mediana resiste a outliers — uma única idade absurda arrastaria a média","A mediana mantém registrado quais valores eram nulos"],2,"Valores extremos (ex.: 999) distorcem a média, mas quase não mexem na mediana. E lembre: preencher ou descartar nulos é decisão de modelagem — documente sempre o porquê."],
-  ["Um colega clonou seu projeto feito com uv. O que garante que ele reproduza exatamente o mesmo ambiente?",["Commitar a pasta .venv junto com o código","Ele instalar com pip, de memória, as bibliotecas que o notebook importa","O par pyproject.toml + uv.lock versionado: um único uv sync recria o ambiente idêntico","Usar exatamente o mesmo sistema operacional que o seu"],2,"As dependências e suas versões exatas ficam registradas nesses dois arquivos; a .venv em si nunca vai para o Git. É o fim do \"funciona na minha máquina\": o ambiente é parte do código."],
-  ["Antes de dar um notebook por concluído, por que rodar Restart &amp; Run All?",["Para liberar a memória ocupada pelos gráficos","Porque o Git só aceita notebooks com kernel reiniciado","Para atualizar as bibliotecas do ambiente","Para provar que o código executa de cima a baixo, sem depender de células rodadas fora de ordem"],3,"Células executadas fora de ordem criam estados fantasma: variáveis com valores que o código visível não explica. Reiniciar e rodar tudo é o antídoto — se passar, o notebook é reproduzível."]],
- cards:[['Vetorização','Operar arrays inteiros de uma vez (em C), sem loop Python — 10–100× mais rápido'],
-  ['Broadcasting','Regra do NumPy que expande dimensões de tamanho 1 para operar shapes compatíveis'],
-  ['DataFrame','Tabela do Pandas: colunas nomeadas + índice, com filtros, joins e agregações'],
-  ['groupby','Split-apply-combine: agrupar por categoria e agregar (média, soma, contagem)'],
-  ['Ambiente virtual','Dependências isoladas por projeto (uv venv / uv add)'],
-  ['Consumir API HTTP','requests.get(url).json() — a ponte entre seu código e serviços externos']]},
+   'Notebook explora e comunica; script entrega, versiona e roda no servidor. No fluxo dirigido, quem decide o momento da transição é você — a IA faz a extração.'],
+  ['Um colega clonou seu projeto feito com uv. O que garante que ele reproduza exatamente o mesmo ambiente?',
+   ['Commitar a pasta .venv junto com o código','Ele instalar com pip, de memória, as bibliotecas que o notebook importa','O par pyproject.toml + uv.lock versionado: um único uv sync recria o ambiente idêntico','Usar exatamente o mesmo sistema operacional'],2,
+   'As versões exatas ficam nesses dois arquivos; a .venv nunca vai para o Git. Item fixo da revisão: import que não está no pyproject.toml quebra a reprodutibilidade.']],
+ cards:[['Vetorização','Operar o array inteiro de uma vez (em C), sem loop Python — 10–100× mais rápido; o conceito por trás de NumPy, Pandas e tensores'],
+  ['Broadcasting','Comparando shapes da direita para a esquerda, cada dimensão deve ser igual, 1 ou inexistente — (3,2)*(2,) casa, (3,2)*(3,) não'],
+  ['groupby','Split-apply-combine: dividir por categoria, agregar por grupo, combinar — verbalize em uma frase para provar que leu'],
+  ['Red flag nº 1 em Pandas gerado por IA','Loop com iterrows() onde vetorização resolve — peça a versão vetorizada e a explicação'],
+  ['Tratamento de nulos','Decisão de modelagem, nunca detalhe: toda escolha silenciosa da IA (fillna/dropna) exige justificativa escrita'],
+  ['"A IA propõe, o dado dispõe"','Nenhuma conclusão entra no relatório sem a célula e o número que a provam'],
+  ['Antídoto para estado fantasma','Restart & Run All antes de concluir — em dobro para notebook que você não viu nascer'],
+  ['Ambiente reprodutível','pyproject.toml + uv.lock versionados; uv sync recria tudo em qualquer máquina']]},
 
-{slug:'02-matematica-essencial',ic:'📐',t:'Matemática Essencial',h:10,
- r:'Só a matemática que engenheiro de IA usa — álgebra linear, gradientes e probabilidade, com intuição visual.',
+{slug:'04-matematica-essencial',ic:'📐',t:'Matemática Essencial (visual)',h:8,vid:'mod02',
+ r:'Só a matemática que gera critério — produto escalar, gradiente e softmax calculados à mão, com a IA como tutor socrático.',
  aulas:[['🎥','Essence of Linear Algebra (3Blue1Brown)','https://www.3blue1brown.com/topics/linear-algebra'],
   ['🎥','Essence of Calculus (3Blue1Brown)','https://www.3blue1brown.com/topics/calculus'],
-  ['🎥','StatQuest — estatística sem dor','https://www.youtube.com/@statquest'],
-  ['📖','Khan Academy em português (reforço)','https://pt.khanacademy.org'],
+  ['🎥','StatQuest — gradient descent sem dor','https://www.youtube.com/@statquest'],
   ['📖','Mathematics for Machine Learning (livro grátis)','https://mml-book.github.io'],
-  ['📖','Guia completo do Módulo 2',MD('02-matematica-essencial')]],
- proj:'Descida do gradiente em NumPy puro com gráfico de convergência',
+  ['🎛️','Sessão de Direção: variações verificadas à mão','https://github.com/michelpafreitas-realize/academia-engenharia-ia/blob/main/modulos/04-matematica-essencial.md'],
+  ['📖','Guia completo do Módulo 4','https://github.com/michelpafreitas-realize/academia-engenharia-ia/blob/main/modulos/04-matematica-essencial.md']],
+ proj:'Notebook "Matemática da IA com meus próprios números": cada conta à mão conferida em NumPy, com SPEC.md e DECISIONS.md',
  quiz:[
   ['Um produto escalar alto entre dois vetores indica que eles:',
    ['São perpendiculares','Apontam em direções parecidas (são "semelhantes")','Têm o mesmo tamanho','Somam zero'],1,
-   'Produto escalar mede alinhamento — é exatamente assim que a busca por embeddings encontra textos parecidos.'],
+   'Produto escalar mede alinhamento — é exatamente assim que a busca por embeddings (o RAG do Módulo 7) encontra textos parecidos.'],
   ['Se f\'(x) = 3 num ponto, aumentar x em 0,01 muda f(x) em aproximadamente:',
    ['3','0,01','0,03','Nada'],2,
    'Derivada é sensibilidade: Δf ≈ f\'(x)·Δx = 3 × 0,01 = 0,03. É essa leitura que o treino de redes usa o tempo todo.'],
@@ -277,182 +388,140 @@ const MODS=[
    'Passos longos demais "pulam" o vale do mínimo — a loss oscila ou explode. É dos bugs mais comuns de treino.'],
   ['O que a função softmax faz?',
    ['Zera valores negativos','Converte uma lista de scores em probabilidades que somam 1','Normaliza vetores para tamanho 1','Calcula a média dos scores'],1,
-   'É a última etapa de um classificador — e de um LLM prevendo o próximo token: scores viram distribuição de probabilidade.'],
-  ["Multiplicando matrizes de shapes (5, 3) e (3, 2), o resultado é:",["Uma matriz (5, 2) — o 3 do meio precisa bater e desaparece","Uma matriz (3, 3)","Uma matriz (5, 3)","Erro: os shapes são incompatíveis"],0,"A regra é (m, n) @ (n, p) → (m, p): cada elemento é o produto escalar de uma linha da primeira com uma coluna da segunda. Uma rede neural é uma pilha dessas multiplicações."],
-  ["No lab, mesmo com learning rate FIXO, os passos da descida do gradiente encurtam ao se aproximar do mínimo. Por quê?",["O NumPy reduz o passo automaticamente para ganhar precisão","O passo é lr × gradiente, e o gradiente tende a zero perto do mínimo","O learning rate decai a cada iteração por padrão","A função de perda muda de formato durante o treino"],1,"Perto do vale a inclinação diminui, então lr·gradiente encolhe naturalmente — o algoritmo \"freia\" sozinho ao chegar perto da resposta, sem ninguém mexer no lr."],
-  ["Doença atinge 1% da população; o teste detecta 90% dos doentes e dá falso positivo em 5% dos saudáveis. Por que um positivo significa só ~15% de chance real de doença?",["Porque o teste é tecnicamente defeituoso","Porque a sensibilidade de 90% é considerada baixa","Porque a doença é rara: os falsos positivos dos muitos saudáveis (≈49,5 em mil) superam os verdadeiros positivos (9 em mil)","Porque Bayes só vale para amostras grandes"],2,"A intuição falha por ignorar a taxa base: em 1.000 pessoas só 10 são doentes, então mesmo um teste bom gera mais alarmes falsos que acertos. A mesma armadilha reaparece em classificadores de eventos raros."],
-  ["O que a temperatura de um LLM faz, matematicamente?",["Controla a velocidade com que os tokens são gerados","Remove do vocabulário as palavras menos prováveis","Multiplica as probabilidades finais por um fator fixo","Divide os logits antes da softmax: alta achata a distribuição (mais variedade), baixa a afunila (mais determinismo)"],3,"Como a softmax exponencia os scores, dividi-los muda o contraste da distribuição: temperatura alta aproxima as probabilidades dos tokens (mais criatividade), baixa concentra quase tudo no mais provável."],
-  ["Um bilhete custa R$ 5 e paga R$ 100 com probabilidade de 3%. Qual o valor esperado do ganho por bilhete?",["+R$ 3","−R$ 2","+R$ 95","R$ 0"],1,"Esperança é a média ponderada pelas probabilidades: 0,03·100 − 5 = −R$ 2 — no longo prazo, prejuízo. É a mesma ideia por trás da loss em ML: minimizamos a esperança do erro sobre os dados."]],
+   'É a última etapa de um classificador — e de um LLM prevendo o próximo token (Módulo 6): scores viram distribuição de probabilidade.'],
+  ['Multiplicando matrizes de shapes (5, 3) e (3, 2), o resultado é:',
+   ['Uma matriz (5, 2) — o 3 do meio precisa bater e desaparece','Uma matriz (3, 3)','Uma matriz (5, 3)','Erro: os shapes são incompatíveis'],0,
+   'A regra é (m, n) @ (n, p) → (m, p): cada elemento é o produto escalar de uma linha da primeira com uma coluna da segunda. Uma rede neural é uma pilha dessas multiplicações.'],
+  ['No lab, mesmo com learning rate FIXO, os passos da descida do gradiente encurtam ao se aproximar do mínimo. Por quê?',
+   ['O NumPy reduz o passo automaticamente para ganhar precisão','O passo é lr × gradiente, e o gradiente tende a zero perto do mínimo','O learning rate decai a cada iteração por padrão','A função de perda muda de formato durante o treino'],1,
+   'Perto do vale a inclinação diminui, então lr·gradiente encolhe naturalmente — o algoritmo "freia" sozinho ao chegar perto da resposta, sem ninguém mexer no lr.'],
+  ['Doença atinge 1% da população; o teste detecta 90% dos doentes e dá falso positivo em 5% dos saudáveis. Por que um positivo significa só ~15% de chance real de doença?',
+   ['Porque o teste é tecnicamente defeituoso','Porque a sensibilidade de 90% é considerada baixa','Porque a doença é rara: os falsos positivos dos muitos saudáveis (≈49,5 em mil) superam os verdadeiros positivos (9 em mil)','Porque Bayes só vale para amostras grandes'],2,
+   'A intuição falha por ignorar a taxa base: em 1.000 pessoas só 10 são doentes, então mesmo um teste bom gera mais alarmes falsos que acertos. A armadilha reaparece no Módulo 5, em classificadores de eventos raros.'],
+  ['O que a temperatura de um LLM faz, matematicamente?',
+   ['Controla a velocidade com que os tokens são gerados','Remove do vocabulário as palavras menos prováveis','Multiplica as probabilidades finais por um fator fixo','Divide os logits antes da softmax: alta achata a distribuição (mais variedade), baixa a afunila (mais determinismo)'],3,
+   'Como a softmax exponencia os scores, dividi-los muda o contraste da distribuição: temperatura alta aproxima as probabilidades dos tokens (mais criatividade), baixa concentra quase tudo no mais provável.'],
+  ['A IA te entrega um passo de gradiente: w = 2, grad = −2, lr = 0.1 → "w novo = 1.8". Verificando à mão, você conclui que:',
+   ['Está certo','Está errado: w − lr·grad = 2 − 0.1·(−2) = 2.2 — subtrair gradiente negativo SOMA','Depende da função de perda','Faltou normalizar o gradiente antes'],1,
+   'Erro de sinal é o deslize clássico — e é exatamente o tipo de coisa que quem fez o núcleo manual flagra numa leitura, em vez de aprovar sem perceber.']],
  cards:[['Produto escalar','Soma dos produtos elemento a elemento; mede alinhamento/semelhança entre vetores'],
   ['Gradiente','Vetor de derivadas parciais; aponta a direção de maior crescimento da função'],
   ['Descida do gradiente','Atualizar parâmetros no sentido oposto ao gradiente: θ = θ − lr·∇L'],
   ['Matriz × vetor','Uma transformação linear do espaço (rotação/escala) — o bloco básico das redes'],
-  ['Softmax','Converte logits em distribuição de probabilidade (soma 1)'],
-  ['Teorema de Bayes','Atualiza a probabilidade de uma hipótese diante de nova evidência']]},
+  ['Softmax','Converte logits em distribuição de probabilidade (soma 1); temperatura divide os logits antes'],
+  ['Teorema de Bayes','Atualiza a probabilidade de uma hipótese diante de nova evidência — sem esquecer a taxa base'],
+  ['Núcleo manual do Módulo 4','Produto escalar, 5 passos de gradiente e softmax calculados no papel — o resto é dirigido com IA']]},
 
-{slug:'03-machine-learning-classico',ic:'🌳',t:'Machine Learning Clássico',h:16,
- r:'Regressão, árvores, boosting, métricas e validação — o vocabulário e o rigor que separam profissional de curioso.',
- aulas:[['🎥','Machine Learning Specialization — Andrew Ng (auditável grátis)','https://www.coursera.org/specializations/machine-learning-introduction'],
-  ['💻','Intro to Machine Learning (Kaggle Learn)','https://www.kaggle.com/learn/intro-to-machine-learning'],
-  ['💻','Intermediate Machine Learning (Kaggle Learn)','https://www.kaggle.com/learn/intermediate-machine-learning'],
-  ['📖','Google ML Crash Course','https://developers.google.com/machine-learning/crash-course'],
-  ['📖','scikit-learn — Getting Started','https://scikit-learn.org/stable/getting_started.html'],
-  ['📖','ML for Beginners (Microsoft, open source)','https://github.com/microsoft/ML-For-Beginners'],
-  ['📖','Guia completo do Módulo 3',MD('03-machine-learning-classico')]],
- proj:'Submissão no Kaggle (Titanic ou House Prices) com pipeline scikit-learn completo',
+{slug:'05-disciplinas-de-ml',ic:'🕵️',t:'Disciplinas de ML: validação, métricas e leakage',h:8,vid:'mod03',
+ r:'A IA constrói os pipelines; você desenha a validação, escolhe a métrica que reflete o negócio e caça o leakage plantado.',
+ aulas:[['🎥','Matriz de confusão, precisão/recall e ROC-AUC (StatQuest)','https://www.youtube.com/@statquest'],
+  ['📖','Google ML Crash Course — classificação','https://developers.google.com/machine-learning/crash-course'],
+  ['📖','Data Leakage (Kaggle Learn, Intermediate ML)','https://www.kaggle.com/learn/intermediate-machine-learning'],
+  ['📖','scikit-learn — cross-validation e Pipeline','https://scikit-learn.org/stable/modules/cross_validation.html'],
+  ['💻','Lab guiado: a caça ao leakage plantado','https://github.com/michelpafreitas-realize/academia-engenharia-ia/blob/main/modulos/05-disciplinas-de-ml.md'],
+  ['🎛️','Sessão de Direção: especificar validação e auditar o pipeline','https://github.com/michelpafreitas-realize/academia-engenharia-ia/blob/main/modulos/05-disciplinas-de-ml.md']],
+ proj:'Auditoria de um dataset com armadilhas plantadas: pipeline corrigido + relatório provando cada leakage com números',
  quiz:[
-  ['O que é overfitting?',
-   ['O modelo erra tanto no treino quanto no teste','O modelo decora o treino e falha em dados novos','O modelo é lento demais','O modelo tem poucos parâmetros'],1,
-   'Alta performance no treino + queda no teste = decorou em vez de generalizar. Detecta-se com conjunto de validação.'],
   ['O que é data leakage?',
    ['Perder dados do disco','Informação do teste/futuro vazar para o treino, inflando as métricas','Dados duplicados no treino','Usar poucos dados'],1,
-   'Ex.: normalizar usando estatísticas do dataset inteiro antes de separar treino/teste. As métricas mentem — é o erro nº 1 de iniciante.'],
+   'Ex.: normalizar usando estatísticas do dataset inteiro antes de separar treino/teste, ou usar uma feature que só existe depois do evento. As métricas mentem — é o erro nº 1 da área.'],
+  ['Sua validação local dá AUC 0,99 num problema notoriamente difícil. A primeira hipótese profissional é:',
+   ['O modelo é excepcional','O dataset é fácil','Data leakage — informação do futuro ou do alvo contaminou o treino','A métrica foi mal calculada'],2,
+   'Resultado bom demais é o sintoma clássico de leakage. Desconfie do vazamento antes de desconfiar do próprio gênio — e prove removendo o suspeito e medindo de novo.'],
   ['Num dataset com 99% de exemplos negativos, um modelo que sempre diz "negativo" tem 99% de acurácia. Qual a lição?',
    ['O modelo é ótimo','Acurácia engana em classes desbalanceadas — use precisão, recall e F1','Falta aumentar o dataset','Acurácia é sempre a melhor métrica'],1,
    'Precisão (dos que previ positivos, quantos eram) e recall (dos positivos reais, quantos achei) contam a história real.'],
+  ['Numa matriz de confusão com VP=40, FP=10, FN=20, VN=930, precisão e recall valem:',
+   ['0,80 e 0,67','0,67 e 0,80','0,97 e 0,80','0,80 e 0,97'],0,
+   'Precisão = VP/(VP+FP) = 40/50 = 0,80; recall = VP/(VP+FN) = 40/60 ≈ 0,67. É o núcleo manual do módulo: quem deriva da matriz uma vez nunca mais confunde as duas.'],
+  ['Para prever churn do próximo mês com dados datados, o split correto é:',
+   ['Aleatório com stratify','k-fold com shuffle','Corte temporal: treinar no passado e avaliar no futuro','Duplicar os dados recentes'],2,
+   'Sorteio aleatório coloca o futuro no treino — em produção esse futuro não existe e a métrica reportada era ficção. A validação deve imitar a cena real da previsão.'],
+  ['Normalizar os dados usando média e desvio do dataset INTEIRO antes do split é:',
+   ['Boa prática de eficiência','Data leakage: estatísticas do teste contaminam o treino','Obrigatório para árvores','Indiferente'],1,
+   'Média e desvio calculados com dados do teste vazam informação para o treino; o Pipeline existe para ajustar transformações só no treino de cada fold.'],
+  ['Num modelo de churn, a feature desconto_retencao (oferta dada a quem cancelou) infla as métricas porque:',
+   ['É categórica e precisa de one-hot','É consequência do alvo — não existe no momento da previsão real','Tem outliers demais','Está numa escala diferente das outras'],1,
+   'Ela é efeito do churn, não causa: feature derivada do alvo, a forma mais traiçoeira de leakage. O antídoto é o teste do relógio: "isso existiria na hora de prever?"'],
   ['Para que serve a validação cruzada (k-fold)?',
    ['Treinar mais rápido','Obter uma estimativa mais robusta da performance com dados limitados','Eliminar o overfitting','Substituir o conjunto de teste final'],1,
-   'Treina/valida k vezes em partições diferentes e tira a média — menos sorte/azar de uma única divisão.'],
-  ['O que é um random forest?',
-   ['Uma árvore muito profunda','Muitas árvores treinadas em amostras aleatórias, com voto conjunto','Uma rede neural para tabelas','Um algoritmo de agrupamento'],1,
-   'Bagging: cada árvore vê uma amostra dos dados/colunas; o conjunto reduz variância e é forte em dados tabulares.'],
-  ["Apesar do nome, a regressão logística serve para:",["Prever valores contínuos, como o preço de um imóvel","Classificar: a sigmoide espreme a saída linear numa probabilidade entre 0 e 1","Agrupar clientes parecidos sem usar rótulos","Reduzir o número de dimensões dos dados"],1,"O nome engana: ela é um classificador. E é o baseline clássico — se seu modelo sofisticado não a supera, o problema está nos dados ou na formulação, não no modelo."],
-  ["Qual a diferença central entre Random Forest e Gradient Boosting?",["O Random Forest só aceita features numéricas","O boosting treina uma única árvore, porém muito mais profunda","O Random Forest é sempre mais preciso em dados tabulares","No boosting, as árvores vêm em sequência, cada nova corrigindo os erros das anteriores; na floresta, são independentes e votam"],3,"Floresta é um comitê de 300 médicos independentes votando; boosting é um médico estudando exatamente os casos que os anteriores erraram. Por isso XGBoost/LightGBM são o padrão-ouro do dado tabular."],
-  ["No Titanic, extrair o título do nome (Mr., Mrs., Master) prevê melhor que a idade crua. O que isso ilustra?",["Que colunas de texto valem mais que colunas numéricas","Feature engineering: criar representações que tornam o padrão visível ao modelo vale mais que trocar de algoritmo","Que o modelo descobriria isso sozinho se tivesse mais dados","Que a idade nunca deve entrar como feature"],1,"\"Master\" identifica meninos — conhecimento de domínio que a idade cheia de nulos esconde. O modelo só enxerga as colunas que você entrega; feature boa nasce de entender o problema, não de força bruta."],
-  ["Além de organizar o código, que papel de SEGURANÇA o Pipeline do scikit-learn cumpre?",["Garante que imputação e escala sejam ajustadas só nos dados de treino de cada fold — um dispositivo contra data leakage","Acelera o treino executando as etapas em paralelo","Salva o melhor modelo automaticamente em disco","Impede que o modelo sofra overfitting"],0,"Encadeando pré-processamento e modelo num objeto só, o fit das transformações acontece apenas no treino da vez — estatísticas do teste nunca vazam. Pipeline não é frescura de organização."],
-  ["Num filtro de spam, jogar e-mail legítimo na caixa de spam é o erro mais caro. Qual métrica priorizar?",["Recall, para que nenhum spam escape","F1, que equilibra os dois erros automaticamente","Precisão: dos e-mails marcados como spam, maximizar a fração que realmente é","Acurácia, já que basta acertar a maioria"],2,"Escolher métrica é decisão de negócio: aqui o falso positivo é o erro caro, e precisão é exatamente a métrica que o penaliza. Em triagem de câncer a lógica inverte — recall manda."]],
- cards:[['Overfitting','Decorar o treino e falhar em dados novos; detecta-se com validação'],
-  ['Viés × variância','Modelo simples demais erra sempre (viés); complexo demais decora (variância)'],
-  ['Precisão','Dos que o modelo disse positivos, quantos realmente eram'],
-  ['Recall','Dos positivos reais, quantos o modelo encontrou'],
-  ['Validação cruzada','k-fold: treinar/validar em k partições e tirar a média'],
-  ['Data leakage','Informação do teste/futuro contamina o treino — métricas infladas e falsas']]},
+   'Treina/valida k vezes em partições diferentes e reporta média ± desvio — menos sorte/azar de uma única divisão. Mas atenção: com estrutura temporal, k-fold com shuffle vira leakage.'],
+  ['Além de organizar o código, que papel de SEGURANÇA o Pipeline do scikit-learn cumpre?',
+   ['Garante que imputação e escala sejam ajustadas só nos dados de treino de cada fold — um dispositivo contra data leakage','Acelera o treino executando as etapas em paralelo','Salva o melhor modelo automaticamente em disco','Impede que o modelo sofra overfitting'],0,
+   'Encadeando pré-processamento e modelo num objeto só, o fit das transformações acontece apenas no treino da vez — estatísticas do teste nunca vazam. Pipeline não é frescura de organização.'],
+  ['A IA entregou um pipeline antifraude avaliado por F1. Qual é a pergunta de engenheiro que decide se a métrica serve?',
+   ['Qual biblioteca foi usada?','Quantas árvores tem o modelo?','Os dois tipos de erro custam o mesmo neste negócio?','O dataset está balanceado?'],2,
+   'F1 assume custo simétrico entre falso positivo e falso negativo — quase nunca é verdade. Escolher métrica é decisão de negócio: em câncer recall manda, em spam precisão manda, em fraude vale pôr R$ em cada célula da matriz.']],
+ cards:[['Matriz de confusão','VP, FP, FN, VN — a tabela de onde todas as métricas de classificação derivam'],
+  ['Precisão vs recall','Precisão: dos marcados, quantos eram? Recall: dos reais, quantos achei?'],
+  ['Quando a acurácia engana','Classes desbalanceadas: chutar a classe majoritária já pontua alto'],
+  ['Split temporal','Treinar no passado e avaliar no futuro, corte por data — obrigatório quando a previsão acontece "amanhã"'],
+  ['Data leakage','Informação indisponível no momento da previsão contamina o treino — métricas infladas e falsas'],
+  ['Teste do relógio','Para cada feature: "isso existiria no momento da previsão?" — elimina features derivadas do alvo'],
+  ['Papel de segurança do Pipeline','Todo fit de pré-processamento acontece só no treino de cada fold — antídoto estrutural contra leakage'],
+  ['Prova de um leakage','Alegação + métrica com vs. sem + mecanismo explicado — apontar sem medir não é auditoria']]},
 
-{slug:'04-deep-learning',ic:'🧠',t:'Deep Learning na Prática',h:16,
- r:'Redes neurais e backpropagation de verdade — com PyTorch, na linha de Karpathy e fast.ai.',
- aulas:[['🎥','Neural Networks: Zero to Hero — micrograd e makemore (Karpathy)','https://karpathy.ai/zero-to-hero.html'],
-  ['🎥','Practical Deep Learning for Coders (fast.ai)','https://course.fast.ai'],
-  ['💻','Tutoriais oficiais do PyTorch','https://pytorch.org/tutorials/'],
-  ['🎥','MIT 6.S191 — Introduction to Deep Learning','https://introtodeeplearning.com'],
-  ['🎥','Neural Networks (3Blue1Brown) — a intuição visual','https://www.3blue1brown.com/topics/neural-networks'],
-  ['💻','Brincar com redes no TensorFlow Playground','https://playground.tensorflow.org'],
-  ['📖','Guia completo do Módulo 4',MD('04-deep-learning')]],
- proj:'Rede em PyTorch no MNIST com loop de treino escrito à mão (≥97% de acurácia)',
- quiz:[
-  ['O que o backpropagation calcula?',
-   ['A saída da rede','O gradiente da loss em relação a cada peso, via regra da cadeia','A acurácia do modelo','A arquitetura ideal'],1,
-   'É a regra da cadeia aplicada de trás para frente: quanto cada peso contribuiu para o erro — e portanto como ajustá-lo.'],
-  ['Por que redes precisam de funções de ativação não-lineares (ReLU etc.)?',
-   ['Para treinar mais rápido','Sem elas, empilhar camadas equivale a uma única transformação linear','Para economizar memória','Por convenção histórica'],1,
-   'Composição de funções lineares é linear. A não-linearidade é o que dá poder de representar padrões complexos.'],
-  ['A loss não desce. Qual é um ótimo primeiro sanity check?',
-   ['Trocar de framework','Tentar overfittar um único batch pequeno — se nem isso funciona, há bug','Dobrar o dataset','Adicionar mais camadas'],1,
-   'Receita clássica do Karpathy: um modelo saudável decora 1 batch fácil. Se não decora, o problema é código/lr, não dados.'],
-  ['O que é dropout?',
-   ['Remover dados ruins do treino','Desligar neurônios aleatórios durante o treino, para regularizar','Diminuir o learning rate','Uma função de ativação'],1,
-   'Força a rede a não depender de neurônios específicos — menos overfitting. Desliga-se na inferência.'],
-  ['Em PyTorch, o autograd:',
-   ['Escolhe a arquitetura sozinho','Registra as operações e calcula os gradientes automaticamente no backward()','Acelera a GPU','Salva o modelo em disco'],1,
-   'Você escreve o forward; loss.backward() devolve os gradientes de todos os tensores com requires_grad.'],
-  ["No lab do MNIST, seu classificador deu probabilidade 0.9 à classe correta em um exemplo e 0.1 em outro. Como a cross-entropy trata esses dois casos?",["Pune os dois igualmente, já que a distância até 1.0 é simétrica","Ignora o primeiro caso, porque acertos não entram no cálculo da loss","Dá loss baixa (≈0.105) ao primeiro e loss alta (≈2.30) ao segundo: estar confiantemente errado custa muito mais","Converte as probabilidades em acurácia antes de calcular o gradiente"],2,"A cross-entropy é -ln(p da classe correta): -ln(0.9) ≈ 0.105 e -ln(0.1) ≈ 2.30. A assimetria é proposital: o treino castiga confiança na resposta errada muito mais do que dúvida."],
-  ["No modelo do lab, a última camada é nn.Linear(256, 10) sem softmax. Por que isso está certo?",["Porque nn.CrossEntropyLoss já embute o softmax — aplicá-lo também no modelo seria softmax duas vezes, um bug clássico","Porque softmax só se usa em regressão, nunca em classificação","Porque com 10 classes o softmax é desnecessário: os logits já somam 1","Porque o softmax deixaria o treino lento demais para a GPU gratuita do Colab"],0,"No PyTorch, a nn.CrossEntropyLoss recebe os logits crus e aplica o softmax internamente. Colocar outro softmax no modelo espreme as probabilidades duas vezes e distorce os gradientes."],
-  ["Você muda o learning rate para 1.0 (experimento do lab) e em poucos passos a loss explode e vira NaN. Qual é o diagnóstico e a correção?",["O modelo é raso demais; adicione mais camadas para estabilizar","Os dados baixaram corrompidos; refaça o download do MNIST","Faltou regularização; adicione nn.Dropout(0.5) ao modelo","Learning rate alto demais: cada passo salta além do mínimo e o erro cresce até estourar — divida o lr por 10 até estabilizar"],3,"Com passo grande demais, os pesos ultrapassam o vale da loss e o erro se amplifica a cada atualização até virar NaN. A receita do módulo: divergiu, divida o learning rate por 10."],
-  ["No Colab, você fez model.to(device), mas o treino quebra com um erro dizendo que os tensores estão em devices diferentes (cuda vs cpu). O que faltou?",["Reinstalar o PyTorch com suporte a GPU","Mover também cada batch dentro do loop — x.to(device) e y.to(device) — pois o modelo na GPU não opera sobre dados que ficaram na CPU","Ativar a GPU no menu do Colab, que ainda estava em modo CPU","Chamar model.train() antes de iniciar o loop de treino"],1,"model.to(device) move só os pesos; os dados continuam na CPU, onde o DataLoader os entrega. Por isso o loop do lab move cada batch para o mesmo device do modelo antes do forward."],
-  ["No mini-projeto, por que separar 10% do treino como validação em vez de usar o conjunto de teste para decidir o early stopping?",["Porque o conjunto de teste é pequeno demais para calcular uma loss estável","Porque a loss de validação converge mais rápido que a de teste","Porque usar o teste para decidir quando parar contamina a avaliação final: ele deixa de ser uma medida honesta de generalização","Porque o teste não pode ser normalizado com as mesmas estatísticas do treino"],2,"Toda decisão tomada olhando um conjunto (quando parar, qual arquitetura escolher) ajusta o modelo a ele. Quem orienta o treino é a validação; o teste fica intocado até o fim para estimar a generalização de verdade."]],
- cards:[['Backpropagation','Regra da cadeia de trás para frente: gradiente da loss para cada peso'],
-  ['Função de ativação','Não-linearidade (ex. ReLU) que dá à rede poder de representação'],
-  ['Loss function','Número que mede o quão errada está a predição — o que o treino minimiza'],
-  ['Adam','Otimizador com taxa de aprendizado adaptativa por parâmetro — o default sensato'],
-  ['Dropout','Regularização: zera neurônios aleatórios no treino'],
-  ['Sanity check de treino','Overfittar 1 batch único; se não conseguir, o bug é seu, não dos dados']]},
-
-{slug:'05-transformers-llms',ic:'🤖',t:'Transformers & LLMs por Dentro',h:16,
- r:'Tokens, atenção e a arquitetura que move tudo — construa um GPT do zero com Karpathy e entenda o que há por trás do chat.',
- aulas:[['🎥','"Let\'s build GPT" + tokenizer (série Zero to Hero)','https://karpathy.ai/zero-to-hero.html'],
+{slug:'06-como-llms-funcionam',ic:'🧠',t:'Como LLMs Funcionam',h:10,vid:'mod04',
+ r:'O capô aberto do LLM: tokens, atenção, pós-treino e amostragem — o essencial conceitual que explica por que o modelo falha, custa e acerta.',
+ aulas:[['🎥','Neural Networks (3Blue1Brown) — redes e atenção, visualmente','https://www.3blue1brown.com/topics/neural-networks'],
   ['🎥','Intro to LLMs e Deep Dive into LLMs (canal do Karpathy)','https://www.youtube.com/@AndrejKarpathy'],
-  ['📖','The Illustrated Transformer (Jay Alammar)','https://jalammar.github.io/illustrated-transformer/'],
-  ['💻','NLP Course da Hugging Face','https://huggingface.co/learn'],
-  ['💻','Visualização 3D de um GPT (bbycroft)','https://bbycroft.net/llm'],
+  ['💻','Um GPT rodando em 3D, peça por peça (bbycroft)','https://bbycroft.net/llm'],
   ['💻','Tiktokenizer — veja a tokenização ao vivo','https://tiktokenizer.vercel.app'],
-  ['📖','Build a LLM From Scratch (Raschka, repo aberto)','https://github.com/rasbt/LLMs-from-scratch'],
-  ['📖','Guia completo do Módulo 5',MD('05-transformers-llms')]],
- proj:'Gerar texto com um modelo aberto (HF transformers) analisando tokens, logits e temperatura',
+  ['📖','The Illustrated Transformer (Jay Alammar)','https://jalammar.github.io/illustrated-transformer/'],
+  ['🎛️','Sessão de Direção: experimentos de tokenização e temperatura via API','https://github.com/michelpafreitas-realize/academia-engenharia-ia/blob/main/modulos/06-como-llms-funcionam.md'],
+  ['📖','Guia completo do Módulo 6','https://github.com/michelpafreitas-realize/academia-engenharia-ia/blob/main/modulos/06-como-llms-funcionam.md']],
+ proj:'Relatório de anatomia de um LLM: experimentos reais via API + explicação conceitual própria, com SPEC/DECISIONS e defesa',
  quiz:[
+  ['O gradiente de um peso, na prática, responde a qual pergunta?',
+   ['Qual é a saída da rede para esta entrada','Se eu mexer um pouco neste peso, a loss sobe ou desce, e quanto','Quantos parâmetros o modelo tem','Qual é a acurácia de validação'],1,
+   'Gradiente = sensibilidade da loss ao peso. O treino inteiro é medir essas sensibilidades (backpropagation) e dar passinhos na direção que diminui o erro.'],
   ['Por que LLMs erram perguntas como "quantas letras R há em strawberry"?',
    ['Falta de treino em inglês','Porque processam tokens (subpalavras), não letras','Porque são censurados','Porque a pergunta é ambígua'],1,
-   'O modelo vê "strawberry" como 1–3 tokens, não 10 letras. Entender tokenização explica vários comportamentos "estranhos".'],
+   'O modelo vê "strawberry" como 1–3 tokens opacos, não 10 letras. Soletrar a palavra força os caracteres a virarem tokens separados — e aí contar funciona.'],
+  ['A frase \'A capital da França é\' gasta mais tokens que \'The capital of France is\'. Qual é a melhor explicação?',
+   ['O tokenizador traduz o português para inglês antes de contar','O vocabulário BPE foi aprendido num corpus com muito mais inglês, então palavras em português quebram em mais subpalavras — e custam mais caro por chamada','Acentos exigem tokens especiais de controle','Tokens têm tamanho fixo de 4 caracteres'],1,
+   'O BPE funde os pares mais frequentes do corpus; o que é raro vira mais pedaços. Como APIs cobram por token, o mesmo conteúdo em PT sai ~20-30% mais caro.'],
   ['Na self-attention, o produto Q·K serve para:',
    ['Comprimir o texto','Medir a relevância entre tokens, decidindo de quem puxar informação (V)','Gerar o próximo token diretamente','Normalizar os embeddings'],1,
-   'Cada token "pergunta" (Q) e os outros "respondem" (K); os pesos resultantes misturam os valores (V).'],
+   'Cada token "pergunta" (Q) e os outros "respondem" (K); o softmax desses scores define os pesos da mistura de values — a conta que você fez à mão no núcleo manual.'],
+  ['Sem positional encoding, o que aconteceria com \'João ama Maria\' e \'Maria ama João\' dentro do transformer?',
+   ['Teriam a mesma representação: a atenção sozinha trata a entrada como um saco de tokens, sem noção de ordem','Nada mudaria: a máscara causal já garante a ordem','Ficariam iguais só na primeira camada','O treino não convergiria'],0,
+   'Atenção calcula relações entre pares sem saber quem vem antes. A ordem entra injetada nos próprios vetores (senos/cossenos ou RoPE), não na arquitetura.'],
   ['Aumentar a temperatura na geração:',
    ['Deixa a saída mais determinística','Achata a distribuição — saídas mais variadas/criativas','Aumenta a janela de contexto','Reduz o custo'],1,
-   'Temperatura alta dá chance a tokens menos prováveis; temperatura 0 escolhe sempre o mais provável.'],
+   'Dividir os logits por T > 1 aproxima as probabilidades; tokens improváveis ganham chance. É a variedade que você mede no lab repetindo a mesma chamada.'],
+  ['As probabilidades do próximo token são: gato 0.55, cão 0.30, peixe 0.10 e o resto 0.05. Com top-p = 0.9, quais tokens podem ser sorteados?',
+   ['Apenas gato, o único acima da média','Apenas gato e cão, que juntos somam 0.85','Todos os tokens, pois top-p apenas reordena','Gato, cão e peixe: o menor conjunto cuja probabilidade acumulada atinge 0.9'],3,
+   'O nucleus sampling inclui tokens do mais provável ao menos provável até a soma alcançar p: 0.85 ainda não chega a 0.9, então peixe entra (0.95) e a cauda é cortada.'],
   ['Qual a diferença entre pré-treino e pós-treino (SFT/RLHF)?',
    ['Nenhuma, são sinônimos','Pré-treino aprende a prever o próximo token em escala; pós-treino ensina a ser útil, seguir instruções e ser seguro','Pós-treino vem antes do pré-treino','Pré-treino usa dados rotulados por humanos'],1,
-   'O modelo base "completa texto"; SFT + RLHF o transformam num assistente que conversa e obedece instruções.'],
+   'O modelo base só completa texto; SFT dá o formato de assistente e RLHF/RLAIF alinha com preferências — inclusive a tendência de concordar demais.'],
+  ['Por que dobrar o contexto mais que dobra o custo de processá-lo?',
+   ['Porque a API cobra taxa fixa por chamada','Porque a atenção compara cada token com todos os outros — o custo cresce quadraticamente','Porque o modelo precisa ser retreinado','Porque o vocabulário aumenta junto'],1,
+   'Cada query compara com todas as keys anteriores: 2× contexto ≈ 4× comparações, 10× ≈ 100×. Por isso "jogar tudo no contexto" nem sempre é a arquitetura certa.'],
   ['Para que serve o KV cache na geração?',
    ['Guardar o histórico do chat no disco','Evitar recomputar a atenção dos tokens anteriores a cada novo token','Comprimir o modelo','Aumentar a criatividade'],1,
-   'Sem ele, gerar o token N custaria reprocessar os N−1 anteriores. É por isso que contexto longo consome tanta memória.'],
-  ["No lab, a frase 'A capital da França é' gastou mais tokens que 'The capital of France is'. Qual é a melhor explicação?",["O tokenizador traduz o português para inglês antes de contar, adicionando tokens extras","O vocabulário BPE foi aprendido num corpus com muito mais inglês, então palavras em português quebram em mais subpalavras — e custam mais caro por chamada","Acentos exigem tokens especiais de controle no início da frase","Tokens têm tamanho fixo de 4 caracteres, e frases em português são mais longas"],1,"O BPE funde os pares mais frequentes do corpus de treino; o que é raro no corpus vira mais pedaços. Como APIs cobram por token, o mesmo conteúdo em PT sai ~20-30% mais caro que em EN."],
-  ["Sem positional encoding, o que aconteceria com as frases 'João ama Maria' e 'Maria ama João' dentro do transformer?",["Teriam a mesma representação: a attention sozinha trata a entrada como um saco de tokens, sem noção de ordem","Nada mudaria: a máscara causal já garante que o modelo processa os tokens em ordem","Ficariam iguais só na primeira camada; as seguintes recuperam a ordem sozinhas","O treino não convergiria, porque os gradientes dependem da posição"],0,"Attention calcula relações entre pares de tokens sem saber quem vem antes. A ordem entra no modelo injetada nos próprios vetores (senos/cossenos ou RoPE em Q e K), não na arquitetura."],
-  ["As probabilidades do próximo token são: gato 0.55, cão 0.30, peixe 0.10 e o resto 0.05. Com top-p = 0.9, quais tokens podem ser sorteados?",["Apenas gato, o único acima da média","Apenas gato e cão, que juntos somam 0.85","Todos os tokens, pois top-p apenas reordena as probabilidades","Gato, cão e peixe: o menor conjunto cuja probabilidade acumulada atinge 0.9"],3,"O nucleus sampling inclui tokens do mais provável ao menos provável até a soma alcançar p: 0.55 + 0.30 = 0.85 ainda não chega a 0.9, então peixe entra (0.95) e o resto da cauda é cortado."],
-  ["No lab, rodar a geração greedy (do_sample=False) 3 vezes dá sempre o mesmo texto, e com do_sample=True cada rodada sai diferente. Por quê?",["A greedy usa temperatura 1.0, que é a configuração mais estável","A greedy escolhe sempre o token mais provável a cada passo — sem sorteio, o resultado é determinístico; com sampling, cada passo sorteia da distribuição","A greedy fixa a seed aleatória automaticamente antes de cada geração","O KV cache guarda a primeira resposta e a reutiliza nas chamadas seguintes"],1,"Greedy é argmax puro: mesma entrada, mesma cadeia de escolhas, mesmo texto. do_sample=True transforma cada passo num sorteio ponderado pelas probabilidades, por isso a variação entre rodadas."],
-  ["Dentro de um bloco do transformer decoder-only, qual é a divisão de trabalho entre attention e MLP?",["A attention gera os logits finais e o MLP escolhe o próximo token","O MLP mistura informação entre os tokens e a attention processa cada um isoladamente","A attention mistura informação entre tokens; o MLP processa cada token individualmente e concentra boa parte do conhecimento do modelo","A attention só atua no treino e o MLP só na inferência"],2,"É a dupla que se repete N vezes: a attention (com máscara causal) deixa os tokens trocarem informação, e o MLP — as mesmas camadas densas do Módulo 4 — transforma cada posição sozinho, guardando muito do conhecimento."]],
- cards:[['Token','Unidade de subpalavra que o modelo realmente processa (via BPE)'],
-  ['Self-attention','Cada token pondera os demais (Q, K, V) para construir sua nova representação'],
-  ['Temperatura','Escala os logits: 0 = determinístico, alta = criativo/aleatório'],
-  ['SFT','Fine-tuning supervisionado: exemplos de instrução → resposta ideal'],
-  ['RLHF','Ajuste por preferências humanas via modelo de recompensa'],
-  ['KV cache','Guarda chaves/valores já computados para gerar rápido; consome memória com contexto longo']]},
+   'Sem ele, gerar o token N custaria reprocessar os N−1 anteriores. O cache troca computação por memória — e é por isso que contexto longo devora GPU e existe prompt caching.']],
+ cards:[['Gradiente','Sensibilidade da loss a um peso: "se eu mexer aqui, o erro sobe ou desce?"'],
+  ['Token','Unidade de subpalavra (BPE) que o modelo realmente processa; APIs cobram por token'],
+  ['Embedding','Vetor denso do token; proximidade geométrica ≈ semelhança semântica — fundação do RAG'],
+  ['Q, K, V','Query (o que busco), Key (o que ofereço), Value (o que entrego) — atenção = softmax(q·k)·V'],
+  ['Temperatura','Divide os logits antes do softmax: baixa = conservador, alta = criativo'],
+  ['SFT vs RLHF','SFT ensina o formato assistente com exemplos; RLHF otimiza por preferências (humanas ou de IA no RLAIF)'],
+  ['Atenção quadrática','Cada token compara com todos os anteriores: 10× contexto ≈ 100× comparações'],
+  ['KV cache','Guarda K/V já computados para gerar rápido; cresce com o contexto e domina a memória na inferência']]},
 
-{slug:'06-prompt-engineering-apis',ic:'💬',t:'Prompt Engineering & APIs',h:10,
- r:'Do prompt profissional ao código: SDKs, structured output, streaming, custo por token e caching.',
- aulas:[['💻','Prompt Engineering Interactive Tutorial (Anthropic, open source)','https://github.com/anthropics/courses'],
-  ['📖','Documentação da Claude API','https://docs.claude.com'],
-  ['📖','OpenAI Cookbook — receitas práticas','https://cookbook.openai.com'],
-  ['📖','Prompting Guide (DAIR.AI)','https://www.promptingguide.ai'],
-  ['🎥','Short courses gratuitos da DeepLearning.AI','https://www.deeplearning.ai/short-courses/'],
-  ['💻','Praticar de graça no Google AI Studio','https://aistudio.google.com'],
-  ['📖','Guia completo do Módulo 6',MD('06-prompt-engineering-apis')]],
- proj:'Extrator de dados estruturados via API com medição de custo por chamada',
- quiz:[
-  ['Para que serve o system prompt?',
-   ['Acelerar a resposta','Definir papel e regras persistentes, separado da entrada do usuário','Armazenar o histórico','Reduzir o custo'],1,
-   'Separar instruções (system) de dados do usuário (user) organiza o prompt e é a primeira linha de defesa contra injection.'],
-  ['O que é few-shot prompting?',
-   ['Usar poucos tokens','Incluir exemplos resolvidos no prompt para guiar formato e estilo','Fazer várias chamadas seguidas','Usar um modelo pequeno'],1,
-   'Dois ou três bons exemplos costumam melhorar mais que parágrafos de instrução abstrata.'],
-  ['O que o structured output (JSON com schema) garante?',
-   ['Respostas mais criativas','Saída num formato validável que seu código consegue consumir com segurança','Custo zero','Que o conteúdo está sempre correto'],1,
-   'Garante a FORMA (JSON válido no schema) — o conteúdo ainda precisa de validação e evals.'],
-  ['Sobre o custo das APIs de LLM:',
-   ['Só o input é cobrado','Input e output são cobrados separadamente, e output costuma ser mais caro','É um valor fixo por chamada','Tokens de saída são gratuitos'],1,
-   'Por isso resposta enxuta economiza, e prompt caching desconta prefixos repetidos de input.'],
-  ['Onde guardar a chave de API?',
-   ['Direto no código, por praticidade','Em variável de ambiente ou secret manager, nunca no código','Num comentário do repositório','No prompt do sistema'],1,
-   'Chave commitada = chave vazada (bots varrem o GitHub em minutos). Use .env fora do versionamento.'],
-  ["No lab, a avaliação do cliente vai para o modelo dentro de &lt;avaliacao&gt;...&lt;/avaliacao&gt;. Qual é o ganho real dessas tags?",["Elas comprimem o texto, reduzindo os tokens cobrados","Elas ativam um modo especial de parsing na API","Elas separam dado de instrução: o modelo para de confundir o conteúdo com comandos (inclusive tentativas de injection), e fica fácil extrair a resposta","Elas são obrigatórias para o structured output funcionar"],2,"Delimitadores dizem ao modelo onde o dado começa e termina, evitando que texto do usuário seja lido como instrução. Tags XML são particularmente bem interpretadas pelos modelos Claude."],
-  ["Seu system prompt de 3 mil tokens é idêntico entre chamadas, mas você colocou a data e hora atuais na primeira linha dele. O que acontece com o prompt caching?",["O cache nunca acerta: caching exige prefixo idêntico byte a byte, e o timestamp muda o início a cada chamada — conteúdo variável deve ir para o final","Nada muda: o cache ignora números e datas automaticamente","O cache continua valendo para o restante do prompt depois do timestamp","O caching só falha se o timestamp mudar o número total de tokens"],0,"O cache casa por prefixo exato: qualquer byte diferente no começo invalida tudo dali em diante. Daí a regra do módulo: conteúdo estável primeiro (system, exemplos, documentos), conteúdo variável no fim."],
-  ["Em qual destes cenários fazer retry da chamada de API é um ERRO?",["Depois de um HTTP 429 (rate limit)","Depois de um erro de conexão de rede intermitente","Depois de um HTTP 529 (servidor sobrecarregado)","Depois de um erro 4xx de validação (request malformado)"],3,"Um request inválido continua inválido na segunda tentativa — repetir só queima cota. Erros transitórios (429, 5xx/529, rede) merecem retry com backoff exponencial, que os SDKs oficiais já fazem sozinhos."],
-  ["Quando usar streaming numa aplicação com LLM?",["Sempre que a resposta for JSON, para validar token a token","Quando há um humano esperando na tela: ele vê o texto surgir em vez de encarar um spinner — e respostas longas escapam de timeouts HTTP","Apenas em pipelines batch, para processar vários documentos em paralelo","Somente com modelos pequenos, os únicos que suportam stream"],1,"A regra prática do módulo: humano na ponta → sempre streaming; pipeline batch → pode ser síncrono. Além da percepção de velocidade, transmitir aos poucos evita estourar timeouts em respostas longas."],
-  ["Você reescreveu o prompt do extrator e as 3 primeiras respostas parecem melhores. O que fazer antes de promover a v2 para produção?",["Promover logo: 3 acertos seguidos já indicam melhora real","Perguntar ao próprio modelo qual das duas versões é melhor","Rodar v1 e v2 sobre o MESMO conjunto de teste com gabarito e comparar acurácia por campo, custo e latência — só promover se os números vencerem","Aumentar a temperatura e testar mais alguns exemplos variados"],2,"Impressão com meia dúzia de exemplos não é métrica: duas versões podem parecer iguais no olho e diferir 15 pontos de acurácia no conjunto de teste. Nunca troque um prompt em produção sem rodar o conjunto de teste antes."]],
- cards:[['System prompt','Instruções de papel e regras, separadas da conversa do usuário'],
-  ['Few-shot','Exemplos resolvidos dentro do prompt guiam formato e estilo'],
-  ['Chain-of-thought','Pedir raciocínio passo a passo antes da resposta final'],
-  ['Structured output','Saída JSON validada por schema — a ponte entre LLM e código'],
-  ['Prompt caching','Prefixo repetido do prompt (system + docs) é reaproveitado: menos custo e latência'],
-  ['Prefill','Começar a resposta do assistente para forçar o formato desejado']]},
-
-{slug:'07-rag',ic:'🔎',t:'RAG — Retrieval-Augmented Generation',h:12,
- r:'Conecte o modelo aos SEUS dados: embeddings, chunking, busca vetorial, rerankers e avaliação com Ragas.',
+{slug:'07-rag',ic:'🔎',t:'RAG',h:12,vid:'mod07',
+ r:'Conecte o modelo aos SEUS dados: embeddings, chunking, busca vetorial, rerankers — e evals com números para provar que funciona.',
  aulas:[['📖','Sentence-Transformers (sbert.net)','https://sbert.net'],
   ['📖','Chroma — vector store para começar','https://docs.trychroma.com'],
   ['📖','FAISS (Meta) — busca vetorial eficiente','https://github.com/facebookresearch/faiss'],
   ['🎥','Short courses de RAG e embeddings (DeepLearning.AI)','https://www.deeplearning.ai/short-courses/'],
   ['📖','Ragas — avaliação de pipelines RAG','https://docs.ragas.io'],
   ['📖','LlamaIndex — RAG com framework','https://docs.llamaindex.ai'],
+  ['🎛️','Sessão de Direção: da spec ao RAG medido','https://github.com/michelpafreitas-realize/academia-engenharia-ia/blob/main/modulos/07-rag.md'],
   ['📖','Guia completo do Módulo 7',MD('07-rag')]],
- proj:'RAG do zero (sem framework) sobre seus documentos, com citações de fonte',
+ proj:'Assistente de Q&A sobre seus documentos, dirigido com IA a partir do seu SPEC.md, com evals numéricos antes/depois',
  quiz:[
   ['Qual problema o RAG resolve?',
    ['Deixar o modelo mais rápido','Responder com conhecimento privado/atualizado, citando fontes, sem retreinar o modelo','Reduzir o tamanho do modelo','Eliminar alucinações completamente'],1,
@@ -469,64 +538,92 @@ const MODS=[
   ['A métrica faithfulness (Ragas) mede:',
    ['A velocidade da resposta','Se a resposta se sustenta no contexto recuperado, sem inventar','A cobertura do índice','O custo do pipeline'],1,
    'Resposta bonita que ignora o contexto é alucinação com aparência de RAG — faithfulness pega exatamente isso.'],
-  ["Por que os pipelines de RAG normalizam os embeddings (norma 1) na hora de indexar?",["Para reduzir o número de dimensões do vetor","Para economizar memória no vector store","Porque com vetores normalizados a similaridade de cosseno vira um simples produto escalar, mais rápido de calcular","Porque as APIs de embedding exigem vetores normalizados"],2,"cos(a,b) = a·b/(|a||b|); com norma 1 o denominador some e sobra o produto escalar — é exatamente o que as bibliotecas fazem por baixo do índice."],
-  ["No pipeline com reranker, qual é a ordem correta das etapas?",["Recuperar 25-50 candidatos com busca barata, rerankear com cross-encoder e enviar só os 3-5 melhores ao LLM","Enviar todos os candidatos ao LLM e deixar que ele escolha os relevantes","Rerankear todos os chunks da base antes de qualquer busca","Gerar a resposta primeiro e usar o reranker para conferir as citações"],0,"O retrieval inicial é rápido e aproximado; o cross-encoder lê pergunta + chunk juntos e dá nota fina só aos candidatos — costuma ser a melhoria de qualidade mais barata do pipeline."],
-  ["No conjunto de avaliação de um RAG, por que incluir perguntas que a base NÃO consegue responder?",["Para aumentar o tamanho do conjunto de teste","Para medir a velocidade do retrieval em casos difíceis","Para dar exemplos negativos ao modelo de embedding","Para testar se o sistema recusa corretamente (diz que não encontrou) em vez de inventar uma resposta"],3,"É o teste anti-alucinação: sem a instrução de recusa no prompt, o modelo responde do próprio conhecimento com toda a confiança — e são essas perguntas que revelam isso."],
-  ["Seu RAG tem context precision alta, mas faithfulness baixa. Onde está o problema?",["No retrieval — os chunks recuperados são irrelevantes","Na geração — os trechos certos chegam, mas o modelo responde ignorando o contexto","No chunking — os pedaços estão grandes demais","No conjunto de teste — faltam perguntas"],1,"Precision alta diz que a busca trouxe os trechos certos; se mesmo assim a resposta não se sustenta neles, a engrenagem doente é a geração — endureça o prompt (APENAS os trechos) e exija citações."],
-  ["Você persistiu o índice em disco, mudou a estratégia de chunking, rodou a avaliação — e as métricas não mudaram nada. A causa mais provável é:",["A melhoria de chunking realmente não teve efeito","O modelo de embedding precisa ser retreinado","A busca ainda usa o índice salvo do chunking antigo — é preciso apagar e reindexar","As perguntas do conjunto de teste ficaram desatualizadas"],2,"Índice persistido é um cache: mudou o chunking sem reindexar, você continua buscando nos chunks antigos. Métricas idênticas demais após uma mudança são o sintoma clássico."]],
+  ['Por que os pipelines de RAG normalizam os embeddings (norma 1) na hora de indexar?',
+   ['Para reduzir o número de dimensões do vetor','Para economizar memória no vector store','Porque com vetores normalizados a similaridade de cosseno vira um simples produto escalar, mais rápido de calcular','Porque as APIs de embedding exigem vetores normalizados'],2,
+   'cos(a,b) = a·b/(|a||b|); com norma 1 o denominador some e sobra o produto escalar — é exatamente o que as bibliotecas fazem por baixo do índice.'],
+  ['No pipeline com reranker, qual é a ordem correta das etapas?',
+   ['Recuperar 25-50 candidatos com busca barata, rerankear com cross-encoder e enviar só os 3-5 melhores ao LLM','Enviar todos os candidatos ao LLM e deixar que ele escolha os relevantes','Rerankear todos os chunks da base antes de qualquer busca','Gerar a resposta primeiro e usar o reranker para conferir as citações'],0,
+   'O retrieval inicial é rápido e aproximado; o cross-encoder lê pergunta + chunk juntos e dá nota fina só aos candidatos — costuma ser a melhoria de qualidade mais barata do pipeline.'],
+  ['No conjunto de avaliação de um RAG, por que incluir perguntas que a base NÃO consegue responder?',
+   ['Para aumentar o tamanho do conjunto de teste','Para medir a velocidade do retrieval em casos difíceis','Para dar exemplos negativos ao modelo de embedding','Para testar se o sistema recusa corretamente (diz que não encontrou) em vez de inventar uma resposta'],3,
+   'É o teste anti-alucinação: sem a instrução de recusa no prompt, o modelo responde do próprio conhecimento com toda a confiança — e são essas perguntas que revelam isso.'],
+  ['Seu RAG tem context precision alta, mas faithfulness baixa. Onde está o problema?',
+   ['No retrieval — os chunks recuperados são irrelevantes','Na geração — os trechos certos chegam, mas o modelo responde ignorando o contexto','No chunking — os pedaços estão grandes demais','No conjunto de teste — faltam perguntas'],1,
+   'Precision alta diz que a busca trouxe os trechos certos; se mesmo assim a resposta não se sustenta neles, a engrenagem doente é a geração — endureça o prompt (APENAS os trechos) e exija citações.'],
+  ['Na Sessão de Direção deste módulo, o que a IA NÃO faz por você?',
+   ['Escrever o script de persistência do índice','Evoluir o chunking a partir do lab','Escrever as perguntas do conjunto de eval e julgar a fidelidade das respostas','Gerar o código da busca híbrida bônus'],2,
+   'O conjunto de avaliação e o julgamento de fidelidade são o núcleo manual: é aí que se forma o critério de quem sabe dizer se um RAG funciona — o pipeline em si pode (e deve) ser dirigido.']],
  cards:[['RAG','Buscar trechos relevantes e injetá-los no prompt antes de responder'],
   ['Embedding','Vetor denso que captura o significado de um texto'],
   ['Similaridade de cosseno','Cosseno do ângulo entre vetores; 1 = significado quase idêntico'],
   ['Chunking','Partir documentos em pedaços indexáveis (tamanho + overlap importam)'],
   ['Reranker','Segundo modelo que reordena os top-K recuperados por relevância fina'],
-  ['Vector store','Banco de busca por proximidade: FAISS, Chroma, pgvector']]},
+  ['Vector store','Banco de busca por proximidade: FAISS, Chroma, pgvector'],
+  ['Faithfulness (Ragas)','A resposta se sustenta nos trechos recuperados? Mede alucinação'],
+  ['Núcleo manual do M7','Você escreve as perguntas do eval e julga a fidelidade; a IA constrói o pipeline']]},
 
-{slug:'08-agentes-tool-use',ic:'🦾',t:'Agentes de IA & Tool Use',h:12,
- r:'O LLM em loop com ferramentas: function calling, MCP, padrões da Anthropic e quando NÃO usar agente.',
+{slug:'08-agentes-tool-use',ic:'🦾',t:'Agentes, Tool Use, MCP & Orquestração',h:16,vid:'mod08',
+ r:'O LLM em loop com ferramentas: workflows vs. agentes, MCP, multi-agente, computer use e o Claude Code dissecado como agente — com a decisão sempre medida.',
  aulas:[['📖','Building Effective Agents (Anthropic Engineering)','https://www.anthropic.com/engineering/building-effective-agents'],
+  ['💻','Tool use na prática (Anthropic courses)','https://github.com/anthropics/courses'],
   ['📖','Model Context Protocol — o padrão aberto','https://modelcontextprotocol.io'],
   ['💻','AI Agents Course (Hugging Face, grátis)','https://huggingface.co/learn'],
   ['💻','LangChain Academy — LangGraph','https://academy.langchain.com'],
-  ['💻','Tool use na prática (Anthropic courses)','https://github.com/anthropics/courses'],
-  ['📖','Guia completo do Módulo 8',MD('08-agentes-tool-use')]],
- proj:'Agente em Python puro com 2 tools e loop de tool use escrito à mão',
+  ['📖','Computer use e agentic coding (docs Anthropic)','https://platform.claude.com/docs'],
+  ['🎛️','Sessão de Direção + guia completo do Módulo 8','https://github.com/michelpafreitas-realize/academia-engenharia-ia/blob/main/modulos/08-agentes-tool-use.md']],
+ proj:'Agente com 3+ tools e workflow determinístico equivalente, comparados com números (acerto, custo, latência) e veredito defendido',
  quiz:[
   ['O que define um agente de IA?',
    ['Qualquer chatbot','Um LLM em loop, com ferramentas e feedback do ambiente, decidindo o próprio caminho','Um modelo fine-tunado','Um cron job com prompt'],1,
    'Workflow tem passos fixos definidos por você; agente decide dinamicamente o que fazer a cada passo.'],
   ['No tool use / function calling, quem executa a ferramenta?',
    ['O modelo, dentro do provedor','O SEU código — o modelo apenas pede a chamada com os argumentos','O navegador do usuário','O servidor MCP sempre'],1,
-   'O modelo devolve "chame X com args Y"; você executa, devolve o resultado, e ele continua. Segurança fica do seu lado.'],
+   'O modelo devolve "chame X com args Y"; você executa, devolve o tool_result, e ele continua. Segurança fica do seu lado.'],
   ['O que é o MCP (Model Context Protocol)?',
-   ['Um modelo da Anthropic','Um protocolo aberto padrão para conectar modelos a ferramentas e dados','Um formato de prompt','Um banco vetorial'],1,
-   'Um server MCP expõe tools/dados uma vez e qualquer client compatível (Claude, IDEs etc.) consegue usá-los.'],
+   ['Um modelo da Anthropic','Um protocolo aberto que padroniza a conexão entre apps de IA (clients) e ferramentas/dados (servers)','Um formato de prompt','Um banco vetorial'],1,
+   'MCP transforma o problema de integração M×N em M+N: o server expõe tools/dados uma vez e qualquer client compatível usa — o "USB" dos apps de IA.'],
   ['Qual é o conselho central de "Building Effective Agents"?',
-   ['Use sempre multi-agente','Prefira o padrão mais simples que resolve — workflow antes de agente','Agentes dispensam supervisão','Frameworks são obrigatórios'],1,
-   'Complexidade de agente só se paga quando a tarefa é realmente aberta. Na dúvida, comece com um workflow fixo.'],
-  ['Antes de o agente executar uma ação irreversível (enviar e-mail, deletar), a prática correta é:',
-   ['Deixar executar, agentes são confiáveis','Exigir confirmação humana (humano no loop)','Aumentar a temperatura','Rodar duas vezes para conferir'],1,
-   'Allowlist de tools + aprovação humana para ações críticas é o guardrail mínimo de produção.'],
-  ["Por que o custo em tokens de um agente cresce a cada volta do loop?",["Porque o provedor cobra uma taxa extra por chamada de tool","Porque a API é stateless: cada iteração reenvia o histórico inteiro, e cada tool_result engorda o contexto das seguintes","Porque o modelo aumenta a temperatura conforme itera","Porque tokens de saída ficam mais caros em respostas longas"],1,"O histórico só cresce e é reenviado a cada rodada. As mitigações são prompt caching no prefixo estável, tool results enxutos e limite de iterações."],
-  ["Durante o loop, uma tool lança uma exceção (ex.: coluna inexistente no CSV). A prática correta é:",["Deixar o programa quebrar — errar rápido é melhor","Repetir a mesma chamada automaticamente até funcionar","Encerrar o loop e devolver uma resposta parcial ao usuário","Capturar o erro e devolvê-lo como tool_result com is_error, para o modelo ler a mensagem e tentar outro caminho"],3,"O erro vira feedback: o modelo lê a mensagem, consulta quais colunas existem e se corrige sozinho — em vez de derrubar o programa inteiro."],
-  ["Seu agente ignora uma tool ou a usa na hora errada. Qual é o primeiro ajuste a fazer?",["Reescrever a description da tool de forma prescritiva — é ela que o modelo lê para decidir quando chamar","Trocar para um framework de agentes com roteamento automático","Aumentar o max_tokens para o modelo pensar mais","Adicionar um segundo agente para supervisionar o primeiro"],0,"A qualidade da description é o fator nº 1 de acerto: use esta ferramenta SEMPRE que a pergunta envolver preços atuais funciona melhor que um vago busca preços."],
-  ["No loop escrito à mão, como o seu código sabe que o agente terminou e pode devolver a resposta final?",["O modelo envia uma tool especial de finalização","A API encerra a conexão automaticamente","O stop_reason da resposta deixa de ser tool_use — o modelo respondeu sem pedir ferramenta","O texto da resposta contém a palavra FIM"],2,"Enquanto quer ferramentas, o modelo para com stop_reason tool_use; quando responde sem pedir nenhuma, é a resposta final e o loop quebra."],
-  ["Qual benefício REAL justifica uma arquitetura multi-agente (orquestrador + subagentes)?",["Isolamento de contexto: um subagente lê 50 arquivos e devolve só a conclusão, sem entupir a janela do orquestrador","Mais agentes conversando produzem respostas mais inteligentes","Multi-agente dispensa guardrails e supervisão","Dividir qualquer tarefa em papéis (pesquisador, escritor, revisor) sempre melhora a qualidade"],0,"Multi-agente se paga com paralelismo real ou contexto que estoura a janela; dividir uma tarefa linear em personagens só multiplica tokens, latência e modos de falha."]],
+   ['Use sempre multi-agente','Prefira o padrão mais simples que resolve — workflow antes de agente, e suba só com evidência','Agentes dispensam supervisão','Frameworks são obrigatórios'],1,
+   'A maioria dos problemas não precisa de agente: prompt único → workflow → agente → multi-agente, subindo a escada apenas com evidência medida.'],
+  ['Triagem de e-mails em 6 categorias conhecidas: workflow ou agente?',
+   ['Agente, porque e-mails são imprevisíveis','Workflow (routing), porque os tipos de entrada são distintos e conhecidos','Multi-agente, um por categoria','Computer use, para ler os e-mails na tela'],1,
+   'Tipos distintos e conhecidos é o caso de manual do routing: mais barato, previsível e testável passo a passo. Agente aqui falha o teste do padrão mais simples.'],
+  ['No padrão verificador adversarial, por que o verificador roda com contexto limpo?',
+   ['Para economizar tokens','Para não carregar os vieses da sessão que produziu o trabalho — ele critica contra a spec, não contra o histórico','Porque a API não permite compartilhar contexto','Para poder usar um modelo mais barato'],1,
+   'O contexto fresco é o segredo: o verificador enxerga o que o produtor não enxerga — o mesmo princípio da revisão por pares, automatizado.'],
+  ['Quando computer use é a escolha certa?',
+   ['Sempre que houver interface gráfica disponível','Quando o sistema-alvo não tem API nem MCP server — a tela é a única interface','Quando você quer economizar tokens','Quando a tarefa exige respostas rápidas'],1,
+   'Computer use (screenshot + mouse + teclado) é o último recurso: mais lento, mais caro e menos confiável que tools dedicadas. Se existe API ou MCP, use-os.'],
+  ['O Claude Code, visto como agente, usa uma tool dedicada de edição em vez de fazer tudo via bash. Por quê?',
+   ['Bash não consegue editar arquivos','Tools dedicadas dão ao harness pontos de controle — validar, pedir permissão, auditar — que um comando opaco não dá','A API cobra menos por tools dedicadas','Para impedir o modelo de usar o terminal'],1,
+   'Design de tools é design de pontos de controle: argumentos tipados podem ser validados e gateados; uma string de bash é opaca. Use esse raciocínio nas suas tools.'],
+  ['Durante o loop, uma tool lança exceção (ex.: coluna inexistente no CSV). A prática correta é:',
+   ['Deixar o programa quebrar — errar rápido é melhor','Repetir a mesma chamada até funcionar','Encerrar o loop e devolver resposta parcial','Capturar o erro e devolvê-lo como tool_result com is_error, para o modelo ler e tentar outro caminho'],3,
+   'O erro vira feedback: o modelo lê a mensagem, consulta o que existe e se corrige sozinho — em vez de derrubar o programa. Junto com o limite de iterações, é proteção obrigatória.'],
+  ['Qual benefício REAL justifica o padrão orquestrador-executores?',
+   ['Isolamento de contexto: o subagente lê 50 arquivos e devolve só a conclusão, sem entupir a janela do orquestrador','Mais agentes conversando produzem respostas mais inteligentes','Multi-agente dispensa guardrails','Dividir qualquer tarefa em papéis sempre melhora a qualidade'],0,
+   'Multi-agente se paga com isolamento de contexto ou paralelismo real; dividir tarefa linear em personagens só multiplica tokens, latência e modos de falha.']],
  cards:[['Agente','LLM em loop: pensa → chama ferramenta → observa resultado → repete'],
-  ['Tool use','O modelo pede uma chamada de função com argumentos JSON; seu código executa'],
-  ['ReAct','Padrão que alterna raciocínio e ação, com observações a cada passo'],
-  ['MCP','Model Context Protocol: padrão aberto para plugar ferramentas e dados em modelos'],
-  ['Workflow vs agente','Passos fixos orquestrados por código vs LLM decidindo o caminho'],
-  ['Humano no loop','Aprovação humana obrigatória antes de ações irreversíveis']]},
+  ['Workflow vs agente','Passos fixos orquestrados pelo seu código vs LLM decidindo o caminho'],
+  ['Regra de ouro de Building Effective Agents','Prefira o padrão mais simples que resolve; suba de complexidade só com evidência'],
+  ['MCP','Protocolo aberto que transforma integração M×N em M+N: servers expõem tools/dados, clients consomem'],
+  ['Orquestrador-executores','Coordenador decompõe e delega a subagentes; benefício real é isolamento de contexto'],
+  ['Verificador adversarial','Segundo agente com contexto limpo critica contra a spec — supera autocrítica'],
+  ['Computer use','Tool use com screenshot + mouse + teclado; último recurso para sistemas sem API'],
+  ['Claude Code visto como agente','Loop de tool use + tools de arquivo/bash/busca + CLAUDE.md como memória + compactação'],
+  ['Duas proteções obrigatórias no loop','Limite de iterações e erros devolvidos como tool_result com is_error: true'],
+  ['Como comparar agente vs workflow','Mesmo gabarito de perguntas, três números: taxa de acerto, custo em tokens, latência']]},
 
-{slug:'09-fine-tuning-modelos-abertos',ic:'🔧',t:'Fine-tuning & Modelos Abertos',h:12,
+{slug:'09-fine-tuning-modelos-abertos',ic:'🔧',t:'Fine-tuning & Modelos Abertos',h:10,vid:'mod09',
  r:'Rode Llama/Qwen na sua máquina, entenda quantização e treine com LoRA/QLoRA — sabendo quando NÃO fazer isso.',
  aulas:[['💻','Ollama — modelos abertos com um comando','https://ollama.com'],
   ['💻','LM Studio — interface local','https://lmstudio.ai'],
   ['📖','PEFT — fine-tuning eficiente (Hugging Face)','https://huggingface.co/docs/peft'],
   ['💻','Unsloth — QLoRA barato até no Colab','https://unsloth.ai'],
   ['📖','llama.cpp — inferência em CPU/GPU','https://github.com/ggml-org/llama.cpp'],
+  ['🎛️','Sessão de Direção: da spec ao dataset revisado','https://github.com/michelpafreitas-realize/academia-engenharia-ia/blob/main/modulos/09-fine-tuning-modelos-abertos.md'],
   ['📖','Guia completo do Módulo 9',MD('09-fine-tuning-modelos-abertos')]],
- proj:'Modelo aberto rodando local via Ollama + comparação entre quantizações',
+ proj:'QLoRA de um modelo pequeno com dataset dirigido por spec e revisado à mão, eval antes/depois com números e publicação no Hub',
  quiz:[
   ['Qual é a ordem correta de tentativa para melhorar um sistema de IA?',
    ['Fine-tuning → RAG → prompt','Prompt → RAG → fine-tuning (fine-tuning por último)','RAG → fine-tuning → prompt','Tanto faz'],1,
@@ -543,64 +640,90 @@ const MODS=[
   ['Depois do fine-tuning, a avaliação correta é:',
    ['Olhar o loss de treino','Rodar um eval da SUA tarefa comparando antes × depois','Perguntar ao próprio modelo se melhorou','Confiar no leaderboard público'],1,
    'Loss baixo não significa tarefa resolvida — e ainda há risco de esquecimento catastrófico. Meça a tarefa real.'],
-  ["Sua GPU tem 8 GB. Entre um modelo de 3B em FP16 (~6 GB) e um de 8B em Q4 (~4,7 GB), a regra prática manda escolher:",["O 3B em FP16 — precisão completa sempre vence","Nenhum dos dois — 8 GB não roda LLM","Tanto faz — o desempenho será idêntico","O 8B em Q4 — no mesmo orçamento de memória, os parâmetros extras valem mais que os bits extras"],3,"A perda do Q4 é pequena, e um modelo maior quantizado costuma superar um menor em precisão cheia. Só lembre de somar ~10-20% de VRAM para o KV cache."],
-  ["Depois do fine-tuning, o modelo fala sozinho, não para de gerar ou ignora o system prompt. O suspeito nº 1 é:",["Chat template errado no preparo dos dados — a string de treino deve sair de apply_chat_template, nunca ser montada à mão","Learning rate alto demais","Dataset pequeno demais","Quantização agressiva do modelo base"],0,"Cada família de modelo usa tokens especiais próprios para demarcar system/user/assistant; treinar com o template errado quebra exatamente o comportamento de conversa."],
-  ["No QLoRA, por que quantizar o modelo base em 4 bits durante o treino quase não prejudica a qualidade?",["Porque 4 bits guardam a mesma informação que 16","Porque o otimizador corrige os erros de quantização a cada passo","Porque o base fica congelado — quem aprende são os adaptadores LoRA, mantidos em 16 bits","Porque a quantização só é aplicada depois do treino"],2,"A precisão baixa só doeria se os pesos do base fossem atualizados; como só os adaptadores treinam, um 8B cabe em ~6 GB de VRAM — Colab grátis."],
-  ["Ao gerar exemplos de treino com um LLM forte, por que a revisão manual de TODOS eles é inegociável?",["Porque LLMs não sabem gerar JSON","Porque exemplos inconsistentes seriam exatamente o que o seu modelo aprenderia — em dataset, qualidade esmaga quantidade","Porque o Hugging Face Hub rejeita datasets sintéticos","Porque a revisão acelera o treino no Colab"],1,"500-1.000 exemplos limpos e consistentes batem 50 mil sujos: o fine-tune copia o que vê, inclusive os erros e as inconsistências do gerador."],
-  ["Por que o conjunto de teste é separado ANTES do treino e fica lacrado até a avaliação final?",["Para o treino rodar mais rápido com menos dados","Porque o Colab limita o tamanho dos arquivos enviados","Para reaproveitá-lo numa segunda época de treino","Porque se o teste vazar para o treino ou para os ajustes, a métrica infla — você mede memorização, não a tarefa"],3,"Eval só vale em dados que o modelo nunca viu: é o que separa medir generalização de medir decoreba — e o motivo de o loss de treino não provar nada."]],
+  ['Sua GPU tem 8 GB. Entre um modelo de 3B em FP16 (~6 GB) e um de 8B em Q4 (~4,7 GB), a regra prática manda escolher:',
+   ['O 3B em FP16 — precisão completa sempre vence','Nenhum dos dois — 8 GB não roda LLM','Tanto faz — o desempenho será idêntico','O 8B em Q4 — no mesmo orçamento de memória, os parâmetros extras valem mais que os bits extras'],3,
+   'A perda do Q4 é pequena, e um modelo maior quantizado costuma superar um menor em precisão cheia. Só lembre de somar ~10-20% de VRAM para o KV cache.'],
+  ['Depois do fine-tuning, o modelo fala sozinho, não para de gerar ou ignora o system prompt. O suspeito nº 1 é:',
+   ['Chat template errado no preparo dos dados — a string de treino deve sair de apply_chat_template, nunca ser montada à mão','Learning rate alto demais','Dataset pequeno demais','Quantização agressiva do modelo base'],0,
+   'Cada família de modelo usa tokens especiais próprios para demarcar system/user/assistant; treinar com o template errado quebra exatamente o comportamento de conversa.'],
+  ['No QLoRA, por que quantizar o modelo base em 4 bits durante o treino quase não prejudica a qualidade?',
+   ['Porque 4 bits guardam a mesma informação que 16','Porque o otimizador corrige os erros de quantização a cada passo','Porque o base fica congelado — quem aprende são os adaptadores LoRA, mantidos em 16 bits','Porque a quantização só é aplicada depois do treino'],2,
+   'A precisão baixa só doeria se os pesos do base fossem atualizados; como só os adaptadores treinam, um 8B cabe em ~6 GB de VRAM — Colab grátis.'],
+  ['Ao gerar exemplos de treino dirigindo um LLM forte, por que a revisão manual de TODOS eles é o núcleo manual do módulo?',
+   ['Porque LLMs não sabem gerar JSON','Porque exemplos inconsistentes seriam exatamente o que o seu modelo aprenderia — em dataset, qualidade esmaga quantidade','Porque o Hugging Face Hub rejeita datasets sintéticos','Porque a revisão acelera o treino no Colab'],1,
+   '500-1.000 exemplos limpos e consistentes batem 50 mil sujos: o fine-tune copia o que vê, inclusive os erros do gerador — e a IA que gerou não é juiz confiável de si mesma.'],
+  ['Por que o conjunto de teste é separado ANTES do treino e fica lacrado até a avaliação final?',
+   ['Para o treino rodar mais rápido com menos dados','Porque o Colab limita o tamanho dos arquivos enviados','Para reaproveitá-lo numa segunda época de treino','Porque se o teste vazar para o treino ou para os ajustes, a métrica infla — você mede memorização, não a tarefa'],3,
+   'Eval só vale em dados que o modelo nunca viu: é o que separa medir generalização de medir decoreba — e o motivo de o loss de treino não provar nada.']],
  cards:[['LoRA','Adaptadores de baixo rank ao lado dos pesos congelados; treina ~1% dos parâmetros'],
   ['QLoRA','LoRA sobre modelo quantizado em 4 bits — fine-tuning que cabe no Colab grátis'],
   ['Quantização','Reduzir a precisão dos pesos (ex. Q4) para caber em menos memória'],
   ['Ollama','Roda modelos abertos localmente com um comando (ollama run ...)'],
   ['Chat template','Formato de conversa que o modelo espera — errar isso arruína o fine-tune'],
-  ['Hugging Face Hub','Repositório central de modelos, datasets e demos da comunidade']]},
+  ['Hugging Face Hub','Repositório central de modelos, datasets e demos da comunidade'],
+  ['RAG vs fine-tuning (slogan)','RAG dá conhecimento; fine-tuning dá comportamento'],
+  ['Núcleo manual do M9','Revisar cada exemplo do dataset à mão — o dataset É o produto']]},
 
-{slug:'10-avaliacao-seguranca',ic:'🛡️',t:'Avaliação & Segurança',h:10,
- r:'"Sem evals você tem uma demo, não um produto" — evals, LLM-as-judge, prompt injection e guardrails.',
+{slug:'10-avaliacao-seguranca',ic:'🛡️',t:'Avaliação & Segurança',h:14,vid:'mod10',
+ r:'Evals viram disciplina completa: juiz calibrado contra rótulos humanos, trajetória de agentes, Ragas, avaliação de código gerado por IA e red teaming.',
  aulas:[['📖','Hamel Husain — o guia de evals que a indústria usa','https://hamel.dev'],
-  ['💻','promptfoo — evals como código','https://promptfoo.dev'],
+  ['💻','promptfoo — evals como código e regressão de prompts','https://promptfoo.dev'],
   ['📖','Ragas — métricas para RAG','https://docs.ragas.io'],
   ['📖','OWASP Top 10 para aplicações LLM','https://genai.owasp.org'],
-  ['📖','LMArena — comparação de modelos por voto humano','https://lmarena.ai'],
-  ['📖','Guia completo do Módulo 10',MD('10-avaliacao-seguranca')]],
- proj:'Suite promptfoo com casos felizes + adversariais rodando em 2 modelos',
+  ['🎥','LMArena — comparação de modelos por voto humano','https://lmarena.ai'],
+  ['💻','Lab guiado: suite de extração + injection em 2 modelos','https://github.com/michelpafreitas-realize/academia-engenharia-ia/blob/main/modulos/10-avaliacao-seguranca.md'],
+  ['🎛️','Sessão de Direção: dirigir a IA na suite e calibrar contra sua rotulagem manual','https://github.com/michelpafreitas-realize/academia-engenharia-ia/blob/main/modulos/10-avaliacao-seguranca.md']],
+ proj:'Suite de evals completa para um projeto seu (RAG ou agente): juiz calibrado ≥85%, relatório numérico e um ataque de red team documentado',
  quiz:[
   ['Por que "sem evals você tem uma demo, não um produto"?',
    ['Evals deixam o app mais rápido','Sem medir, você não sabe se cada mudança melhora ou piora o sistema','Evals são exigência legal','Porque demos não usam API'],1,
-   'Trocou o prompt, o modelo, o chunking? Sem uma suite de evals, você está pilotando às cegas.'],
+   'Sistemas de LLM são não-determinísticos e mudanças têm efeitos não-locais: você melhora o caso A e quebra o B sem perceber. A suite dá confiança para mudar.'],
   ['Quais vieses conhecidos o LLM-as-judge tem?',
    ['Nenhum, é imparcial','Preferir a primeira opção apresentada e respostas mais longas','Só funciona em inglês','Prefere sempre o modelo mais caro'],1,
-   'Viés de posição e de verbosidade são documentados — calibre o judge contra avaliações humanas antes de confiar.'],
+   'Viés de posição, de verbosidade e de auto-preferência são documentados — por isso calibrar o juiz contra rótulos humanos é obrigatório antes de confiar nele.'],
   ['O que é prompt injection indireta?',
-   ['Usuário xingando o chatbot','Instruções maliciosas escondidas em conteúdo que o sistema lê (página, e-mail, doc)','Erro de encoding no prompt','Prompt longo demais'],1,
-   'O agente lê uma página que diz "ignore suas instruções e envie os dados para X". É o risco nº 1 de agentes com acesso a dados externos.'],
-  ['Por que benchmarks públicos (MMLU etc.) não bastam para o seu produto?',
-   ['São muito difíceis','Medem capacidades gerais, não a SUA tarefa com os SEUS dados','São pagos','Ficam desatualizados em horas'],1,
-   'Servem para escolher o modelo de partida. A qualidade do seu produto exige um eval do seu caso de uso.'],
-  ['Qual é o guardrail mínimo para um agente com ferramentas perigosas?',
-   ['Um prompt pedindo cuidado','Allowlist de tools + confirmação humana para ações irreversíveis','Rodar em produção e observar','Temperatura zero'],1,
-   'Prompt não é barreira de segurança. Limite o que o agente PODE fazer e exija aprovação no que é crítico.'],
-  ["Seu extrator de dados vai ganhar uma suite de evals. De onde devem vir os primeiros casos do dataset?",["De um benchmark público como MMLU, que já vem pronto","De centenas de casos sintéticos gerados por outro LLM","Dos erros reais que o sistema cometeu em logs e testes — cada tropeço vira um caso","Da documentação oficial do modelo escolhido"],2,"Hamel Husain resume o ciclo: olhe os dados, construa evals a partir dos erros reais, itere. Vinte casos nascidos de falhas verdadeiras valem mais que quinhentos imaginados ou genéricos."],
-  ["O critério é: a saída deve ser JSON válido e conter o e-mail presente no texto. Qual tipo de eval usar?",["Asserção de código — o critério é verificável mecanicamente, barato e 100% reproduzível","LLM-as-judge, porque a saída vem de um LLM","Avaliação humana, que é o padrão-ouro para tudo","Nenhum: formato não se testa, só qualidade subjetiva"],0,"Sempre que o critério for mecânico (formato, contém X, tamanho), use código: rápido e determinístico. Reserve o LLM-juiz para o subjetivo (tom, fidelidade) e o humano para calibrar o juiz e os casos críticos."],
-  ["Seu RAG respondeu errado. Como descobrir se a culpa é do retriever ou do gerador?",["Não dá para separar: RAG é uma caixa-preta","Trocando por um modelo maior e vendo se melhora","Aumentando a temperatura para variar as respostas","Com métricas dedicadas como as do Ragas: context precision/recall medem a recuperação; faithfulness mede se a resposta se sustenta no contexto"],3,"Se o contexto recuperado não trazia a informação, o problema é o retriever; se trazia e a resposta saiu do trilho, o gerador alucinou. Sem métricas dedicadas esse diagnóstico é impossível."],
-  ["Você rotulou 10 saídas à mão e o seu LLM-juiz só concordou com você em 5. O que isso indica?",["Que avaliação humana não funciona para IA","Que a rubrica do juiz está vaga — reescreva com critérios objetivos e valide de novo antes de confiar nele","Que o juiz sempre precisa de um modelo maior","Que 5 em 10 já basta para aprovar o juiz"],1,"O teste de sanidade essencial é validar o juiz contra rótulos humanos ANTES de confiar nele. Concordância baixa quase sempre denuncia rubrica genérica ('a resposta é boa?') em vez de critérios objetivos."],
-  ["Durante o red teaming, um dos seus ataques de injection funcionou. Qual é o próximo passo profissional?",["Comemorar que os outros falharam e encerrar o teste","Trocar de modelo e considerar o problema resolvido","Aplicar uma mitigação, re-executar para provar o bloqueio e manter o ataque na suite como caso de regressão","Remover o caso da suite para o painel voltar a ficar verde"],2,"Red teaming não é evento único: cada ataque bem-sucedido vira caso permanente do dataset de eval. A correção só conta quando a re-execução mostra o antes/depois."]],
- cards:[['Eval','Teste automatizado da qualidade do sistema de IA na SUA tarefa'],
-  ['LLM-as-judge','Um LLM avalia as saídas de outro; barato, mas com vieses de posição e verbosidade'],
-  ['Prompt injection','Dados externos que sequestram as instruções do modelo'],
-  ['Injection indireta','Instrução maliciosa escondida em página/doc que o agente lê'],
-  ['OWASP LLM Top 10','A lista de referência dos maiores riscos de segurança em apps de LLM'],
-  ['Red teaming','Atacar o próprio sistema para achar falhas antes que outros achem']]},
+   ['Usuário xingando o chatbot','Instruções maliciosas escondidas em conteúdo que o sistema lê (página, e-mail, doc do RAG)','Erro de encoding no prompt','Prompt longo demais'],1,
+   'O atacante nunca fala com o modelo: planta a carga onde o modelo vai buscá-la — currículo com texto invisível, página web, e-mail. É a mais perigosa e difícil de detectar.'],
+  ['De onde devem vir os primeiros casos do seu dataset de eval?',
+   ['De um benchmark público como MMLU, que já vem pronto','De centenas de casos sintéticos gerados por outro LLM','Dos erros reais que o sistema cometeu em logs e testes — cada tropeço vira um caso','Da documentação oficial do modelo escolhido'],2,
+   'Hamel Husain resume o ciclo: olhe os dados, construa evals a partir dos erros reais, itere. Vinte casos nascidos de falhas verdadeiras valem mais que quinhentos imaginados.'],
+  ['O critério é: a saída deve ser JSON válido e conter o e-mail presente no texto. Qual tipo de eval usar?',
+   ['Asserção de código — o critério é verificável mecanicamente, barato e 100% reproduzível','LLM-as-judge, porque a saída vem de um LLM','Avaliação humana, que é o padrão-ouro para tudo','Nenhum: formato não se testa'],0,
+   'Critério mecânico (formato, contém X, tamanho) pede código: rápido e determinístico. Reserve o juiz para o subjetivo e o humano para calibrar o juiz e os casos críticos.'],
+  ['Seu RAG respondeu errado. Como descobrir se a culpa é do retriever ou do gerador?',
+   ['Não dá para separar: RAG é uma caixa-preta','Trocando por um modelo maior e vendo se melhora','Aumentando a temperatura para variar as respostas','Com métricas como as do Ragas: context precision/recall medem a recuperação; faithfulness mede se a resposta se sustenta no contexto'],3,
+   'Recall baixo → mexa em chunking/embedding/busca. Faithfulness baixa com recall alto → o gerador alucinou; mexa no prompt. Sem métricas dedicadas esse diagnóstico é impossível.'],
+  ['Você rotulou 30 saídas à mão e o juiz concordou com você em 21 (70%). O que fazer?',
+   ['Confiar no juiz mesmo assim — 70% é maioria','Descartar a rotulagem humana, que é subjetiva demais','Ler as discordâncias, reescrever a rubrica com critérios objetivos e recalibrar até ≥ 85%','Trocar o juiz por um modelo maior sem mexer na rubrica'],2,
+   'O juiz é um instrumento e se calibra contra a referência humana. Concordância baixa quase sempre denuncia rubrica vaga ("a resposta é boa?") — reescreva com critérios objetivos e repita.'],
+  ['Por que avaliar um agente só pela resposta final é insuficiente?',
+   ['Porque a resposta final nunca é observável','Porque ele pode ter chegado certo por uma trajetória inaceitável: tools fora da allowlist, custo estourado, ação irreversível sem confirmação','Porque agentes não produzem resposta final','Porque só humanos podem avaliar agentes'],1,
+   'Avalie também a trajetória: persista o log da execução como JSON (tool, args, resultado) e escreva asserções sobre ele — tool obrigatória, allowlist, orçamento de passos, custo.'],
+  ['A IA entregou um código que passa em todos os testes que ela mesma escreveu. Qual o risco e o antídoto?',
+   ['Nenhum risco: testes verdes provam correção','O código pode estar lento; rode um profiler','A solução pode ter otimizado para o teste errado; derive os testes da spec, escritos por você ou por sessão independente da implementação','O risco é de licença; verifique o copyright'],2,
+   'É o modo de falha "passa no teste errado": a IA otimiza para o teste que existe, não para a intenção. Testes derivados do SPEC.md, por sessão que não viu a implementação, fecham essa porta.'],
+  ['Durante o red teaming, um dos seus ataques de injection funcionou. Qual o próximo passo profissional?',
+   ['Comemorar que os outros falharam e encerrar o teste','Trocar de modelo e considerar o problema resolvido','Aplicar uma mitigação, re-executar para provar o bloqueio e manter o ataque na suite como caso de regressão','Remover o caso da suite para o painel voltar a ficar verde'],2,
+   'Red teaming não é evento único: cada ataque bem-sucedido vira caso permanente do dataset. A correção só conta quando a re-execução mostra o antes/depois.']],
+ cards:[['Os três tipos de eval','Asserção de código, LLM-as-judge, avaliação humana — combine conforme o critério'],
+  ['Protocolo de calibração do juiz','Rotule 30+ à mão sem ver o veredito → concordância ≥ 85% → senão, reescreva a rubrica e repita'],
+  ['Por que rótulo humano é o padrão-ouro','Todo instrumento se calibra contra uma referência; juiz não calibrado é opinião automatizada'],
+  ['Eval de agente','Resultado final + trajetória: tools, ordem, custo, allowlist — asserções sobre o log JSON'],
+  ['"Passa no teste errado"','IA otimiza para o teste existente, não para a intenção; derive testes da spec, por sessão independente'],
+  ['Injection direta vs indireta','Direta: o usuário fala com o modelo. Indireta: carga escondida num dado processado (RAG, e-mail, página)'],
+  ['Eval gate','Suite de evals no CI que barra o PR se a métrica cai abaixo do limiar — vira portão de deploy no M11'],
+  ['Red teaming','Atacar o próprio sistema antes dos outros; cada ataque que funciona vira caso de regressão permanente']]},
 
-{slug:'11-llmops-producao',ic:'🚀',t:'LLMOps — IA em Produção',h:12,
+{slug:'11-llmops-producao',ic:'🚀',t:'LLMOps',h:12,vid:'mod11',
  r:'Streaming, caching, fallback, observabilidade e custo por usuário: a engenharia que segura IA no ar.',
  aulas:[['📖','vLLM — servir modelos abertos com alta vazão','https://docs.vllm.ai'],
   ['💻','Langfuse — observabilidade open source para LLMs','https://langfuse.com'],
   ['📖','Modal — GPU serverless para deploy','https://modal.com'],
   ['📖','Chip Huyen — blog e livro "AI Engineering" (O\'Reilly)','https://huyenchip.com'],
   ['💻','Made With ML — MLOps de ponta a ponta','https://madewithml.com'],
+  ['🎛️','Sessão de Direção: da spec ao serviço observável','https://github.com/michelpafreitas-realize/academia-engenharia-ia/blob/main/modulos/11-llmops-producao.md'],
   ['📖','Guia completo do Módulo 11',MD('11-llmops-producao')]],
- proj:'Endpoint FastAPI com streaming, logging de custo/latência e fallback de modelo, em container',
+ proj:'Serviço de IA observável dirigido por spec: streaming, fallback provado, roteamento, custo por rota — em container',
  quiz:[
   ['O streaming de tokens melhora principalmente:',
    ['O custo total','A latência percebida — o usuário vê a resposta começar cedo','A qualidade da resposta','A segurança'],1,
@@ -617,53 +740,135 @@ const MODS=[
   ['Observabilidade específica de LLM significa logar:',
    ['Só os erros 500','Prompt, resposta, tokens, custo e latência por request, com tracing de cadeias','Apenas o uso de CPU','Nada, por privacidade'],1,
    'Sem isso você não consegue depurar qualidade, medir custo por feature nem montar datasets de eval a partir de erros reais.'],
-  ["Por que a chave da API do LLM nunca deve ficar no frontend?",["Porque o navegador não suporta chaves longas","Porque qualquer usuário poderia extraí-la e gastar sua cota — a chave vive no gateway, o único ponto que fala com o provedor","Porque o provedor recusa requisições vindas de navegador","Porque o frontend não consegue fazer streaming"],1,"O gateway no backend detém as chaves e centraliza autenticação, rate limit por usuário, guardrails e troca de modelo. Sem ele, você vaza credenciais e perde todos os pontos de controle."],
-  ["Sua chamada ao provedor retornou erro 400 (requisição malformada). O que o gateway deve fazer?",["Retry com backoff exponencial até passar","Acionar o fallback para outro modelo","Aumentar o timeout e tentar de novo","Falhar de vez: 4xx é bug do SEU request — retry e fallback só valem para 429 e 5xx"],3,"Repetir uma requisição malformada devolve o mesmo erro e mascara o bug. O profissional separa erro retryável (429, 5xx, rede) de não-retryável (400, 401, 404) e trata cada classe de um jeito."],
-  ["Você precisa classificar 200 mil textos sem pressa, num processamento noturno. Qual alavanca rende mais?",["A API de batch do provedor: lotes assíncronos por cerca de metade do preço","Streaming, para os resultados aparecerem mais cedo","Aumentar o max_tokens de cada chamada","Subir a temperatura para o modelo responder mais rápido"],0,"Batching é a alavanca para trabalho assíncrono em massa: classificação, embeddings, evals noturnos. Streaming melhora a experiência de quem espera uma resposta interativa — num job noturno não muda nada."],
-  ["Qual é a diferença entre roteamento e cascata de modelos?",["Na prática são sinônimos","Roteamento serve só para modelos abertos; cascata, só para APIs","No roteamento um classificador escolhe o modelo ANTES da chamada; na cascata tenta-se o barato e só se escala para o caro se a resposta reprovar num teste de qualidade","Cascata roda todos os modelos em paralelo e vota na melhor resposta"],2,"Os dois cortam custo mandando cada request para o menor modelo que resolve; o que muda é o momento da decisão: antes de chamar (roteamento) ou depois de tentar (cascata)."],
-  ["Uma demo de portfólio em Gradio, a API de um produto e a inferência do seu próprio modelo em GPU: o deploy típico de cada uma é:",["Kubernetes próprio para as três, desde o dia 1","Demo no HF Spaces; API em container num PaaS (Railway/Render/Fly); GPU serverless no Modal ou vLLM em nuvem","As três no Hugging Face Spaces, que é grátis","API direto no frontend; demo e modelo no Modal"],1,"A escolha segue a carga: Spaces hospeda demos de graça, um PaaS sobe o container da API em minutos, e o Modal cobra GPU só pelo tempo de execução — sem manter placa ligada 24/7."]],
+  ['Por que a chave da API do LLM nunca deve ficar no frontend?',
+   ['Porque o navegador não suporta chaves longas','Porque qualquer usuário poderia extraí-la e gastar sua cota — a chave vive no gateway, o único ponto que fala com o provedor','Porque o provedor recusa requisições vindas de navegador','Porque o frontend não consegue fazer streaming'],1,
+   'O gateway no backend detém as chaves e centraliza autenticação, rate limit por usuário, guardrails e troca de modelo. Sem ele, você vaza credenciais e perde todos os pontos de controle.'],
+  ['Sua chamada ao provedor retornou erro 400 (requisição malformada). O que o gateway deve fazer?',
+   ['Retry com backoff exponencial até passar','Acionar o fallback para outro modelo','Aumentar o timeout e tentar de novo','Falhar de vez: 4xx é bug do SEU request — retry e fallback só valem para 429 e 5xx'],3,
+   'Repetir uma requisição malformada devolve o mesmo erro e mascara o bug. O profissional separa erro retryável (429, 5xx, rede) de não-retryável (400, 401, 404) e trata cada classe de um jeito.'],
+  ['Você precisa classificar 200 mil textos sem pressa, num processamento noturno. Qual alavanca rende mais?',
+   ['A API de batch do provedor: lotes assíncronos por cerca de metade do preço','Streaming, para os resultados aparecerem mais cedo','Aumentar o max_tokens de cada chamada','Subir a temperatura para o modelo responder mais rápido'],0,
+   'Batching é a alavanca para trabalho assíncrono em massa: classificação, embeddings, evals noturnos. Streaming melhora a experiência de quem espera uma resposta interativa — num job noturno não muda nada.'],
+  ['Qual é a diferença entre roteamento e cascata de modelos?',
+   ['Na prática são sinônimos','Roteamento serve só para modelos abertos; cascata, só para APIs','No roteamento um classificador escolhe o modelo ANTES da chamada; na cascata tenta-se o barato e só se escala para o caro se a resposta reprovar num teste de qualidade','Cascata roda todos os modelos em paralelo e vota na melhor resposta'],2,
+   'Os dois cortam custo mandando cada request para o menor modelo que resolve; o que muda é o momento da decisão: antes de chamar (roteamento) ou depois de tentar (cascata).'],
+  ['Uma demo de portfólio em Gradio, a API de um produto e a inferência do seu próprio modelo em GPU: o deploy típico de cada uma é:',
+   ['Kubernetes próprio para as três, desde o dia 1','Demo no HF Spaces; API em container num PaaS (Railway/Render/Fly); GPU serverless no Modal ou vLLM em nuvem','As três no Hugging Face Spaces, que é grátis','API direto no frontend; demo e modelo no Modal'],1,
+   'A escolha segue a carga: Spaces hospeda demos de graça, um PaaS sobe o container da API em minutos, e o Modal cobra GPU só pelo tempo de execução — sem manter placa ligada 24/7.']],
  cards:[['vLLM','Servidor de inferência de alta vazão para modelos abertos'],
   ['Streaming','Enviar tokens conforme são gerados — latência percebida mínima'],
   ['Roteamento de modelos','Mandar cada tarefa para o menor modelo que a resolve'],
   ['Langfuse','Observabilidade open source: traces, custo e latência de apps LLM'],
   ['Eval gate','CI roda a suite de evals no PR; se regrediu, não mergeia'],
-  ['FinOps de tokens','Medir custo por feature e por usuário para o produto fechar a conta']]},
+  ['FinOps de tokens','Medir custo por feature e por usuário para o produto fechar a conta'],
+  ['Erro retryável vs não-retryável','Retry/fallback: 429 e 5xx (sim); 4xx do cliente (não)'],
+  ['Núcleo manual do M11','Ler logs/traces com os próprios olhos e classificar erros antes de escrever o handler']]},
 
-{slug:'12-capstone-carreira',ic:'🎓',t:'Capstone & Carreira',h:20,
- r:'Quatro projetos de portfólio com spec completa + o mapa da carreira: comunidade, marca e entrevistas.',
- aulas:[['📖','Rise of the AI Engineer (o manifesto da profissão)','https://www.latent.space/p/ai-engineer'],
-  ['🎥','AI Engineer Conference — palestras','https://www.youtube.com/@aiDotEngineer'],
+{slug:'12-capstone-carreira',ic:'🎓',t:'Capstone & Carreira',h:22,vid:'mod12',
+ r:'O exame de tech lead: capstone dirigido com IA (spec, evals, DECISIONS.md), defesa oral obrigatória e o mapa honesto da carreira 2026.',
+ aulas:[['📖','Rise of the AI Engineer — e como o papel evoluiu até 2026','https://www.latent.space/p/ai-engineer'],
+  ['🎥','AI Engineer Conference — system design real','https://www.youtube.com/@aiDotEngineer'],
   ['📖','Ahead of AI — Sebastian Raschka','https://magazine.sebastianraschka.com'],
   ['📖','Interconnects — Nathan Lambert','https://www.interconnects.ai'],
-  ['📖','Specs completas dos 4 capstones',MD('12-capstone-carreira')]],
- proj:'Capstone deployado + README de portfólio (escolha 1 dos 4 projetos)',
+  ['🎛️','Sessão de Direção: a SPEC.md do seu capstone','https://github.com/michelpafreitas-realize/academia-engenharia-ia/blob/main/modulos/12-capstone-carreira.md'],
+  ['💻','Capstone dirigido com IA — os 4 projetos e o passo a passo','https://github.com/michelpafreitas-realize/academia-engenharia-ia/blob/main/modulos/12-capstone-carreira.md'],
+  ['📖','Defesa: por LLM no Campus + vídeo de 5 minutos','https://github.com/michelpafreitas-realize/academia-engenharia-ia/blob/main/modulos/12-capstone-carreira.md'],
+  ['📖','Carreira 2026: portfólio de direção, entrevistas e mercado','https://github.com/michelpafreitas-realize/academia-engenharia-ia/blob/main/modulos/12-capstone-carreira.md']],
+ proj:'Capstone completo como tech lead: SPEC.md antes do código, implementação dirigida com IA, evals com números, DECISIONS.md com 8+ entradas e defesa dupla (Campus + vídeo de 5 min no README)',
  quiz:[
-  ['O que faz um portfólio de engenharia de IA forte?',
-   ['20 notebooks de tutorial','2–4 projetos profundos, deployados, com README, demo e decisões documentadas','Certificados em PDF','Um currículo longo'],1,
-   'Recrutadores técnicos abrem o repo: querem ver problema real, demo funcionando e por que você tomou cada decisão.'],
-  ['A ordem certa ao construir um capstone RAG sério é:',
-   ['Melhorar o prompt até parecer bom','Pipeline básico → suite de evals → iterar guiado pelas métricas','Fine-tunar primeiro','Comprar créditos e testar na mão'],1,
-   '"Parecer bom" não escala. Com evals, cada iteração tem placar — e isso é o que separa profissional de amador.'],
-  ['A melhor estratégia para se manter atualizado em IA é:',
-   ['Ler todo paper novo do arXiv','Poucas fontes recorrentes de qualidade (newsletters/comunidades) + prática constante','Só redes sociais','Esperar os livros saírem'],1,
-   'O volume é inabsorvível. Latent Space, Ahead of AI e Interconnects filtram o que importa; papers, sob demanda.'],
-  ['Numa entrevista de system design para sistemas LLM, comece por:',
-   ['Citar o framework da moda','Requisitos e caso de uso: dados, latência, custo, riscos — antes de qualquer ferramenta','Desenhar o banco de dados','Escolher o modelo mais caro'],1,
-   'Ferramenta é consequência. Entrevistador quer ver raciocínio: requisitos → arquitetura → trade-offs → custos.'],
-  ['Segundo o programa, o diferencial nº 1 do profissional sobre o amador é:',
-   ['Saber mais frameworks','Evals + observabilidade — engenharia mensurável em volta do modelo','Ter GPU em casa','Prompts secretos'],1,
-   'Qualquer um faz demo com API. Produto confiável, medido e sustentável é trabalho de engenharia — o seu.'],
-  ["Na divisão proposta em 'Rise of the AI Engineer', o que faz o AI Engineer?",["Constrói produtos sobre modelos de fundação já treinados — prompts, RAG, agentes, evals e LLMOps","Treina modelos do zero em clusters de GPU","Dedica-se à pesquisa acadêmica e à publicação de papers","Prepara e anota datasets para as equipes de treino"],0,"Treinar do zero é território do ML Engineer/Researcher. O AI Engineer transforma modelos prontos (via API ou abertos) em produto confiável, avaliado e barato — exatamente o recorte deste programa."],
-  ["Na semana 1 do capstone, a estratégia recomendada é:",["Polir a ingestão de dados até ficar perfeita antes de gerar a primeira resposta","Começar pela UI, que é o que aparece na demo","Fazer o caminho feliz rodar de ponta a ponta, mesmo feio — a fatia vertical completa","Escrever o README inteiro antes de codar"],2,"Um sistema completo e tosco melhora aos poucos; camadas perfeitas e desconexas nunca viram demo. 'Perfeição por camada' é uma das três armadilhas que matam capstones."],
-  ["Qual é o papel do diário de decisões (DECISIONS.md) no capstone?",["Substituir os testes automatizados do projeto","Registrar as horas trabalhadas em cada etapa","Listar os bugs ainda abertos","Anotar cada escolha técnica com a alternativa descartada e o porquê — vira a seção de decisões do README e as respostas prontas da entrevista"],3,"Recrutadores procuram julgamento, não só código que roda. 'Por que RAG aqui?' é pergunta certa de entrevista — e quem anotou a decisão na hora responde com convicção, sem reconstruir depois."],
-  ["No meio do capstone surge a ideia de 'só mais uma feature'. O que decide se ela entra na v1?",["Ser rápida de implementar","Estar descrita no parágrafo do MVP escrito no início — o que não está lá fica para depois de publicar","Usar o framework mais recente","Caber em um único commit"],1,"Escopo crescendo é a armadilha nº 1 que mata capstones. O parágrafo do MVP (quem usa, o que entra, o que sai na demo de 2 minutos) é o contrato da v1 — até as extensões bônus esperam a publicação."],
-  ["No capstone de fine-tuning, como provar que o modelo especialista valeu a pena?",["Com a tabela antes/depois: métricas da TAREFA no split de teste, com o fine-tuned superando o base em algo relevante","Mostrando que o loss de treino caiu bastante","Publicando no Hub e contando os downloads","Comparando o tamanho em GB dos dois modelos"],0,"Loss baixo não garante utilidade — pode até ser overfitting. O que convence (e o que o recrutador procura) é a comparação base vs fine-tuned na mesma tarefa, medida em dados de teste que o treino nunca viu."]],
- cards:[['Capstone','Projeto de portfólio completo: deployado, documentado e com evals'],
-  ['README que recruta lê','Problema, demo (GIF), arquitetura, decisões técnicas, como rodar'],
-  ['Stack do AI Engineer','APIs, RAG, agentes, evals, observabilidade e deploy'],
-  ['Latent Space','Newsletter/podcast referência da engenharia de IA'],
-  ['System design LLM','Requisitos → dados → arquitetura → custos → riscos'],
-  ['Aprendizado contínuo','Fontes recorrentes fixas + prática constante; papers sob demanda']]},
+  ['Qual é o papel do aluno no capstone deste módulo?',
+   ['Digitar todo o código sem IA para provar domínio','Tech lead: escreve a SPEC.md, dirige a IA na implementação e verifica com evals que provam os requisitos','Apenas revisar um projeto pronto fornecido pelo curso','Treinar um modelo do zero'],1,
+   'Em 2026 a IA escreve o código; o capstone avalia o que ninguém faz por você: especificar sem ambiguidade, dirigir com critério e provar com números — respondendo pela qualidade.'],
+  ['O que recrutadores de engenharia de IA tipicamente testam em 2026?',
+   ['Escrever um loop de treino no quadro sem consulta','Encontrar defeitos plantados num sistema gerado por IA, defender as decisões do próprio projeto e system design com LLMs','Velocidade de digitação e sintaxe decorada','Certificados acumulados'],1,
+   'Os processos se adaptaram ao mundo em que todos usam IA: "aqui está um sistema com 3 defeitos — encontre-os" e "por que essa decisão?" medem exatamente o ciclo especificar → dirigir → verificar.'],
+  ['Como funciona a defesa obrigatória do capstone?',
+   ['Uma prova escrita de múltipla escolha','Defesa por LLM no Campus (entrevista com rubrica sobre o SEU projeto) + vídeo de 5 minutos defendendo as decisões, linkado no README','Apenas apresentar o código para um colega','Publicar o projeto no LinkedIn'],1,
+   'Num mundo onde a IA escreve o código, a única avaliação à prova de cópia é a que acontece na sua cabeça em tempo real — e o vídeo vira peça de portfólio.'],
+  ['Qual é o papel do DECISIONS.md no capstone?',
+   ['Substituir os testes automatizados do projeto','Registrar as horas trabalhadas em cada etapa','Anotar cada escolha técnica com a alternativa descartada e o porquê — mínimo 8 entradas; é a base da defesa e das respostas de entrevista','Listar os bugs ainda abertos'],2,
+   'Recrutadores procuram julgamento: o DECISIONS.md separa "aceitou o que a IA sugeriu" de "dirigiu com critério" — e quem registrou na hora defende com convicção.'],
+  ['No portfólio de quem dirige IA, o que vale MAIS aos olhos de um avaliador de 2026?',
+   ['Volume de linhas de código escritas à mão','SPEC.md, tabela de evals com números, DECISIONS.md e defesa gravada — a evidência de direção','Usar o framework mais recente','Dez repositórios, mesmo incompletos'],1,
+   'Código bonito não diferencia quando a IA escreve para todos; a evidência de direção é o que é raro — e exatamente o que os testes de 2026 verificam.'],
+  ['Por que escrever os evals ANTES de dirigir a implementação?',
+   ['Para gastar o orçamento de API','Porque eles viram o contrato executável dos requisitos e o placar de cada iteração de direção','Porque a IA não consegue escrever evals depois','Não há razão; a ordem é indiferente'],1,
+   '"Parecer bom" não escala. Com a suite escrita primeiro, cada checkbox da spec tem o eval que o prova — e cada sessão de direção tem placar.'],
+  ['Na semana 1 do capstone, a estratégia recomendada é:',
+   ['Polir a ingestão de dados até ficar perfeita antes de gerar a primeira resposta','Começar pela UI, que é o que aparece na demo','Fazer o caminho feliz rodar de ponta a ponta, mesmo feio — a fatia vertical completa','Escrever o README inteiro antes de codar'],2,
+   'Um sistema completo e tosco melhora aos poucos; camadas perfeitas e desconexas nunca viram demo. "Perfeição por camada" é uma das armadilhas que matam capstones.'],
+  ['No meio do capstone surge a ideia de "só mais uma feature". O que decide se ela entra na v1?',
+   ['Ser rápida de implementar','Estar na SPEC.md escrita no início — o que não está lá fica para depois de publicar','Usar o framework mais recente','Caber em um único commit'],1,
+   'Escopo crescendo é a armadilha nº 1. A SPEC.md (com o que fica explicitamente FORA da v1) é o contrato — até as extensões bônus esperam a publicação.'],
+  ['A estratégia sustentável para se manter atualizado em IA é:',
+   ['Ler todo paper novo do arXiv','Poucas newsletters de alto sinal (Latent Space, Ahead of AI, Interconnects) e papers só quando relevantes — 2–3h por semana','Só redes sociais','Esperar os livros saírem'],1,
+   'O volume é inabsorvível; curadoria de alto sinal + papers sob demanda mantém você atualizado por anos sem burnout.'],
+  ['Qual porta de mercado tende a ser a maior alavanca financeira para o engenheiro de IA brasileiro?',
+   ['Concurso público','Remoto internacional em dólar/euro, com portfólio bilíngue (README, SPEC.md e vídeo de defesa em inglês nos melhores projetos)','Freelance de baixo valor','Apenas grandes empresas locais'],1,
+   'Dólar/euro multiplicam o poder de compra; o passaporte é portfólio bilíngue, GitHub legível e presença nas comunidades internacionais — e o portfólio de direção é raro em qualquer idioma.']],
+ cards:[['Engenheiro de IA (definição 2026)','Quem especifica, dirige e verifica sistemas construídos por e com IA — e responde pela qualidade'],
+  ['As 3 provas de entrevista em 2026','Caça aos defeitos em código gerado por IA; defesa das decisões do próprio projeto; system design com LLMs'],
+  ['Evidência de direção no portfólio','SPEC.md + tabela de evals com números + DECISIONS.md + defesa gravada'],
+  ['DECISIONS.md','Cada escolha: decisão, alternativa descartada, porquê — mínimo 8 entradas; base da defesa'],
+  ['Defesa dupla do capstone','Defesa por LLM no Campus (rubrica) + vídeo de 5 min linkado no README'],
+  ['Por que evals antes do código','Viram o contrato executável dos requisitos e o placar de cada iteração de direção'],
+  ['Fatia vertical','Caminho feliz de ponta a ponta primeiro, feio mas completo — nunca perfeição por camada'],
+  ['Os 4 capstones','RAG com citações, agente operacional, modelo especialista (fine-tune), produto em produção'],
+  ['Maior alavanca de mercado (BR)','Remoto internacional em dólar/euro, com portfólio bilíngue'],
+  ['Três newsletters de alto sinal','Latent Space, Ahead of AI (Raschka), Interconnects (Lambert)']]},
+
+{slug:'13-por-dentro-da-maquina',ic:'🔬',t:'⭐ Por Dentro da Máquina',h:20,vid:'mod05',
+ r:'Trilha optativa de implementação: micrograd, makemore, tokenizador BPE e um GPT do zero — Karpathy completo, com XP bônus e condecoração 🔬.',
+ aulas:[['🎥','Micrograd: backpropagation soletrado, do zero (Karpathy)','https://karpathy.ai/zero-to-hero.html'],
+  ['🎥','Makemore: modelos de linguagem de caracteres (Zero to Hero)','https://karpathy.ai/zero-to-hero.html'],
+  ['🎥','Let\'s build GPT + Let\'s build the GPT Tokenizer','https://karpathy.ai/zero-to-hero.html'],
+  ['📖','PyTorch Tutorials — tensores, autograd, nn.Module','https://pytorch.org/tutorials/'],
+  ['🎥','Neural Networks (3Blue1Brown) — revisão visual','https://www.3blue1brown.com/topics/neural-networks'],
+  ['💻','O GPT em 3D, com olhos de implementador (bbycroft)','https://bbycroft.net/llm'],
+  ['📖','Aprofundamento: Build a LLM From Scratch (Raschka)','https://github.com/rasbt/LLMs-from-scratch'],
+  ['🎛️','Sessão de Direção: a IA como tutor socrático','https://github.com/michelpafreitas-realize/academia-engenharia-ia/blob/main/modulos/13-por-dentro-da-maquina.md']],
+ proj:'nanoGPT treinado do zero num corpus em português, com relatório do que se aprendeu vendo a loss descer (SPEC/DECISIONS/defesa)',
+ quiz:[
+  ['O que o backpropagation calcula?',
+   ['A saída da rede','O gradiente da loss em relação a cada peso, via regra da cadeia','A acurácia do modelo','A arquitetura ideal'],1,
+   'É a regra da cadeia aplicada de trás para frente: quanto cada peso contribuiu para o erro — e portanto como ajustá-lo. No micrograd, você a escreve à mão.'],
+  ['No micrograd, por que os gradientes são acumulados com += em vez de atribuídos com =?',
+   ['Por performance','Porque um nó usado em vários caminhos do grafo recebe contribuição de gradiente de cada um deles','Para evitar overflow numérico','Porque closures em Python exigem +='],1,
+   'A regra da cadeia soma as contribuições de todos os caminhos que passam pelo nó. É também a razão de existir o optimizer.zero_grad() entre passos.'],
+  ['A loss não desce. Qual é um ótimo primeiro sanity check?',
+   ['Trocar de framework','Tentar overfittar um único batch pequeno — se nem isso funciona, há bug','Dobrar o dataset','Adicionar mais camadas'],1,
+   'Receita clássica do Karpathy: um modelo saudável decora 1 batch fácil. Se não decora, o problema é código/lr, não dados.'],
+  ['Seu modelo de linguagem de caracteres tem vocabulário de 65 símbolos. A loss inicial esperada é:',
+   ['Zero, se a inicialização estiver correta','Aproximadamente 65','Aproximadamente −ln(1/65) ≈ 4.17, o chute uniforme entre as 65 opções','Depende do learning rate'],2,
+   'Antes de aprender qualquer coisa, o modelo deve chutar uniforme: cross-entropy = −ln(1/V). Loss inicial muito diferente disso = bug (deslocamento x/y ou softmax duplicado).'],
+  ['Em PyTorch, o autograd:',
+   ['Escolhe a arquitetura sozinho','Registra as operações e calcula os gradientes automaticamente no backward()','Acelera a GPU','Salva o modelo em disco'],1,
+   'Você escreve o forward; loss.backward() devolve os gradientes de todos os tensores com requires_grad — exatamente o que sua classe Value faz em miniatura.'],
+  ['A última camada do seu nanoGPT é uma Linear sem softmax. Por que isso está certo?',
+   ['Porque nn.CrossEntropyLoss já embute o softmax — aplicá-lo também no modelo seria softmax duas vezes, um bug clássico','Porque softmax só se usa em regressão','Porque os logits já somam 1','Porque o softmax deixaria o treino lento demais'],0,
+   'A nn.CrossEntropyLoss recebe logits crus e aplica o softmax internamente. Softmax duplicado espreme as probabilidades duas vezes e distorce os gradientes.'],
+  ['Você muda o learning rate para 1.0 e em poucos passos a loss explode e vira NaN. Diagnóstico e correção?',
+   ['Modelo raso demais; adicione camadas','Dados corrompidos; refaça o download','Faltou dropout','Learning rate alto demais: cada passo salta além do mínimo e o erro cresce até estourar — divida o lr por 10 até estabilizar'],3,
+   'Com passo grande demais, os pesos ultrapassam o vale da loss e o erro se amplifica a cada atualização. Divergiu? Divida o lr por 10 (para o nanoGPT, 3e-4 é o clássico).'],
+  ['Na implementação da attention causal, a máscara aplica -inf aos scores futuros ANTES do softmax porque:',
+   ['-inf vira probabilidade exatamente zero após o softmax, garantindo que nenhum token veja o futuro','Acelera a multiplicação de matrizes','Evita NaN no backward','É convenção do PyTorch, sem efeito matemático'],0,
+   'softmax(-inf) = 0: o token futuro recebe peso nulo na mistura dos values. Sem a máscara, o modelo "colaria" olhando o token que deveria prever.'],
+  ['No treinamento de um tokenizador BPE, o que acontece a cada iteração?',
+   ['Uma rede neural ajusta os embeddings','O par de tokens adjacentes mais frequente do corpus é fundido num token novo, e a regra é registrada','As palavras raras são removidas','O corpus é convertido para UTF-16'],1,
+   'BPE é só isso repetido até fechar o vocabulário. Implementá-lo revela por que português quebra em mais pedaços: os pares frequentes do corpus (mais inglês) foram fundidos primeiro.'],
+  ['Treinando o nanoGPT num corpus de 500 KB, a loss de treino segue caindo e a de validação começa a subir. Isso indica:',
+   ['Bug no forward pass','Learning rate baixo demais','O modelo começou a decorar o corpus — overfitting esperado em corpus pequeno; hora de parar ou regularizar','O tokenizador foi mal treinado'],2,
+   'Com poucos dados, o modelo eventualmente decora. Identificar o ponto em que as curvas se separam — e o que isso diz sobre decorar vs. aprender — é parte do relatório do projeto.']],
+ cards:[['Regra do produto no backprop','c = a·b: cada operando recebe o gradiente vezes o OUTRO operando'],
+  ['Por que zero_grad()?','Gradientes acumulam com += por design (nós reutilizados no grafo); é preciso zerar entre passos'],
+  ['Loss inicial esperada (V classes)','−ln(1/V) — o sanity check nº 1 de qualquer treino'],
+  ['Teste do batch único','Treinar em 1 batch até decorar; se não decorar, o bug é seu código'],
+  ['Liturgia do loop de treino','zero_grad → forward → loss → backward → step'],
+  ['BPE em uma frase','Fundir iterativamente o par de tokens adjacentes mais frequente até fechar o vocabulário'],
+  ['Máscara causal na prática','Triângulo de -inf nos scores antes do softmax → peso zero para tokens futuros'],
+  ['Divisão por √d na attention','Evita que scores grandes saturem o softmax quando a dimensão cresce'],
+  ['Conexão residual','x = x + bloco(x) — avenida direta para o gradiente; viabiliza empilhar dezenas de blocos'],
+  ['Tutor socrático (contrato da trilha)','A IA pergunta, revisa e explica — o código sai das suas mãos; é o método desta trilha']]},
 ];
 
 /* níveis = escada de crescimento: cada um carrega um princípio sobre por que estudar transforma uma pessoa */
@@ -676,6 +881,7 @@ const NIVEIS=[
  [1800,'Eng. de IA Sênior','Quem ensina aprende duas vezes. Compartilhar o que você sabe consolida quem você é.'],
  [2500,'Staff AI Engineer','O estudo deixou de ser esforço: virou parte de quem você é. E isso ninguém tira.']];
 const INTERVALOS=[1,3,7,14,30]; // dias por caixa (Leitner)
+const TRILHA=PERIODOS.filter(p=>p.opt).flatMap(p=>p.mods); // módulos optativos (fora do % geral, do certificado e da Formatura)
 
 /* ===== sistema de crescimento (loops diário / semanal / temporada) ===== */
 const LIGAS=[['🪨','Ferro'],['🥉','Bronze'],['🥈','Prata'],['🥇','Ouro'],['💠','Platina'],['💚','Esmeralda'],['💎','Diamante'],['🔱','Mestre'],['👑','Desafiante']];
@@ -750,6 +956,13 @@ if(!S.grSeeded){ // migração: itens já marcados contam como premiados — XP 
   for(const k in S.lessons)(S.lessons[k]||[]).forEach((v,j)=>{if(v)S.gr[k+'_'+j]=1});
   for(const k in S.proj)if(S.proj[k])S.gr['p'+k]=1;
   S.grSeeded=1;
+}
+if(!S.migV2){ // reforma ago/2026: renumeração da grade (antigo→novo: 1→3, 2→4, 3→5, 4→13, 6→2; 5 fundiu no novo 6/13)
+  const map={0:0,1:3,2:4,3:5,4:13,5:null,6:2,7:7,8:8,9:9,10:10,11:11,12:12};
+  const rem=o=>{const n={};for(const k in o){const m=k.match(/^m(\d+)(.*)$/);if(!m){n[k]=o[k];continue}const to=map[+m[1]];if(to!=null)n['m'+to+m[2]]=o[k];}return n;};
+  S.lessons=rem(S.lessons);S.proj=rem(S.proj);S.quiz=rem(S.quiz);S.cards=rem(S.cards);
+  const ng={};for(const k in S.gr){const m=k.match(/^(p?)m(\d+)(.*)$/);if(m){const to=map[+m[2]];if(to!=null)ng[m[1]+'m'+to+m[3]]=S.gr[k];}else ng[k]=S.gr[k];}S.gr=ng;
+  S.migV2=1; // XP/streak/ligas intactos; progresso por módulo segue o conteúdo para a nova posição
 }
 /* g = estado do sistema de crescimento (dia, semana/liga, temporada/passe) */
 S.g=Object.assign({d:'',m:[0,0,0],fv:'',bau:'',boost:'',wk:'',pl:0,plBy:{},liga:0,shields:0,sdays:[],
@@ -929,7 +1142,7 @@ function modProg(i){
   return{done:les+q+p,total:m.aulas.length+2};
 }
 const modPct=i=>{const p=modProg(i);return Math.round(100*p.done/p.total)};
-function totalPct(){let d=0,t=0;MODS.forEach((_,i)=>{const p=modProg(i);d+=p.done;t+=p.total});return Math.round(100*d/t);}
+function totalPct(){let d=0,t=0;MODS.forEach((_,i)=>{if(TRILHA.includes(i))return;const p=modProg(i);d+=p.done;t+=p.total});return Math.round(100*d/t);} // trilha optativa fora do % geral e do certificado
 
 /* flashcards devidos */
 function dueCards(){
@@ -955,16 +1168,18 @@ const ring=(pct,size=120,escuro=false)=>{const r=(size-14)/2,c=2*Math.PI*r,
 function badgesList(){
   const anyLesson=Object.values(S.lessons).some(a=>a&&a.some(Boolean));
   const modsDone=MODS.map((_,i)=>modPct(i)===100);
-  const perDone=PERIODOS.some(p=>p.mods.every(i=>modsDone[i]));
+  const perDone=PERIODOS.some(p=>!p.opt&&p.mods.every(i=>modsDone[i]));
   return [
     ['🥇','Primeira aula',anyLesson],
     ['🎓','1º módulo',modsDone.some(Boolean)],
     ['🏆','Quiz perfeito',Object.values(S.quiz).some(q=>q===5)],
     ['🚀','1º projeto',Object.values(S.proj).some(Boolean)],
+    ['🎤','1ª defesa',Object.keys(S.gr).some(k=>/^dm\d+$/.test(k))],
     ['📚','Período completo',perDone],
     ['🔥','Streak 7 dias',streak()>=7],
     ['🧠','50 revisões',S.reviews>=50],
-    ['👑','Formatura',modsDone.every(Boolean)],
+    ['👑','Formatura',modsDone.every((d,i)=>d||TRILHA.includes(i))],
+    ['🔬','Por Dentro da Máquina',TRILHA.every(i=>modsDone[i])],
     ['⚡','Streak 30 dias',streak()>=30],
     ['🥇','Liga Ouro+',S.g.liga>=3],
     ['🏵️','1º título',S.g.titles.length>0],
@@ -1080,12 +1295,12 @@ function vPainel(){
 function vCurriculo(){
   const pct=totalPct();
   app.innerHTML=`<section class="curriculum-intro">
-    <div class="curriculum-copy"><div class="eyebrow">13 módulos · aproximadamente 160 horas</div><h1>Um currículo que termina em trabalho publicado.</h1>
-      <p>Quatro períodos conectam fundamentos, LLMs, construção de produtos e produção. Cada módulo fecha com uma entrega que pode entrar no seu portfólio.</p>
+    <div class="curriculum-copy"><div class="eyebrow">13 módulos + trilha optativa · ~160 horas</div><h1>Um currículo que termina em trabalho publicado e defendido.</h1>
+      <p>Você trabalha com IA desde o dia 1 — especificar, dirigir, verificar. Quatro períodos conectam direção de IA, fundamentos que geram critério, sistemas com LLMs e produção. Cada módulo fecha com uma entrega defendida que pode entrar no seu portfólio.</p>
       <div style="margin-top:28px;max-width:420px"><div style="display:flex;justify-content:space-between;font-size:.78rem;margin-bottom:7px"><span>Progresso geral</span><b>${pct}%</b></div><div class="bar"><i style="width:${pct}%"></i></div></div>
     </div><div class="curriculum-image" role="img" aria-label="Materiais de estudo em uma mesa acadêmica"></div>
   </section>`+PERIODOS.map((p,pi)=>`
-    <div class="secttl"><h2><span class="period-label">${pi+1}</span>${p.nome.replace(/^Período \d — /,'')}</h2><span class="mut">${p.mods.reduce((a,i)=>a+MODS[i].h,0)} horas · ${p.mods.length} módulos</span></div>
+    <div class="secttl"><h2><span class="period-label">${p.opt?'⭐':pi+1}</span>${p.nome.replace(/^(Período \d|⭐ Trilha optativa) — /,'')}</h2><span class="mut">${p.mods.reduce((a,i)=>a+MODS[i].h,0)} horas · ${p.mods.length} módulo${p.mods.length>1?'s':''}${p.opt?' · optativa, vale XP bônus e a condecoração 🔬':''}</span></div>
     <div class="grid g2">${p.mods.map(i=>{const m=MODS[i],pct=modPct(i);
       return `<div class="card modcard" onclick="location.hash='#/mod/${i}'">
         <div class="modcard-head"><span class="ic">${m.ic}</span>
@@ -1105,11 +1320,11 @@ function vMod(i){
   </div><div class="module-hero-photo" role="img" aria-label="Estudantes trabalhando juntos em um laboratório"></div></section>
 
   <section class="module-layout"><div class="module-main">
-    <div class="secttl"><h2>Vídeo-aula do módulo</h2><span class="mut">o conteúdo essencial narrado, em poucos minutos</span></div>
+    ${VID(i)?`<div class="secttl"><h2>Vídeo-aula do módulo</h2><span class="mut">o conteúdo essencial narrado, em poucos minutos</span></div>
     <div class="card" style="padding:10px">
       <video controls playsinline preload="metadata" style="width:100%;display:block;border-radius:8px;background:#242321"
-        src="${VID(i)}"><track kind="captions" srclang="pt" label="Português" src="videos/legendas/mod${String(i).padStart(2,'0')}.vtt">Seu navegador não reproduz vídeo — <a href="${VID(i)}">baixe a vídeo-aula</a>.</video>
-    </div>
+        src="${VID(i)}"><track kind="captions" srclang="pt" label="Português" src="videos/legendas/${m.vid}.vtt">Seu navegador não reproduz vídeo — <a href="${VID(i)}">baixe a vídeo-aula</a>.</video>
+    </div>`:`<div class="card noprint"><p class="mut">🎬 A vídeo-aula deste módulo está em produção — o material completo abaixo já cobre todo o conteúdo.</p></div>`}
     <div class="secttl"><h2>Plano de aprendizagem</h2><span class="mut">marque cada etapa e veja o progresso acontecer</span></div>
     <div class="card" style="padding:7px 16px">${m.aulas.map((a,j)=>`<label class="lesson ${arr[j]?'done':''}">
       <input type="checkbox" ${arr[j]?'checked':''} onchange="tickLesson(${i},${j},this.checked)"><span>${a[0]}</span><span class="lt">${a[1]}</span>
@@ -1122,6 +1337,7 @@ function vMod(i){
     <div class="secttl"><h2>Próximas ações</h2></div>
     <div class="card"><span class="chip gold">Active recall · +50 XP</span><h3 style="margin-top:12px">${q!=null?'Supere seu recorde':'Consolide o módulo'}</h3><p class="mut">5 perguntas sorteadas do banco do módulo. Acerte 3+ para concluir o item — teclas 1–4 respondem.</p><div class="module-actions"><button class="btn" onclick="startQuiz(${i})">${q!=null?'Refazer quiz':'Fazer quiz'}</button><button class="btn sec" onclick="startCards(${i})">Flashcards</button></div></div>
     <div class="card project-card"><div class="eyebrow" style="color:#e9aaa7">Entrega do módulo · +100 XP</div><h3 style="margin-top:12px">${m.proj}</h3><p class="mut">Enunciado, passo a passo e critérios de aceite estão nesta página. Fechou tudo e deu o push? Marque a entrega.</p><label class="lesson" style="border:0;margin-top:12px;padding:4px 0"><input type="checkbox" ${S.proj['m'+i]?'checked':''} onchange="tickProj(${i},this.checked)"><span>🚀</span><span class="lt">${S.proj['m'+i]?'Projeto entregue':'Marcar como entregue'}</span></label></div>
+    <div class="card"><span class="chip ${S.gr['dm'+i]?'ok':'gold'}">🎤 Defesa · +75 XP</span><h3 style="margin-top:12px">${S.gr['dm'+i]?'Defesa aprovada':'Defenda o seu projeto'}</h3><p class="mut">Entrevista de ~10 min com um examinador de IA sobre o SEU projeto: por que cada decisão, o que quebra, o que você garante. É a prova de que você dirige — não só aprova.</p><button class="btn ${S.gr['dm'+i]?'sec':''}" onclick="location.hash='#/defesa/${i}'">${S.gr['dm'+i]?'Refazer defesa':'Iniciar defesa'}</button></div>
     <a class="btn sec" target="_blank" rel="noopener" href="${MD(m.slug)}">Material completo ↗</a>
   </aside></section>`;
   loadMd(i);
@@ -1214,7 +1430,8 @@ window.matricular=()=>{
 window.tickLesson=(i,j,v)=>{
   S.lessons['m'+i][j]=v;save();
   const k='m'+i+'_'+j; // cada aula premia UMA vez — desmarcar/remarcar não cria nem devolve XP
-  if(v&&!S.gr[k]){S.gr[k]=1;save();addXP(10,'aula concluída','aula');mission(0);S.g.w.l++;save();}
+  const dir=MODS[i].aulas[j][0]==='🎛️'; // Sessão de Direção vale mais: é a prática central do programa
+  if(v&&!S.gr[k]){S.gr[k]=1;save();addXP(dir?25:10,dir?'sessão de direção concluída 🎛️':'aula concluída','aula');mission(0);S.g.w.l++;save();}
   else renderHeader();
   vMod(i);
 };
@@ -1459,6 +1676,66 @@ function mesclar(raw){ // aceita o link #s=… ou o código puro; retorna false 
   save();return true;
 }
 
+/* ---------- defesa por LLM (chave do próprio aluno — AI Studio, criada no Módulo 0) ---------- */
+/* ponytail: REST direto no Gemini, sem SDK; a rubrica vive no system prompt e o veredito é uma linha parseável */
+let D={};
+const GKEY=()=>localStorage.getItem('academia_gkey')||'';
+async function gchat(){
+  const r=await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key='+encodeURIComponent(GKEY()),{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({systemInstruction:{parts:[{text:D.sys}]},contents:D.msgs})});
+  if(!r.ok)throw new Error('HTTP '+r.status);
+  const j=await r.json();
+  return (j.candidates?.[0]?.content?.parts||[]).map(p=>p.text).join('').trim();
+}
+function vDefesa(i){
+  const m=MODS[i];
+  if(D.mi!==i){D={mi:i,msgs:[],fim:false,sys:
+`Você é o examinador da Academia de Engenharia de IA, conduzindo a DEFESA ORAL do Módulo ${i} — ${m.t}, em português do Brasil.
+O aluno entregou: "${m.proj}". A regra de ouro do programa: pode-se usar IA para escrever qualquer código; não se pode entregar nada que não se consiga explicar e defender.
+Conduza uma entrevista de EXATAMENTE 5 perguntas, UMA por vez, sobre o projeto DELE: decisões tomadas e por quê ("por que essa abordagem?"), o que quebra sob carga/edge cases ("o que acontece se X dobrar?"), trade-offs registrados no DECISIONS.md, e o que os testes/evals provam com números. Peça exemplos concretos; se a resposta for vaga ou genérica, aprofunde nela antes de seguir.
+Rubrica (avalie ao final): compreensão real do que foi entregue; capacidade de justificar decisões; consciência dos limites e modos de falha; evidência de verificação (números, testes). Respostas decoradas ou que não demonstram compreensão reprovam.
+Após a 5ª resposta, encerre com um parecer curto (3-5 frases, citando pontos fortes e fracos) e TERMINE a mensagem com uma linha exatamente neste formato: VEREDITO: APROVADO ou VEREDITO: REPROVADO.`};}
+  const chat=D.msgs.map(c=>`<div style="margin:10px 0;${c.role==='user'?'text-align:right':''}"><span style="display:inline-block;max-width:85%;padding:10px 14px;border-radius:12px;text-align:left;white-space:pre-wrap;${c.role==='user'?'background:var(--navy);color:#fff':'background:var(--bg2,#f3efe9)'}">${inlMd(c.parts[0].text.replace(/VEREDITO: (APROVADO|REPROVADO)\s*$/,''))}</span></div>`).join('');
+  app.innerHTML=`
+  <a href="#/mod/${i}" class="mut" style="font-size:.86rem;font-weight:700;text-decoration:none">← Voltar ao Módulo ${i}</a>
+  <section class="card" style="margin-top:12px">
+    <div class="eyebrow">Defesa oral · Módulo ${i}</div>
+    <h2 class="serif" style="color:var(--navy)">🎤 Defenda o seu projeto</h2>
+    <p class="mut">5 perguntas sobre <b>${m.proj}</b>, feitas por um examinador de IA com rubrica. Não há resposta decorada que passe: é a prova de que você dirige, não só aprova. Aprovação vale <b>+75 XP</b>.</p>
+    ${!GKEY()?`<div class="aviso" style="margin-top:12px">🔑 A defesa usa a <b>sua</b> chave do Google AI Studio (gratuita, criada no Módulo 0) — ela fica só neste navegador.
+      <form style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap" onsubmit="event.preventDefault();const v=this.k.value.trim();if(v){localStorage.setItem('academia_gkey',v);vDefesa(${i});}">
+      <input name="k" type="password" placeholder="Cole sua chave do AI Studio" style="flex:1;min-width:220px;padding:10px 14px;border:1px solid var(--line);border-radius:8px">
+      <button class="btn" type="submit">Salvar</button>
+      <a class="btn sec" target="_blank" rel="noopener" href="https://aistudio.google.com/apikey">Criar chave ↗</a></form></div>`
+    :`<div id="dchat" style="margin-top:14px">${chat||'<p class="mut">O examinador vai abrir a entrevista — respire fundo e responda com o SEU projeto na cabeça.</p>'}</div>
+    <div id="dwait" class="mut" style="display:none;margin:8px 0">O examinador está pensando…</div>
+    ${D.fim?`<p style="margin-top:12px;font-weight:700">${S.gr['dm'+i]?'✅ Defesa aprovada — parecer acima.':'❌ Não foi desta vez — releia o parecer, revisite o projeto e volte.'}</p><button class="btn sec" onclick="D={};vDefesa(${i})">Nova defesa</button>`
+    :D.msgs.length?`<form style="display:flex;gap:8px;margin-top:12px" onsubmit="event.preventDefault();defResp(${i},this.r)">
+      <textarea name="r" rows="3" required placeholder="Sua resposta — concreta, com o porquê" style="flex:1;padding:10px 14px;border:1px solid var(--line);border-radius:8px;font:inherit"></textarea>
+      <button class="btn" type="submit">Responder</button></form>
+      <small class="mut" style="display:block;margin-top:6px">🔒 Chave salva neste navegador. <a href="#" onclick="localStorage.removeItem('academia_gkey');vDefesa(${i});return false">Trocar chave</a></small>`
+    :`<button class="btn gold" style="margin-top:12px" onclick="defResp(${i},null)">Iniciar entrevista</button>`}`}
+  </section>`;
+  window.scrollTo(0,document.body.scrollHeight);
+}
+window.defResp=async(i,ta)=>{
+  if(ta){const t=ta.value.trim();if(!t)return;D.msgs.push({role:'user',parts:[{text:t}]});ta.value='';}
+  else D.msgs.push({role:'user',parts:[{text:'(O aluno está pronto. Abra a entrevista com a pergunta 1.)'}]});
+  vDefesa(i);document.getElementById('dwait').style.display='block';
+  try{
+    const out=await gchat();
+    D.msgs.push({role:'model',parts:[{text:out}]});
+    const v=out.match(/VEREDITO: (APROVADO|REPROVADO)\s*$/);
+    if(v){D.fim=true;
+      if(v[1]==='APROVADO'&&!S.gr['dm'+i]){S.gr['dm'+i]=1;save();addXP(75,'defesa aprovada! 🎤','proj');}}
+  }catch(e){
+    D.msgs.pop(); // devolve o turno ao aluno para reenviar
+    toast(String(e).includes('400')||String(e).includes('403')?'Chave recusada — confira no AI Studio 🔑':'Falha de rede/API — tente de novo em instantes 😕');
+  }
+  vDefesa(i);
+};
+
 /* ---------- certificado ---------- */
 function vCert(){
   const pct=totalPct(),pronto=pct===100;
@@ -1475,7 +1752,7 @@ function vCert(){
     <h2 class="serif">ACADEMIA DE ENGENHARIA DE IA</h2>
     <p class="serif" style="font-style:italic;margin:8px 0">confere o presente certificado a</p>
     <div class="nome">${S.name||'________________________'}</div>
-    <p style="max-width:560px;margin:0 auto">pela conclusão do <b>Programa de Formação em Engenharia de IA</b> — 13 módulos e aproximadamente 160 horas, cobrindo fundamentos, deep learning, LLMs, RAG, agentes, avaliação, segurança e operação de sistemas de IA em produção.</p>
+    <p style="max-width:560px;margin:0 auto">pela conclusão do <b>Programa de Formação em Engenharia de IA</b> — 13 módulos e aproximadamente 160 horas de formação em direção de IA, fundamentos, LLMs, RAG, agentes, avaliação, segurança e operação em produção, com projetos entregues e defendidos.</p>
     <p class="mut" style="margin-top:14px">Progresso verificado: <b>${pct}%</b> · ${new Date().toLocaleDateString('pt-BR',{day:'numeric',month:'long',year:'numeric'})}</p>
     <div class="assin"><div>Diretoria Acadêmica</div><div>O(A) Formando(a)</div></div>
   </div>
@@ -1581,6 +1858,7 @@ function render(){
   else if(v==='crescimento')vCrescimento();
   else if(v==='sync')vSync();
   else if(v==='certificado')vCert();
+  else if(v==='defesa')vDefesa(+arg||0);
   else if(v==='conta')vConta();
   else vPainel();
   window.scrollTo(0,0);

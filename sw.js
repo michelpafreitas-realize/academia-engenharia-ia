@@ -1,9 +1,10 @@
 // Offline da Academia: rede primeiro (conteúdo sempre fresco), cache como fallback.
 // Vídeos ficam de fora (cross-origin, pesados); aulas, quiz, cards e material funcionam sem rede.
-const C='academia-v1';
-const SLUGS=['00-boas-vindas-setup','01-python-para-ia','02-matematica-essencial','03-machine-learning-classico',
-  '04-deep-learning','05-transformers-llms','06-prompt-engineering-apis','07-rag','08-agentes-tool-use',
-  '09-fine-tuning-modelos-abertos','10-avaliacao-seguranca','11-llmops-producao','12-capstone-carreira'];
+const C='academia-v2'; // reforma ago/2026: nova grade
+const SLUGS=['00-boas-vindas-setup','01-direcao-de-ia','02-prompt-engineering-apis','03-python-dados',
+  '04-matematica-essencial','05-disciplinas-de-ml','06-como-llms-funcionam','07-rag','08-agentes-tool-use',
+  '09-fine-tuning-modelos-abertos','10-avaliacao-seguranca','11-llmops-producao','12-capstone-carreira',
+  '13-por-dentro-da-maquina'];
 const FILES=['./','index.html','manifest.webmanifest','icon.svg',
   ...SLUGS.map(s=>'modulos/'+s+'.md'),
   ...SLUGS.map((_,i)=>'videos/legendas/mod'+String(i).padStart(2,'0')+'.vtt')];

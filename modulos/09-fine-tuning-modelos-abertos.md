@@ -1,14 +1,18 @@
 # Módulo 9 — Fine-tuning & Modelos Abertos
 
-> 🏛️ Período 3 · ⏱️ Carga estimada: 12h · 📋 Pré-requisitos: Módulo 5 (Como LLMs funcionam: tokens, embeddings, transformers)
+> 🏛️ Período 3 — Sistemas com LLMs · ⏱️ Carga estimada: 10h · 📋 Pré-requisitos: Módulo 8 (Agentes, Tool Use, MCP & Orquestração)
 
 ## 🎯 Objetivos
 
 - Ao final, você será capaz de aplicar a árvore de decisão prompt → RAG → fine-tuning e justificar por que fine-tuning é a última opção, não a primeira.
-- Ao final, você será capaz de rodar modelos abertos localmente com Ollama, llama.cpp ou LM Studio, e escolher a quantização adequada à sua VRAM.
+- Ao final, você será capaz de rodar modelos abertos localmente com Ollama ou llama.cpp, e escolher a quantização adequada à sua VRAM.
 - Ao final, você será capaz de explicar LoRA e QLoRA com as dimensões das matrizes na mão, e usar PEFT/Unsloth para treinar barato.
-- Ao final, você será capaz de preparar um dataset de treino no formato correto (chat template, JSONL) e evitar os erros clássicos de formatação.
-- Ao final, você será capaz de avaliar um modelo pós-fine-tune com eval de tarefa (não confiando no loss) e publicá-lo no Hugging Face Hub.
+- Ao final, você será capaz de dirigir a IA na produção de um dataset de treino no formato correto (chat template, JSONL) — e revisá-lo com o rigor de quem sabe que o modelo aprende os erros também.
+- Ao final, você será capaz de avaliar um modelo pós-fine-tune com eval de tarefa e números (não confiando no loss) e publicá-lo no Hugging Face Hub.
+
+## 🎛️ Núcleo manual deste módulo
+
+À mão, você **revisa cada exemplo do dataset de treino** (o dataset É o produto — exemplo inconsistente vira comportamento inconsistente), **desenha as matrizes A e B do LoRA com as dimensões num papel** e faz de cabeça a conta de VRAM por quantização — são as três intuições que separam quem entende fine-tuning de quem roda notebook. Todo o resto — geração de rascunhos, scripts de split, notebook de treino e eval — é dirigido com IA.
 
 ## 🗺️ Por que isso importa
 
@@ -22,13 +26,13 @@ Ao mesmo tempo, modelos abertos viraram infraestrutura séria: empresas rodam Ll
 |---|------|------|---------|------------------|
 | 1 | Instalar e explorar o Ollama (modelos locais em 5 minutos) | 💻 lab | [ollama.com](https://ollama.com) | 45 min |
 | 2 | llama.cpp: o motor por trás da inferência local e o formato GGUF | 📖 leitura | [github.com/ggml-org/llama.cpp](https://github.com/ggml-org/llama.cpp) | 1h |
-| 3 | LM Studio: interface gráfica para modelos locais | 💻 lab | [lmstudio.ai](https://lmstudio.ai) | 30 min |
-| 4 | Hugging Face Learn: curso de fine-tuning de LLMs (grátis) | 🎥 vídeo + 📖 leitura | [huggingface.co/learn](https://huggingface.co/learn) | 2h30 |
-| 5 | Documentação do PEFT: LoRA e adaptadores na prática | 📖 leitura | [huggingface.co/docs/peft](https://huggingface.co/docs/peft) | 1h |
-| 6 | Unsloth: fine-tuning 2x mais rápido no Colab grátis | 💻 lab | [unsloth.ai](https://unsloth.ai) | 1h30 |
-| 7 | LLMs from Scratch (Sebastian Raschka) — capítulos de fine-tuning | 📖 leitura | [github.com/rasbt/LLMs-from-scratch](https://github.com/rasbt/LLMs-from-scratch) | 2h |
-| 8 | Lab guiado: Ollama local + comparação de quantizações | 💻 lab | este módulo, seção Lab guiado | 1h30 |
-| 9 | Opcional: QLoRA com Unsloth num dataset de instruções | 💻 lab | este módulo, seção Lab guiado (parte B) | 1h30 |
+| 3 | Hugging Face Learn: curso de fine-tuning de LLMs (grátis) | 🎥 vídeo + 📖 leitura | [huggingface.co/learn](https://huggingface.co/learn) | 2h |
+| 4 | Documentação do PEFT: LoRA e adaptadores na prática | 📖 leitura | [huggingface.co/docs/peft](https://huggingface.co/docs/peft) | 1h |
+| 5 | Unsloth: fine-tuning 2x mais rápido no Colab grátis | 💻 lab | [unsloth.ai](https://unsloth.ai) | 1h |
+| 6 | Lab guiado: Ollama local + comparação de quantizações | 💻 lab | este módulo, seção Lab guiado | 1h30 |
+| 7 | Sessão de Direção: da spec ao dataset revisado | 🎛️ sessão de direção | este módulo, seção 🎛️ | 1h |
+| 8 | Opcional: QLoRA com Unsloth num dataset de instruções | 💻 lab | este módulo, seção Lab guiado (parte B) | 1h30 |
+| 9 | Opcional (trilha profunda): LLMs from Scratch (Raschka) — capítulos de fine-tuning | 📖 leitura | [github.com/rasbt/LLMs-from-scratch](https://github.com/rasbt/LLMs-from-scratch) | 2h |
 
 ## 🧠 Conteúdo essencial
 
@@ -260,27 +264,40 @@ trainer.train()
 
 **Passo 5** — Compare antes/depois com 10 prompts de teste que **não** estão no treino, gerando com o modelo base e com o adaptado, lado a lado. Só então (se gostar do resultado) publique: `model.push_to_hub("seu-usuario/meu-primeiro-lora")`.
 
+## 🎛️ Sessão de Direção
+
+A prática de direção deste módulo é a **produção do dataset de treino** — o artefato que decide o destino do fine-tune:
+
+1. **Especifique**: escreva o `SPEC.md` antes de gerar qualquer exemplo — o esquema exato do JSON de saída (campos e valores permitidos), a variedade obrigatória de tons e temas, o tamanho do dataset, o split 80/10/10 e as **metas numéricas do eval** (ex.: JSON válido ≥ 90% e campos corretos ≥ 70% no fine-tuned).
+2. **Dirija**: peça os rascunhos ao seu assistente de IA em lotes pequenos, variando tom e tema a cada lote conforme a spec. Também dirija a IA nos scripts de apoio (split, eval) — revisando cada um antes de rodar.
+3. **Verifique**: aqui entra o núcleo manual — **você revisa cada exemplo com os próprios olhos** (a IA que gerou não é juiz confiável de si mesma) e confronta os números do eval final com as metas da spec.
+
+**Entregável:** o `SPEC.md` e um resumo da sessão no `DECISIONS.md` (quantos rascunhos a IA gerou, quantos você cortou ou corrigiu e por quê, o que isso ensinou sobre o gerador). Esse material entra no repositório do mini-projeto abaixo.
+
 ## 🚀 Mini-projeto
 
 **Enunciado**: **"Formatador especialista"** — faça QLoRA de um modelo aberto pequeno (1B–3B) para uma tarefa de formato bem definida: transformar mensagens informais de clientes em registros JSON padronizados (`{"intencao": ..., "produto": ..., "urgencia": ..., "resumo": ...}`). O objetivo é experimentar o ciclo completo: dados → treino → eval antes/depois → publicação.
 
 **Requisitos**:
-- Dataset próprio com ≥ 150 exemplos em JSONL (pode gerar os rascunhos com um LLM forte e revisar à mão — revisão manual é obrigatória), com split treino/validação/teste (80/10/10).
-- Treino com QLoRA via Unsloth ou PEFT no Colab grátis.
-- Eval de tarefa: nos exemplos de teste, medir % de saídas que são JSON válido e % com campos corretos — para o modelo base e para o fine-tuned.
-- Publicação do adaptador no Hugging Face Hub com model card completa (base, dados, hiperparâmetros, tabela de resultados, limitações).
+1. `SPEC.md` escrito **antes** de qualquer exemplo ou código, com o esquema do JSON e as metas numéricas do eval (critério universal a).
+2. Dataset próprio com ≥ 150 exemplos em JSONL (rascunhos gerados dirigindo um LLM forte — revisão manual de TODOS é o núcleo manual, inegociável), com split treino/validação/teste (80/10/10).
+3. Treino com QLoRA via Unsloth ou PEFT no Colab grátis.
+4. **Eval de tarefa com números** (critério universal b): nos exemplos de teste, % de saídas com JSON válido e % com campos corretos — para o modelo base e para o fine-tuned, na tabela antes/depois.
+5. Publicação do adaptador no Hugging Face Hub com model card completa (base, dados, hiperparâmetros, tabela de resultados, limitações).
+6. `DECISIONS.md` (critério universal c) com o resumo da Sessão de Direção e os trade-offs (por que esses hiperparâmetros, o que foi cortado na revisão).
+7. Defesa (critério universal d): ser capaz de responder "por quê?" sobre qualquer célula do notebook — e passar na Defesa do módulo no Campus.
 
 ### 🧭 Passo a passo
 
 Reserve ~6h no total (dá para dividir em 3 sessões: dados, treino+eval, publicação). Siga na ordem — cada etapa termina com um **checkpoint**; só avance quando ele passar.
 
-**Etapa 1 — Definir o esquema e gerar rascunhos com um LLM forte (1h)**
+**Etapa 1 — SPEC.md, esquema e rascunhos com um LLM forte (1h)**
 
-1. Fixe os valores permitidos antes de gerar qualquer exemplo: `intencao` ∈ {duvida, compra, reclamacao, cancelamento}, `urgencia` ∈ {baixa, media, alta}, `produto` texto livre, `resumo` com até 15 palavras.
+1. Escreva o `SPEC.md` **antes de qualquer exemplo** (é a Sessão de Direção, passo 1): fixe os valores permitidos — `intencao` ∈ {duvida, compra, reclamacao, cancelamento}, `urgencia` ∈ {baixa, media, alta}, `produto` texto livre, `resumo` com até 15 palavras — mais a variedade de tons/temas, o split e as metas numéricas do eval. Crie a pasta do projeto e faça o primeiro commit já com o SPEC.md.
 2. Peça rascunhos a um LLM forte (o assistente de IA que você já usa) em lotes de 20, variando tom e tema a cada lote: *"Gere 20 pares `mensagem do cliente → JSON` para treinar um formatador. Mensagens de clientes de [tema do lote: telefonia / e-commerce / academia...], em tom [formal / com gírias / irritado / cheio de erros de digitação]. O JSON tem exatamente os campos intencao (duvida|compra|reclamacao|cancelamento), produto, urgencia (baixa|media|alta) e resumo (até 15 palavras)."*
 3. Repita trocando tema e tom até juntar ~180 rascunhos — sobra para os cortes da revisão.
 
-✅ **Checkpoint:** ~180 pares num arquivo de rascunho, com pelo menos 5 combinações diferentes de tom/tema.
+✅ **Checkpoint:** `SPEC.md` no repositório com metas numéricas, e ~180 pares num arquivo de rascunho com pelo menos 5 combinações diferentes de tom/tema.
 
 **Etapa 2 — Revisar TODOS à mão e salvar `dataset.jsonl` (1h30)**
 
@@ -344,7 +361,7 @@ avaliar(model, tokenizer)  # anote os números: é a linha "base" da tabela
 
 ✅ **Checkpoint:** treino terminou no Colab sem OOM e o fine-tuned supera o base em pelo menos uma métrica (se não superou, veja o 🆘 antes de publicar).
 
-**Etapa 6 — Publicar no Hub com model card completa (45 min)**
+**Etapa 6 — Publicar, DECISIONS.md e defesa (45 min)**
 
 1. Crie sua conta em [huggingface.co](https://huggingface.co) e pegue o token: clique no seu avatar (canto superior direito) → *Settings* → *Access Tokens* → *Create new token* → tipo **Write** → copie o valor (começa com `hf_`). No Colab, autentique e publique:
 
@@ -356,24 +373,29 @@ tokenizer.push_to_hub("seu-usuario/formatador-especialista-lora")
 ```
 
 2. Na página do modelo no Hub, edite o `README.md` (a model card) com o roteiro da seção 8: modelo base, descrição dos dados, hiperparâmetros (`r`, `alpha`, épocas, learning rate), a tabela antes/depois da Etapa 5, limitações — e a seção "quando NÃO usar este modelo".
-3. Código também é entrega: **apague o token da célula de `login`** (deixe só `login()`, que pede o token na hora), baixe o notebook (*Arquivo → Fazer download → .ipynb*), mova-o para a pasta do seu repositório `academia-ia` e faça commit e push — modelo no Hub, código no GitHub.
+3. Código também é entrega: **apague o token da célula de `login`** (deixe só `login()`, que pede o token na hora), baixe o notebook (*Arquivo → Fazer download → .ipynb*) e mova-o para a pasta do projeto.
+4. Escreva o `DECISIONS.md`: resumo da Sessão de Direção (quantos rascunhos cortou e por quê), hiperparâmetros escolhidos e a tabela antes/depois da Etapa 5. Atualize o `SPEC.md` se as metas mudaram no caminho. Commit e push — modelo no Hub, código no GitHub. Feche passando na Defesa do módulo no Campus.
 
-✅ **Checkpoint:** a URL pública do modelo abre com a model card completa, o notebook aparece no seu GitHub sem nenhum token `hf_` — e todos os critérios de aceite abaixo marcados.
+✅ **Checkpoint:** a URL pública do modelo abre com a model card completa, o notebook + SPEC.md + DECISIONS.md aparecem no seu GitHub sem nenhum token `hf_` — e todos os critérios de aceite abaixo marcados.
 
-**🆘 Se travar:** `CUDA out of memory` no Colab → *Runtime → Restart runtime* e treine com `per_device_train_batch_size=1` e `max_seq_length=1024` (as mensagens deste projeto são curtas, sobra folga); o fine-tuned gera JSON quebrado ou texto que não para → suspeito nº 1 é chat template errado — volte à seção 7 e confira que **tudo** passa por `apply_chat_template`, inclusive o prompt do eval; o loss não desce (ou despenca para perto de zero) → exemplos repetidos ou template aplicado duas vezes — imprima `ds[0]["text"]` e leia a string com os próprios olhos; travou 30+ minutos em qualquer etapa → pergunte ao seu assistente de IA colando o erro completo e dizendo em qual etapa está (mas peça a *explicação*, não só a resposta — o objetivo é treinar).
+**🆘 Se travar:** trabalhar com seu assistente de IA É o método — cole o erro completo, diga em qual etapa está, peça hipóteses e entenda a causa antes de aceitar a correção. Pistas específicas deste projeto: `CUDA out of memory` no Colab → *Runtime → Restart runtime* e treine com `per_device_train_batch_size=1` e `max_seq_length=1024` (as mensagens deste projeto são curtas, sobra folga); o fine-tuned gera JSON quebrado ou texto que não para → suspeito nº 1 é chat template errado — volte à seção 7 e confira que **tudo** passa por `apply_chat_template`, inclusive o prompt do eval; o loss não desce (ou despenca para perto de zero) → exemplos repetidos ou template aplicado duas vezes — imprima `ds[0]["text"]` e leia a string com os próprios olhos. Travou de verdade (30+ min sem entender nem com IA)? Anote a dúvida no seu DECISIONS.md e leve para a comunidade.
 
 **Critérios de aceite**:
-- [ ] Dataset revisado manualmente, com os 3 splits separados antes do treino
+- [ ] `SPEC.md` escrito antes de qualquer exemplo, com metas numéricas (critério universal a)
+- [ ] Dataset revisado manualmente (núcleo manual), com os 3 splits separados antes do treino
 - [ ] Treino conclui no Colab grátis sem OOM (ajuste batch size/seq length se preciso)
-- [ ] Tabela antes/depois: JSON válido (%) e campos corretos (%) para base vs fine-tuned
+- [ ] Eval com números: tabela antes/depois — JSON válido (%) e campos corretos (%) para base vs fine-tuned (critério universal b)
 - [ ] Fine-tuned supera o modelo base em pelo menos uma das duas métricas
-- [ ] Modelo publicado no Hub com model card preenchida
-- [ ] Uma seção "quando NÃO usar este modelo" na model card
-- [ ] Notebook no seu repositório `academia-ia` no GitHub, sem nenhum token `hf_` no código
+- [ ] Modelo publicado no Hub com model card preenchida, incluindo a seção "quando NÃO usar este modelo"
+- [ ] `DECISIONS.md` com o resumo da Sessão de Direção e os trade-offs (critério universal c)
+- [ ] Passei na Defesa do módulo no Campus (critério universal d)
+- [ ] Notebook, SPEC.md e DECISIONS.md no seu repositório `academia-ia` no GitHub, sem nenhum token `hf_` no código
 
 **Dicas**: use temperatura 0 no eval para resultados reproduzíveis. Se o JSON sair quebrado no fine-tuned, o suspeito nº 1 é chat template errado no preparo dos dados. Se o modelo "esquecer" instruções gerais, seu dataset provavelmente é homogêneo demais — misture variações de fraseado.
 
-## ✅ Quiz
+> **Regra de ouro:** você pode usar IA para escrever qualquer código. Você não pode entregar nada que não consiga explicar e defender.
+
+## 🧠 Quiz de fixação
 
 **1.** Um cliente quer que o chatbot "conheça os 800 produtos do catálogo, que muda toda semana". A abordagem correta é:
 A) Fine-tuning mensal com o catálogo
@@ -462,9 +484,15 @@ D) Que o modelo supera o base
 
 - [ ] Sei recitar a árvore prompt → RAG → fine-tuning com um exemplo real de cada degrau
 - [ ] Rodei um modelo aberto localmente com Ollama e comparei duas quantizações (Parte A do lab)
-- [ ] Sei estimar de cabeça a VRAM de um modelo dado tamanho e quantização
-- [ ] Consigo explicar LoRA desenhando as matrizes A e B com dimensões num papel
+- [ ] Sei estimar de cabeça a VRAM de um modelo dado tamanho e quantização (núcleo manual)
+- [ ] Consigo explicar LoRA desenhando as matrizes A e B com dimensões num papel (núcleo manual)
+- [ ] Fiz a Sessão de Direção: SPEC.md antes de qualquer exemplo e todos os rascunhos revisados à mão
 - [ ] Preparei um dataset em JSONL e apliquei o chat template corretamente
-- [ ] Treinei um QLoRA (lab parte B ou mini-projeto) e fiz eval antes/depois em dados de teste
+- [ ] Treinei um QLoRA (lab parte B ou mini-projeto) e fiz eval antes/depois em dados de teste, com números
 - [ ] Publiquei um modelo no Hugging Face Hub com model card completa
+- [ ] Entreguei o mini-projeto com SPEC.md e DECISIONS.md no GitHub
+- [ ] Passei na Defesa do módulo no Campus
 - [ ] Sei argumentar contra um fine-tuning desnecessário numa reunião de produto
+- [ ] Acertei pelo menos 6 de 8 no quiz
+
+**🆘 Se travar:** trabalhar com seu assistente de IA É o método deste módulo — cole o erro, cole a célula que estourou, peça hipóteses (dados? template? VRAM?) e entenda a causa antes de aceitar a correção. Travou de verdade (30+ min sem entender nem com IA)? Anote a dúvida no seu DECISIONS.md e leve para a comunidade.

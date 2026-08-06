@@ -1,6 +1,6 @@
-# Módulo 6 — Prompt Engineering & APIs de LLM
+# Módulo 2 — Prompt Engineering & APIs de LLM
 
-> 🏛️ Período 3 · ⏱️ Carga estimada: 10h · 📋 Pré-requisitos: Módulo 5 (Transformers & LLMs por Dentro)
+> 🏛️ Período 1 · ⏱️ Carga estimada: 10h · 📋 Pré-requisitos: Módulo 1 (Direção de IA: spec, contexto e verificação)
 
 ## 🎯 Objetivos
 
@@ -9,12 +9,17 @@
 - Ao final, você será capaz de chamar as APIs da Anthropic e da OpenAI em Python, com streaming, tratamento de erros e retries.
 - Ao final, você será capaz de estimar e medir o custo de cada chamada (tokens de input vs. output) e reduzi-lo com prompt caching.
 - Ao final, você será capaz de montar uma avaliação sistemática mínima para comparar versões de um prompt.
+- Ao final, você será capaz de dirigir a IA na parte de código do módulo enquanto escreve, à mão, os prompts que definem o comportamento do sistema.
+
+## 🎛️ Núcleo manual deste módulo
+
+**Os prompts do lab e do projeto são escritos à mão — o prompt É a especificação**, e escrever a especificação é exatamente o trabalho que não se delega. Todo o resto (código Python de suporte, scripts de avaliação, leitura de erros) pode e deve ser dirigido com seu assistente de IA — desde que você consiga explicar cada linha aceita.
 
 ## 🗺️ Por que isso importa
 
-Esta é, provavelmente, a habilidade de maior retorno imediato de todo o programa. Prompt engineering profissional não é coleção de "truques mágicos" de rede social — é especificação de comportamento: você está escrevendo o contrato entre seu sistema e um modelo probabilístico. Empresas que colocam LLMs em produção vivem disso: um prompt bem estruturado com saída validada é a diferença entre uma feature confiável e um chatbot que quebra o parser do backend uma vez por hora.
+Esta é, provavelmente, a habilidade de maior retorno imediato de todo o programa. Prompt engineering profissional não é coleção de "truques mágicos" de rede social — é especificação de comportamento: você está escrevendo o contrato entre seu sistema e um modelo probabilístico. É a mesma disciplina que você começou no Módulo 1, agora apontada para dentro do produto: a spec que você escrevia para dirigir a IA vira o system prompt que dirige o modelo em produção. Empresas que colocam LLMs em produção vivem disso: um prompt bem estruturado com saída validada é a diferença entre uma feature confiável e um chatbot que quebra o parser do backend uma vez por hora.
 
-E o prompt não vive sozinho: ele viaja dentro de uma chamada de API que custa dinheiro, falha com rate limit, precisa de streaming para não parecer travada e não pode vazar a chave da empresa no GitHub. O engenheiro de IA é julgado por esse pacote completo. Tudo que você aprender aqui será usado diariamente nos módulos de RAG (7) e Agentes, e o hábito de *medir* prompts em vez de opinar sobre eles é o gancho para o Módulo 10 (Avaliação).
+E o prompt não vive sozinho: ele viaja dentro de uma chamada de API que custa dinheiro, falha com rate limit, precisa de streaming para não parecer travada e não pode vazar a chave da empresa no GitHub. O engenheiro de IA é julgado por esse pacote completo. Você ainda não passou pelo mergulho de Python & Dados (Módulo 3) — e está tudo bem: o código deste módulo é curto, comentado, e a regra da casa vale em dobro aqui: dirija a IA no que for sintaxe, entenda a fundo o que for decisão. Tudo que você aprender aqui será usado diariamente nos módulos de RAG (Módulo 7) e Agentes (Módulo 8), e o hábito de *medir* prompts em vez de opinar sobre eles é o gancho para o Módulo 10 (Avaliação & Segurança).
 
 ## 📚 Aulas
 
@@ -26,11 +31,12 @@ E o prompt não vive sozinho: ele viaja dentro de uma chamada de API que custa d
 | 4 | Documentação da API da Anthropic | 📖 leitura | [docs.claude.com](https://docs.claude.com) | 1h00 |
 | 5 | Documentação da API da OpenAI + Cookbook | 📖 leitura | [platform.openai.com/docs](https://platform.openai.com/docs) · [cookbook.openai.com](https://cookbook.openai.com) | 1h00 |
 | 6 | Praticando de graça no Google AI Studio | 💻 lab | [aistudio.google.com](https://aistudio.google.com) | 0h30 |
-| 7 | Lab guiado: classificador com structured output e custo medido | 💻 lab | Seção 💻 abaixo | 1h30 |
+| 7 | Lab guiado: classificador com structured output e custo medido | 💻 lab | Seção 💻 abaixo | 1h00 |
+| 8 | Sessão de Direção: o extrator dirigido por spec | 🎛️ sessão de direção | Seção 🎛️ abaixo | 0h30 |
 
 ## 🧠 Conteúdo essencial
 
-### 6.1 Anatomia de um prompt profissional: system vs. user
+### 2.1 Anatomia de um prompt profissional: system vs. user
 
 As APIs de chat separam papéis. O **system prompt** define quem o modelo é, as regras e o formato — é o "manual do funcionário", escrito por você, desenvolvedor. O **user** carrega o dado da vez. Misturar tudo em uma string única funciona em demo e apodrece em produção.
 
@@ -42,7 +48,7 @@ user:   Não consigo entrar na minha conta desde ontem.
 
 Regras práticas: instruções estáveis e persona → system; dados variáveis → user; nunca concatene input do usuário dentro do system (além de bagunçar, facilita prompt injection).
 
-### 6.2 As técnicas que realmente importam
+### 2.2 As técnicas que realmente importam
 
 - **Few-shot**: mostre 2-5 exemplos de entrada → saída antes do caso real. É a técnica com melhor custo-benefício que existe: modelos imitam padrões muito melhor do que seguem descrições abstratas. Exemplos > adjetivos.
 - **Chain-of-thought (CoT)**: para tarefas com raciocínio (matemática, lógica, decisões com critérios), peça o raciocínio antes da resposta ("pense passo a passo antes de responder; depois dê a resposta final"). Nota de 2026: os modelos de raciocínio atuais já fazem isso internamente — o CoT explícito importa mais em modelos simples e em tarefas onde você quer *auditar* o raciocínio.
@@ -50,11 +56,11 @@ Regras práticas: instruções estáveis e persona → system; dados variáveis 
 - **Prefill (nota histórica)**: começar a resposta do assistente por ele (ex.: enviar `{` como início da resposta para forçar JSON) foi uma técnica popular. Nos modelos Claude atuais (família 4.6+) o prefill de última mensagem foi **removido da API** (retorna erro 400) porque o structured output resolve o mesmo problema com garantia. Conheça o conceito; use a ferramenta moderna.
 - **Pedir o formato de saída explicitamente**: sempre. "Responda em JSON com as chaves X e Y", "responda com uma única palavra". Modelo sem formato pedido devolve prosa simpática que ninguém consegue parsear.
 
-### 6.3 Structured output: JSON garantido, não JSON prometido
+### 2.3 Structured output: JSON garantido, não JSON prometido
 
 Pedir JSON no prompt dá certo 95% das vezes — e os 5% derrubam seu pipeline às 3 da manhã. **Structured output** resolve na raiz: você passa um schema e a API *restringe a geração* para que a saída seja válida contra ele. No SDK da Anthropic, o caminho recomendado é `client.messages.parse()` com um modelo Pydantic (você recebe um objeto Python validado, não uma string); a OpenAI tem o equivalente com `response_format`/parse no SDK dela. Use structured output sempre que a resposta alimentar código; deixe texto livre só para texto destinado a humanos.
 
-### 6.4 Chamando as APIs de verdade
+### 2.4 Chamando as APIs de verdade
 
 Instale os SDKs oficiais (`pip install anthropic openai`) e **nunca** coloque a chave no código — exporte `ANTHROPIC_API_KEY` / `OPENAI_API_KEY` no ambiente e deixe o SDK encontrá-las:
 
@@ -75,7 +81,9 @@ print(resp.usage.input_tokens, resp.usage.output_tokens)  # a conta chega aqui
 
 O SDK da OpenAI segue o mesmo espírito com `client.chat.completions.create(model=..., messages=[...])`. Para praticar sem cartão de crédito, o [Google AI Studio](https://aistudio.google.com) oferece um free tier generoso — ótimo para exercícios; os conceitos (roles, tokens, streaming) são idênticos.
 
-### 6.5 Streaming: ninguém espera 20 segundos olhando um spinner
+Se algum trecho de Python aqui parecer grego (f-strings, tuplas, `Literal`), não trave: cole o trecho no seu assistente de IA e peça a explicação linha a linha — o mergulho formal em Python vem no Módulo 3, mas você não precisa dele para *dirigir* este código.
+
+### 2.5 Streaming: ninguém espera 20 segundos olhando um spinner
 
 Respostas longas devem ser transmitidas token a token para o usuário. Nos SDKs isso é um gerenciador de contexto:
 
@@ -92,7 +100,7 @@ with client.messages.stream(
 
 Regra prática: chat com humano na ponta → sempre streaming; pipeline batch → pode ser síncrono. Streaming também protege contra timeouts HTTP em respostas longas.
 
-### 6.6 Tokens, custo e prompt caching
+### 2.6 Tokens, custo e prompt caching
 
 Você paga por token, e **output custa ~5× mais que input** (na Anthropic: Claude Opus 4.8 sai a US$ 5,00/milhão de tokens de input e US$ 25,00/milhão de output; Haiku 4.5, o modelo econômico, US$ 1,00/US$ 5,00). Três consequências de engenharia:
 
@@ -102,7 +110,7 @@ Você paga por token, e **output custa ~5× mais que input** (na Anthropic: Clau
 
 Custo por chamada = `input_tokens × preço_input + output_tokens × preço_output`. Faça essa conta virar hábito — o lab abaixo automatiza.
 
-### 6.7 Erros, retries e a regra número 1 de segurança
+### 2.7 Erros, retries e a regra número 1 de segurança
 
 Chamadas de API falham: `429` (rate limit), `500/529` (servidor sobrecarregado), erros de rede. Os SDKs oficiais já fazem retry automático com backoff exponencial para esses casos (configurável via `max_retries`). Sua parte é capturar as exceções tipadas — da mais específica para a mais genérica — e nunca fazer retry de erro 4xx de validação (repetir um request inválido só queima cota):
 
@@ -119,7 +127,7 @@ except anthropic.APIConnectionError:
 
 **Segurança básica, inegociável:** chave de API nunca vai para o código, nem para o Git. Use variáveis de ambiente ou secret manager; adicione `.env` ao `.gitignore`; se uma chave vazar, revogue imediatamente (bots varrem o GitHub em minutos). Chave vazada = fatura de milhares de dólares no seu nome.
 
-### 6.8 Avaliando prompts como engenheiro (gancho para o Módulo 10)
+### 2.8 Avaliando prompts como engenheiro (gancho para o Módulo 10)
 
 "Esse prompt parece melhor" não é engenharia. O fluxo mínimo profissional:
 
@@ -128,11 +136,13 @@ except anthropic.APIConnectionError:
 3. Meça: acurácia/F1 para classificação; validade do JSON para extração; custo e latência sempre.
 4. Só promova a versão que vence **nos números**.
 
-Duas versões de prompt podem parecer iguais no olho e diferir 15 pontos de acurácia no conjunto de teste. No Módulo 10 isso vira disciplina completa (LLM-as-judge, regressão de prompts, datasets de avaliação); por ora, o hábito basta: **nunca troque um prompt em produção sem rodar o conjunto de teste antes**.
+Duas versões de prompt podem parecer iguais no olho e diferir 15 pontos de acurácia no conjunto de teste. No Módulo 10 (Avaliação & Segurança) isso vira disciplina completa (LLM-as-judge, regressão de prompts, datasets de avaliação); por ora, o hábito basta: **nunca troque um prompt em produção sem rodar o conjunto de teste antes**.
 
 ## 💻 Lab guiado
 
 **Objetivo:** construir um classificador de sentimento com extração estruturada via API da Anthropic, medindo o custo real de cada chamada. Precisa de `ANTHROPIC_API_KEY` exportada no ambiente (ou adapte para o SDK do provedor que você tiver; a estrutura é a mesma).
+
+**Como trabalhar neste lab:** o **núcleo manual** aqui é o `SYSTEM` e o schema — escreva-os você, palavra por palavra, porque eles são a especificação do comportamento. O código Python ao redor você pode digitar, colar ou pedir à IA que monte a partir deste guia; o que não pode é aceitar uma linha sem saber o que ela faz (peça a explicação de qualquer trecho estranho — Python profundo chega no Módulo 3).
 
 ```python
 # ── 1. Setup ────────────────────────────────────────────────
@@ -205,34 +215,46 @@ print(f"\nTokens de input da 1ª chamada (medidos sem custo): {contagem.input_to
 
 **Experimentos obrigatórios:** (a) quebre o schema de propósito (mude `Literal` para valores que o texto não permite) e observe o comportamento; (b) adicione 3 exemplos few-shot no system e verifique se a `confianca` fica mais bem calibrada; (c) calcule quanto custaria o mesmo pipeline com os preços de um modelo econômico (ex.: US$ 1,00/US$ 5,00 por milhão) e discuta o trade-off qualidade × custo.
 
+## 🎛️ Sessão de Direção
+
+A prática de direção deste módulo acontece dentro do mini-projeto, na etapa do script de avaliação (`avaliar.py`) — o pedaço com mais Python "de verdade" do módulo, e por isso o candidato perfeito para ser construído dirigindo a IA.
+
+1. **Especifique.** Antes de abrir o assistente, escreva no `SPEC.md` do projeto a seção "avaliar.py": entrada (os 15 textos + gabarito), saída (acertos por campo, custo total por versão), regras (comparar `skills` como conjunto, tratar 429/erros tipados sem derrubar o lote, registrar casos pulados). Critério de aceite: rodar as duas versões de prompt de ponta a ponta e imprimir a tabela.
+2. **Dirija.** Entregue a spec à IA e peça a implementação. Itere: se ela inventar dependência, simplificar demais o tratamento de erro ou comparar `skills` como lista, aponte a violação da spec e peça correção — não conserte silenciosamente à mão o que a spec deveria ter dito.
+3. **Verifique.** Leia o diff inteiro antes de aceitar; rode com 2 exemplos antes do lote; confira que os números batem com uma conferência manual de 1 caso. Peça à IA que explique qualquer linha que você não explicaria a um colega.
+
+**Entregável da sessão:** o trecho do `SPEC.md` escrito antes, e um resumo curto da sessão no `DECISIONS.md` (quantas iterações, o que a IA errou, o que você mudou na spec por causa disso). Lembrete do núcleo manual: os *prompts* (`SYSTEM_V1`/`SYSTEM_V2`) continuam sendo escritos por você — dirigir vale para o código de suporte, não para a especificação de comportamento.
+
 ## 🚀 Mini-projeto
 
 **Enunciado:** construa um **extrator estruturado de dados de currículos** (ou de anúncios de vagas, à sua escolha): recebe texto livre e devolve JSON validado com nome, cargo/título, skills (lista), anos de experiência e senioridade estimada — com avaliação sistemática de duas versões do prompt.
 
 **Requisitos:**
 
-1. Schema Pydantic com pelo menos 5 campos, incluindo uma lista e um `Literal` (ex.: senioridade: junior/pleno/senior).
-2. Uso de structured output (nada de `json.loads` em texto livre torcendo para dar certo).
-3. Conjunto de teste com ≥ 15 exemplos e gabarito (pode gerar os textos sinteticamente, mas o gabarito é seu).
-4. Duas versões de prompt (ex.: v1 sem few-shot, v2 com 3 exemplos) avaliadas sobre o MESMO conjunto.
-5. Relatório: acurácia por campo, custo médio por chamada e custo projetado para 10 mil documentos, para cada versão.
-6. Tratamento de erros com as exceções tipadas do SDK e streaming em pelo menos um caminho interativo do código.
+1. Especificação escrita ANTES do código: um `SPEC.md` no repositório dizendo o que o extrator faz, os campos, e os critérios de aceite mensuráveis.
+2. Schema Pydantic com pelo menos 5 campos, incluindo uma lista e um `Literal` (ex.: senioridade: junior/pleno/senior).
+3. Uso de structured output (nada de `json.loads` em texto livre torcendo para dar certo).
+4. Conjunto de teste com ≥ 15 exemplos e gabarito (pode gerar os textos sinteticamente, mas o gabarito é seu) — são os testes que provam os requisitos, com números.
+5. Duas versões de prompt **escritas à mão** (ex.: v1 sem few-shot, v2 com 3 exemplos) avaliadas sobre o MESMO conjunto.
+6. Relatório: acurácia por campo, custo médio por chamada e custo projetado para 10 mil documentos, para cada versão.
+7. Tratamento de erros com as exceções tipadas do SDK e streaming em pelo menos um caminho interativo do código.
+8. `DECISIONS.md` registrando as decisões e trade-offs (incluindo o resumo da Sessão de Direção) e defesa: ser capaz de responder "por quê?" sobre qualquer linha entregue.
 
 ### 🧭 Passo a passo
 
-Reserve ~4h30 no total (pode dividir em 2 ou 3 sessões). Siga na ordem — cada etapa termina com um **checkpoint**; só avance quando ele passar.
+Reserve ~4h30 no total (pode dividir em 2 ou 3 sessões). Siga na ordem — cada etapa termina com um **checkpoint**; só avance quando ele passar. Código de suporte pode ser dirigido com IA (é o método da casa); os prompts e o gabarito são seus, à mão.
 
-**Etapa 1 — Preparar o projeto e a chave (20 min)**
+**Etapa 1 — SPEC.md, projeto e chave (30 min)**
 
-1. Crie a pasta `modulo06-extrator` no seu repositório e instale as dependências: `pip install anthropic pydantic`.
-2. Gere sua chave no console do provedor (para a Anthropic: [console.anthropic.com](https://console.anthropic.com) → *API Keys*) e exporte no shell — **nunca** no código nem no Git (seção 6.7): `export ANTHROPIC_API_KEY="sua-chave"`. Se usar arquivo `.env`, adicione-o ao `.gitignore` AGORA, antes do primeiro commit.
-3. Confirme a conexão sem gastar nada, com `count_tokens` (seção 6.6): `python -c "import anthropic; c = anthropic.Anthropic(); print(c.messages.count_tokens(model='claude-opus-4-8', messages=[{'role': 'user', 'content': 'oi'}]).input_tokens)"`
+1. Crie a pasta `modulo02-extrator` no seu repositório e escreva o `SPEC.md` ANTES de qualquer código: o que o extrator recebe e devolve, os 5+ campos do schema, e os critérios de aceite (100% das saídas validam; tabela v1 × v2; custo medido). Duas ou três dúzias de linhas bastam — spec curta e testável vence spec longa e vaga (Módulo 1).
+2. Instale as dependências: `pip install anthropic pydantic`. Gere sua chave no console do provedor (para a Anthropic: [console.anthropic.com](https://console.anthropic.com) → *API Keys*) e exporte no shell — **nunca** no código nem no Git (seção 2.7): `export ANTHROPIC_API_KEY="sua-chave"`. Se usar arquivo `.env`, adicione-o ao `.gitignore` AGORA, antes do primeiro commit.
+3. Confirme a conexão sem gastar nada, com `count_tokens` (seção 2.6): `python -c "import anthropic; c = anthropic.Anthropic(); print(c.messages.count_tokens(model='claude-opus-4-8', messages=[{'role': 'user', 'content': 'oi'}]).input_tokens)"`
 
-✅ **Checkpoint:** o comando imprime um número de tokens, sem erro de autenticação.
+✅ **Checkpoint:** `SPEC.md` commitado e o comando imprime um número de tokens, sem erro de autenticação.
 
 **Etapa 2 — Escrever o schema Pydantic (20 min)**
 
-Crie `extrator.py` começando pelo contrato, igual ao passo 2 do lab guiado (a seção 6.3 explica o porquê):
+Crie `extrator.py` começando pelo contrato, igual ao passo 2 do lab guiado (a seção 2.3 explica o porquê):
 
 ```python
 from pydantic import BaseModel
@@ -257,7 +279,7 @@ class Curriculo(BaseModel):
 
 **Etapa 4 — Função de extração com structured output (30 min)**
 
-Adapte a `classificar()` do lab guiado (passo 3), reaproveitando o setup dele (`client`, `MODEL`, preços): mesmo esqueleto, trocando o schema e a tag XML (seção 6.2):
+Adapte a `classificar()` do lab guiado (passo 3), reaproveitando o setup dele (`client`, `MODEL`, preços): mesmo esqueleto, trocando o schema e a tag XML (seção 2.2):
 
 ```python
 def extrair(texto: str, system: str) -> tuple[Curriculo, float]:
@@ -272,55 +294,64 @@ def extrair(texto: str, system: str) -> tuple[Curriculo, float]:
 
 ✅ **Checkpoint:** `extrair(curriculos[0], "Extraia os dados do currículo.")` devolve um objeto `Curriculo` validado, impresso no terminal.
 
-**Etapa 5 — Escrever as duas versões do prompt (30 min)**
+**Etapa 5 — Escrever as duas versões do prompt À MÃO (30 min)**
+
+Este é o núcleo manual do módulo — nada de pedir os prompts à IA: eles são a especificação que você está aprendendo a escrever.
 
 1. `SYSTEM_V1`: o mais ingênuo possível, 2-3 linhas descrevendo a tarefa. Resista a melhorá-lo — a graça é *medir* a diferença.
-2. `SYSTEM_V2`: o mesmo texto + 3 exemplos few-shot entrada → saída dentro de `<exemplos>` (seção 6.2). Use 3 currículos que **não** estão no conjunto de teste.
+2. `SYSTEM_V2`: o mesmo texto + 3 exemplos few-shot entrada → saída dentro de `<exemplos>` (seção 2.2). Use 3 currículos que **não** estão no conjunto de teste.
 3. Meça cada versão com `count_tokens` antes do lote (é critério de aceite) e anote os números.
 
 ✅ **Checkpoint:** as duas constantes existem no código e você sabe quantos tokens de input cada versão custa.
 
-**Etapa 6 — Avaliar as duas versões no MESMO conjunto (45 min)**
+**Etapa 6 — Sessão de Direção: avaliar as duas versões no MESMO conjunto (45 min)**
 
-Crie `avaliar.py`: para cada versão, rode `extrair()` nos 15 textos, compare campo a campo com o gabarito (para `skills`, compare como conjuntos: `set(previsto) == set(esperado)`) e acumule acertos por campo e custo. Envolva a chamada nas exceções tipadas da seção 6.7:
+Esta é a Sessão de Direção do módulo (seção 🎛️ acima): especifique o `avaliar.py` no SPEC.md, dirija a IA na implementação e verifique o resultado. O script deve: para cada versão, rodar `extrair()` nos 15 textos, comparar campo a campo com o gabarito (para `skills`, compare como conjuntos: `set(previsto) == set(esperado)`) e acumular acertos por campo e custo. Envolva a chamada nas exceções tipadas da seção 2.7:
 
 ```python
 try:
     previsto, custo = extrair(texto, system)
 except anthropic.RateLimitError:
     time.sleep(30); continue      # e registre o caso pulado
-# trate também APIStatusError e APIConnectionError, como na seção 6.7
+# trate também APIStatusError e APIConnectionError, como na seção 2.7
 ```
 
-✅ **Checkpoint:** o script percorre os 15 exemplos nas duas versões sem morrer no meio e imprime acertos por campo e custo total.
+✅ **Checkpoint:** o script percorre os 15 exemplos nas duas versões sem morrer no meio, imprime acertos por campo e custo total — e você leu e consegue explicar cada linha aceita da IA.
 
 **Etapa 7 — Relatório v1 × v2 (30 min)**
 
-Monte `relatorio.md` com uma tabela: uma linha por campo, colunas acurácia v1 / acurácia v2; abaixo, custo médio por chamada de cada versão e custo projetado para 10 mil documentos (`custo_medio × 10_000`, seção 6.6). Feche com um parágrafo dizendo qual versão venceu e **pelos números** de quais campos.
+Monte `relatorio.md` com uma tabela: uma linha por campo, colunas acurácia v1 / acurácia v2; abaixo, custo médio por chamada de cada versão e custo projetado para 10 mil documentos (`custo_medio × 10_000`, seção 2.6). Feche com um parágrafo dizendo qual versão venceu e **pelos números** de quais campos.
 
 ✅ **Checkpoint:** a tabela responde "qual versão vai para produção?" sem precisar de opinião.
 
-**Etapa 8 — Streaming, README e entrega (30 min)**
+**Etapa 8 — Streaming, DECISIONS.md e entrega (30 min)**
 
-1. Adicione um caminho interativo: um modo em que você cola um currículo no terminal e vê um resumo do candidato ser transmitido token a token com `client.messages.stream` (copie a estrutura da seção 6.5), antes ou depois da extração estruturada.
-2. Escreva o README curto (instalar, variáveis de ambiente, como rodar), confira que nenhuma chave vazou (`git log -p | grep -i "sk-"` deve voltar vazio) e faça commit e push.
+1. Adicione um caminho interativo: um modo em que você cola um currículo no terminal e vê um resumo do candidato ser transmitido token a token com `client.messages.stream` (copie a estrutura da seção 2.5), antes ou depois da extração estruturada.
+2. Atualize o `SPEC.md` (o que mudou entre a spec e o entregue?) e escreva o `DECISIONS.md`: por que esses campos, por que v1 ou v2 venceu, o resumo da Sessão de Direção e o que você faria diferente.
+3. Escreva o README curto (instalar, variáveis de ambiente, como rodar), confira que nenhuma chave vazou (`git log -p | grep -i "sk-"` deve voltar vazio) e faça commit e `git push` — projeto publicado no GitHub.
 
-✅ **Checkpoint:** todos os critérios de aceite abaixo marcados.
+✅ **Checkpoint:** repositório público com SPEC.md, DECISIONS.md, código e relatório; todos os critérios de aceite abaixo marcados.
 
-**🆘 Se travar:** `ValidationError` do Pydantic no gabarito ou na avaliação → quase sempre é grafia fora do `Literal` ("sênior"/"Senior" em vez de "senior") ou campo faltando no JSON — alinhe gabarito e schema letra a letra; erro de autenticação ("could not resolve authentication method" / 401) → a chave não está no ambiente **deste** shell: confira com `echo $ANTHROPIC_API_KEY` e re-exporte; 429 ou orçamento estourando → teste com 3 exemplos antes do lote completo, reduza `max_tokens` e, se precisar, rode a avaliação no free tier do Google AI Studio deixando só a rodada final na API paga (dica do módulo). Travou 30+ minutos em qualquer etapa → pergunte ao seu assistente de IA colando o erro completo e dizendo em qual etapa está (mas peça a *explicação*, não só a resposta — o objetivo é treinar).
+**🆘 Se travar:** trabalhar com seu assistente de IA É o método deste módulo — cole o erro completo, diga em qual etapa está, peça hipóteses e entenda a causa antes de aceitar a correção. Casos clássicos: `ValidationError` do Pydantic no gabarito ou na avaliação → quase sempre é grafia fora do `Literal` ("sênior"/"Senior" em vez de "senior") ou campo faltando no JSON — alinhe gabarito e schema letra a letra; erro de autenticação ("could not resolve authentication method" / 401) → a chave não está no ambiente **deste** shell: confira com `echo $ANTHROPIC_API_KEY` e re-exporte; 429 ou orçamento estourando → teste com 3 exemplos antes do lote completo, reduza `max_tokens` e, se precisar, rode a avaliação no free tier do Google AI Studio deixando só a rodada final na API paga. Travou de verdade (30+ min sem entender nem com a IA)? Anote a dúvida no seu DECISIONS.md e leve para a comunidade.
 
 **Critérios de aceite:**
 
+- [ ] `SPEC.md` escrito ANTES do código, commitado, e atualizado na entrega.
 - [ ] 100% das saídas validam contra o schema (é o ponto do structured output).
-- [ ] Tabela comparativa v1 × v2 com acurácia por campo e custo.
+- [ ] Tabela comparativa v1 × v2 com acurácia por campo e custo — os números provam os requisitos.
 - [ ] A versão vencedora foi escolhida pelos números, e o relatório justifica.
+- [ ] Os dois prompts foram escritos à mão por você (núcleo manual), e você defende cada escolha deles.
+- [ ] `DECISIONS.md` no repositório com decisões, trade-offs e o resumo da Sessão de Direção.
 - [ ] Nenhuma chave de API aparece no código ou no repositório (confira o histórico do Git!).
 - [ ] `count_tokens` usado para estimar custo antes das execuções em lote.
 - [ ] README curto explicando como rodar (variáveis de ambiente incluídas).
+- [ ] Defesa: você responde "por quê?" sobre qualquer linha entregue — passei na Defesa do módulo no Campus.
 
 **Dicas:** para o gabarito, planilha simples resolve; comece pelo prompt v1 mais ingênuo possível — a graça é *medir* a melhora do few-shot, não assumir; se o orçamento apertar, rode a avaliação no free tier do Google AI Studio e apenas as execuções finais na API paga.
 
-## ✅ Quiz
+> **Regra de ouro:** você pode usar IA para escrever qualquer código. Você não pode entregar nada que não consiga explicar e defender.
+
+## 🧠 Quiz de fixação
 
 1. O que deve ir no system prompt?
    - A) Os dados variáveis de cada requisição
@@ -405,6 +436,12 @@ Monte `relatorio.md` com uma tabela: uma linha por campo, colunas acurácia v1 /
 - [ ] Rodei o lab do classificador e fiz os 3 experimentos obrigatórios
 - [ ] Fiz pelo menos uma chamada com streaming e uma com prompt caching
 - [ ] Minha chave de API está em variável de ambiente e o `.gitignore` cobre `.env`
+- [ ] Escrevi o `SPEC.md` do mini-projeto ANTES do código
+- [ ] Escrevi os dois prompts à mão (núcleo manual) e a IA só dirigiu o código de suporte
 - [ ] Entreguei o mini-projeto com avaliação v1 × v2 baseada em números
+- [ ] `DECISIONS.md` no repositório com decisões, trade-offs e o log da Sessão de Direção
+- [ ] Passei na Defesa do módulo no Campus (respondi "por quê?" sobre o meu próprio código)
 - [ ] Sei calcular de cabeça o custo aproximado de uma chamada dado o preço por milhão
 - [ ] Acertei pelo menos 6 de 8 no quiz
+
+**🆘 Se travar:** trabalhar com seu assistente de IA É o método — cole o erro, peça hipóteses, entenda a causa antes de aceitar a correção. Travou de verdade (30+ min sem entender nem com IA)? Anote a dúvida no seu DECISIONS.md e leve para a comunidade.

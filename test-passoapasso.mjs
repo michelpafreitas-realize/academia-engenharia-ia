@@ -27,7 +27,7 @@ const semCodigo=h=>h.replace(/<pre><code>[\s\S]*?<\/code><\/pre>/g,'').replace(/
 const cru=h=>/\*\*|```|- \[ \]/.test(semCodigo(h));
 
 const files=readdirSync(new URL('./modulos',import.meta.url)).filter(f=>f.endsWith('.md')).sort();
-assert.equal(files.length,13);
+assert.equal(files.length,14); // 13 módulos da trilha principal + trilha optativa (13-por-dentro-da-maquina)
 let tabelas=0;
 for(const f of files){
   const sec=mdSecs(readFileSync(new URL('./modulos/'+f,import.meta.url),'utf8'));

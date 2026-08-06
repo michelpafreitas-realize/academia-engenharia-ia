@@ -1,6 +1,6 @@
-# Módulo 11 — LLMOps: IA em Produção
+# Módulo 11 — LLMOps
 
-> 🏛️ Período 4 · ⏱️ Carga estimada: 12h · 📋 Pré-requisitos: Módulo 10 (Avaliação & Segurança)
+> 🏛️ Período 4 — Qualidade, produção e prova · ⏱️ Carga estimada: 12h · 📋 Pré-requisitos: Módulo 10 (Avaliação & Segurança)
 
 ## 🎯 Objetivos
 
@@ -9,6 +9,11 @@
 - Ao final, você será capaz de reduzir latência e custo com streaming, prompt caching, batching e roteamento/cascata de modelos.
 - Ao final, você será capaz de tornar o sistema resiliente com retries, timeouts, fallback entre provedores e respeito a rate limits.
 - Ao final, você será capaz de instrumentar observabilidade específica de LLM (prompt, resposta, tokens, custo, latência, tracing) e montar um FinOps de tokens.
+- Ao final, você será capaz de especificar um serviço de IA (rotas, resiliência, observabilidade, metas de custo) e dirigir a IA na implementação, verificando cada garantia com testes reais.
+
+## 🎛️ Núcleo manual deste módulo
+
+À mão, você **lê os logs e traces com os próprios olhos** (uma sessão de 20 minutos olhando registros reais vale mais que qualquer dashboard) e **classifica erros em retryável vs não-retryável antes de escrever qualquer handler** — é essa taxonomia na cabeça que separa o gateway resiliente do catch genérico que engole tudo. Também vale fazer de cabeça a conta de custo de um request (tokens × preço) uma vez. Todo o resto — rotas, instrumentação, Dockerfile, scripts de teste — você constrói dirigindo seu assistente de IA.
 
 ## 🗺️ Por que isso importa
 
@@ -29,7 +34,8 @@ Este é o módulo que faz de você alguém que uma empresa pode confiar para *co
 | 7 | Made With ML: boas práticas de MLOps aplicadas | 📖 leitura | [madewithml.com](https://madewithml.com) | 1h30 |
 | 8 | Full Stack Deep Learning: deploy e operação | 🎥 vídeo | [fullstackdeeplearning.com](https://fullstackdeeplearning.com) | 1h30 |
 | 9 | Lab guiado: FastAPI na frente de um LLM com logging e fallback | 💻 lab | este módulo, seção Lab guiado | 2h |
-| 10 | Mini-projeto: containerizar e medir o serviço | 💻 lab | este módulo, seção Mini-projeto | 1h |
+| 10 | Sessão de Direção: da spec ao serviço observável | 🎛️ sessão de direção | este módulo, seção 🎛️ | 1h |
+| 11 | Mini-projeto: containerizar e medir o serviço | 💻 lab | este módulo, seção Mini-projeto | 1h |
 
 ## 🧠 Conteúdo essencial
 
@@ -256,27 +262,40 @@ docker run -p 8000:8000 -e ANTHROPIC_API_KEY="$ANTHROPIC_API_KEY" llm-gateway
 
 **Passo 5 — Teste o fallback.** Troque temporariamente `MODELO_PRIMARIO` por um ID inexistente para simular falha (vai dar 404, que *não* deve cair no fallback — só 429/5xx devem). Depois force um cenário de 429/sobrecarga (ou stubbe a exceção) e confirme que o log de "usando fallback" aparece e a resposta ainda chega. Essa distinção retryável vs não-retryável é o coração da resiliência.
 
+## 🎛️ Sessão de Direção
+
+A prática de direção deste módulo é transformar o lab no mini-projeto **sem digitar o serviço você mesmo**:
+
+1. **Especifique**: escreva o `SPEC.md` antes de qualquer código — as rotas e seus contratos, a política de resiliência (timeout, retries, em quais erros o fallback dispara e em quais NÃO), o que cada request registra, a heurística de roteamento e **as garantias verificáveis** (ex.: fallback comprovado em 429/5xx e ausente em 4xx, roteamento visível nos logs, custo por rota batendo com a soma dos requests).
+2. **Dirija**: entregue a spec + o `app.py` do lab ao seu assistente de IA e conduza a evolução em etapas pequenas, revisando cada diff. Atenção especial ao tratamento de erros: é onde a IA mais gera o catch genérico que a sua spec proíbe.
+3. **Verifique**: aqui entra o núcleo manual — provoque as falhas você mesmo (modelo inexistente, 429 simulado), leia os registros no SQLite com os próprios olhos e confira que cada garantia da spec se sustenta em log, não em fé.
+
+**Entregável:** o `SPEC.md` e um resumo da sessão no `DECISIONS.md` (o que a IA propôs, o que você aceitou, o que recusou e por quê — em especial nas decisões de resiliência). Esse material entra no repositório do mini-projeto abaixo.
+
 ## 🚀 Mini-projeto
 
-**Enunciado**: **"Serviço de IA observável"** — evolua o gateway do lab para um serviço com observabilidade completa e um dashboard de custo, deployado num container acessível.
+**Enunciado**: **"Serviço de IA observável"** — evolua, dirigindo a IA, o gateway do lab para um serviço com observabilidade completa e um dashboard de custo, deployado num container acessível.
 
 **Requisitos**:
-- API FastAPI com pelo menos 2 rotas de IA distintas (ex.: `/resumir` e `/classificar`), cada uma com streaming quando fizer sentido.
-- Observabilidade real: integre **Langfuse** (ou logging estruturado próprio) registrando por request prompt, resposta, tokens, custo, latência e modelo. Trace pelo menos uma cadeia/agente (2+ passos).
-- Resiliência: retries com backoff (pode ser o do SDK), timeout explícito, e fallback de modelo apenas em erros retryáveis.
-- Roteamento de modelo: uma das rotas escolhe entre modelo pequeno e grande conforme uma heurística simples de complexidade da entrada.
-- FinOps: um endpoint `/custos` (ou uma página) que agrega o custo total e por rota a partir dos logs.
-- Deploy num container, subido em Railway/Render/Fly (ou rodando localmente via Docker com instruções claras).
+1. `SPEC.md` escrito **antes** do código, com contratos das rotas, política de resiliência e garantias verificáveis (critério universal a).
+2. API FastAPI com pelo menos 2 rotas de IA distintas (ex.: `/resumir` e `/classificar`), cada uma com streaming quando fizer sentido.
+3. Observabilidade real: integre **Langfuse** (ou logging estruturado próprio) registrando por request prompt, resposta, tokens, custo, latência e modelo. Trace pelo menos uma cadeia/agente (2+ passos).
+4. Resiliência: retries com backoff (pode ser o do SDK), timeout explícito, e fallback de modelo apenas em erros retryáveis.
+5. Roteamento de modelo: uma das rotas escolhe entre modelo pequeno e grande conforme uma heurística simples de complexidade da entrada.
+6. FinOps: um endpoint `/custos` (ou uma página) que agrega o custo total e por rota a partir dos logs.
+7. **Testes que provam as garantias, com números** (critério universal b): fallback demonstrado nos dois sentidos (dispara em 429/5xx, não dispara em 4xx), roteamento comprovado nos registros, custo por rota conferido.
+8. Deploy num container, subido em Railway/Render/Fly (ou rodando localmente via Docker com instruções claras).
+9. `DECISIONS.md` (critério universal c) com os trade-offs e o resumo da Sessão de Direção; defesa (critério universal d): responder "por quê?" sobre qualquer linha do repositório e passar na Defesa do módulo no Campus.
 
 ### 🧭 Passo a passo
 
 Reserve ~3h30 no total (pode dividir em 2 sessões). Siga na ordem — cada etapa termina com um **checkpoint**; só avance quando ele passar.
 
-**Etapa 1 — Partir do gateway do lab (15 min)**
+**Etapa 1 — SPEC.md e partir do gateway do lab (30 min)**
 
-Copie o projeto do Lab guiado (Passos 1 a 4) para uma pasta nova: `cp -r llm-gateway servico-ia && cd servico-ia`. Suba com `uvicorn app:app --reload` e repita o `curl -N` do Passo 3 do lab.
+Escreva o `SPEC.md` **antes de qualquer código** (é a Sessão de Direção, passo 1): rotas e contratos, política de resiliência, o que cada request registra, heurística de roteamento e as garantias verificáveis. Duas frases por item bastam — spec é contrato, não redação. Depois copie o projeto do Lab guiado (Passos 1 a 4) para uma pasta nova: `cp -r llm-gateway servico-ia && cd servico-ia`. Suba com `uvicorn app:app --reload` e repita o `curl -N` do Passo 3 do lab. Daqui até a Etapa 6, dirija seu assistente de IA com a spec em mãos — uma etapa por vez, revisando cada diff.
 
-✅ **Checkpoint:** a resposta chega token a token e o servidor imprime o log JSON com tokens, custo e latência.
+✅ **Checkpoint:** `SPEC.md` no repositório com as garantias verificáveis, a resposta chega token a token e o servidor imprime o log JSON com tokens, custo e latência.
 
 **Etapa 2 — Duas rotas de IA com streaming e roteamento (45 min)**
 
@@ -354,7 +373,8 @@ def custos():
 
 1. Reaproveite o `Dockerfile` e o `requirements.txt` do Passo 4 do lab (nada novo a instalar — `sqlite3` e `uuid` são da biblioteca padrão): `docker build -t servico-ia .` e depois `docker run -p 8000:8000 -e ANTHROPIC_API_KEY="$ANTHROPIC_API_KEY" servico-ia`. Repita os curls das Etapas 2, 5 e 6 contra o container (o `registros.db` nasce zerado dentro dele — chame as rotas de IA antes do `/custos`).
 2. Quer público? Suba o container em Railway/Render/Fly (seção 7), com `ANTHROPIC_API_KEY` no painel do serviço — nunca no Dockerfile. Feche com um README explicando como subir e testar cada rota, e rode a suite de evals do Módulo 10 contra o serviço como gate.
-3. Entregue no seu repositório `academia-ia` — Dockerfile e README vão junto; `registros.db` e chave de API ficam fora (confira o `.gitignore` com `git status` antes):
+3. Escreva o `DECISIONS.md`: os trade-offs (por que essa heurística de roteamento, por que SQLite vs Langfuse), o resumo da Sessão de Direção (o que a IA propôs, o que você recusou) e os números que provam cada garantia da spec (Etapas 4 a 6). Atualize o `SPEC.md` se algo mudou no caminho.
+4. Entregue no seu repositório `academia-ia` — Dockerfile, README, SPEC.md e DECISIONS.md vão junto; `registros.db` e chave de API ficam fora (confira o `.gitignore` com `git status` antes). Feche passando na Defesa do módulo no Campus:
 
 ```bash
 git add .
@@ -364,22 +384,26 @@ git push
 
 ✅ **Checkpoint:** todas as rotas respondem no container (ou na URL pública), o projeto aparece no seu GitHub e todos os critérios de aceite abaixo estão marcados.
 
-**🆘 Se travar:** `Address already in use` na porta 8000 → o uvicorn da Etapa 1 ainda está rodando; encerre-o (Ctrl+C) antes do `docker run`, ou use `-p 8001:8000`. Erro 401/`authentication_error` só dentro do container → a `ANTHROPIC_API_KEY` não entra sozinha: falta o `-e` no `docker run` (ou a variável no painel do PaaS). A resposta chega inteira de uma vez em vez de em streaming → falta o `-N` no curl (é ele que desliga o buffer do lado do cliente). Travou 30+ minutos em qualquer etapa → pergunte ao seu assistente de IA colando o erro completo e dizendo em qual etapa está (mas peça a *explicação*, não só a resposta — o objetivo é treinar).
+**🆘 Se travar:** trabalhar com seu assistente de IA É o método — cole o erro completo, diga em qual etapa está, peça hipóteses e entenda a causa antes de aceitar a correção. Pistas específicas deste projeto: `Address already in use` na porta 8000 → o uvicorn da Etapa 1 ainda está rodando; encerre-o (Ctrl+C) antes do `docker run`, ou use `-p 8001:8000`; erro 401/`authentication_error` só dentro do container → a `ANTHROPIC_API_KEY` não entra sozinha: falta o `-e` no `docker run` (ou a variável no painel do PaaS); a resposta chega inteira de uma vez em vez de em streaming → falta o `-N` no curl (é ele que desliga o buffer do lado do cliente). Travou de verdade (30+ min sem entender nem com IA)? Anote a dúvida no seu DECISIONS.md e leve para a comunidade.
 
 **Critérios de aceite**:
+- [ ] `SPEC.md` escrito antes do código, com garantias verificáveis (critério universal a)
 - [ ] Duas rotas de IA funcionando, com streaming onde aplicável
 - [ ] Cada request registra prompt, resposta, tokens, custo, latência e modelo (Langfuse ou logs estruturados)
 - [ ] Pelo menos um trace de cadeia/agente com 2+ passos visível no painel
-- [ ] Fallback dispara em 429/5xx e NÃO dispara em 4xx do cliente (demonstrado)
-- [ ] Roteamento de modelo comprovado (mesma rota, entradas diferentes → modelos diferentes)
+- [ ] Garantias provadas com números (critério universal b): fallback dispara em 429/5xx e NÃO dispara em 4xx (demonstrado), roteamento comprovado nos registros (mesma rota, entradas diferentes → modelos diferentes)
 - [ ] Endpoint/painel de custos agregando por rota
 - [ ] Container roda e o README explica como subir e testar
 - [ ] (Liga com Módulo 10) A suite de evals roda contra o serviço como gate
-- [ ] Projeto no seu repositório `academia-ia` no GitHub — Dockerfile e README inclusos, chave de API e `registros.db` fora
+- [ ] `DECISIONS.md` com trade-offs, resumo da Sessão de Direção e os números das provas (critério universal c)
+- [ ] Passei na Defesa do módulo no Campus (critério universal d)
+- [ ] Projeto no seu repositório `academia-ia` no GitHub — Dockerfile, README, SPEC.md e DECISIONS.md inclusos, chave de API e `registros.db` fora
 
 **Dicas**: comece do lab e adicione uma rota por vez. Para o trace de cadeia, um mini-agente com 2 tools do Módulo 8 já serve. No roteamento, uma heurística boba (comprimento da entrada, presença de palavras-chave) já demonstra o conceito — o importante é o mecanismo. Guarde os custos num arquivo/SQLite simples; não precisa de banco de verdade para o exercício.
 
-## ✅ Quiz
+> **Regra de ouro:** você pode usar IA para escrever qualquer código. Você não pode entregar nada que não consiga explicar e defender.
+
+## 🧠 Quiz de fixação
 
 **1.** Por que o app não deve chamar a API do LLM direto do frontend?
 A) Porque o frontend é lento
@@ -467,10 +491,16 @@ D) Eliminar o uso de modelos grandes
 ## ☑️ Checklist de conclusão
 
 - [ ] Sei desenhar a arquitetura gateway → guardrails → LLM → logs e explicar o papel de cada camada
+- [ ] Classifiquei erros em retryável vs não-retryável antes de escrever o handler (núcleo manual)
 - [ ] Sei preencher a tabela de decisão vLLM (self-hosted) vs API gerenciada para um cenário dado
 - [ ] Apliquei as 4 alavancas de custo/latência e sei em que caso cada uma rende mais
-- [ ] Implementei fallback que dispara só em erros retryáveis (429/5xx), com retries e timeout
-- [ ] Instrumentei prompt, resposta, tokens, custo e latência por request (Langfuse ou logs)
+- [ ] Fiz a Sessão de Direção: SPEC.md antes do código e diffs revisados um a um
+- [ ] Implementei fallback que dispara só em erros retryáveis (429/5xx), com retries e timeout — e provei os dois sentidos
+- [ ] Instrumentei prompt, resposta, tokens, custo e latência por request (Langfuse ou logs) e li os registros com os próprios olhos
 - [ ] Containerizei o serviço com Docker e sei subi-lo num PaaS
 - [ ] Montei um agregador de custo por rota (FinOps básico)
 - [ ] Conectei os evals do Módulo 10 como gate de deploy do serviço
+- [ ] Entreguei o mini-projeto com SPEC.md e DECISIONS.md no GitHub e passei na Defesa do módulo no Campus
+- [ ] Acertei pelo menos 6 de 8 no quiz
+
+**🆘 Se travar:** trabalhar com seu assistente de IA É o método deste módulo — cole o erro, cole o log do request que falhou, peça hipóteses (rede? provedor? seu handler?) e entenda a causa antes de aceitar a correção. Travou de verdade (30+ min sem entender nem com IA)? Anote a dúvida no seu DECISIONS.md e leve para a comunidade.

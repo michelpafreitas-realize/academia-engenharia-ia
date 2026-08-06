@@ -1,351 +1,317 @@
 # Módulo 12 — Capstone & Carreira
 
-> 🏛️ Período 4 · ⏱️ Carga estimada: 20h · 📋 Pré-requisitos: todos os módulos anteriores (1–11)
+> 🏛️ Período 4 · ⏱️ Carga estimada: 22h · 📋 Pré-requisitos: Módulo 11 (LLMOps)
 
 ## 🎯 Objetivos
 
-- Ao final, você será capaz de projetar e entregar um projeto de portfólio completo que integra RAG, evals, agentes, fine-tuning ou LLMOps — no nível que um recrutador reconhece como profissional.
-- Ao final, você será capaz de escrever um README que vende o projeto: demo em vídeo/GIF, decisões técnicas documentadas e resultados de eval.
-- Ao final, você será capaz de descrever com precisão o papel do Engenheiro de IA e posicionar sua marca pessoal (GitHub, LinkedIn, comunidades).
-- Ao final, você será capaz de se manter atualizado de forma sustentável, com um punhado de fontes de alto sinal em vez de afogamento em papers.
-- Ao final, você será capaz de se preparar para entrevistas de engenharia de IA, incluindo system design de sistemas LLM e o mercado brasileiro e remoto.
+- Ao final, você será capaz de atuar como tech lead de um projeto real: escrever a `SPEC.md` completa, dirigir a IA na implementação e verificar o resultado com evals que provam os requisitos com números.
+- Ao final, você será capaz de manter um `DECISIONS.md` de nível profissional — cada escolha técnica registrada com alternativa descartada e porquê — e usá-lo como base da sua defesa.
+- Ao final, você será capaz de defender oralmente qualquer decisão do seu capstone: na Defesa por LLM do Campus e num vídeo de 5 minutos que vai para o portfólio.
+- Ao final, você será capaz de montar um portfólio que reflete a profissão de 2026: specs, evals e defesas gravadas valem mais que código digitado à mão.
+- Ao final, você será capaz de se preparar para o que recrutadores testam hoje: encontrar defeitos em sistemas gerados por IA, defender decisões sob pressão e conduzir system design de sistemas com LLMs.
+- Ao final, você será capaz de se posicionar nos mercados BR e remoto internacional com LinkedIn, GitHub e rotina de atualização sustentável alinhados a essa realidade.
+
+## 🎛️ Núcleo manual deste módulo
+
+À mão, você escreve a `SPEC.md`, mantém o `DECISIONS.md` e defende cada decisão em voz alta — porque especificar, decidir e explicar são exatamente o que ninguém pode fazer por você; toda a implementação é dirigida com IA.
 
 ## 🗺️ Por que isso importa
 
-Você aprendeu as peças; agora precisa provar que sabe montá-las. No mercado de IA, **portfólio vale mais que diploma**: um recrutador ou gestor técnico confia mais em três projetos que ele consegue rodar e ler do que em qualquer lista de cursos. O termo "AI Engineer" foi cunhado por Swyx no ensaio "Rise of the AI Engineer" ([latent.space/p/ai-engineer](https://www.latent.space/p/ai-engineer)) exatamente para descrever este perfil emergente: alguém que constrói produtos sobre modelos de fundação, na interseção de engenheiro de software e conhecimento de ML aplicado. É um papel novo, com demanda maior que a oferta — e quem tem portfólio demonstrável larga na frente.
+Você aprendeu o ciclo inteiro — especificar, dirigir, verificar; agora precisa provar que o domina de ponta a ponta, sozinho, num projeto que o mercado reconhece. O termo "AI Engineer" nasceu no ensaio de Swyx ([latent.space/p/ai-engineer](https://www.latent.space/p/ai-engineer)) descrevendo quem constrói produtos sobre modelos de fundação; em 2026 o perfil evoluiu: o engenheiro de IA é **quem especifica, dirige e verifica sistemas construídos por e com IA — e responde pela qualidade do resultado**. O capstone deste módulo é o seu exame de tech lead: a IA escreve o código; você escreve a spec, toma as decisões, prova com evals e responde por tudo.
 
-Este módulo é o portão de saída da Academia. Ele consolida o programa em projetos de capstone que você poderá mostrar em entrevistas, e cuida do outro lado da carreira: como se posicionar, onde estar, como se manter atualizado sem se afogar, e como passar nas entrevistas — incluindo o mercado brasileiro e o remoto internacional, onde salários em dólar mudam a vida. O objetivo final não é terminar o curso; é você ser contratado (ou promovido) como engenheiro de IA.
+E o mercado mudou junto. Recrutadores de 2026 não pedem mais "escreva um loop de treino no quadro" — eles entregam um sistema gerado por IA com defeitos plantados e mandam você encontrá-los; abrem seu repositório e perguntam "por que essa decisão?"; conduzem system design de sistemas com LLMs esperando trade-offs verbalizados. Um portfólio de quem *dirige* IA — `SPEC.md`, tabela de evals, `DECISIONS.md` e uma defesa gravada — responde exatamente a esse teste. Este módulo fecha a Academia entregando as duas coisas: o capstone que resiste a esse escrutínio e o mapa de carreira honesto para os mercados brasileiro e remoto.
 
 ## 📚 Aulas
 
 | # | Aula | Tipo | Recurso | Duração estimada |
 |---|------|------|---------|------------------|
-| 1 | "Rise of the AI Engineer" (o ensaio que nomeou o papel) | 📖 leitura | [latent.space/p/ai-engineer](https://www.latent.space/p/ai-engineer) | 1h |
-| 2 | Newsletter Latent Space (acompanhar o campo) | 📖 leitura | [latent.space](https://www.latent.space) | 30 min |
-| 3 | Ahead of AI, de Sebastian Raschka (fundamentos + fronteira) | 📖 leitura | [magazine.sebastianraschka.com](https://magazine.sebastianraschka.com) | 45 min |
-| 4 | Interconnects, de Nathan Lambert (análise de modelos e mercado) | 📖 leitura | [interconnects.ai](https://interconnects.ai) | 45 min |
-| 5 | Palestras da AI Engineer Conference (system design real) | 🎥 vídeo | YouTube: canal "AI Engineer" | 2h |
-| 6 | Comunidades: r/LocalLLaMA e Hugging Face Discord | 📖 leitura | [huggingface.co](https://huggingface.co) (Discord) · reddit.com/r/LocalLLaMA | 1h |
-| 7 | Projetos Capstone (o coração do módulo) | 💻 lab | este módulo, seção Projetos Capstone | 12h+ |
-| 8 | Carreira: portfólio, marca, entrevistas, mercado | 📖 leitura | este módulo, seção Carreira | 2h |
+| 1 | "Rise of the AI Engineer" — e como o papel evoluiu até 2026 | 📖 leitura | [latent.space/p/ai-engineer](https://www.latent.space/p/ai-engineer) | 1h |
+| 2 | Palestras da AI Engineer Conference (system design real) | 🎥 vídeo | YouTube: canal "AI Engineer" | 2h |
+| 3 | Newsletters de alto sinal: Latent Space, Ahead of AI, Interconnects | 📖 leitura | [latent.space](https://www.latent.space) · [magazine.sebastianraschka.com](https://magazine.sebastianraschka.com) · [interconnects.ai](https://interconnects.ai) | 1h |
+| 4 | Comunidades: Hugging Face Discord e r/LocalLLaMA | 📖 leitura | [huggingface.co](https://huggingface.co) (Discord) · reddit.com/r/LocalLLaMA | 1h |
+| 5 | Sessão de Direção: a SPEC.md do seu capstone | 🎛️ sessão de direção | este módulo, seção Sessão de Direção | 3h |
+| 6 | Capstone dirigido com IA (o coração do módulo) | 💻 lab | este módulo, seção Capstone | 11h+ |
+| 7 | Defesa: Campus + vídeo de 5 minutos | 📖 leitura | este módulo, seção 12.8 | 1h30 |
+| 8 | Carreira 2026: portfólio, entrevistas, mercado | 📖 leitura | este módulo, seções 12.2–12.7 | 1h30 |
 
 ## 🧠 Conteúdo essencial
 
-### 1. O que é, de fato, um Engenheiro de IA
+### 12.1 O engenheiro de IA de 2026 — e por que o capstone é dirigido
 
-O ensaio de Swyx marca uma divisão de trabalho: o **ML Engineer/Researcher** treina modelos (matemática, dados, GPUs); o **AI Engineer** constrói *produtos* sobre modelos de fundação já treinados (via API ou abertos). Você não precisa provar teoremas nem treinar do zero — precisa dominar prompt engineering, RAG, tool use/agentes, evals, fine-tuning leve (LoRA) e LLMOps. É exatamente o que a Academia cobriu. A demanda por esse perfil explodiu porque as empresas têm acesso a modelos poderosíssimos e faltam pessoas que saibam transformá-los em produto confiável, avaliado e barato. Você é essa pessoa.
+O ensaio de Swyx (2023) definiu o AI Engineer como quem constrói produtos sobre modelos de fundação, sem treinar do zero. Três anos depois, a definição precisou de um upgrade: com a própria IA escrevendo a maior parte do código, o valor do engenheiro migrou para cima na cadeia — **especificar** o que deve existir, **dirigir** a implementação (por IA ou por gente) e **verificar** que o resultado cumpre o combinado, respondendo pela qualidade. É o papel de tech lead, e é o papel que você exerce neste capstone.
 
-### 2. Portfólio no GitHub que recruta olha
+Na prática, isso muda o que o capstone avalia. Não é "você consegue digitar um pipeline de RAG?" — a IA digita em minutos. É: sua `SPEC.md` descreve o sistema sem ambiguidade? Suas decisões de arquitetura têm justificativa registrada? Seus evals provam, com números, que os requisitos foram cumpridos? E — o teste final — você defende tudo isso em voz alta, sem olhar o código? Quem responde sim às quatro perguntas é contratável. Quem só tem código que roda, não.
 
-Um recrutador técnico gasta 30–60 segundos por repositório. O que faz ele parar:
+### 12.2 Honestidade de mercado: o que recrutadores testam em 2026
 
-- **README que abre com uma demo**: um GIF ou vídeo curto do sistema funcionando, *antes* de qualquer parágrafo. Ver é acreditar. Um `README` que começa com "clone e rode `pip install`" perde a atenção; um que começa com o produto em movimento ganha.
-- **Decisões técnicas documentadas**: uma seção "por que escolhi X" (por que RAG e não fine-tuning; por que este modelo; por que este trade-off de custo). É isso que separa "seguiu um tutorial" de "pensa como engenheiro". Recrutadores procuram *julgamento*, não só código que roda.
-- **Resultados de eval**: uma tabela de métricas (do Módulo 10) prova que você mede o que constrói. "Precisão 89% em 120 casos" vale mais que mil linhas de código sem prova.
-- **Código limpo e rodável**: instruções que funcionam, `.env.example`, dependências fixadas. Se não roda em 5 minutos, não conta.
-- **Foco em poucos projetos fortes**: três projetos completos e polidos batem dez pela metade. Qualidade, não quantidade.
+O processo seletivo se adaptou à realidade em que todo candidato usa IA. As três provas que dominam as entrevistas de engenharia de IA hoje:
 
-### 3. LinkedIn e marca pessoal
+| Prova | Como funciona | O que você treinou |
+|-------|---------------|--------------------|
+| **Caça aos defeitos** | "Aqui está um sistema gerado por IA com 3 defeitos — encontre-os." Bug lógico, vulnerabilidade, caso de borda ignorado. Mede se você *lê e verifica* código que não escreveu. | Módulo 1 (revisão de diffs, modos de falha) e todo mini-projeto desde então |
+| **Defesa do projeto** | O entrevistador abre o SEU repositório: "por que RAG e não fine-tuning?", "o que quebra se o volume 10x?", "explique esta função". Mede se você entende o que entregou. | O `DECISIONS.md` de cada módulo + a Defesa por LLM do Campus |
+| **System design com LLMs** | "Projete um assistente de suporte sobre a base da empresa." Espera-se: RAG vs fine-tuning justificado, gateway → guardrails → LLM, estratégia de eval, custo/latência (cache, streaming, roteamento), segurança (injection, PII). | Módulos 7–11 — é onde o programa inteiro converge |
 
-Você não precisa virar influencer, mas precisa ser *encontrável* e *legível*:
+O que **saiu** dos processos: teste de digitação de algoritmo no quadro, pegadinhas de sintaxe, "implemente sem IA". Ninguém paga por isso mais. O que **entrou** é exatamente o ciclo especificar → dirigir → verificar sob observação. A boa notícia: você passou a Academia inteira treinando isso.
 
-- **LinkedIn atualizado** com "Engenheiro de IA" na headline e os projetos ligados ao GitHub. Recrutadores buscam por termos — "RAG", "LLM", "fine-tuning" no seu perfil te colocam nos resultados.
-- **Construa em público**: poste os projetos da Academia conforme os termina — um print da demo, o que aprendeu, o link do repo. Consistência baixa (um post por projeto) já constrói presença ao longo dos meses.
-- **Escreva quando aprender algo**: um post explicando "como fiz eval do meu RAG" demonstra domínio e vira ímã de oportunidades. Ensinar é a melhor prova de que você entende.
+### 12.3 O portfólio de quem dirige IA
 
-O objetivo da marca pessoal não é vaidade — é reduzir o atrito para a próxima oportunidade te achar.
+Um recrutador técnico gasta 30–60 segundos por repositório — e em 2026 ele assume que a IA escreveu o código. Código bonito não diferencia mais ninguém; o que faz ele parar é a **evidência de direção**:
 
-### 4. Comunidades
+- **`SPEC.md` no repositório** — a especificação escrita antes do código. Prova que o sistema nasceu de intenção, não de tentativa e erro. É o primeiro arquivo que um avaliador experiente abre.
+- **Tabela de evals com números no README** — "faithfulness 0,91 em 25 casos" vale mais que mil linhas de código. Prova que você mede o que constrói.
+- **`DECISIONS.md`** — cada escolha com alternativa descartada e porquê. É o que separa "aceitou o que a IA sugeriu" de "dirigiu a IA com critério". Recrutadores procuram julgamento.
+- **Defesa gravada** — um vídeo de 5 minutos defendendo as decisões do projeto, linkado no README. Nenhum candidato médio tem isso; é a prova em primeira pessoa de que você explica o que entrega.
+- **Demo no topo do README** — GIF/vídeo do sistema funcionando antes de qualquer parágrafo, e instruções que rodam em 5 minutos (`.env.example`, dependências fixadas).
+- **Poucos projetos fortes** — dois capstones completos com specs, evals e defesas batem dez repositórios pela metade.
 
-Onde o campo respira, e onde você aprende mais rápido que em qualquer curso:
+### 12.4 LinkedIn e marca pessoal, versão 2026
 
-- **Hugging Face Discord** — o coração do ecossistema aberto; canais de modelos, datasets, fine-tuning.
-- **r/LocalLLaMA** — a comunidade de referência para modelos abertos, quantização e inferência local; notícias e benchmarks práticos primeiro.
-- **AI Engineer (conferência e canal no YouTube)** — palestras de quem opera IA em produção de verdade; a melhor fonte de system design real e de tendências do papel.
+O objetivo continua o mesmo — ser encontrável e legível — mas o vocabulário mudou:
 
-Estar nessas comunidades te dá contexto, contatos e o pulso do que as empresas realmente usam — muito além do que um currículo transmite.
+- **Headline**: "Engenheiro de IA" acompanhado dos termos que recrutadores buscam hoje: "RAG", "agentes", "evals", "LLMOps". "Dirijo sistemas construídos com IA" comunica mais que "10 anos de Python".
+- **Posts que demonstram direção**: em vez de "fiz um app", poste "a spec que escrevi, o que a IA implementou, o que os evals pegaram". O processo é o diferencial — mostre-o. Um post por projeto já constrói presença.
+- **Vídeos de defesa como conteúdo**: o vídeo de 5 minutos do capstone é um post pronto — e demonstra exatamente a habilidade que a entrevista vai testar.
 
-### 5. Manter-se atualizado sem se afogar
+### 12.5 Comunidades e atualização sustentável
 
-O campo publica mais em uma semana do que dá para ler em um ano. A armadilha do iniciante é tentar ler tudo e paralisar. A disciplina do profissional é **poucas fontes de alto sinal, papers só quando relevantes**:
+Onde o campo respira: **Hugging Face Discord** (ecossistema aberto), **r/LocalLLaMA** (modelos abertos, quantização, benchmarks práticos primeiro), **AI Engineer** (conferência e canal — o melhor system design real em vídeo). Estar nelas dá contexto, contatos e o pulso do que as empresas usam de verdade.
 
-- **Newsletters curadas** fazem a triagem por você. Três boas bastam:
-  - **Latent Space** ([latent.space](https://www.latent.space)) — o pulso do AI Engineer, ferramentas e produtos.
-  - **Ahead of AI** ([magazine.sebastianraschka.com](https://magazine.sebastianraschka.com)) — Sebastian Raschka, forte em fundamentos e no que realmente importa da pesquisa.
-  - **Interconnects** ([interconnects.ai](https://interconnects.ai)) — Nathan Lambert, análise afiada de modelos, mercado e open-source.
-- **Papers só quando relevantes ao seu trabalho ou muito citados**. Você não precisa ler o arXiv inteiro; precisa ler o paper que resolve o problema que está na sua frente. Deixe as newsletters filtrarem o que merece atenção.
+Para não se afogar: **três newsletters de alto sinal bastam** — Latent Space (o pulso do AI Engineer), Ahead of AI (Raschka, fundamentos + fronteira) e Interconnects (Lambert, modelos e mercado). Papers só quando relevantes ao problema na sua frente ou muito citados; deixe a curadoria filtrar. 2–3 horas por semana mantêm você atualizado por anos; tentar ler tudo leva ao burnout em semanas.
 
-A meta é sustentabilidade: 2–3 horas por semana de leitura curada mantém você atualizado por anos, enquanto tentar acompanhar tudo leva ao burnout em semanas.
+### 12.6 Preparação para entrevistas
 
-### 6. Preparação para entrevistas
+As três frentes da seção 12.2 pedem três treinos distintos:
 
-Entrevistas de engenharia de IA têm três frentes:
+- **Caça aos defeitos**: pratique gerando sistemas com IA e pedindo a ela que plante defeitos (sem te contar onde) — depois encontre-os lendo e testando. É o mini-projeto do Módulo 1 transformado em rotina de ginásio.
+- **Defesa**: a Defesa por LLM do Campus é seu simulador oficial — refaça-a até responder "por quê?" sobre qualquer parte do capstone sem hesitar. As perguntas clássicas: "por que essa arquitetura?", "como sabe que funciona?", "o que quebra se dobrar o volume?", "o que você faria diferente?".
+- **System design em voz alta**: pegue enunciados (assistente de suporte, busca semântica interna, automação com aprovação humana) e verbalize a solução completa — requisitos → RAG vs fine-tuning → arquitetura de produção → evals → custo/latência → segurança. Desenhar caixas em silêncio não treina o que a entrevista mede.
 
-- **System design de sistemas LLM** — a peça central. Você recebe um enunciado ("projete um assistente de suporte que responde sobre a base de conhecimento da empresa") e desenha a solução na lousa: RAG vs fine-tuning (e por quê), arquitetura gateway → guardrails → LLM (Módulo 11), estratégia de eval (Módulo 10), custo e latência (streaming, cache, roteamento), resiliência e segurança (injection, PII). É onde todo o programa converge. Pratique verbalizando trade-offs, não só desenhando caixas.
-- **Perguntas conceituais típicas**: RAG vs fine-tuning (quando cada um); como você avalia um sistema de IA; o que é prompt injection e como mitigar; como controla custo; o que é LoRA. Se você fez os módulos, já sabe responder — pratique *dizer em voz alta*, conciso.
-- **Discussão do portfólio**: prepare-se para defender cada decisão dos seus projetos capstone. "Por que RAG aqui?", "como sabe que funciona?", "e se o volume 10x?". Seu portfólio é o roteiro da entrevista — domine-o.
+### 12.7 Mercado: Brasil e remoto internacional
 
-### 7. Mercado: Brasil e remoto
+- **Mercado BR**: startups de IA, consultorias e empresas de tecnologia contratam o perfil, ainda escasso; salários acima da média de dev. Português para produtos locais é diferencial.
+- **Remoto internacional**: a maior alavanca — dólar/euro multiplicam o poder de compra. O passaporte: portfólio em inglês (README, `SPEC.md` e vídeo de defesa bilíngues nos seus dois melhores projetos), GitHub legível, presença nas comunidades internacionais. Inglês técnico é requisito, não diferencial.
 
-O mercado de IA tem duas portas para o engenheiro brasileiro:
+A estratégia prática: portfólio bilíngue, comunidades internacionais, candidatura aos dois mercados. A escassez do perfil trabalha a seu favor nos dois — e o portfólio de direção (spec + evals + defesa) é raro em qualquer idioma.
 
-- **Mercado BR**: empresas de tecnologia, consultorias e o crescente número de startups de IA contratam esse perfil, ainda escasso no país. Salários acima da média de dev pela raridade da especialização. Domínio de português para produtos locais é diferencial.
-- **Remoto internacional**: a maior alavanca. Empresas dos EUA e Europa contratam remoto e pagam em dólar/euro, o que multiplica o poder de compra. O portfólio em inglês, o GitHub legível e a presença nas comunidades internacionais (seção 4) são o passaporte. O inglês técnico é requisito, não diferencial.
+### 12.8 A Defesa: por LLM e em vídeo
 
-A estratégia prática: construa o portfólio bilíngue (README em inglês), esteja nas comunidades internacionais, e candidate-se aos dois mercados. A escassez do perfil trabalha a seu favor nos dois.
+A defesa é **obrigatória** e tem duas partes:
 
-## 🏗️ Projetos Capstone
+1. **Defesa por LLM no Campus** — a entrevista de ~10 minutos com rubrica, sobre o SEU capstone: decisões, trade-offs, evals, o que quebra sob carga. Só se considera aprovado quem responde "por quê?" sobre qualquer parte do que entregou. Se travar numa pergunta, a resposta não é decorar — é voltar ao repositório, entender, atualizar o `DECISIONS.md` e refazer.
+2. **Vídeo de 5 minutos** — você, câmera ligada (ou tela + voz), defendendo as decisões do capstone: o problema, a arquitetura escolhida e por quê, o que os evals provam (com os números na tela) e o que faria diferente. Sem ler script palavra a palavra. O vídeo vai **linkado no README** — é peça de portfólio, não burocracia: é a prova pública de que você é quem dirigiu.
 
-Escolha **pelo menos dois** para o portfólio (idealmente todos os quatro ao longo do tempo). Cada um deve virar um repositório público com README completo. Estes são os projetos que você mostra numa entrevista.
+Por que isso funciona: num mundo onde a IA escreve o código, a única avaliação à prova de cópia é a que acontece na sua cabeça em tempo real — e é exatamente o que a entrevista real mede.
 
-### 🧭 Como tirar um capstone do papel — passo a passo
+## 🎛️ Sessão de Direção
 
-O que separa quem publica um capstone de quem fica na intenção não é talento — é roteiro. O passo a passo abaixo serve para **qualquer** um dos quatro projetos; siga na ordem, e só avance quando o **checkpoint** passar.
+A sessão de direção deste módulo é o **kickoff do seu capstone** — a fase de especificar, feita inteira à mão antes de qualquer código:
 
-**Etapa 1 — Escolher UM projeto (30 min)**
+**O que especificar.** Escreva a `SPEC.md` completa do projeto escolhido (seção Capstone): contexto de negócio em 1 parágrafo, o cenário exato da demo de 2 minutos (quem usa, o que entra, o que sai), requisitos funcionais e técnicos numerados, critérios de aceite mensuráveis (cada um com o número que o prova: "≥ 10 perguntas com citação correta", "faithfulness ≥ 0,85 em 25 casos"), restrições (custo por execução, modelos permitidos, prazo) e o que fica explicitamente FORA da v1.
 
-Dois critérios, nessa ordem: qual módulo você mais curtiu fazer (RAG → Projeto 1; agentes → Projeto 2; fine-tuning → Projeto 3; LLMOps → Projeto 4) e qual história você quer contar numa entrevista. Escolha **um** e escreva o nome dele; os outros ficam para depois — dois capstones pela metade valem menos que um inteiro.
+**Como dirigir.** Antes de implementar, submeta a spec à IA como revisora: "aja como o engenheiro que vai implementar isto — que ambiguidades te fariam adivinhar? que casos de borda não estão cobertos? que critério de aceite não é verificável?". Itere até a spec sobreviver ao interrogatório. Depois peça o plano de implementação em marcos verificáveis e compare com o seu — divergências viram entradas no `DECISIONS.md`.
 
-✅ **Checkpoint:** você escreveu qual projeto vai fazer e consegue dizer em uma frase por que esse.
+**O que verificar.** A spec está pronta quando: outra pessoa (ou outra sessão de IA, sem contexto) descreve de volta o sistema corretamente só lendo o arquivo; todo critério de aceite tem um número; e você sabe dizer qual eval prova cada requisito.
 
-**Etapa 2 — Escopar o MVP em 1 parágrafo (30 min)**
+**Entregável:** a `SPEC.md` commitada como primeiro commit do repositório + um resumo da sessão (o que a revisão da IA pegou, o que você mudou) no `DECISIONS.md`.
 
-Escreva UM parágrafo descrevendo o que o sistema faz na **demo de 2 minutos**: quem usa, o que entra, o que sai. Exemplo (Projeto 1): "O usuário sobe 3 PDFs, faz uma pergunta em linguagem natural e recebe a resposta com o trecho da fonte citado; para uma pergunta fora da base, o sistema admite que não sabe." Regra de ouro: **tudo que não estiver nesse parágrafo fica fora da v1** — inclusive as extensões bônus.
+## 🚀 Capstone
 
-✅ **Checkpoint:** o parágrafo está salvo (crie o repositório agora e cole-o no topo do README rascunho).
+**Enunciado:** entregue **um** projeto de portfólio completo (dos quatro abaixo — idealmente dois ao longo do tempo), atuando como tech lead: você especifica, dirige a IA na implementação e verifica com evals. O repositório público final contém `SPEC.md`, `DECISIONS.md`, suite de evals com resultados no README, demo no topo e o link do seu vídeo de defesa.
 
-**Etapa 3 — Quebrar em marcos semanais (30 min)**
+**Requisitos (universais, valem para qualquer um dos 4 projetos):**
 
-Planeje 3–4 semanas, cada uma com um entregável *verificável*, não "avançar em X":
-
-- **Semana 1** — o caminho feliz roda de ponta a ponta na sua máquina (Etapa 4).
-- **Semana 2** — os requisitos técnicos do seu projeto implementados (evals, guardrails, observabilidade — conforme a lista dele).
-- **Semana 3** — todos os critérios de aceite marcados.
-- **Semana 4** — README, demo em GIF/vídeo e publicação (Etapas 7 e 8).
-
-Adapte livremente, mas mantenha a regra: **toda semana termina com algo demonstrável e commitado**.
-
-✅ **Checkpoint:** você tem 3–4 marcos escritos, cada um com um entregável verificável.
-
-**Etapa 4 — Fatia vertical: o caminho feliz primeiro (semana 1)**
-
-Faça o fluxo principal funcionar de ponta a ponta o quanto antes — **feio, mas completo**. No Projeto 1, por exemplo: 1 PDF → 1 pergunta → 1 resposta com citação, mesmo com chunking ingênuo e sem UI. Nunca "perfeição por camada" (uma semana polindo a ingestão antes de existir uma resposta): um sistema completo e tosco melhora aos poucos; camadas perfeitas e desconexas nunca viram demo.
-
-✅ **Checkpoint:** um único comando (ou script) executa o cenário do seu parágrafo de MVP de ponta a ponta, sem intervenção manual no meio.
-
-**Etapa 5 — Diário de decisões (10 min por sessão, contínuo)**
-
-Crie um `DECISIONS.md` no repositório e, a cada escolha técnica, anote três linhas: **decisão** (o que escolhi), **alternativa descartada** e **porquê**. Ex.: "Chunking por parágrafo; descartei tamanho fixo; os docs têm seções curtas e o retrieval melhorou nos meus casos de teste." É esse arquivo que vira a seção "por que escolhi X" do README e as respostas prontas da entrevista ("por que RAG aqui?").
-
-✅ **Checkpoint:** o `DECISIONS.md` existe e tem ao menos 3 entradas ao final da semana 2.
-
-**Etapa 6 — Fechar os critérios de aceite (semanas 2–3)**
-
-Volte à lista de critérios de aceite do seu projeto e trate-a como contrato: implemente o que falta, um checkbox por vez, sempre commitando. Os critérios com números (ex.: "≥ 10 perguntas", "mínimo 25 casos") são os que provam rigor — não pule os evals para "ganhar tempo": a tabela de métricas é exatamente o que o recrutador procura.
-
-✅ **Checkpoint:** todos os checkboxes dos critérios de aceite do seu projeto marcados.
-
-**Etapa 7 — README que recruta olha (meio dia)**
-
-Monte o README na ordem que a seção "Portfólio no GitHub" deste módulo manda: **demo (GIF/vídeo curto) no topo**, o problema em 2 frases, como rodar em 5 minutos (`.env.example`, dependências fixadas), diagrama da arquitetura, tabela de resultados com números e a seção de decisões (copie do `DECISIONS.md`).
-
-✅ **Checkpoint:** alguém (ou você, numa máquina ou pasta limpa) roda o projeto em 5 minutos seguindo só o README.
-
-**Etapa 8 — Publicar e coletar feedback (1h)**
-
-Torne o repositório público e poste no LinkedIn (print da demo + o que aprendeu + link, como manda a seção de marca pessoal). Compartilhe também nas comunidades do módulo — Hugging Face Discord e r/LocalLLaMA, quando fizer sentido — e responda os comentários: cada pergunta que aparecer é um ensaio grátis de entrevista.
-
-✅ **Checkpoint:** repositório público, post no ar e ao menos um feedback externo recebido.
-
-**🆘 Se travar:** as três armadilhas que matam capstones são **escopo crescendo** ("só mais uma feature" — releia o parágrafo do MVP: se não está lá, não entra na v1), **semanas sem commit** (o marco estava grande demais — corte-o pela metade e entregue a metade que roda) e **polir antes de funcionar** (UI bonita sem backend, chunking "perfeito" sem resposta — volte à fatia vertical da Etapa 4). E a regra de sempre: travou 30+ minutos num erro → pergunte ao seu assistente de IA colando o erro completo e dizendo em qual etapa está — mas peça a *explicação*, não só a resposta; o objetivo é você saber defender cada linha na entrevista.
+1. `SPEC.md` completa escrita ANTES do código (produto da Sessão de Direção) — primeiro commit do repo.
+2. Testes/evals que provam cada requisito da spec, com números reportados em tabela no README.
+3. `DECISIONS.md` com toda escolha técnica relevante: decisão, alternativa descartada, porquê — mínimo 8 entradas ao final.
+4. Defesa dupla aprovada: Defesa por LLM do Campus + vídeo de 5 minutos linkado no README.
+5. Os requisitos específicos do projeto escolhido (abaixo).
+6. README com demo (GIF/vídeo) no topo e instruções que rodam em 5 minutos.
 
 ### Projeto 1 — Assistente de documentos (RAG completo)
 
-**Contexto de negócio**: uma empresa tem centenas de documentos (manuais, políticas, contratos) e quer que funcionários façam perguntas em linguagem natural e recebam respostas *com citação da fonte*, sem alucinação.
+**Contexto de negócio**: uma empresa tem centenas de documentos (manuais, políticas, contratos) e quer que funcionários façam perguntas em linguagem natural e recebam respostas com citação da fonte, sem alucinação.
 
-**Requisitos funcionais**:
-- Ingestão de documentos próprios (PDFs, markdown) em uma base vetorial.
-- Perguntas em linguagem natural com respostas fundamentadas e **citação da fonte** (arquivo + trecho).
-- UI simples em Streamlit ou Gradio (campo de pergunta, resposta com citações).
+**Requisitos específicos**:
+- Ingestão de documentos próprios (PDFs, markdown) em base vetorial; pipeline de RAG (Módulo 7): chunking, embeddings, retrieval, geração com contexto.
+- UI simples (Streamlit/Gradio) com resposta citando arquivo + trecho.
+- Guardrail de "não sei" honesto: sem sustentação no contexto, o sistema admite em vez de inventar.
 
-**Requisitos técnicos**:
-- Pipeline de RAG (Módulo 7): chunking, embeddings, retrieval, geração com contexto.
-- Suite de evals (Módulo 10) com **Ragas** (faithfulness, answer relevancy, context precision) e/ou **promptfoo** — mínimo 25 casos.
-- Guardrail contra "não sei" honesto: se o contexto não sustenta a resposta, o sistema admite em vez de inventar.
+**Critérios de aceite** (além dos universais 1–4 e 6):
+- [ ] A spec define e o sistema responde ≥ 10 perguntas reais com citações corretas
+- [ ] Suite de evals (Ragas e/ou promptfoo — faithfulness, answer relevancy, context precision) com ≥ 25 casos, resultados na tabela do README
+- [ ] Rejeição honesta a perguntas fora da base demonstrada nos evals
+- [ ] `DECISIONS.md` cobre no mínimo: chunking, embeddings, modelo e o trade-off RAG vs fine-tuning
 
-**Critérios de aceite**:
-- [ ] Responde ≥ 10 perguntas reais sobre os docs com citações corretas
-- [ ] Métricas de Ragas/promptfoo reportadas numa tabela no README
-- [ ] Demonstra rejeição honesta a perguntas fora da base
-- [ ] UI rodável em 5 minutos com instruções
-
-**Extensões bônus**: filtro por metadados (data, tipo de doc), re-ranking dos chunks, histórico de conversa, avaliação de faithfulness por LLM-juiz validado.
-
-**No README**: GIF da UI respondendo com citação; diagrama do pipeline; tabela de métricas; seção "por que estas escolhas de chunking/embeddings/modelo".
+**Extensões bônus**: filtro por metadados, re-ranking, histórico de conversa, LLM-juiz validado.
 
 ### Projeto 2 — Agente operacional
 
-**Contexto de negócio**: automatizar uma tarefa operacional real que exige *agir* em vários sistemas — ex.: um agente que, dado um pedido de suporte, consulta o histórico do cliente, verifica o status de um serviço e rascunha uma resposta, pedindo aprovação humana antes de enviar.
+**Contexto de negócio**: automatizar uma tarefa operacional real que exige agir em vários sistemas — ex.: dado um pedido de suporte, consultar histórico, verificar status e rascunhar resposta, com aprovação humana antes de enviar.
 
-**Requisitos funcionais**:
-- Agente com **3+ tools reais**, sendo **pelo menos uma via MCP** (Módulo 8).
-- Guardrails: allowlist de tools, validação de saída.
-- **Humano no loop** para qualquer ação irreversível (enviar e-mail, alterar dados).
+**Requisitos específicos**:
+- Agente com 3+ tools reais, pelo menos uma via MCP (Módulo 8); loop com limite de iterações e tratamento de erro por `tool_result`.
+- Guardrails: allowlist de tools, validação de saída, humano no loop para qualquer ação irreversível.
+- Observabilidade (Módulo 11): trace dos passos, tokens e custo por execução.
 
-**Requisitos técnicos**:
-- Loop de agente (à mão ou framework justificado no README) com limite de iterações e tratamento de erro por `tool_result`.
-- Uma tool conectada via MCP server (pronto ou seu).
-- Observabilidade (Módulo 11): trace dos passos do agente, tokens e custo por execução.
+**Critérios de aceite** (além dos universais):
+- [ ] Completa a tarefa de ponta a ponta com as 3 tools em sequências não roteirizadas — provado por evals de trajetória (a spec define os cenários)
+- [ ] Pelo menos uma tool servida via MCP
+- [ ] Ação irreversível bloqueada por confirmação humana (demonstrado na demo)
+- [ ] Trace de uma execução visível (Langfuse ou logs) com custo por run
+- [ ] `DECISIONS.md` cobre no mínimo: loop à mão vs framework, desenho das tools e os guardrails escolhidos
 
-**Critérios de aceite**:
-- [ ] Completa a tarefa de ponta a ponta usando as 3 tools em sequências não roteirizadas
-- [ ] Pelo menos uma tool é servida via MCP
-- [ ] Ação irreversível bloqueada por confirmação humana (demonstrado)
-- [ ] Trace de uma execução visível (Langfuse ou logs), com custo por run
-
-**Extensões bônus**: memória entre sessões, red teaming contra injection indireta nas tools de leitura, dashboard de custo por execução.
-
-**No README**: vídeo curto do agente resolvendo um caso; lista das tools e qual é MCP; diagrama do loop; seção de segurança (guardrails aplicados).
+**Extensões bônus**: memória entre sessões, red teaming contra injection indireta, dashboard de custo.
 
 ### Projeto 3 — Modelo especialista (fine-tune)
 
-**Contexto de negócio**: uma tarefa estreita e repetitiva onde um modelo pequeno especializado sai mais barato e rápido que um grande genérico — ex.: classificar/estruturar mensagens de clientes num formato interno rígido.
+**Contexto de negócio**: uma tarefa estreita e repetitiva onde um modelo pequeno especializado sai mais barato e rápido que um grande genérico — ex.: classificar/estruturar mensagens num formato interno rígido.
 
-**Requisitos funcionais**:
-- Um modelo aberto pequeno fine-tunado (QLoRA/Unsloth, Módulo 9) para a tarefa.
-- Comparação clara base vs fine-tuned na *mesma* tarefa.
+**Requisitos específicos**:
+- Modelo aberto pequeno fine-tunado (QLoRA/Unsloth, Módulo 9); dataset próprio em JSONL com splits treino/validação/teste e chat template correto.
+- Eval de tarefa antes/depois (não confie no loss): métricas do problema em dados de teste.
+- Publicação no Hugging Face Hub com model card completa.
 
-**Requisitos técnicos**:
-- Dataset próprio em JSONL com splits treino/validação/teste, chat template correto.
-- QLoRA via Unsloth/PEFT no Colab grátis.
-- **Eval de tarefa antes/depois** (não confie no loss): métricas do problema nos dados de teste.
-- Publicação do modelo no **Hugging Face Hub** com model card completa.
+**Critérios de aceite** (além dos universais):
+- [ ] Dataset revisado manualmente (este é núcleo manual: você rotula/revisa a amostra) com 3 splits separados
+- [ ] Tabela antes/depois com métricas da tarefa em dados de teste; fine-tuned supera o base na métrica que a spec definiu como principal
+- [ ] Modelo no Hub com model card (base, dados, hiperparâmetros, resultados, limitações)
+- [ ] `DECISIONS.md` cobre no mínimo: por que fine-tuning e não RAG/prompt, escolha do base e dos hiperparâmetros
 
-**Critérios de aceite**:
-- [ ] Dataset revisado manualmente com 3 splits separados
-- [ ] Tabela antes/depois com métricas da tarefa em dados de teste
-- [ ] Fine-tuned supera o base em ao menos uma métrica relevante
-- [ ] Modelo publicado no Hub com model card (base, dados, hiperparâmetros, resultados, limitações)
-
-**Extensões bônus**: exportar para GGUF e rodar no Ollama, comparar 2 tamanhos de base, medir custo/latência do especialista vs API do modelo grande.
-
-**No README**: tabela antes/depois em destaque; link do modelo no Hub; seção "quando usar (e quando NÃO usar) este modelo"; justificativa de por que fine-tuning e não RAG/prompt aqui.
+**Extensões bônus**: exportar GGUF e rodar no Ollama, comparar 2 bases, custo/latência vs API do modelo grande.
 
 ### Projeto 4 — Produto de IA em produção
 
-**Contexto de negócio**: um produto de IA completo, deployado e acessível por link, com a engenharia de produção que uma empresa exigiria — o projeto que mais impressiona porque prova que você opera IA, não só prototipa.
+**Contexto de negócio**: um produto de IA completo, deployado e acessível por link, com a engenharia de produção que uma empresa exigiria — o que mais impressiona porque prova que você opera IA, não só prototipa.
 
-**Requisitos funcionais**:
-- App completo com frontend simples + backend, deployado (link público).
-- Streaming das respostas.
+**Requisitos específicos**:
+- Backend FastAPI (gateway do Módulo 11) com streaming e guardrails de entrada/saída; frontend simples; deploy em Railway/Render/Fly (demos podem ir para HF Spaces).
+- Observabilidade com Langfuse (prompt, resposta, tokens, custo, latência por request) e custo por usuário/feature (FinOps).
+- Eval em CI: a suite roda como gate no pipeline; resiliência com retries, timeout e fallback de modelo em erros retryáveis.
 
-**Requisitos técnicos**:
-- Backend FastAPI (gateway do Módulo 11) com streaming, guardrails de entrada/saída.
-- **Observabilidade com Langfuse**: prompt, resposta, tokens, custo, latência por request; trace de cadeias.
-- **Custo por usuário**: atribuição de gasto por usuário/feature (FinOps).
-- **Eval em CI**: a suite de evals (Módulo 10) roda como gate no pipeline.
-- Resiliência: retries, timeout, fallback de modelo em erros retryáveis.
-- Deploy em Railway/Render/Fly (app) — demos podem ir para HF Spaces.
-
-**Critérios de aceite**:
+**Critérios de aceite** (além dos universais):
 - [ ] Link público funcionando, com streaming
-- [ ] Painel Langfuse com traces, tokens e custo por request
-- [ ] Custo agregado por usuário/feature acessível
+- [ ] Painel Langfuse com traces, tokens e custo por request; custo agregado por usuário/feature acessível
 - [ ] Suite de evals rodando no CI como gate (badge ou print)
-- [ ] Fallback demonstrado apenas em 429/5xx
-- [ ] Dockerfile e instruções de deploy no README
+- [ ] Fallback demonstrado apenas em 429/5xx; Dockerfile e instruções de deploy no README
+- [ ] `DECISIONS.md` cobre no mínimo: escolha de modelo/roteamento, arquitetura do gateway e o trade-off custo × latência
 
-**Extensões bônus**: autenticação e cota por usuário, roteamento de modelo por complexidade, alertas de custo, teste de carga.
+**Extensões bônus**: autenticação e cota por usuário, roteamento por complexidade, alertas de custo, teste de carga.
 
-**No README**: GIF do produto no ar; link público; diagrama da arquitetura de produção; print do painel de custo; badge do CI com eval gate.
+### 🧭 Passo a passo
 
-## 💼 Carreira de Engenheiro de IA
+**Etapa 1 — Escolher e especificar (3h)**
 
-*(Esta seção consolida a orientação de carreira — leia junto com as subseções 1–7 do Conteúdo essencial acima, que a detalham.)*
+Escolha UM projeto (dois critérios: o módulo que você mais curtiu e a história que quer contar numa entrevista) e execute a Sessão de Direção deste módulo: `SPEC.md` completa, revisada pela IA como implementadora cética, antes de qualquer código. Crie o repositório e faça o primeiro commit só com a spec:
 
-Um roteiro de ação para os próximos meses, transformando o que você aprendeu em oportunidade:
+```bash
+mkdir capstone && cd capstone && git init
+# escreva a SPEC.md (Sessão de Direção) e o esqueleto do DECISIONS.md
+git add SPEC.md DECISIONS.md
+git commit -m "spec: especificação completa do capstone (antes de qualquer código)"
+git push -u origin main
+```
 
-**Passo 1 — Publique dois capstones.** Escolha dois projetos acima, termine-os com README de nível profissional (demo em vídeo/GIF no topo, decisões documentadas, resultados de eval) e torne-os públicos no GitHub. Estes são seus cartões de visita.
+✅ **Checkpoint:** repositório criado; `SPEC.md` é o primeiro commit e sobreviveu ao interrogatório da IA (ambiguidades e casos de borda resolvidos).
 
-**Passo 2 — Monte a vitrine.** Atualize o LinkedIn com "Engenheiro de IA" na headline e links para os repos. Faça um post por projeto conforme publica: print da demo, o que aprendeu, link. Construir em público, mesmo em ritmo baixo, cria presença.
+**Etapa 2 — Evals primeiro (2h)**
 
-**Passo 3 — Entre nas comunidades.** Hugging Face Discord, r/LocalLLaMA e o canal AI Engineer no YouTube. Acompanhe, participe, absorva o pulso do campo. É onde você aprende o que as empresas usam de verdade e onde contatos aparecem.
+Antes da implementação, transforme os critérios de aceite em suite de evals: os casos de teste (≥ 25 no Projeto 1; cenários de trajetória no 2; split de teste no 3; suite de CI no 4) e o script que os roda. Eles vão falhar — perfeito: são o contrato que a implementação precisa cumprir. Registre no `DECISIONS.md` por que escolheu essas métricas.
 
-**Passo 4 — Instale a rotina de atualização sustentável.** Assine Latent Space, Ahead of AI e Interconnects. Reserve 2–3h por semana. Papers só quando relevantes. Sem afogamento.
+✅ **Checkpoint:** a suite roda (e falha) contra um stub; cada requisito da spec tem o eval que o prova.
 
-**Passo 5 — Prepare-se para entrevistas.** Pratique system design de sistema LLM em voz alta (RAG vs fine-tuning, arquitetura de produção, eval, custo, segurança — tudo converge aqui). Ensaie as perguntas conceituais típicas. Saiba defender cada decisão dos seus capstones.
+**Etapa 3 — Dirigir a fatia vertical (semana 1)**
 
-**Passo 6 — Ataque os dois mercados.** Candidate-se no Brasil (perfil escasso, salário acima da média de dev) e no remoto internacional (dólar/euro, portfólio em inglês, comunidades internacionais). A escassez do perfil trabalha a seu favor.
+Dirija a IA para fazer o caminho feliz rodar de ponta a ponta — feio, mas completo (ex.: 1 PDF → 1 pergunta → 1 resposta com citação). Trabalhe por diffs pequenos que você LÊ antes de aceitar; a cada sessão, atualize o `DECISIONS.md` (10 min: decisão, alternativa, porquê). Nunca "perfeição por camada": sistema completo e tosco melhora; camadas perfeitas e desconexas nunca viram demo. Commite todo avanço.
 
-A verdade libertadora: você não precisa saber *tudo*. Precisa saber construir, avaliar, colocar em produção e explicar suas escolhas. A Academia te deu isso. O resto é executar o roteiro acima.
+✅ **Checkpoint:** um único comando executa o cenário da demo de ponta a ponta; primeiros evals passando; ≥ 3 entradas no `DECISIONS.md`.
 
-## ✅ Quiz
+**Etapa 4 — Fechar os critérios guiado pelos evals (semanas 2–3)**
 
-**1.** Segundo "Rise of the AI Engineer", o que distingue o AI Engineer do ML Engineer/Researcher?
-A) O AI Engineer treina modelos maiores
-B) O AI Engineer constrói produtos sobre modelos de fundação já treinados, sem precisar treinar do zero
-C) Não há diferença
-D) O AI Engineer só trabalha com modelos abertos
+Trate os critérios de aceite como contrato: dirija a IA um checkbox por vez, sempre medindo — a suite de evals é o placar de cada iteração. Os números (≥ 10 perguntas, 25 casos, antes/depois) são o que prova rigor; não pule evals para "ganhar tempo". Toda semana termina com algo demonstrável e commitado (`git push` no mínimo semanal).
 
-**2.** O que um recrutador técnico mais valoriza num README de portfólio?
-A) O maior número possível de projetos
-B) Uma demo (GIF/vídeo) no topo, decisões técnicas documentadas e resultados de eval
-C) A quantidade de linhas de código
-D) O uso do framework mais recente
+✅ **Checkpoint:** todos os checkboxes específicos do seu projeto marcados; tabela de evals final gerada; ≥ 8 entradas no `DECISIONS.md`.
 
-**3.** Por que resultados de eval no README importam tanto?
-A) Deixam o README mais longo
-B) Provam que você mede o que constrói — sinal de engenheiro, não de quem só seguiu tutorial
-C) São exigência do GitHub
-D) Melhoram o SEO do repositório
+**Etapa 5 — README de portfólio (meio dia)**
 
-**4.** Qual é a estratégia sustentável para se manter atualizado?
+Monte o README na ordem da seção 12.3: demo (GIF/vídeo) no topo, problema em 2 frases, como rodar em 5 minutos (`.env.example`, dependências fixadas), diagrama da arquitetura, tabela de evals com números, seção de decisões (destilada do `DECISIONS.md`) e espaço reservado para o link da defesa.
+
+✅ **Checkpoint:** você (numa pasta limpa) roda o projeto em 5 minutos seguindo só o README.
+
+**Etapa 6 — Defesa dupla (2h)**
+
+Primeiro a Defesa por LLM no Campus: a entrevista sobre o seu capstone, até aprovar — se travar, volte ao repo, entenda, atualize o `DECISIONS.md` e refaça. Depois grave o vídeo de 5 minutos (seção 12.8): problema, arquitetura e porquês, números dos evals na tela, o que faria diferente. Suba (YouTube não listado serve) e linke no README.
+
+✅ **Checkpoint:** Defesa do Campus aprovada e vídeo de 5 min linkado no README.
+
+**Etapa 7 — Publicar e colher feedback (1h)**
+
+Revise `SPEC.md` e `DECISIONS.md` uma última vez (a spec reflete o que foi entregue? toda decisão de peso está registrada?), torne o repositório público, `git push` final, e poste no LinkedIn no formato 12.4: a spec que você escreveu, o que a IA implementou, o que os evals provam — mais o link do vídeo. Compartilhe nas comunidades quando fizer sentido; cada pergunta que chegar é ensaio grátis de entrevista.
+
+✅ **Checkpoint:** repositório público com SPEC.md/DECISIONS.md atualizados, post no ar e ao menos um feedback externo recebido.
+
+> **Regra de ouro:** você pode usar IA para escrever qualquer código. Você não pode entregar nada que não consiga explicar e defender.
+
+## 🧠 Quiz de fixação
+
+**1.** Qual é o papel do aluno no capstone deste módulo?
+A) Digitar todo o código sem IA para provar domínio
+B) Tech lead: escreve a SPEC.md, dirige a IA na implementação e verifica com evals que provam os requisitos
+C) Apenas revisar um projeto pronto fornecido pelo curso
+D) Treinar um modelo do zero
+
+**2.** O que recrutadores de 2026 tipicamente testam, segundo o módulo?
+A) Escrever um loop de treino no quadro sem consulta
+B) Encontrar defeitos plantados num sistema gerado por IA, defender as decisões do próprio projeto e system design com LLMs
+C) Velocidade de digitação e sintaxe decorada
+D) Certificados acumulados
+
+**3.** Por que o `DECISIONS.md` é exigência central (e não mais uma dica)?
+A) Porque deixa o repositório maior
+B) Porque é a evidência de julgamento — separa "aceitou o que a IA sugeriu" de "dirigiu com critério" — e vira a base da defesa e das respostas de entrevista
+C) Porque substitui os testes
+D) Porque o GitHub exige
+
+**4.** Como funciona a defesa obrigatória do capstone?
+A) Uma prova escrita de múltipla escolha
+B) Defesa por LLM no Campus (entrevista com rubrica sobre o SEU projeto) + vídeo de 5 minutos defendendo as decisões, linkado no README
+C) Apenas apresentar o código para um colega
+D) Publicar o projeto no LinkedIn
+
+**5.** No portfólio de quem dirige IA, o que vale MAIS aos olhos de um avaliador de 2026?
+A) Volume de linhas de código escritas à mão
+B) SPEC.md, tabela de evals com números, DECISIONS.md e defesa gravada — a evidência de direção
+C) Usar o framework mais recente
+D) Dez repositórios, mesmo incompletos
+
+**6.** Por que escrever os evals ANTES de dirigir a implementação (Etapa 2)?
+A) Para gastar o orçamento de API
+B) Porque eles viram o contrato que a implementação deve cumprir e o placar de cada iteração de direção
+C) Porque a IA não consegue escrever evals depois
+D) Não há razão; a ordem é indiferente
+
+**7.** Qual é a estratégia sustentável de atualização recomendada?
 A) Ler todos os papers do arXiv diariamente
-B) Poucas newsletters de alto sinal (Latent Space, Ahead of AI, Interconnects) e papers só quando relevantes
-C) Ignorar novidades e focar só no que já sabe
+B) Poucas newsletters de alto sinal (Latent Space, Ahead of AI, Interconnects) e papers só quando relevantes — 2–3h/semana
+C) Ignorar novidades
 D) Acompanhar todos os influencers de IA
 
-**5.** No system design de uma entrevista de IA, o que se espera que você discuta?
-A) Só o modelo a escolher
-B) Trade-offs: RAG vs fine-tuning, arquitetura de produção, eval, custo/latência, resiliência e segurança
-C) Apenas o custo por token
-D) O algoritmo de treino do transformer
-
-**6.** Qual porta de mercado tende a ser a maior alavanca financeira para o engenheiro de IA brasileiro?
+**8.** Qual porta de mercado tende a ser a maior alavanca financeira para o engenheiro de IA brasileiro?
 A) Concurso público
-B) Remoto internacional, pagando em dólar/euro, com portfólio em inglês
+B) Remoto internacional em dólar/euro, com portfólio bilíngue (README, SPEC e defesa em inglês nos melhores projetos)
 C) Freelance de baixo valor
 D) Apenas grandes empresas locais
 
-**7.** No Projeto Capstone 1 (Assistente de documentos), qual guardrail é essencial?
-A) Bloquear todas as perguntas fora do horário comercial
-B) Admitir honestamente quando o contexto recuperado não sustenta a resposta, em vez de alucinar
-C) Limitar a resposta a 10 palavras
-D) Exigir login para cada pergunta
-
-**8.** No Projeto Capstone 4 (Produto em produção), o que conecta o trabalho ao Módulo 10?
-A) O uso de streaming
-B) A suite de evals rodando como gate no CI
-C) O Dockerfile
-D) O painel de custo do Langfuse
-
 <details><summary>Ver respostas</summary>
 
-**1-B.** O AI Engineer constrói produtos sobre modelos de fundação já treinados (via API ou abertos), dominando prompt/RAG/agentes/evals/fine-tuning leve/LLMOps — sem precisar treinar do zero, que é o território do ML Engineer/Researcher.
-
-**2-B.** Recrutadores gastam segundos por repo: uma demo no topo prende a atenção, decisões documentadas mostram julgamento e resultados de eval provam rigor. Poucos projetos fortes batem muitos fracos.
-
-**3-B.** Métricas de eval provam que você mede o que constrói — a marca do engenheiro. "Precisão 89% em 120 casos" separa quem pensa como profissional de quem só copiou um tutorial.
-
-**4-B.** Poucas fontes curadas (Latent Space, Ahead of AI, Interconnects) fazem a triagem; papers só quando relevantes ao seu trabalho. Tentar ler tudo leva ao burnout; a curadoria mantém você atualizado por anos.
-
-**5-B.** System design de IA é onde o programa inteiro converge: escolher RAG ou fine-tuning e justificar, desenhar gateway/guardrails/LLM, definir a estratégia de eval, tratar custo/latência, resiliência e segurança — verbalizando trade-offs.
-
-**6-B.** O remoto internacional paga em moeda forte e multiplica o poder de compra; o passaporte é o portfólio em inglês, GitHub legível e presença nas comunidades internacionais. A escassez do perfil trabalha a favor.
-
-**7-B.** Rejeição honesta ("não encontrei isso na base") em vez de alucinar é o guardrail que torna um RAG confiável. Um assistente que inventa fonte é pior que um que admite não saber.
-
-**8-B.** A suite de evals do Módulo 10 rodando como gate no CI é o elo direto: prompts e mudanças só sobem se a qualidade se mantém. É o que fecha o ciclo entre avaliação e operação.
+1. **B** — Em 2026 a IA escreve o código; o capstone avalia o que ninguém faz por você: especificar sem ambiguidade, dirigir com critério e provar com evals — respondendo pela qualidade.
+2. **B** — Os processos se adaptaram ao mundo em que todos usam IA: caça aos defeitos, defesa do próprio projeto e system design com LLMs medem exatamente o ciclo especificar → dirigir → verificar.
+3. **B** — Recrutadores procuram julgamento, não só código que roda. "Por que essa decisão?" é a pergunta certa da entrevista — e quem registrou na hora responde com convicção.
+4. **B** — A defesa dupla: LLM-entrevistador com rubrica no Campus + vídeo de 5 min que vai para o portfólio. É a única avaliação à prova de cópia — a que acontece na sua cabeça em tempo real.
+5. **B** — Código bonito não diferencia quando a IA escreve para todos; a evidência de direção (spec, números, decisões, defesa) é o que é raro e o que os testes de 2026 verificam.
+6. **B** — Evals primeiro transformam os critérios de aceite em contrato executável: cada iteração de direção tem placar, e "parecer bom" deixa de ser o critério.
+7. **B** — O volume é inabsorvível; curadoria de alto sinal + papers sob demanda mantém você atualizado por anos sem burnout.
+8. **B** — Dólar/euro multiplicam o poder de compra; o passaporte é portfólio bilíngue, GitHub legível e presença nas comunidades internacionais.
 
 </details>
 
@@ -353,24 +319,29 @@ D) O painel de custo do Langfuse
 
 | Frente | Verso |
 |--------|-------|
-| AI Engineer (definição de Swyx) | Constrói produtos sobre modelos de fundação treinados; não precisa treinar do zero |
-| O que abre um README de portfólio | Uma demo (GIF/vídeo) do sistema funcionando, antes de qualquer texto |
-| O que separa "tutorial" de "engenheiro" no portfólio | Decisões técnicas documentadas + resultados de eval |
-| Regra de quantidade de projetos | Poucos projetos fortes e polidos > muitos pela metade |
+| Engenheiro de IA (definição 2026) | Quem especifica, dirige e verifica sistemas construídos por e com IA — e responde pela qualidade |
+| As 3 provas de entrevista em 2026 | Caça aos defeitos em código gerado por IA; defesa das decisões do próprio projeto; system design com LLMs |
+| Evidência de direção no portfólio | SPEC.md + tabela de evals com números + DECISIONS.md + defesa gravada |
+| DECISIONS.md | Cada escolha: decisão, alternativa descartada, porquê — mínimo 8 entradas; base da defesa |
+| Defesa dupla do capstone | Defesa por LLM no Campus (rubrica) + vídeo de 5 min linkado no README |
+| Por que evals antes do código | Viram o contrato executável dos requisitos e o placar de cada iteração de direção |
+| Fatia vertical | Caminho feliz de ponta a ponta primeiro, feio mas completo — nunca perfeição por camada |
 | Três newsletters de alto sinal | Latent Space, Ahead of AI (Raschka), Interconnects (Lambert) |
-| Papers: quando ler | Só quando relevantes ao seu trabalho ou muito citados; deixe as newsletters filtrarem |
-| Peça central da entrevista de IA | System design de sistema LLM (RAG vs fine-tune, arquitetura, eval, custo, segurança) |
-| Comunidades essenciais | Hugging Face Discord, r/LocalLLaMA, AI Engineer (YouTube) |
-| Maior alavanca de mercado (BR) | Remoto internacional em dólar/euro, com portfólio em inglês |
+| Maior alavanca de mercado (BR) | Remoto internacional em dólar/euro, com portfólio bilíngue |
 | Os 4 capstones | RAG com citações, agente operacional, modelo especialista (fine-tune), produto em produção |
 
-## ☑️ Checklist de conclusão ("estou pronto?")
+## ☑️ Checklist de conclusão
 
-- [ ] Publiquei ao menos 2 projetos capstone completos, públicos no GitHub, com README de nível profissional (demo, decisões, evals)
-- [ ] Sei explicar o papel de Engenheiro de IA e como me diferencio de um ML Engineer
-- [ ] Meu LinkedIn está atualizado e ligado aos repositórios; fiz ao menos um post por projeto
-- [ ] Estou em pelo menos duas comunidades ativas do campo
-- [ ] Tenho uma rotina sustentável de atualização (newsletters curadas, 2–3h/semana)
-- [ ] Consigo conduzir um system design de sistema LLM em voz alta, discutindo trade-offs
-- [ ] Sei defender cada decisão técnica dos meus capstones sob pressão
-- [ ] Tenho um portfólio bilíngue e estou me candidatando aos mercados BR e remoto internacional
+- [ ] Escrevi a `SPEC.md` completa ANTES de qualquer código (primeiro commit do repo) e ela sobreviveu à revisão cética da IA
+- [ ] A suite de evals prova cada requisito da spec, com números na tabela do README
+- [ ] Meu `DECISIONS.md` tem ≥ 8 entradas (decisão, alternativa descartada, porquê)
+- [ ] Passei na Defesa do módulo no Campus, respondendo "por quê?" sobre qualquer parte do capstone
+- [ ] Gravei o vídeo de 5 minutos defendendo as decisões e linkei no README
+- [ ] Publiquei ao menos 1 capstone completo (ideal: 2 ao longo do tempo) com demo no topo e instruções que rodam em 5 minutos
+- [ ] LinkedIn atualizado à realidade 2026 (headline + post mostrando spec → direção → evals) e GitHub ligado
+- [ ] Consigo conduzir um system design de sistema LLM em voz alta e encontrar defeitos em código gerado por IA
+- [ ] Tenho rotina sustentável de atualização (newsletters curadas, 2–3h/semana) e estou em ≥ 2 comunidades
+- [ ] Estou me candidatando aos mercados BR e remoto internacional com portfólio bilíngue
+- [ ] Quiz de fixação: acertei 6/8 ou mais
+
+**🆘 Se travar:** trabalhar com seu assistente de IA É o método — no capstone, você é o tech lead e a IA é a equipe: cole o erro, peça hipóteses, entenda a causa antes de aceitar a correção; toda sessão termina com o `DECISIONS.md` atualizado. As três armadilhas que matam capstones continuam as mesmas: escopo crescendo (releia a `SPEC.md` — o que não está lá não entra na v1), semanas sem commit (o marco estava grande — corte pela metade e entregue a metade que roda) e polir antes de funcionar (volte à fatia vertical). Travou de verdade (30+ min sem entender nem com IA)? Anote a dúvida no seu `DECISIONS.md` e leve para a comunidade — cada pergunta respondida é ensaio grátis para a defesa.
