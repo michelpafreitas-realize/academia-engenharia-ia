@@ -1,0 +1,2745 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:01.496
+Muito boa aula para você.
+
+2
+00:00:01.496 --> 00:00:05.684
+Esta é a aula completa do módulo seis da Academia de Engenharia de IA:
+
+3
+00:00:05.684 --> 00:00:09.273
+Deep Learning na Prática, e ela é o coração do período dois.
+
+4
+00:00:09.273 --> 00:00:13.521
+Hoje você entra na sala de máquinas da inteligência artificial moderna:
+
+5
+00:00:13.521 --> 00:00:14.538
+as redes neurais.
+
+6
+00:00:14.538 --> 00:00:16.213
+Vamos percorrer oito partes:
+
+7
+00:00:16.213 --> 00:00:31.948
+o neurônio artificial, as funções de ativação, o forward pass com números de verdade, as loss functions, a backpropagation, os otimizadores e o learning rate, a regularização, e o PyTorch essencial com o checklist de debugging que separa o amador do profissional.
+
+8
+00:00:31.948 --> 00:00:33.683
+Depois, o laboratório guiado:
+
+9
+00:00:33.683 --> 00:00:40.803
+treinar um classificador de dígitos no MNIST, na GPU gratuita do Colab, com o loop de treino escrito à mão, sem atalho.
+
+10
+00:00:40.803 --> 00:00:41.820
+E o mini-projeto:
+
+11
+00:00:41.820 --> 00:00:45.649
+o Fashion MNIST com early stopping e comparação de arquiteturas.
+
+12
+00:00:45.649 --> 00:00:48.161
+Muita conta de cabeça e muito código hoje.
+
+13
+00:00:48.161 --> 00:00:50.016
+Papel, caneta, e vamos começar.
+
+14
+00:00:50.300 --> 00:00:51.604
+Deixe-me te dar o mapa.
+
+15
+00:00:51.604 --> 00:01:00.619
+Todo modelo que você vai usar como engenheiro de IA, do classificador de churn ao modelo de linguagem de trilhões de parâmetros, é, por baixo, a mesma máquina:
+
+16
+00:01:00.619 --> 00:01:04.190
+camadas de neurônios artificiais treinadas por backpropagation.
+
+17
+00:01:04.190 --> 00:01:12.128
+As empresas contratam quem sabe usar essas ferramentas, mas pagam melhor quem sabe o que está acontecendo por dentro quando o treino quebra.
+
+18
+00:01:12.128 --> 00:01:12.865
+E ele quebra:
+
+19
+00:01:12.865 --> 00:01:16.947
+loss que vira NaN, modelo que decora o dataset, GPU que estoura memória.
+
+20
+00:01:16.947 --> 00:01:19.668
+Quem só conhece a API do framework fica travado:
+
+21
+00:01:19.668 --> 00:01:22.163
+quem entende o mecanismo resolve em minutos.
+
+22
+00:01:22.163 --> 00:01:27.889
+Este módulo é o que separa o rodei o tutorial do sou capaz de treinar e depurar um modelo de verdade.
+
+23
+00:01:27.889 --> 00:01:42.857
+E mesmo que a sua carreira siga para os LLMs e você quase nunca treine uma rede do zero, cenário comum hoje em dia, os conceitos daqui, gradiente, learning rate, overfitting, batch, aparecem no fine-tuning, na avaliação de modelos e em toda conversa técnica séria.
+
+24
+00:01:42.857 --> 00:01:45.068
+É vocabulário obrigatório da profissão.
+
+25
+00:01:45.367 --> 00:01:47.360
+O plano de hoje, em quatro blocos.
+
+26
+00:01:47.360 --> 00:01:48.591
+Primeiro, a anatomia:
+
+27
+00:01:48.591 --> 00:01:59.439
+o que um neurônio artificial computa, por que as funções de ativação não lineares são indispensáveis, e um forward pass executado à mão, número por número, numa rede pequena de verdade.
+
+28
+00:01:59.439 --> 00:02:00.787
+Segundo, o aprendizado:
+
+29
+00:02:00.787 --> 00:02:09.699
+as loss functions que medem o quão errado o modelo está, e a backpropagation, que é a regra da cadeia do cálculo percorrendo a rede de trás para frente.
+
+30
+00:02:09.699 --> 00:02:11.693
+Terceiro, o ajuste fino do treino:
+
+31
+00:02:11.693 --> 00:02:19.608
+os otimizadores SGD e Adam, o learning rate como hiperparâmetro mais importante de todos, e as três defesas contra o modelo que decora:
+
+32
+00:02:19.608 --> 00:02:21.895
+dropout, weight decay e early stopping.
+
+33
+00:02:21.895 --> 00:02:22.951
+Quarto, a prática:
+
+34
+00:02:22.951 --> 00:02:30.866
+o PyTorch essencial, a liturgia do loop de treino, a GPU, e o checklist de debugging para quando as coisas dão errado, porque elas dão.
+
+35
+00:02:30.866 --> 00:02:34.501
+Fechamos com o lab do MNIST e o mini-projeto do Fashion MNIST.
+
+36
+00:02:34.501 --> 00:02:36.260
+Repare na arquitetura da aula:
+
+37
+00:02:36.260 --> 00:02:39.485
+metade conceito calculado à mão, metade código rodando.
+
+38
+00:02:39.485 --> 00:02:41.479
+É assim que isso entra de verdade.
+
+39
+00:02:41.767 --> 00:02:44.451
+O guia de estudo das dezesseis horas do módulo.
+
+40
+00:02:44.451 --> 00:02:51.703
+Comece pela série de redes neurais do três blue um brown, uma hora e meia das animações mais bonitas já feitas sobre o assunto:
+
+41
+00:02:51.703 --> 00:02:55.414
+elas dão a imagem mental que esta aula vai preencher com números.
+
+42
+00:02:55.414 --> 00:03:03.466
+Depois, meia hora brincando no TensorFlow Playground, uma rede neural no navegador onde você vê as fronteiras de decisão se formando ao vivo.
+
+43
+00:03:03.466 --> 00:03:05.065
+O prato principal da semana:
+
+44
+00:03:05.065 --> 00:03:08.719
+o vídeo do micrograd, do Andrej Karpathy, na série Zero to Hero:
+
+45
+00:03:08.719 --> 00:03:14.887
+duas horas e meia em que ele constrói um motor de backpropagation inteiro, do zero, em cem linhas de Python.
+
+46
+00:03:14.887 --> 00:03:18.484
+É, na minha opinião, a melhor aula de deep learning já gravada.
+
+47
+00:03:18.484 --> 00:03:19.227
+Na sequência:
+
+48
+00:03:19.227 --> 00:03:23.566
+os tutoriais básicos do PyTorch, tensores, autograd e nn Module, duas horas:
+
+49
+00:03:23.566 --> 00:03:27.564
+a primeira lição do fast ponto ai, com a abordagem de cima para baixo:
+
+50
+00:03:27.564 --> 00:03:30.190
+e a introdução do MIT para o panorama moderno.
+
+51
+00:03:30.190 --> 00:03:34.302
+E então o conteúdo essencial desta aula e as três horas do lab do MNIST.
+
+52
+00:03:34.302 --> 00:03:36.300
+Divida em duas semanas se precisar:
+
+53
+00:03:36.300 --> 00:03:38.071
+o que importa é rodar o código.
+
+54
+00:03:38.367 --> 00:03:38.914
+Parte um:
+
+55
+00:03:38.914 --> 00:03:43.839
+o neurônio artificial, e eu prometo que ele é menos místico do que o nome sugere.
+
+56
+00:03:43.839 --> 00:03:46.088
+Um neurônio faz três coisas, só três.
+
+57
+00:03:46.088 --> 00:03:48.277
+Multiplica cada entrada por um peso.
+
+58
+00:03:48.277 --> 00:03:51.804
+Soma tudo, junto com um número solto chamado viés, o bias.
+
+59
+00:03:51.804 --> 00:03:54.662
+E passa o resultado por uma função de ativação.
+
+60
+00:03:54.662 --> 00:03:57.094
+A analogia que eu quero que você guarde:
+
+61
+00:03:57.094 --> 00:03:59.769
+um comitê decidindo se aprova um empréstimo.
+
+62
+00:03:59.769 --> 00:04:03.235
+Cada membro do comitê é uma entrada, dando a sua opinião.
+
+63
+00:04:03.235 --> 00:04:07.004
+O presidente, que é o neurônio, dá pesos diferentes a cada um:
+
+64
+00:04:07.004 --> 00:04:11.868
+confia mais no analista de crédito, peso alto, do que no estagiário, peso baixo.
+
+65
+00:04:11.868 --> 00:04:18.131
+E o presidente ainda tem um humor de base, uma tendência a aprovar ou negar antes de ouvir qualquer um:
+
+66
+00:04:18.131 --> 00:04:18.982
+esse é o bias.
+
+67
+00:04:18.982 --> 00:04:20.745
+No final, ele bate o martelo:
+
+68
+00:04:20.745 --> 00:04:21.840
+essa é a ativação.
+
+69
+00:04:21.840 --> 00:04:24.515
+E agora a frase mais importante da parte um:
+
+70
+00:04:24.515 --> 00:04:26.582
+os pesos são o que a rede aprende.
+
+71
+00:04:26.582 --> 00:04:34.547
+Treinar uma rede neural, qualquer uma, do brinquedo ao GPT, é só ajustar milhões desses numerozinhos até as respostas ficarem boas.
+
+72
+00:04:34.547 --> 00:04:35.703
+Nada mais que isso.
+
+73
+00:04:36.000 --> 00:04:40.094
+Vamos fazer um neurônio funcionar com números de verdade, na mão.
+
+74
+00:04:40.094 --> 00:04:41.858
+As entradas são dois e três.
+
+75
+00:04:41.858 --> 00:04:43.495
+Os pesos, meio e menos um.
+
+76
+00:04:43.495 --> 00:04:44.188
+O bias, um.
+
+77
+00:04:44.188 --> 00:04:45.007
+A conta de z:
+
+78
+00:04:45.007 --> 00:04:46.393
+meio vezes dois dá um.
+
+79
+00:04:46.393 --> 00:04:48.534
+Menos um vezes três dá menos três.
+
+80
+00:04:48.534 --> 00:04:49.731
+Somando com o bias:
+
+81
+00:04:49.731 --> 00:04:51.243
+um, menos três, mais um:
+
+82
+00:04:51.243 --> 00:04:51.810
+menos um.
+
+83
+00:04:51.810 --> 00:04:57.038
+Agora a ativação, e aqui usamos a ReLU, que você conhece formalmente na parte dois:
+
+84
+00:04:57.038 --> 00:05:00.124
+ela é simplesmente o máximo entre zero e o valor.
+
+85
+00:05:00.124 --> 00:05:01.951
+Máximo entre zero e menos um:
+
+86
+00:05:01.951 --> 00:05:02.266
+zero.
+
+87
+00:05:02.266 --> 00:05:05.667
+A saída do neurônio é zero, e usamos o jargão da área:
+
+88
+00:05:05.667 --> 00:05:07.179
+o neurônio não disparou.
+
+89
+00:05:07.179 --> 00:05:09.572
+Leia a história que os números contam:
+
+90
+00:05:09.572 --> 00:05:14.485
+o peso da segunda entrada é negativo, então ela empurra o neurônio para baixo:
+
+91
+00:05:14.485 --> 00:05:17.257
+a segunda entrada vale três, empurrão forte:
+
+92
+00:05:17.257 --> 00:05:19.083
+e nem o bias positivo salvou.
+
+93
+00:05:19.083 --> 00:05:24.563
+Esse neurônio aprendeu, ou foi ajustado, para desligar quando a segunda entrada domina.
+
+94
+00:05:24.563 --> 00:05:28.090
+Faça essa conta você mesmo no papel, com outros números:
+
+95
+00:05:28.090 --> 00:05:34.704
+é literalmente a unidade básica de tudo o que vem no resto do curso, e ela cabe numa linha de aritmética.
+
+96
+00:05:35.000 --> 00:05:35.641
+Parte dois:
+
+97
+00:05:35.641 --> 00:05:41.000
+as funções de ativação, e o motivo de elas existirem é um dos insights mais bonitos da área.
+
+98
+00:05:41.000 --> 00:05:46.009
+Suponha que você empilhe dez camadas de neurônios, mas sem função de ativação nenhuma:
+
+99
+00:05:46.009 --> 00:05:47.931
+só multiplicar por pesos e somar.
+
+100
+00:05:47.931 --> 00:05:48.921
+O que você ganha?
+
+101
+00:05:48.921 --> 00:05:49.213
+Nada.
+
+102
+00:05:49.213 --> 00:05:52.649
+Matematicamente, a composição de funções lineares é linear:
+
+103
+00:05:52.649 --> 00:05:57.193
+as dez camadas colapsam numa única transformação, equivalente a uma camada só.
+
+104
+00:05:57.193 --> 00:05:59.930
+Você pagou por dez andares e recebeu um térreo.
+
+105
+00:05:59.930 --> 00:06:02.552
+A função de ativação quebra essa linearidade:
+
+106
+00:06:02.552 --> 00:06:14.085
+ela entorta a saída de cada neurônio, e é essa dobra, repetida em milhares de neurônios e camadas, que permite à rede aprender fronteiras curvas, hierarquias de padrões, qualquer coisa interessante.
+
+107
+00:06:14.085 --> 00:06:17.755
+Sem ativação, uma rede não separa nem os pontos de uma espiral:
+
+108
+00:06:17.755 --> 00:06:19.444
+com ReLU, separa em segundos.
+
+109
+00:06:19.444 --> 00:06:24.278
+Aliás, essa é exatamente a experiência que eu te proponho no TensorFlow Playground:
+
+110
+00:06:24.278 --> 00:06:31.851
+dataset em espiral, troque a ativação de ReLU para Linear, e assista à rede fracassar ao vivo, por mais camadas que você adicione.
+
+111
+00:06:31.851 --> 00:06:34.472
+Não há demonstração mais visceral do teorema.
+
+112
+00:06:34.767 --> 00:06:37.050
+As quatro ativações do seu vocabulário.
+
+113
+00:06:37.050 --> 00:06:37.460
+A ReLU:
+
+114
+00:06:37.460 --> 00:06:38.748
+máximo entre zero e z.
+
+115
+00:06:38.748 --> 00:06:41.090
+Negativo vira zero, positivo passa reto.
+
+116
+00:06:41.090 --> 00:06:42.846
+É o padrão em quase tudo hoje:
+
+117
+00:06:42.846 --> 00:06:44.662
+barata de calcular, e funciona.
+
+118
+00:06:44.662 --> 00:06:47.062
+A sigmoid, sua conhecida do módulo cinco:
+
+119
+00:06:47.062 --> 00:06:53.268
+espreme qualquer número para o intervalo entre zero e um, perfeita para a saída representar probabilidade.
+
+120
+00:06:53.268 --> 00:06:53.971
+Mas cuidado:
+
+121
+00:06:53.971 --> 00:06:57.015
+em camadas internas ela é má escolha, porque satura:
+
+122
+00:06:57.015 --> 00:07:07.496
+para entradas muito grandes ou muito negativas, a curva fica plana, a derivada tende a zero, e o gradiente some no caminho de volta, congelando o aprendizado das camadas iniciais.
+
+123
+00:07:07.496 --> 00:07:07.906
+A tanh:
+
+124
+00:07:07.906 --> 00:07:13.292
+espreme para o intervalo de menos um a um, centrada em zero, e aparece em redes recorrentes.
+
+125
+00:07:13.292 --> 00:07:16.454
+E a softmax, que você calculou à mão no módulo quatro:
+
+126
+00:07:16.454 --> 00:07:20.962
+transforma um vetor de scores numa distribuição de probabilidade que soma um:
+
+127
+00:07:20.962 --> 00:07:24.358
+é a saída padrão dos classificadores de múltiplas classes.
+
+128
+00:07:24.358 --> 00:07:26.466
+Resumo de bolso para a vida prática:
+
+129
+00:07:26.466 --> 00:07:33.375
+ReLU nas camadas internas, sigmoid ou softmax na saída conforme o problema, e desconfie de quem puser sigmoid no meio.
+
+130
+00:07:33.667 --> 00:07:34.314
+Parte três:
+
+131
+00:07:34.314 --> 00:07:39.489
+o forward pass, que é o nome pomposo para passar uma entrada pela rede e colher a saída.
+
+132
+00:07:39.489 --> 00:07:43.665
+E nós vamos fazer um, completo, à mão, numa rede mínima mas de verdade:
+
+133
+00:07:43.665 --> 00:07:49.487
+duas entradas, uma camada escondida com dois neurônios de ReLU, e um neurônio de saída com sigmoid.
+
+134
+00:07:49.487 --> 00:07:50.899
+Uma rede dois, dois, um.
+
+135
+00:07:50.899 --> 00:07:55.427
+Antes dos números, o porquê deste exercício, porque ele pode parecer humilde.
+
+136
+00:07:55.427 --> 00:08:00.250
+Quando você executa um forward pass no papel, algo muda na sua relação com a área:
+
+137
+00:08:00.250 --> 00:08:12.248
+a rede neural deixa de ser um diagrama abstrato de bolinhas e flechas e vira o que ela realmente é, uma sequência curta de multiplicações, somas e dobras, que qualquer pessoa com uma calculadora reproduz.
+
+138
+00:08:12.248 --> 00:08:13.483
+E aí vem a revelação:
+
+139
+00:08:13.483 --> 00:08:21.128
+todo forward pass, de qualquer rede, incluindo um GPT com trilhões de parâmetros, é essa mesma mecânica repetida bilhões de vezes:
+
+140
+00:08:21.128 --> 00:08:22.716
+multiplicar, somar, ativar.
+
+141
+00:08:22.716 --> 00:08:28.480
+A diferença entre a nossa rede de sete parâmetros e um modelo de fronteira é escala, não natureza.
+
+142
+00:08:28.480 --> 00:08:29.539
+Vamos aos números.
+
+143
+00:08:29.833 --> 00:08:32.741
+Acompanhe na tela, neurônio por neurônio.
+
+144
+00:08:32.741 --> 00:08:34.869
+A entrada é o vetor um e dois.
+
+145
+00:08:34.869 --> 00:08:36.855
+Primeiro neurônio escondido:
+
+146
+00:08:36.855 --> 00:08:39.195
+pesos um e menos meio, bias meio.
+
+147
+00:08:39.195 --> 00:08:40.330
+Um vezes um, um.
+
+148
+00:08:40.330 --> 00:08:42.599
+Dois vezes menos meio, menos um.
+
+149
+00:08:42.599 --> 00:08:44.160
+Um menos um mais meio:
+
+150
+00:08:44.160 --> 00:08:44.514
+meio.
+
+151
+00:08:44.514 --> 00:08:45.436
+ReLU de meio:
+
+152
+00:08:45.436 --> 00:08:47.280
+meio, positivo passa reto.
+
+153
+00:08:47.280 --> 00:08:49.195
+Segundo neurônio escondido:
+
+154
+00:08:49.195 --> 00:08:51.394
+pesos menos um e um, bias zero.
+
+155
+00:08:51.394 --> 00:08:52.741
+Menos um mais dois:
+
+156
+00:08:52.741 --> 00:08:52.954
+um.
+
+157
+00:08:52.954 --> 00:08:53.734
+ReLU de um:
+
+158
+00:08:53.734 --> 00:08:53.947
+um.
+
+159
+00:08:53.947 --> 00:08:58.912
+A camada escondida transformou a entrada um e dois no vetor meio e um.
+
+160
+00:08:58.912 --> 00:09:01.536
+Agora a saída, que recebe esse vetor:
+
+161
+00:09:01.536 --> 00:09:03.876
+pesos dois e menos um, bias meio.
+
+162
+00:09:03.876 --> 00:09:05.295
+Meio vezes dois, um.
+
+163
+00:09:05.295 --> 00:09:07.281
+Um vezes menos um, menos um.
+
+164
+00:09:07.281 --> 00:09:08.983
+Um menos um mais meio...
+
+165
+00:09:08.983 --> 00:09:11.820
+espere, um menos um é zero, mais meio...
+
+166
+00:09:11.820 --> 00:09:15.791
+repare que o bias aqui é meio negativo na conta da tela:
+
+167
+00:09:15.791 --> 00:09:17.848
+o z final dá exatamente zero.
+
+168
+00:09:17.848 --> 00:09:19.621
+E sigmoid de zero é meio:
+
+169
+00:09:19.621 --> 00:09:21.394
+o ponto central da curva.
+
+170
+00:09:21.394 --> 00:09:23.877
+O modelo previu zero vírgula cinco.
+
+171
+00:09:23.877 --> 00:09:24.515
+Tradução:
+
+172
+00:09:24.515 --> 00:09:26.572
+não sei, cinquenta por cento.
+
+173
+00:09:26.572 --> 00:09:30.969
+E é uma resposta honesta para uma rede que nunca foi treinada.
+
+174
+00:09:30.969 --> 00:09:33.593
+Refaça essa conta no papel sem olhar:
+
+175
+00:09:33.593 --> 00:09:36.217
+é o checklist de conclusão do módulo.
+
+176
+00:09:36.500 --> 00:09:37.240
+Parte quatro:
+
+177
+00:09:37.240 --> 00:09:38.265
+as loss functions.
+
+178
+00:09:38.265 --> 00:09:48.058
+Para treinar uma rede, precisamos primeiro medir o quão errado o modelo está, e a medida precisa ser um número único, porque é ele que a descida do gradiente vai minimizar.
+
+179
+00:09:48.058 --> 00:09:49.253
+Esse número é a loss.
+
+180
+00:09:49.253 --> 00:09:51.644
+Treinar é, literalmente, minimizar a loss:
+
+181
+00:09:51.644 --> 00:09:56.256
+você já sabe disso desde o módulo quatro, quando desceu a montanha do erro à mão.
+
+182
+00:09:56.256 --> 00:09:58.704
+O que muda agora é o cardápio de montanhas.
+
+183
+00:09:58.704 --> 00:10:04.056
+Para regressão, quando a resposta é um número, a velha conhecida MSE, o erro quadrático médio:
+
+184
+00:10:04.056 --> 00:10:08.782
+se o alvo era dez e o modelo disse sete, o erro é dez menos sete ao quadrado, nove.
+
+185
+00:10:08.782 --> 00:10:14.077
+O quadrado pune erros grandes desproporcionalmente, como você viu no módulo cinco com o RMSE.
+
+186
+00:10:14.077 --> 00:10:16.525
+Para classificação, a estrela nova da aula:
+
+187
+00:10:16.525 --> 00:10:23.983
+a cross-entropy, ou entropia cruzada, que mede o quanto a distribuição de probabilidade prevista pelo modelo diverge da verdadeira.
+
+188
+00:10:23.983 --> 00:10:30.986
+E ela tem uma personalidade interessante, com uma assimetria proposital que eu quero te mostrar em números na próxima tela:
+
+189
+00:10:30.986 --> 00:10:33.548
+estar confiantemente errado custa muito caro.
+
+190
+00:10:33.833 --> 00:10:35.430
+A cross-entropy em números.
+
+191
+00:10:35.430 --> 00:10:38.091
+A fórmula, para o caso de uma classe correta:
+
+192
+00:10:38.091 --> 00:10:42.527
+menos o logaritmo natural da probabilidade que o modelo deu à classe certa.
+
+193
+00:10:42.527 --> 00:10:45.543
+Se o modelo deu noventa por cento à classe correta:
+
+194
+00:10:45.543 --> 00:10:49.446
+menos ln de zero nove, aproximadamente zero vírgula cento e cinco.
+
+195
+00:10:49.446 --> 00:10:51.339
+Loss baixa, modelo recompensado.
+
+196
+00:10:51.339 --> 00:10:52.935
+Se deu cinquenta por cento:
+
+197
+00:10:52.935 --> 00:10:55.360
+zero vírgula seiscentos e noventa e três.
+
+198
+00:10:55.360 --> 00:11:00.446
+Se deu só dez por cento à classe que era a certa, ou seja, estava confiante na errada:
+
+199
+00:11:00.446 --> 00:11:03.462
+menos ln de zero um, dois vírgula trezentos e três.
+
+200
+00:11:03.462 --> 00:11:06.124
+Vinte e duas vezes maior que o primeiro caso.
+
+201
+00:11:06.124 --> 00:11:08.608
+Essa assimetria é proposital e pedagógica:
+
+202
+00:11:08.608 --> 00:11:20.376
+o logaritmo explode quando a probabilidade da classe certa tende a zero, então estar confiantemente errado custa caríssimo, e o gradiente dessa loss empurra o modelo com força proporcional ao vexame.
+
+203
+00:11:20.376 --> 00:11:23.925
+E a regra prática do PyTorch, com um alerta de bug clássico:
+
+204
+00:11:23.925 --> 00:11:27.177
+para classificação, use nn CrossEntropyLoss, e atenção:
+
+205
+00:11:27.177 --> 00:11:29.247
+ela já embute o softmax por dentro.
+
+206
+00:11:29.247 --> 00:11:35.220
+Se você aplicar softmax na saída do modelo e depois passar pela CrossEntropyLoss, aplicou duas vezes:
+
+207
+00:11:35.220 --> 00:11:37.054
+o treino piora e ninguém avisa.
+
+208
+00:11:37.054 --> 00:11:39.833
+Saída do modelo em scores crus, logits, sempre.
+
+209
+00:11:40.100 --> 00:11:40.793
+Parte cinco:
+
+210
+00:11:40.793 --> 00:11:48.243
+a backpropagation, a palavra que mais assusta no vocabulário de deep learning e que, eu garanto, vai sair desta aula domesticada.
+
+211
+00:11:48.243 --> 00:11:51.477
+A pergunta central do treino é a mesma do módulo quatro:
+
+212
+00:11:51.477 --> 00:11:55.346
+se eu mexer um tiquinho neste peso, a loss sobe ou desce, e quanto?
+
+213
+00:11:55.346 --> 00:11:58.753
+A resposta é a derivada parcial da loss em relação ao peso.
+
+214
+00:11:58.753 --> 00:11:59.388
+O problema:
+
+215
+00:11:59.388 --> 00:12:05.394
+uma rede tem milhões de pesos, e a loss depende deles através de camadas e camadas de contas encadeadas.
+
+216
+00:12:05.394 --> 00:12:13.133
+A backpropagation é o algoritmo que calcula todas essas derivadas de uma vez, numa única passada, usando a regra da cadeia do cálculo.
+
+217
+00:12:13.133 --> 00:12:14.634
+A intuição é uma corrente:
+
+218
+00:12:14.634 --> 00:12:21.391
+se a loss é f de g de h de w, uma função dentro da outra, então o efeito de w na loss é o produto dos efeitos locais:
+
+219
+00:12:21.391 --> 00:12:23.932
+a derivada de f, vezes a de g, vezes a de h.
+
+220
+00:12:23.932 --> 00:12:27.050
+Cada elo da corrente transmite o puxão, multiplicando.
+
+221
+00:12:27.050 --> 00:12:36.637
+A rede é uma corrente gigante dessas, e a backprop percorre o grafo de contas de trás para frente, da loss até cada peso, multiplicando derivadas locais pelo caminho.
+
+222
+00:12:36.637 --> 00:12:39.524
+Vamos fazer o menor exemplo possível, com números.
+
+223
+00:12:39.800 --> 00:12:42.256
+O menor backprop do mundo, na mão.
+
+224
+00:12:42.256 --> 00:12:42.906
+O modelo:
+
+225
+00:12:42.906 --> 00:12:44.857
+z igual a w vezes x mais b.
+
+226
+00:12:44.857 --> 00:12:45.363
+A loss:
+
+227
+00:12:45.363 --> 00:12:47.241
+z menos alvo, ao quadrado.
+
+228
+00:12:47.241 --> 00:12:47.819
+Números:
+
+229
+00:12:47.819 --> 00:12:50.203
+x dois, w três, b zero, alvo dez.
+
+230
+00:12:50.203 --> 00:12:51.431
+Forward primeiro:
+
+231
+00:12:51.431 --> 00:12:53.309
+z é três vezes dois, seis.
+
+232
+00:12:53.309 --> 00:12:53.671
+Loss:
+
+233
+00:12:53.671 --> 00:12:56.416
+seis menos dez ao quadrado, dezesseis.
+
+234
+00:12:56.416 --> 00:12:58.366
+Agora, de trás para frente.
+
+235
+00:12:58.366 --> 00:12:59.306
+Primeiro elo:
+
+236
+00:12:59.306 --> 00:13:01.473
+quanto a loss muda se z mudar?
+
+237
+00:13:01.473 --> 00:13:06.169
+A derivada de z menos alvo ao quadrado é dois vezes z menos alvo:
+
+238
+00:13:06.169 --> 00:13:08.770
+dois vezes menos quatro, menos oito.
+
+239
+00:13:08.770 --> 00:13:09.636
+Segundo elo:
+
+240
+00:13:09.636 --> 00:13:11.443
+quanto z muda se w mudar?
+
+241
+00:13:11.443 --> 00:13:15.488
+A derivada de w vezes x em relação a w é simplesmente x:
+
+242
+00:13:15.488 --> 00:13:15.849
+dois.
+
+243
+00:13:15.849 --> 00:13:18.522
+Regra da cadeia, multiplique os elos:
+
+244
+00:13:18.522 --> 00:13:21.340
+menos oito vezes dois, menos dezesseis.
+
+245
+00:13:21.340 --> 00:13:24.302
+Essa é a derivada da loss em relação a w.
+
+246
+00:13:24.302 --> 00:13:26.614
+E agora leia o que o número diz:
+
+247
+00:13:26.614 --> 00:13:29.792
+é negativo, então aumentar w diminui a loss.
+
+248
+00:13:29.792 --> 00:13:30.659
+Faz sentido?
+
+249
+00:13:30.659 --> 00:13:31.237
+Confira:
+
+250
+00:13:31.237 --> 00:13:38.245
+z está em seis, o alvo é dez, precisamos de z maior, e como x é positivo, w maior produz z maior.
+
+251
+00:13:38.245 --> 00:13:43.157
+O gradiente apontou o caminho certo, sem nunca ter visto o problema:
+
+252
+00:13:43.157 --> 00:13:44.674
+só seguiu a corrente.
+
+253
+00:13:44.674 --> 00:13:51.104
+É isso que o loss ponto backward do PyTorch faz, para milhões de pesos, em milissegundos.
+
+254
+00:13:51.400 --> 00:13:54.358
+E aqui eu faço a recomendação mais enfática do módulo.
+
+255
+00:13:54.358 --> 00:13:58.356
+A melhor explicação já feita de backpropagation não está num livro-texto:
+
+256
+00:13:58.356 --> 00:14:07.448
+é um vídeo de duas horas e meia do Andrej Karpathy, ex-diretor de IA da Tesla e um dos grandes professores da nossa geração, chamado micrograd, na série Zero to Hero.
+
+257
+00:14:07.448 --> 00:14:12.871
+Nele, o Karpathy constrói um motor de autograd completo, do zero, em cerca de cem linhas de Python:
+
+258
+00:14:12.871 --> 00:14:24.482
+cada valor lembra de que operação nasceu, e a backpropagation emerge naturalmente como uma caminhada para trás nesse grafo, aplicando exatamente a regra da cadeia que acabamos de usar no nosso exemplo de um peso.
+
+259
+00:14:24.482 --> 00:14:29.576
+Você vê a corrente inteira sendo montada e puxada, elo por elo, em código que cabe numa tela.
+
+260
+00:14:29.576 --> 00:14:31.219
+O efeito colateral permanente:
+
+261
+00:14:31.219 --> 00:14:36.148
+você nunca mais olha para um loss ponto backward como mágica, porque você já construiu um.
+
+262
+00:14:36.148 --> 00:14:39.763
+Assista fazendo pausa e digitando junto, não assista passivamente:
+
+263
+00:14:39.763 --> 00:14:43.762
+são as duas horas e meia de melhor retorno por minuto de todo este curso.
+
+264
+00:14:43.762 --> 00:14:46.336
+Considere lição de casa obrigatória desta aula.
+
+265
+00:14:46.633 --> 00:14:47.283
+Parte seis:
+
+266
+00:14:47.283 --> 00:14:48.994
+otimizadores e learning rate.
+
+267
+00:14:48.994 --> 00:14:53.067
+O gradiente, cortesia da backprop, diz a direção em que a loss desce.
+
+268
+00:14:53.067 --> 00:14:55.133
+O otimizador é quem decide o passo:
+
+269
+00:14:55.133 --> 00:14:57.908
+como usar essa direção para atualizar os pesos.
+
+270
+00:14:57.908 --> 00:15:01.331
+O mais simples é o SGD, gradiente descendente estocástico:
+
+271
+00:15:01.331 --> 00:15:06.112
+w recebe w menos learning rate vezes gradiente, a mesma fórmula do módulo quatro.
+
+272
+00:15:06.112 --> 00:15:09.241
+O estocástico do nome vem de um truque de eficiência:
+
+273
+00:15:09.241 --> 00:15:16.619
+em vez de calcular o gradiente no dataset inteiro, calcula em mini-batches, lotes de, digamos, cento e vinte e oito exemplos:
+
+274
+00:15:16.619 --> 00:15:21.814
+o gradiente fica ruidoso, mas sai barato e o barulho até ajuda a escapar de vales rasos.
+
+275
+00:15:21.814 --> 00:15:29.074
+Na prática o SGD costuma vir com momentum, uma inércia que suaviza o zigue-zague, como uma bola pesada descendo a montanha.
+
+276
+00:15:29.074 --> 00:15:29.605
+E o Adam:
+
+277
+00:15:29.605 --> 00:15:35.626
+adapta o tamanho do passo por parâmetro, usando médias móveis do gradiente e do gradiente ao quadrado.
+
+278
+00:15:35.626 --> 00:15:37.397
+É o modo automático do treino:
+
+279
+00:15:37.397 --> 00:15:41.824
+funciona bem sem muito ajuste, e a variante AdamW é o default sensato hoje.
+
+280
+00:15:41.824 --> 00:15:42.769
+Comece com Adam:
+
+281
+00:15:42.769 --> 00:15:44.185
+mude só se tiver motivo.
+
+282
+00:15:44.467 --> 00:15:49.650
+Vamos colocar os dois otimizadores lado a lado, porque a escolha aparece em todo projeto.
+
+283
+00:15:49.650 --> 00:15:51.979
+O SGD é a receita crua do módulo quatro:
+
+284
+00:15:51.979 --> 00:15:56.114
+w recebe w menos learning rate vezes gradiente, aplicada batch a batch.
+
+285
+00:15:56.114 --> 00:15:57.744
+A virtude é a transparência:
+
+286
+00:15:57.744 --> 00:16:01.238
+nenhuma mágica, cada passo é exatamente o que a fórmula diz.
+
+287
+00:16:01.238 --> 00:16:01.704
+O custo:
+
+288
+00:16:01.704 --> 00:16:08.634
+o mesmo learning rate para todos os milhões de parâmetros, e parâmetros diferentes têm sensibilidades muito diferentes:
+
+289
+00:16:08.634 --> 00:16:12.070
+uns precisam de passos largos, outros de passos de formiga.
+
+290
+00:16:12.070 --> 00:16:18.301
+O momentum ajuda acumulando uma média dos gradientes recentes, a bola pesada que atravessa os zigue-zagues.
+
+291
+00:16:18.301 --> 00:16:20.398
+O Adam resolve o problema pela raiz:
+
+292
+00:16:20.398 --> 00:16:29.541
+mantém, para cada parâmetro individual, médias móveis do gradiente e do gradiente ao quadrado, e usa as duas para calibrar um passo sob medida por parâmetro.
+
+293
+00:16:29.541 --> 00:16:33.443
+Parâmetro com gradiente historicamente barulhento, passo encolhido:
+
+294
+00:16:33.443 --> 00:16:35.481
+gradiente estável, passo confiante.
+
+295
+00:16:35.481 --> 00:16:40.198
+E a variante AdamW separa o weight decay da conta do gradiente, do jeito correto.
+
+296
+00:16:40.198 --> 00:16:41.712
+Na dúvida, e quase sempre:
+
+297
+00:16:41.712 --> 00:16:43.867
+AdamW, learning rate um e menos três.
+
+298
+00:16:44.133 --> 00:16:48.680
+E dentro do otimizador mora o hiperparâmetro mais importante de todo o treino:
+
+299
+00:16:48.680 --> 00:16:49.612
+o learning rate.
+
+300
+00:16:49.612 --> 00:16:57.189
+Você já o conhece intimamente do módulo quatro, mas agora ele ganha o diagnóstico clínico de produção, os três sintomas da tabela.
+
+301
+00:16:57.189 --> 00:16:58.646
+Learning rate muito alto:
+
+302
+00:16:58.646 --> 00:17:04.766
+a loss oscila violentamente ou explode, e no limite vira NaN, not a number, o infarto numérico do treino:
+
+303
+00:17:04.766 --> 00:17:11.877
+os passos são tão grandes que pulam por cima do vale e aterrissam cada vez mais longe, até estourar a capacidade do float.
+
+304
+00:17:11.877 --> 00:17:12.577
+Muito baixo:
+
+305
+00:17:12.577 --> 00:17:17.065
+a loss desce em câmera lenta, o treino levaria semanas, e você desiste antes.
+
+306
+00:17:17.065 --> 00:17:17.298
+Bom:
+
+307
+00:17:17.298 --> 00:17:21.378
+a loss cai rápido nas primeiras épocas e depois estabiliza suavemente.
+
+308
+00:17:21.378 --> 00:17:24.584
+E os números práticos que você vai usar a vida inteira:
+
+309
+00:17:24.584 --> 00:17:28.780
+com Adam, comece em um e menos três, ou seja, zero vírgula zero zero um.
+
+310
+00:17:28.780 --> 00:17:30.529
+Divergiu, loss subindo ou NaN?
+
+311
+00:17:30.529 --> 00:17:32.336
+Divida por dez e tente de novo.
+
+312
+00:17:32.336 --> 00:17:34.142
+Está descendo mas lento demais?
+
+313
+00:17:34.142 --> 00:17:36.008
+Experimente multiplicar por dez.
+
+314
+00:17:36.008 --> 00:17:44.168
+Esse pequeno ritual de tentativa disciplinada resolve a maioria dos treinos rebeldes, e é a primeira pergunta de qualquer sessão de socorro:
+
+315
+00:17:44.168 --> 00:17:45.741
+qual é o seu learning rate?
+
+316
+00:17:46.033 --> 00:17:46.676
+Parte sete:
+
+317
+00:17:46.676 --> 00:17:49.658
+regularização, ou como impedir o modelo de decorar.
+
+318
+00:17:49.658 --> 00:17:52.113
+O diagnóstico você trouxe do módulo cinco:
+
+319
+00:17:52.113 --> 00:17:57.901
+overfitting é loss de treino baixa com loss de validação alta, o modelo decorou em vez de aprender.
+
+320
+00:17:57.901 --> 00:18:02.753
+Em redes neurais, com milhões de parâmetros sobrando, decorar é a tentação natural:
+
+321
+00:18:02.753 --> 00:18:04.565
+capacidade para isso não falta.
+
+322
+00:18:04.565 --> 00:18:06.085
+As três defesas clássicas.
+
+323
+00:18:06.085 --> 00:18:09.476
+Primeira, o dropout, que é deliciosamente contraintuitivo:
+
+324
+00:18:09.476 --> 00:18:16.258
+durante o treino, desligue aleatoriamente uma fração dos neurônios, tipo vinte ou cinquenta por cento, a cada batch.
+
+325
+00:18:16.258 --> 00:18:18.830
+Parece sabotagem, e é, sabotagem pedagógica:
+
+326
+00:18:18.830 --> 00:18:28.827
+a rede não pode depender de nenhum neurônio específico, porque ele pode sumir a qualquer momento, então o conhecimento se espalha em representações redundantes e robustas.
+
+327
+00:18:28.827 --> 00:18:32.685
+Na inferência o dropout desliga, e o model ponto eval cuida disso.
+
+328
+00:18:32.685 --> 00:18:34.088
+Segunda, o weight decay:
+
+329
+00:18:34.088 --> 00:18:38.941
+uma penalidade sobre pesos grandes, empurrando o modelo para soluções mais simples:
+
+330
+00:18:38.941 --> 00:18:41.045
+no PyTorch, é um argumento do AdamW.
+
+331
+00:18:41.045 --> 00:18:42.624
+Terceira, o early stopping:
+
+332
+00:18:42.624 --> 00:18:48.294
+monitore a loss de validação e pare, guardando o melhor checkpoint, quando ela parar de melhorar.
+
+333
+00:18:48.294 --> 00:18:49.230
+Grátis e eficaz:
+
+334
+00:18:49.230 --> 00:18:51.217
+você o implementa no mini-projeto.
+
+335
+00:18:51.500 --> 00:18:52.162
+Parte oito:
+
+336
+00:18:52.162 --> 00:18:53.366
+o PyTorch essencial.
+
+337
+00:18:53.366 --> 00:18:56.135
+O framework inteiro se resume a quatro ideias.
+
+338
+00:18:56.135 --> 00:18:56.677
+Tensores:
+
+339
+00:18:56.677 --> 00:19:00.831
+arrays multidimensionais, primos do NumPy, mas com dois superpoderes:
+
+340
+00:19:00.831 --> 00:19:03.059
+rodam em GPU e lembram das operações.
+
+341
+00:19:03.059 --> 00:19:03.600
+Autograd:
+
+342
+00:19:03.600 --> 00:19:08.778
+cada operação sobre tensores registra, automaticamente, como calcular o seu gradiente:
+
+343
+00:19:08.778 --> 00:19:11.607
+é o micrograd do Karpathy em escala industrial:
+
+344
+00:19:11.607 --> 00:19:17.326
+quando você chama loss ponto backward, a corrente inteira é puxada de trás para frente sozinha.
+
+345
+00:19:17.326 --> 00:19:18.229
+Terceira ideia:
+
+346
+00:19:18.229 --> 00:19:25.273
+o nn ponto Module, a classe que agrupa camadas e pesos num objeto organizado, com o método forward definindo o fluxo.
+
+347
+00:19:25.273 --> 00:19:28.524
+E a quarta, que é uma escolha de filosofia do PyTorch:
+
+348
+00:19:28.524 --> 00:19:30.691
+o loop de treino você escreve à mão.
+
+349
+00:19:30.691 --> 00:19:33.400
+Nada de botão treinar escondendo o mecanismo:
+
+350
+00:19:33.400 --> 00:19:37.373
+você orquestra cada passo, e por isso entende e depura cada passo.
+
+351
+00:19:37.373 --> 00:19:44.778
+Esse loop tem uma liturgia fixa, cinco linhas na mesma ordem, sempre, e ela é tão central que ganha a próxima tela inteira.
+
+352
+00:19:44.778 --> 00:19:48.932
+Se você decorar uma única coisa de código neste módulo, que seja ela.
+
+353
+00:19:49.200 --> 00:19:55.154
+A liturgia do loop de treino, os cinco passos que você vai escrever centenas de vezes na carreira.
+
+354
+00:19:55.154 --> 00:19:58.313
+Para cada batch de dados x e y vindos do dataloader:
+
+355
+00:19:58.313 --> 00:20:02.018
+passo um, optimizer zero grad, zera os gradientes acumulados.
+
+356
+00:20:02.018 --> 00:20:03.355
+Passo dois, o forward:
+
+357
+00:20:03.355 --> 00:20:05.846
+passa x pelo modelo e colhe as previsões.
+
+358
+00:20:05.846 --> 00:20:07.000
+Passo três, a loss:
+
+359
+00:20:07.000 --> 00:20:10.402
+compara previsões com as respostas y usando o criterion.
+
+360
+00:20:10.402 --> 00:20:12.103
+Passo quatro, loss backward:
+
+361
+00:20:12.103 --> 00:20:15.201
+a backpropagation calcula o gradiente de cada peso.
+
+362
+00:20:15.201 --> 00:20:16.902
+Passo cinco, optimizer step:
+
+363
+00:20:16.902 --> 00:20:20.243
+atualiza os pesos, dando o passinho contra o gradiente.
+
+364
+00:20:20.243 --> 00:20:22.430
+Zera, forward, loss, backward, step.
+
+365
+00:20:22.430 --> 00:20:26.015
+Repita comigo mentalmente, porque essa ordem é inegociável.
+
+366
+00:20:26.015 --> 00:20:28.019
+E o alerta da tela merece ênfase:
+
+367
+00:20:28.019 --> 00:20:31.907
+esquecer o zero grad é o bug de iniciante mais comum em PyTorch.
+
+368
+00:20:31.907 --> 00:20:36.221
+O framework, por design, acumula gradientes entre chamadas de backward:
+
+369
+00:20:36.221 --> 00:20:45.394
+sem zerar no início de cada batch, cada passo usa uma sopa de gradientes velhos e novos, e o treino degringola de um jeito silencioso e desconcertante:
+
+370
+00:20:45.394 --> 00:20:48.249
+a loss até se mexe, mas nunca converge direito.
+
+371
+00:20:48.249 --> 00:20:55.296
+Você vai remover o zero grad de propósito num experimento do lab, para ver a cara desse bug e nunca mais esquecê-lo.
+
+372
+00:20:55.567 --> 00:20:58.135
+Dois assuntos rápidos antes do debugging.
+
+373
+00:20:58.135 --> 00:20:59.137
+Primeiro, a GPU.
+
+374
+00:20:59.137 --> 00:21:05.026
+Redes neurais são pilhas de multiplicações de matrizes, e GPUs fazem isso em paralelo massivo:
+
+375
+00:21:05.026 --> 00:21:08.785
+a diferença de velocidade contra a CPU é de dez a cem vezes.
+
+376
+00:21:08.785 --> 00:21:11.103
+A receita em PyTorch são três linhas:
+
+377
+00:21:11.103 --> 00:21:13.859
+device recebe cuda se disponível, senão cpu:
+
+378
+00:21:13.859 --> 00:21:16.678
+model ponto to device manda os pesos para lá:
+
+379
+00:21:16.678 --> 00:21:19.310
+e cada batch vai junto, x ponto to device.
+
+380
+00:21:19.310 --> 00:21:21.565
+No Colab, a GPU T quatro é gratuita:
+
+381
+00:21:21.565 --> 00:21:24.384
+menu ambiente de execução, alterar tipo, GPU.
+
+382
+00:21:24.384 --> 00:21:26.451
+Sem desculpa para treinar em CPU.
+
+383
+00:21:26.451 --> 00:21:27.453
+Segundo assunto:
+
+384
+00:21:27.453 --> 00:21:32.904
+as CNNs, redes convolucionais, o primo especializado em imagens, num parágrafo honesto.
+
+385
+00:21:32.904 --> 00:21:39.294
+Camadas convolucionais deslizam filtros pequenos pela imagem, detectando padrões locais em hierarquia:
+
+386
+00:21:39.294 --> 00:21:43.303
+primeiro bordas, depois texturas, depois partes, depois objetos:
+
+387
+00:21:43.303 --> 00:21:49.755
+com muito menos parâmetros que camadas densas, porque o mesmo filtro é reaproveitado na imagem inteira.
+
+388
+00:21:49.755 --> 00:21:57.273
+Você não precisa dominar CNNs para trabalhar com LLMs, e este curso segue para os transformers no restante deste módulo:
+
+389
+00:21:57.273 --> 00:22:00.343
+mas precisa saber que existem, e por que existem.
+
+390
+00:22:00.633 --> 00:22:05.445
+E o checklist de debugging, a parte desta aula que vai te salvar de madrugada.
+
+391
+00:22:05.445 --> 00:22:06.185
+Situação um:
+
+392
+00:22:06.185 --> 00:22:07.233
+a loss não desce.
+
+393
+00:22:07.233 --> 00:22:08.529
+Confira, nesta ordem:
+
+394
+00:22:08.529 --> 00:22:12.230
+o learning rate, testando dez vezes menor e dez vezes maior:
+
+395
+00:22:12.230 --> 00:22:14.019
+o zero grad presente no loop:
+
+396
+00:22:14.019 --> 00:22:20.989
+as labels alinhadas com as previsões, porque um embaralhamento silencioso entre x e y é mais comum do que parece:
+
+397
+00:22:20.989 --> 00:22:22.469
+e os dados normalizados.
+
+398
+00:22:22.469 --> 00:22:25.060
+Situação dois, e esta é a técnica de ouro:
+
+399
+00:22:25.060 --> 00:22:26.910
+o sanity check do batch único.
+
+400
+00:22:26.910 --> 00:22:30.241
+Pegue um único batch e treine nele centenas de passos.
+
+401
+00:22:30.241 --> 00:22:35.422
+Uma rede saudável tem que conseguir decorar um batch, loss indo a praticamente zero:
+
+402
+00:22:35.422 --> 00:22:38.630
+é pouco dado e muito parâmetro, decorar é obrigação.
+
+403
+00:22:38.630 --> 00:22:40.604
+Se nem isso acontece, pare tudo:
+
+404
+00:22:40.604 --> 00:22:46.032
+o bug está no código, não no modelo, e você acabou de economizar horas de treino inútil.
+
+405
+00:22:46.032 --> 00:22:46.895
+Situação três:
+
+406
+00:22:46.895 --> 00:22:48.561
+a loss inicial faz sentido?
+
+407
+00:22:48.561 --> 00:22:54.297
+Classificação com dez classes deve começar perto de menos ln de um décimo, dois vírgula três:
+
+408
+00:22:54.297 --> 00:22:55.901
+o valor do chute uniforme.
+
+409
+00:22:55.901 --> 00:22:59.479
+Muito diferente disso, há bug na inicialização ou na loss.
+
+410
+00:22:59.479 --> 00:23:00.466
+Situação quatro:
+
+411
+00:23:00.466 --> 00:23:02.501
+treino caindo, validação subindo:
+
+412
+00:23:02.501 --> 00:23:04.598
+overfitting, aplique a parte sete.
+
+413
+00:23:04.598 --> 00:23:06.449
+Imprima esse checklist mental:
+
+414
+00:23:06.449 --> 00:23:07.929
+ele é metade do salário.
+
+415
+00:23:08.200 --> 00:23:16.639
+Antes do lab, três palavras que a área usa o tempo todo e que valem um minuto de precisão, porque confundi-las custa caro em conversa técnica.
+
+416
+00:23:16.639 --> 00:23:17.887
+Batch, ou mini-batch:
+
+417
+00:23:17.887 --> 00:23:21.215
+o lote de exemplos processado num único passo de treino.
+
+418
+00:23:21.215 --> 00:23:24.365
+No nosso lab, cento e vinte e oito imagens por batch:
+
+419
+00:23:24.365 --> 00:23:27.455
+o gradiente daquele passo é calculado só sobre elas.
+
+420
+00:23:27.455 --> 00:23:27.990
+Iteração:
+
+421
+00:23:27.990 --> 00:23:31.080
+um passo do loop, uma execução da liturgia completa:
+
+422
+00:23:31.080 --> 00:23:33.220
+zera, forward, loss, backward, step.
+
+423
+00:23:33.220 --> 00:23:33.576
+Época:
+
+424
+00:23:33.576 --> 00:23:36.073
+uma passada completa pelo dataset inteiro.
+
+425
+00:23:36.073 --> 00:23:42.966
+Com sessenta mil imagens e batches de cento e vinte e oito, uma época tem cerca de quatrocentas e setenta iterações.
+
+426
+00:23:42.966 --> 00:23:44.749
+E a pergunta que sempre surge:
+
+427
+00:23:44.749 --> 00:23:47.958
+por que batches, em vez do dataset inteiro de uma vez?
+
+428
+00:23:47.958 --> 00:23:48.672
+Duas razões.
+
+429
+00:23:48.672 --> 00:23:49.147
+Memória:
+
+430
+00:23:49.147 --> 00:23:55.268
+sessenta mil imagens não cabem confortavelmente na GPU de uma vez, cento e vinte e oito cabem folgadas.
+
+431
+00:23:55.268 --> 00:23:56.754
+E eficiência estatística:
+
+432
+00:23:56.754 --> 00:24:06.025
+o gradiente de um batch é uma estimativa barulhenta mas honesta do gradiente verdadeiro, e dá para dar quatrocentos e setenta passos por época em vez de um.
+
+433
+00:24:06.025 --> 00:24:08.105
+Barulho barato vence precisão cara:
+
+434
+00:24:08.105 --> 00:24:09.472
+é o estocástico do SGD.
+
+435
+00:24:09.767 --> 00:24:13.602
+Chegou o laboratório guiado, três horas das mais formativas do curso:
+
+436
+00:24:13.602 --> 00:24:18.549
+treinar um classificador de dígitos manuscritos no MNIST, o hello world do deep learning:
+
+437
+00:24:18.549 --> 00:24:24.219
+sessenta mil imagens de dígitos de zero a nove, vinte e oito por vinte e oito pixels em tons de cinza.
+
+438
+00:24:24.219 --> 00:24:28.666
+Tudo em PyTorch, na GPU gratuita do Colab, e com o loop de treino escrito à mão:
+
+439
+00:24:28.666 --> 00:24:33.780
+nada de Trainer pronto, porque o objetivo é você tocar cada um dos cinco passos da liturgia.
+
+440
+00:24:33.780 --> 00:24:35.226
+O roteiro em cinco blocos:
+
+441
+00:24:35.226 --> 00:24:36.060
+setup e device:
+
+442
+00:24:36.060 --> 00:24:39.228
+os dados, com o DataLoader servindo batches embaralhados:
+
+443
+00:24:39.228 --> 00:24:42.174
+o modelo, um MLP com dropout definido como nn Module:
+
+444
+00:24:42.174 --> 00:24:51.013
+e então, antes de qualquer treino de verdade, o sanity check do batch único, exatamente como manda o checklist, com um assert que quebra se a rede não decorar:
+
+445
+00:24:51.013 --> 00:24:56.405
+e finalmente o treino completo por cinco épocas, com avaliação de acurácia no teste a cada época.
+
+446
+00:24:56.405 --> 00:24:56.794
+A meta:
+
+447
+00:24:56.794 --> 00:24:59.795
+noventa e sete a noventa e oito por cento de acurácia.
+
+448
+00:24:59.795 --> 00:25:05.354
+E depois, quatro experimentos obrigatórios de quebrar de propósito, que valem tanto quanto o treino.
+
+449
+00:25:05.354 --> 00:25:06.911
+Vamos aos blocos principais.
+
+450
+00:25:07.200 --> 00:25:09.462
+O bloco de dados, com três ideias novas.
+
+451
+00:25:09.462 --> 00:25:11.611
+O device, escolhido na primeira linha:
+
+452
+00:25:11.611 --> 00:25:13.704
+cuda se houver GPU, cpu como reserva:
+
+453
+00:25:13.704 --> 00:25:17.097
+no Colab com GPU ligada, o print confirma treinando em cuda.
+
+454
+00:25:17.097 --> 00:25:20.830
+O transform, uma esteira de preparação por onde toda imagem passa:
+
+455
+00:25:20.830 --> 00:25:37.910
+o ToTensor converte a imagem em tensor com valores entre zero e um, e o Normalize subtrai a média e divide pelo desvio-padrão do MNIST, aqueles números mágicos zero treze zero sete e zero trinta e oitenta e um, calculados sobre o dataset inteiro uma vez na história e usados por todo mundo desde então.
+
+456
+00:25:37.910 --> 00:25:38.985
+Por que normalizar?
+
+457
+00:25:38.985 --> 00:25:42.887
+Dados centrados e com escala uniforme fazem o gradiente fluir melhor:
+
+458
+00:25:42.887 --> 00:25:45.998
+é o StandardScaler do módulo cinco em versão de imagem.
+
+459
+00:25:45.998 --> 00:25:47.977
+E o DataLoader, o garçom do treino:
+
+460
+00:25:47.977 --> 00:25:57.196
+serve os dados em batches de cento e vinte e oito, embaralhados a cada época, shuffle igual a true, para a rede não aprender a ordem do dataset em vez do conteúdo.
+
+461
+00:25:57.196 --> 00:26:01.042
+Sessenta mil imagens de treino, dez mil de teste, servidas em lotes:
+
+462
+00:26:01.042 --> 00:26:04.944
+é o padrão que você verá em todo projeto PyTorch daqui para a frente.
+
+463
+00:26:05.233 --> 00:26:09.659
+O modelo, definido como uma classe que herda de nn Module, o padrão da casa.
+
+464
+00:26:09.659 --> 00:26:14.201
+Dentro, um nn Sequential empilhando as camadas na ordem em que os dados fluem.
+
+465
+00:26:14.201 --> 00:26:20.607
+O Flatten achata a imagem de vinte e oito por vinte e oito num vetor de setecentos e oitenta e quatro números:
+
+466
+00:26:20.607 --> 00:26:22.936
+um MLP não sabe o que é grade, só vetor.
+
+467
+00:26:22.936 --> 00:26:28.759
+A primeira Linear projeta os setecentos e oitenta e quatro em duzentos e cinquenta e seis neurônios:
+
+468
+00:26:28.759 --> 00:26:36.620
+são setecentos e oitenta e quatro vezes duzentos e cinquenta e seis pesos, mais os biases, uns duzentos mil parâmetros nessa camada só.
+
+469
+00:26:36.620 --> 00:26:38.950
+A ReLU entorta, como manda a parte dois.
+
+470
+00:26:38.950 --> 00:26:43.434
+O Dropout de vinte por cento sabota pedagogicamente, como manda a parte sete.
+
+471
+00:26:43.434 --> 00:26:46.636
+E a Linear final projeta em dez saídas, uma por dígito.
+
+472
+00:26:46.636 --> 00:26:50.480
+E o comentário na última camada é o aviso mais importante da tela:
+
+473
+00:26:50.480 --> 00:26:51.470
+sem softmax aqui.
+
+474
+00:26:51.470 --> 00:26:57.409
+As saídas são logits, scores crus, porque a CrossEntropyLoss embute o softmax, lembra da parte quatro?
+
+475
+00:26:57.409 --> 00:26:59.506
+Aplicar duas vezes é o bug clássico.
+
+476
+00:26:59.506 --> 00:27:06.261
+Fechando, o criterion é a CrossEntropyLoss, o otimizador é o AdamW com learning rate um e menos três e weight decay:
+
+477
+00:27:06.261 --> 00:27:08.473
+cada escolha da aula, agora em código.
+
+478
+00:27:08.767 --> 00:27:12.309
+E antes do treino de verdade, o ritual que o checklist mandou:
+
+479
+00:27:12.309 --> 00:27:14.023
+o sanity check do batch único.
+
+480
+00:27:14.023 --> 00:27:22.935
+Pegamos um único batch, cento e vinte e oito imagens, com o next iter do dataloader, mandamos para o device, e treinamos nele, só nele, por duzentos passos:
+
+481
+00:27:22.935 --> 00:27:27.848
+repare que o miolo do loop é a liturgia completa, zera, forward, loss, backward, step.
+
+482
+00:27:27.848 --> 00:27:28.877
+A lógica do teste:
+
+483
+00:27:28.877 --> 00:27:32.990
+cento e vinte e oito exemplos contra duzentos mil parâmetros é covardia:
+
+484
+00:27:32.990 --> 00:27:38.646
+uma rede saudável tem a obrigação de decorar esse batch, com a loss despencando para perto de zero.
+
+485
+00:27:38.646 --> 00:27:42.302
+E o assert na última linha transforma a expectativa em contrato:
+
+486
+00:27:42.302 --> 00:27:48.701
+se a loss após duzentos passos não estiver abaixo de zero vírgula um, o notebook quebra na hora, com a mensagem:
+
+487
+00:27:48.701 --> 00:27:51.158
+a rede deveria decorar um batch, há um bug.
+
+488
+00:27:51.158 --> 00:27:51.786
+E há mesmo:
+
+489
+00:27:51.786 --> 00:27:56.985
+learning rate errado, zero grad faltando, labels trocadas, algo no código, nunca no modelo.
+
+490
+00:27:56.985 --> 00:28:02.298
+Trinta segundos de execução que economizam horas de treino inútil em cima de código quebrado.
+
+491
+00:28:02.298 --> 00:28:05.897
+Adote este ritual em todo projeto de deep learning da sua vida:
+
+492
+00:28:05.897 --> 00:28:06.354
+treinou?
+
+493
+00:28:06.354 --> 00:28:07.783
+Primeiro decore um batch.
+
+494
+00:28:08.067 --> 00:28:15.892
+Antes do treino completo, a função que mede a acurácia no teste, e ela ensina três disciplinas de medição que valem para sempre.
+
+495
+00:28:15.892 --> 00:28:16.442
+Primeira:
+
+496
+00:28:16.442 --> 00:28:17.115
+model eval.
+
+497
+00:28:17.115 --> 00:28:20.477
+Lembra do dropout sabotando neurônios durante o treino?
+
+498
+00:28:20.477 --> 00:28:23.778
+Na hora de medir, queremos a rede inteira funcionando:
+
+499
+00:28:23.778 --> 00:28:25.307
+o eval desliga o dropout.
+
+500
+00:28:25.307 --> 00:28:29.892
+Ao final, o model train religa tudo, devolvendo o modelo ao modo de treino:
+
+501
+00:28:29.892 --> 00:28:35.210
+medir e treinar são modos diferentes, e a função entra e sai deixando tudo como estava.
+
+502
+00:28:35.210 --> 00:28:35.700
+Segunda:
+
+503
+00:28:35.700 --> 00:28:36.678
+o torch no grad.
+
+504
+00:28:36.678 --> 00:28:43.830
+Dentro desse bloco, o PyTorch para de registrar operações para o autograd, porque avaliação não precisa de gradiente:
+
+505
+00:28:43.830 --> 00:28:46.092
+fica mais rápido e usa menos memória.
+
+506
+00:28:46.092 --> 00:28:47.315
+Avaliou sem no grad?
+
+507
+00:28:47.315 --> 00:28:48.843
+Funciona, mas desperdiça.
+
+508
+00:28:48.843 --> 00:28:49.394
+Terceira:
+
+509
+00:28:49.394 --> 00:28:50.983
+a conta da acurácia em si.
+
+510
+00:28:50.983 --> 00:28:53.367
+O modelo devolve dez logits por imagem:
+
+511
+00:28:53.367 --> 00:28:57.402
+o argmax na dimensão um pega o índice do maior, a classe apostada:
+
+512
+00:28:57.402 --> 00:29:01.070
+comparamos com y, somamos os acertos e dividimos pelo total.
+
+513
+00:29:01.070 --> 00:29:06.511
+Simples, mas repare que tudo acontece no device, e só o número final volta para o Python.
+
+514
+00:29:06.511 --> 00:29:07.673
+Guarde esta função:
+
+515
+00:29:07.673 --> 00:29:12.075
+ela, ou uma prima dela, aparece em todo projeto seu daqui para a frente.
+
+516
+00:29:12.367 --> 00:29:13.463
+O treino de verdade.
+
+517
+00:29:13.463 --> 00:29:19.604
+Primeiro, recriamos o modelo do zero, porque o das duzentas iterações do sanity check está viciado num batch só.
+
+518
+00:29:19.604 --> 00:29:24.538
+Depois, uma função avalia que mede a acurácia no teste, com dois detalhes de profissional:
+
+519
+00:29:24.538 --> 00:29:28.924
+o model eval desliga o dropout, porque na hora de medir queremos a rede inteira:
+
+520
+00:29:28.924 --> 00:29:35.448
+e o torch no grad desliga o registro de gradientes, que só serve para treinar, deixando a avaliação mais rápida e leve.
+
+521
+00:29:35.448 --> 00:29:36.709
+E então o loop da tela:
+
+522
+00:29:36.709 --> 00:29:40.711
+cinco épocas, e época é uma passada completa pelos sessenta mil exemplos.
+
+523
+00:29:40.711 --> 00:29:45.316
+Para cada batch, a liturgia sagrada, os cinco passos, idênticos aos do sanity check:
+
+524
+00:29:45.316 --> 00:29:49.757
+e ao final de cada época, a loss média de treino e a acurácia de teste impressas.
+
+525
+00:29:49.757 --> 00:29:51.018
+O que você vê ao rodar:
+
+526
+00:29:51.018 --> 00:29:57.707
+a loss média caindo época após época, e a acurácia subindo até estacionar entre noventa e sete e noventa e oito por cento.
+
+527
+00:29:57.707 --> 00:29:59.351
+Pare um segundo para apreciar:
+
+528
+00:29:59.351 --> 00:30:06.040
+umas quarenta linhas de código, dois minutos de GPU, e a máquina lê dígitos manuscritos melhor que muita gente com pressa.
+
+529
+00:30:06.040 --> 00:30:10.207
+Este notebook rodando é o seu certificado de alfabetização em deep learning.
+
+530
+00:30:10.500 --> 00:30:17.245
+E os quatro experimentos obrigatórios, a parte do lab em que você quebra o treino de propósito, com o motor ainda quente.
+
+531
+00:30:17.245 --> 00:30:18.025
+Experimento a:
+
+532
+00:30:18.025 --> 00:30:20.478
+mude o learning rate para um inteiro e rode.
+
+533
+00:30:20.478 --> 00:30:23.710
+A loss explode em poucas iterações, possivelmente até NaN:
+
+534
+00:30:23.710 --> 00:30:29.006
+você está vendo, ao vivo, o passo que pula por cima do vale, o sintoma da tabela da parte seis.
+
+535
+00:30:29.006 --> 00:30:29.786
+Experimento b:
+
+536
+00:30:29.786 --> 00:30:31.458
+learning rate um e menos seis.
+
+537
+00:30:31.458 --> 00:30:33.298
+Nada quebra, e é isso que engana:
+
+538
+00:30:33.298 --> 00:30:38.816
+a loss desce numa lentidão geológica, e você entende por que treino lento também é treino quebrado.
+
+539
+00:30:38.816 --> 00:30:39.597
+Experimento c:
+
+540
+00:30:39.597 --> 00:30:42.885
+remova o Dropout e compare a loss de treino com a de teste:
+
+541
+00:30:42.885 --> 00:30:49.630
+a distância entre elas cresce, o overfitting aparecendo sob demanda, e você entende o que aquela camada estava segurando.
+
+542
+00:30:49.630 --> 00:30:51.302
+Experimento d, o meu favorito:
+
+543
+00:30:51.302 --> 00:30:54.368
+remova o optimizer zero grad e explique o que acontece.
+
+544
+00:30:54.368 --> 00:31:02.004
+Os gradientes se acumulam batch após batch, o passo efetivo cresce sem controle, e o treino degringola de um jeito estranho e instrutivo.
+
+545
+00:31:02.004 --> 00:31:04.401
+Anote o sintoma de cada quebra no notebook:
+
+546
+00:31:04.401 --> 00:31:10.644
+essa coleção de fisionomias de bug é exatamente o que o checklist de debugging te pede para reconhecer de longe.
+
+547
+00:31:10.933 --> 00:31:12.418
+O mini-projeto do módulo:
+
+548
+00:31:12.418 --> 00:31:15.208
+o Fashion MNIST, o irmão mais difícil do MNIST:
+
+549
+00:31:15.208 --> 00:31:22.214
+mesmo formato, sessenta mil imagens de vinte e oito por vinte e oito, mas em vez de dígitos, dez categorias de roupas:
+
+550
+00:31:22.214 --> 00:31:23.996
+camiseta, calça, tênis, bolsa.
+
+551
+00:31:23.996 --> 00:31:29.161
+Mais difícil porque uma camisa e um casaco se parecem muito mais que um três e um sete.
+
+552
+00:31:29.161 --> 00:31:29.992
+Os requisitos:
+
+553
+00:31:29.992 --> 00:31:34.445
+usar o datasets FashionMNIST, que é a troca de uma linha em relação ao lab.
+
+554
+00:31:34.445 --> 00:31:38.008
+Loop de treino escrito à mão, proibido Trainer ou Lightning:
+
+555
+00:31:38.008 --> 00:31:39.492
+a proibição é pedagógica.
+
+556
+00:31:39.492 --> 00:31:47.329
+Separar dez por cento do treino como conjunto de validação, e implementar o early stopping da parte sete, guardando o melhor modelo.
+
+557
+00:31:47.329 --> 00:31:53.623
+Plotar com matplotlib as curvas de loss de treino e de validação por época, o eletrocardiograma do treino.
+
+558
+00:31:53.623 --> 00:32:00.035
+Testar pelo menos duas arquiteturas, um MLP raso contra um fundo, com e sem dropout, e comparar numa tabela.
+
+559
+00:32:00.035 --> 00:32:02.232
+E reportar a acurácia final no teste.
+
+560
+00:32:02.232 --> 00:32:03.835
+A regra de ouro do projeto:
+
+561
+00:32:03.835 --> 00:32:05.735
+ele é o lab guiado com upgrades:
+
+562
+00:32:05.735 --> 00:32:07.635
+copie de lá, não digite do zero.
+
+563
+00:32:07.635 --> 00:32:10.069
+Reserve umas três horas, em duas sessões.
+
+564
+00:32:10.367 --> 00:32:12.337
+O passo a passo, primeira metade.
+
+565
+00:32:12.337 --> 00:32:13.651
+Etapa um, dez minutos:
+
+566
+00:32:13.651 --> 00:32:19.682
+notebook novo no Colab, ambiente de execução, alterar tipo, GPU T quatro, e a célula de setup do lab:
+
+567
+00:32:19.682 --> 00:32:22.847
+o checkpoint é o print confirmando treinando em cuda.
+
+568
+00:32:22.847 --> 00:32:24.399
+Etapa dois, vinte minutos:
+
+569
+00:32:24.399 --> 00:32:24.937
+os dados.
+
+570
+00:32:24.937 --> 00:32:30.251
+MNIST vira FashionMNIST, a troca de uma linha, mas com um detalhe que derruba desatentos:
+
+571
+00:32:30.251 --> 00:32:34.372
+a normalização muda, porque a média e o desvio do Fashion são outros:
+
+572
+00:32:34.372 --> 00:32:39.328
+zero vírgula duzentos e oitenta e seis e zero vírgula trezentos e cinquenta e três.
+
+573
+00:32:39.328 --> 00:32:41.836
+E o split de validação com o random split:
+
+574
+00:32:41.836 --> 00:32:47.270
+cinquenta e quatro mil para treino, seis mil para validação, os dez por cento do requisito:
+
+575
+00:32:47.270 --> 00:32:51.032
+o checkpoint imprime cinquenta e quatro mil, seis mil, dez mil.
+
+576
+00:32:51.032 --> 00:32:53.062
+Etapa três, vinte e cinco minutos:
+
+577
+00:32:53.062 --> 00:32:54.316
+as duas arquiteturas.
+
+578
+00:32:54.316 --> 00:32:56.764
+O ModeloA é o MLP do lab renomeado, raso:
+
+579
+00:32:56.764 --> 00:33:00.586
+setecentos e oitenta e quatro, duzentos e cinquenta e seis, dez.
+
+580
+00:33:00.586 --> 00:33:02.198
+O ModeloB é a versão funda:
+
+581
+00:33:02.198 --> 00:33:09.244
+setecentos e oitenta e quatro, quinhentos e doze, duzentos e cinquenta e seis, dez, com ReLU e dropout entre cada par.
+
+582
+00:33:09.244 --> 00:33:15.514
+E o sanity check do batch único, colado do lab sem mudar nada, rodando antes de qualquer treino completo:
+
+583
+00:33:15.514 --> 00:33:17.903
+isso é critério de aceite, não sugestão.
+
+584
+00:33:18.200 --> 00:33:19.118
+Segunda metade.
+
+585
+00:33:19.118 --> 00:33:22.849
+Etapa quatro, quarenta e cinco minutos, o coração do projeto:
+
+586
+00:33:22.849 --> 00:33:26.153
+a função treina, que é o loop do lab com duas adições.
+
+587
+00:33:26.153 --> 00:33:31.536
+A cada época, além do treino, calcule a loss de validação com uma função irmã da avalia.
+
+588
+00:33:31.536 --> 00:33:32.699
+E o early stopping:
+
+589
+00:33:32.699 --> 00:33:38.327
+se a validação melhorou, guarde a melhor loss e uma cópia do state dict, os pesos do modelo:
+
+590
+00:33:38.327 --> 00:33:39.734
+se não melhorou, conte:
+
+591
+00:33:39.734 --> 00:33:44.016
+três épocas seguidas sem melhora, pare e restaure o melhor checkpoint.
+
+592
+00:33:44.016 --> 00:33:46.830
+O esqueleto completo está na página do módulo:
+
+593
+00:33:46.830 --> 00:33:48.665
+adapte, entendendo cada linha.
+
+594
+00:33:48.665 --> 00:33:50.378
+Etapa cinco, quinze minutos:
+
+595
+00:33:50.378 --> 00:33:57.352
+as curvas de treino e validação no matplotlib, com legenda, e uma célula de texto sua respondendo com honestidade:
+
+596
+00:33:57.352 --> 00:33:58.270
+há overfitting?
+
+597
+00:33:58.270 --> 00:34:00.962
+A partir de qual época as curvas se separam?
+
+598
+00:34:00.962 --> 00:34:02.308
+Etapa seis, meia hora:
+
+599
+00:34:02.308 --> 00:34:07.630
+repita tudo com o ModeloB, meça a acurácia de teste de cada um, e monte a tabela final:
+
+600
+00:34:07.630 --> 00:34:11.912
+modelo, épocas até parar, melhor loss de validação, acurácia de teste.
+
+601
+00:34:11.912 --> 00:34:14.482
+A meta é oitenta e oito por cento ou mais.
+
+602
+00:34:14.482 --> 00:34:15.644
+Feche com o ritual:
+
+603
+00:34:15.644 --> 00:34:21.272
+reiniciar e executar tudo, download do notebook, e commit e push no repositório academia ia.
+
+604
+00:34:21.567 --> 00:34:25.337
+Os primeiros socorros do projeto, com os três tropeços clássicos.
+
+605
+00:34:25.337 --> 00:34:25.975
+Tropeço um:
+
+606
+00:34:25.975 --> 00:34:29.166
+o erro mat um and mat dois shapes cannot be multiplied.
+
+607
+00:34:29.166 --> 00:34:32.473
+É a regra do n do meio do módulo quatro cobrando pedágio:
+
+608
+00:34:32.473 --> 00:34:35.953
+as camadas Linear do ModeloB precisam se encaixar em cadeia:
+
+609
+00:34:35.953 --> 00:34:38.158
+a saída de uma é a entrada da próxima:
+
+610
+00:34:38.158 --> 00:34:46.453
+setecentos e oitenta e quatro para quinhentos e doze, quinhentos e doze para duzentos e cinquenta e seis, duzentos e cinquenta e seis para dez.
+
+611
+00:34:46.453 --> 00:34:48.831
+Um elo fora da cadeia e o forward quebra.
+
+612
+00:34:48.831 --> 00:34:49.585
+Tropeço dois:
+
+613
+00:34:49.585 --> 00:34:51.384
+loss que não desce ou vira NaN:
+
+614
+00:34:51.384 --> 00:34:53.704
+rode o checklist da parte oito na ordem:
+
+615
+00:34:53.704 --> 00:35:00.259
+learning rate dez vezes menor, zero grad presente, dados normalizados com os números do Fashion, não os do MNIST.
+
+616
+00:35:00.259 --> 00:35:01.013
+Tropeço três:
+
+617
+00:35:01.013 --> 00:35:03.972
+early stopping disparando já na época dois ou três:
+
+618
+00:35:03.972 --> 00:35:05.538
+a validação está oscilando:
+
+619
+00:35:05.538 --> 00:35:08.265
+diminua o learning rate ou aumente a paciência.
+
+620
+00:35:08.265 --> 00:35:09.425
+E a regra de sempre:
+
+621
+00:35:09.425 --> 00:35:15.110
+travou mais de trinta minutos, pergunte ao seu assistente de IA colando o erro completo e a etapa:
+
+622
+00:35:15.110 --> 00:35:17.662
+e peça a explicação, não só o código pronto.
+
+623
+00:35:17.662 --> 00:35:19.983
+O músculo que este projeto treina é seu.
+
+624
+00:35:20.267 --> 00:35:24.345
+Os cinco tropeços clássicos do módulo, para reconhecer de longe.
+
+625
+00:35:24.345 --> 00:35:24.919
+Primeiro:
+
+626
+00:35:24.919 --> 00:35:30.271
+aplicar softmax na saída do modelo e usar CrossEntropyLoss, que já embute o softmax.
+
+627
+00:35:30.271 --> 00:35:35.306
+Duas vezes softmax, gradiente esmagado, treino medíocre, e nenhum erro na tela:
+
+628
+00:35:35.306 --> 00:35:37.727
+dos bugs mais silenciosos que existem.
+
+629
+00:35:37.727 --> 00:35:39.257
+Saída em logits, sempre.
+
+630
+00:35:39.257 --> 00:35:39.767
+Segundo:
+
+631
+00:35:39.767 --> 00:35:41.105
+esquecer o zero grad.
+
+632
+00:35:41.105 --> 00:35:44.801
+Gradientes acumulando entre batches, treino degringolando:
+
+633
+00:35:44.801 --> 00:35:46.458
+você viu no experimento d.
+
+634
+00:35:46.458 --> 00:35:47.031
+Terceiro:
+
+635
+00:35:47.031 --> 00:35:48.879
+sigmoid nas camadas internas.
+
+636
+00:35:48.879 --> 00:35:52.384
+Satura, o gradiente some, as camadas iniciais congelam:
+
+637
+00:35:52.384 --> 00:35:55.252
+ReLU no meio, sigmoid só na saída, e olhe lá.
+
+638
+00:35:55.252 --> 00:35:55.698
+Quarto:
+
+639
+00:35:55.698 --> 00:35:58.565
+treinar horas sem rodar o sanity check antes.
+
+640
+00:35:58.565 --> 00:36:02.453
+Se há bug de código, o batch único revela em trinta segundos:
+
+641
+00:36:02.453 --> 00:36:06.467
+sem ele, você descobre depois de uma tarde de GPU desperdiçada.
+
+642
+00:36:06.467 --> 00:36:06.913
+Quinto:
+
+643
+00:36:06.913 --> 00:36:09.399
+avaliar o modelo sem chamar model eval.
+
+644
+00:36:09.399 --> 00:36:19.977
+O dropout continua ligado na inferência, desligando neurônios na hora da prova, e a acurácia medida sai menor que a real, com você caçando um problema que não existe.
+
+645
+00:36:19.977 --> 00:36:22.271
+Eval para medir, train para treinar:
+
+646
+00:36:22.271 --> 00:36:23.291
+sempre em pares.
+
+647
+00:36:23.567 --> 00:36:24.918
+Vamos amarrar os fios.
+
+648
+00:36:24.918 --> 00:36:27.681
+O neurônio é uma média ponderada com opinião:
+
+649
+00:36:27.681 --> 00:36:29.032
+pesos, bias, ativação:
+
+650
+00:36:29.032 --> 00:36:31.243
+e os pesos são o que a rede aprende.
+
+651
+00:36:31.243 --> 00:36:34.375
+Sem ativação não linear, dez camadas colapsam numa:
+
+652
+00:36:34.375 --> 00:36:36.955
+ReLU no meio, sigmoid ou softmax na saída.
+
+653
+00:36:36.955 --> 00:36:41.499
+O forward pass é multiplicar, somar, ativar, do nosso dois dois um ao GPT:
+
+654
+00:36:41.499 --> 00:36:43.341
+muda a escala, não a natureza.
+
+655
+00:36:43.341 --> 00:36:45.307
+A loss resume o erro num número:
+
+656
+00:36:45.307 --> 00:36:54.334
+MSE para regressão, cross-entropy para classificação, com o castigo assimétrico para a confiança errada, e o softmax embutido na versão do PyTorch.
+
+657
+00:36:54.334 --> 00:37:01.090
+A backpropagation é a regra da cadeia percorrendo o grafo de trás para frente, multiplicando derivadas locais:
+
+658
+00:37:01.090 --> 00:37:02.441
+você fez uma no papel.
+
+659
+00:37:02.441 --> 00:37:03.915
+O otimizador dá o passo:
+
+660
+00:37:03.915 --> 00:37:08.766
+AdamW por padrão, learning rate um e menos três, dividindo por dez se divergir.
+
+661
+00:37:08.766 --> 00:37:09.872
+Contra a decoreba:
+
+662
+00:37:09.872 --> 00:37:12.205
+dropout, weight decay, early stopping.
+
+663
+00:37:12.205 --> 00:37:13.495
+E a liturgia do loop:
+
+664
+00:37:13.495 --> 00:37:15.706
+zera, forward, loss, backward, step:
+
+665
+00:37:15.706 --> 00:37:22.338
+com o sanity check do batch único antes de todo treino, e o checklist de debugging quando a loss se rebelar.
+
+666
+00:37:22.338 --> 00:37:25.655
+Isso é deep learning de verdade, com as mãos no motor.
+
+667
+00:37:25.933 --> 00:37:29.543
+Antes de encerrar, o checklist de conclusão do módulo seis.
+
+668
+00:37:29.543 --> 00:37:34.253
+A série do três blue um brown e o vídeo do micrograd do Karpathy, assistidos:
+
+669
+00:37:34.253 --> 00:37:37.006
+o micrograd, de preferência, digitando junto.
+
+670
+00:37:37.006 --> 00:37:41.656
+Um forward pass na rede dois dois um, feito à mão, sem consultar o material:
+
+671
+00:37:41.656 --> 00:37:43.491
+se travar, volte à parte três.
+
+672
+00:37:43.491 --> 00:37:49.364
+Saber explicar backpropagation para um colega, usando a regra da cadeia e o exemplo da corrente.
+
+673
+00:37:49.364 --> 00:37:58.051
+O lab do MNIST rodado no Colab com GPU, batendo noventa e sete por cento, e os quatro experimentos de quebrar de propósito, feitos e anotados.
+
+674
+00:37:58.051 --> 00:38:01.966
+O mini-projeto do Fashion MNIST entregue com todos os critérios:
+
+675
+00:38:01.966 --> 00:38:08.084
+early stopping funcionando, curvas comentadas, tabela comparativa, oitenta e oito por cento ou mais.
+
+676
+00:38:08.084 --> 00:38:10.164
+E pelo menos seis de oito no quiz.
+
+677
+00:38:10.164 --> 00:38:10.653
+Cumpriu?
+
+678
+00:38:10.653 --> 00:38:13.529
+Então você não é mais turista em deep learning:
+
+679
+00:38:13.529 --> 00:38:17.933
+você já treinou, quebrou e consertou redes neurais com as próprias mãos.
+
+680
+00:38:17.933 --> 00:38:21.115
+E o mergulho continua no restante deste módulo seis:
+
+681
+00:38:21.115 --> 00:38:23.011
+transformers e LLMs por dentro:
+
+682
+00:38:23.011 --> 00:38:26.987
+atenção, tokens, embeddings, e a arquitetura que devorou o mundo.
+
+683
+00:38:26.987 --> 00:38:29.435
+Na próxima aula da grade, o módulo sete:
+
+684
+00:38:29.435 --> 00:38:32.432
+RAG, conectando o modelo aos seus próprios dados.
+
+685
+00:38:32.432 --> 00:38:33.411
+Eu te espero lá.
+
+686
+00:38:33.411 --> 00:38:34.573
+Até a próxima aula.

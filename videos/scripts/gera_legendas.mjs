@@ -7,7 +7,7 @@ import {readFileSync,writeFileSync,mkdirSync,readdirSync} from 'fs';
 const FPS=30,PAD=8;
 const raiz=new URL('../..',import.meta.url);
 const DUR={};
-for(const [,k,v] of readFileSync(new URL('videos/src/durations.ts',raiz),'utf8').matchAll(/"(mod\d\d-\d+)":\s*([\d.]+)/g))DUR[k]=+v;
+for(const [,k,v] of readFileSync(new URL('videos/src/durations.ts',raiz),'utf8').matchAll(/"((?:mod|aula)\d\d-\d+)":\s*([\d.]+)/g))DUR[k]=+v;
 
 const ts=s=>{const h=Math.floor(s/3600),m=Math.floor(s%3600/60),x=(s%60).toFixed(3).padStart(6,'0');
   return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${x}`;};

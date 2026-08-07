@@ -1,0 +1,469 @@
+{
+ "id": "Aula03",
+ "slug": "aula03",
+ "modulo": 3,
+ "titulo": "Python para IA",
+ "periodo": "Período 1",
+ "carga": "6h",
+ "scenes": [
+  {
+   "tipo": "capa",
+   "fala": "Muito boa aula para você. Esta é a aula completa do módulo três da Academia de Engenharia de IA: Python para IA. Eu vou conduzir esta aula do jeito que uma boa aula de engenharia deve ser conduzida: com calma, com exemplos concretos, e sempre explicando o porquê antes do como. Nos próximos quarenta minutos, você vai fazer a travessia que separa o Python de exercício de faculdade do Python profissional, aquele que processa milhões de linhas de dados em segundos. Vamos percorrer oito partes: Python idiomático, funções bem desenhadas, ambientes com uv, NumPy, Pandas, visualização com Matplotlib, notebooks contra scripts, e consumo de APIs. No final, faremos juntos o laboratório do Titanic, e eu explico em detalhe o seu mini-projeto. Acomode-se, pegue papel e caneta, e vamos começar."
+  },
+  {
+   "tipo": "conceito",
+   "kicker": "POR QUE ISSO IMPORTA",
+   "frase": "Quem domina vetorização escreve em 5 linhas o que o iniciante escreve em 50 — e roda 100 vezes mais rápido.",
+   "fala": "Antes de qualquer linha de código, deixe-me te dar o mapa. Python é a ferramenta de trabalho número um do engenheiro de IA, mas não é qualquer Python. O Python que resolve exercício de faculdade, cheio de loops e prints, é diferente do Python que processa milhões de linhas em segundos. A diferença tem nome: vetorização. Quem opera NumPy e Pandas com fluência escreve em cinco linhas o que o iniciante escreve em cinquenta, e o código roda até cem vezes mais rápido. E tem um dado que costuma surpreender os alunos: em qualquer empresa, de sessenta a oitenta por cento do tempo de um projeto de IA é gasto entendendo e limpando dados. Não é treinando modelo. É limpando dado. Esta aula treina exatamente esse músculo."
+  },
+  {
+   "tipo": "topico",
+   "kicker": "ROTEIRO DA AULA",
+   "titulo": "O plano de hoje",
+   "bullets": [
+    "Partes 1 a 3: estilo, funções e ambientes",
+    "Partes 4 e 5: NumPy e Pandas, o coração",
+    "Partes 6 a 8: gráficos, notebooks e APIs",
+    "Lab guiado: análise completa do Titanic",
+    "Mini-projeto: sua análise, seu dataset"
+   ],
+   "fala": "Aqui está o plano da aula, para você saber onde estamos a cada momento. Nas três primeiras partes, cuidamos da base de engenharia: escrever Python como a comunidade escreve, desenhar funções dignas de produção, e montar ambientes reprodutíveis com a ferramenta uv. As partes quatro e cinco são o coração técnico da aula: NumPy com vetorização e broadcasting, e Pandas para limpar e agregar dados de verdade. Nas partes seis, sete e oito, fechamos o ferramental: gráficos com Matplotlib, a diferença entre notebook e script, e como consumir APIs sem se machucar. E aí vem a melhor parte: o laboratório do Titanic, uma análise exploratória completa, de ponta a ponta, e o enunciado do seu mini-projeto. Há também um outro lado, o da engenharia: notebook bagunçado não vai para produção. Times contratam quem transforma exploração em código confiável."
+  },
+  {
+   "tipo": "topico",
+   "kicker": "COMO ESTUDAR",
+   "titulo": "As 8 aulas do módulo",
+   "bullets": [
+    "Tutorial oficial do Python, cap. 3 a 5",
+    "Kaggle Learn: Python e Pandas, com labs",
+    "Trilhas oficiais: NumPy e Matplotlib",
+    "uv: gerência de projetos e dependências",
+    "Carga total: cerca de 12 horas"
+   ],
+   "fala": "Esta vídeo-aula é a espinha dorsal do módulo, mas ela não substitui a prática: o módulo completo soma cerca de seis horas, distribuídas em oito aulas listadas no site da Academia. O percurso recomendado: comece pelo tutorial oficial do Python em português, capítulos três a cinco, sobre estruturas de dados. Depois, os dois cursos gratuitos do Kaggle Learn, Python e Pandas: eles têm laboratórios interativos e certificado, e são a melhor prática guiada que existe no nível iniciante. Complete com as trilhas oficiais de NumPy e Matplotlib, e a documentação da uv para gerência de projetos. Um conselho de professor: não assista a tudo de uma vez. Intercale: um bloco de vídeo ou leitura, um bloco de teclado. Conhecimento de programação que não passa pelos dedos evapora em uma semana."
+  },
+  {
+   "tipo": "conceito",
+   "kicker": "PARTE 1 DE 8",
+   "frase": "Python idiomático: escreva como a comunidade escreve.",
+   "fala": "Parte um: Python idiomático. Toda linguagem tem gramática, mas também tem estilo. Em Python, esse estilo tem até nome: código pythônico. É o jeito que a comunidade inteira, depois de trinta anos, convencionou como a forma mais clara de dizer cada coisa. Por que isso importa numa academia de IA? Porque código de IA é lido por muita gente: colegas, revisores, e cada vez mais pelos próprios assistentes de IA que trabalham com você. Código idiomático é previsível, e código previsível recebe ajuda melhor. Nesta parte, eu te mostro as marcas registradas desse estilo, começando pela mais famosa de todas: a comprehension."
+  },
+  {
+   "tipo": "topico",
+   "kicker": "PYTHON IDIOMÁTICO",
+   "titulo": "O que é ser pythônico",
+   "bullets": [
+    "Existe um jeito certo de dizer cada coisa",
+    "Menos índice, mais intenção",
+    "Uma linha legível vence três espertas",
+    "O editor e a IA entendem você melhor",
+    "Estilo é comunicação, não vaidade"
+   ],
+   "fala": "Vamos definir o que é ser pythônico, porque não é frescura de estilo. Código pythônico expressa intenção em vez de mecânica. Quando você escreve um loop com índice, contador e append, o leitor precisa executar o código na cabeça para entender o que ele faz. Quando você escreve a mesma ideia numa comprehension, a frase se lê como uma sentença: quero o quadrado de cada número par da lista. A mecânica sumiu, sobrou a intenção. E atenção para o critério que vai guiar tudo nesta aula: legibilidade vence. Se a forma esperta ficou ilegível, ela está errada, por mais esperta que seja. O código que você escreve hoje será lido dezenas de vezes, inclusive por você mesmo daqui a seis meses, quando já tiver esquecido tudo."
+  },
+  {
+   "tipo": "code",
+   "kicker": "COMPREHENSIONS",
+   "titulo": "Do loop à comprehension",
+   "code": "# Iniciante: loop com índice e append\nquadrados = []\nfor i in range(len(numeros)):\n    if numeros[i] % 2 == 0:\n        quadrados.append(numeros[i] ** 2)\n\n# Pythônico: uma linha, mais clara e mais rápida\nquadrados = [n**2 for n in numeros if n % 2 == 0]",
+   "fala": "Olhe com calma para as duas versões na tela, porque essa comparação resume a parte um inteira. Em cima, o estilo iniciante: cria uma lista vazia, percorre os índices com range e len, testa se o número é par, e vai acrescentando com append. Cinco linhas, três oportunidades de errar o índice. Embaixo, a mesma lógica em uma única linha: para cada n em números, se n é par, me dê n ao quadrado. Leia em voz alta e repare: a versão de baixo é quase português. E não é só beleza: a comprehension também roda mais rápido, porque o interpretador otimiza essa construção internamente. Sempre que você se pegar escrevendo lista vazia seguida de for e append, pare e pergunte: isso não é uma comprehension querendo nascer?"
+  },
+  {
+   "tipo": "code",
+   "kicker": "COMPREHENSIONS",
+   "titulo": "Dicionários e conjuntos",
+   "code": "# Dicionário: id -> nome, direto da lista\nnomes = {c.id: c.nome for c in clientes}\n\n# Conjunto: estados únicos com venda alta\nufs = {v.uf for v in vendas if v.valor > 1000}\n\n# Três condições aninhadas? Volte ao for.\n# Legibilidade vence concurso de esperteza.",
+   "fala": "A mesma ideia se estende para dicionários e conjuntos. Na primeira linha, uma dict comprehension: para cada cliente da lista, crio o par id apontando para nome. Uma linha, e nasce um dicionário de consulta pronto. Na segunda, uma set comprehension: o conjunto dos estados que tiveram venda acima de mil, sem duplicatas, porque conjunto não repete elemento. Agora, o aviso de professor: comprehension é ferramenta de clareza, não competição de esperteza. Se a sua expressão precisa de três condições aninhadas, dois ifs e um else para caber numa linha, ela não cabe numa linha. Volte para o loop tradicional sem culpa nenhuma. A regra de ouro: use comprehension quando ela couber em uma linha legível. Legível para o colega, não só para você."
+  },
+  {
+   "tipo": "topico",
+   "kicker": "FERRAMENTAS DIÁRIAS",
+   "titulo": "Quatro marcas de estilo",
+   "bullets": [
+    "Desempacotar: menor, *resto = valores",
+    "enumerate entrega índice e valor juntos",
+    "zip percorre duas listas lado a lado",
+    "f-string: f\"média: {media:.2f}\"",
+    "range(len(...)) é cheiro de código antigo"
+   ],
+   "fala": "Além das comprehensions, quatro marcas de estilo que você vai usar todos os dias. Primeira: desempacotamento. Em vez de pegar elementos por índice, escreva menor, asterisco resto, igual valores: o primeiro elemento vai para uma variável e o restante para outra, numa linha só. Segunda: enumerate. Quando precisar do índice e do valor ao mesmo tempo, enumerate entrega os dois juntos, e você aposenta o range com len que denuncia iniciante. Terceira: zip, que costura duas listas e percorre as duas lado a lado, par a par. E quarta: f-strings para formatar texto. Você escreve a letra f antes das aspas e coloca a variável entre chaves, podendo até controlar as casas decimais, como média com duas casas. São detalhes pequenos, mas são o sotaque da língua: quem lê seu código percebe na hora se você fala Python fluente."
+  },
+  {
+   "tipo": "conceito",
+   "kicker": "PARTE 2 DE 8",
+   "frase": "Uma função faz uma coisa, tem nome honesto e declara seus tipos.",
+   "fala": "Parte dois: funções bem desenhadas. Aqui começa a diferença entre quem programa e quem faz engenharia. Uma boa função obedece três princípios. Primeiro: ela faz uma coisa só. Se você precisa da palavra e para descrever o que a função faz, ela provavelmente são duas funções. Segundo: o nome diz o que ela faz, sem surpresa. Quem lê taxa de conversão sabe o que vai receber. Terceiro: ela declara seus tipos, o que entra e o que sai. Vou te mostrar esses três princípios num exemplo pequeno, mas completo, que serve de molde para toda função que você escrever daqui em diante."
+  },
+  {
+   "tipo": "code",
+   "kicker": "FUNÇÕES",
+   "titulo": "O contrato explícito",
+   "code": "def taxa_conversao(visitas: int,\n                   vendas: int) -> float:\n    \"\"\"Taxa de conversão = vendas / visitas.\n\n    Levanta ValueError se visitas for zero.\n    \"\"\"\n    if visitas == 0:\n        raise ValueError(\"visitas não pode ser 0\")\n    return vendas / visitas",
+   "fala": "Analise comigo cada pedaço desta função, porque cada linha carrega um hábito profissional. Na assinatura, as anotações de tipo: visitas é inteiro, vendas é inteiro, e a seta indica que a resposta é um número decimal, um float. Isso documenta a função e permite que o editor pegue erros antes mesmo de você rodar. Logo abaixo, a docstring, entre aspas triplas: ela explica o contrato. O que a função calcula, e o que pode dar errado: se visitas for zero, ela levanta um ValueError, porque divisão por zero é indefinida. Repare que a função não imprime nada, não mexe em variável de fora, não tem efeito colateral nenhum. Ela recebe valores, devolve um valor, e acabou. Esse é o contrato explícito: quem chama sabe exatamente o que esperar, inclusive o erro."
+  },
+  {
+   "tipo": "code",
+   "kicker": "TESTE MÍNIMO",
+   "titulo": "Assert: o menor teste do mundo",
+   "code": "# Teste mínimo: asserts no fim do arquivo\nassert taxa_conversao(100, 5) == 0.05\nassert taxa_conversao(200, 0) == 0.0\n\n# Rodou sem erro? A lógica está de pé.\n# Quebrou? Você descobre agora,\n# e não daqui a um mês, em produção.",
+   "fala": "E agora, o hábito que mais separa o amador do profissional: o teste mínimo. Antes de qualquer framework de teste, que veremos em módulos futuros, existe o humilde assert. A palavra assert afirma que uma expressão é verdadeira: se for, o programa segue em silêncio; se não for, ele para na hora com um erro. Aqui eu afirmo que cem visitas com cinco vendas dá taxa de zero vírgula zero cinco, e que duzentas visitas com zero vendas dá taxa zero. Dois asserts no fim do arquivo e pronto: toda vez que o arquivo roda, a lógica é verificada. Crie o hábito desde já: toda função não trivial ganha ao menos um assert que quebra se a lógica quebrar. Custa dez segundos escrever, e te salva de descobrir o erro um mês depois, no pior momento possível."
+  },
+  {
+   "tipo": "conceito",
+   "kicker": "FUNÇÕES PURAS",
+   "frase": "Mesmo input, mesmo output, nenhum efeito colateral: isso é uma função pura.",
+   "fala": "Vamos dar nome ao que acabamos de fazer, porque esse conceito volta em toda a sua carreira. Uma função pura é aquela que, para o mesmo input, devolve sempre o mesmo output, e não mexe em nada fora dela: não altera variável global, não escreve em arquivo, não depende de horário nem de sorte. A taxa de conversão que escrevemos é pura. E por que isso é tão valioso? Porque função pura é trivial de testar: basta um assert com entrada e saída conhecidas. É trivial de entender: tudo que ela usa está nos parâmetros. E é trivial de reaproveitar em qualquer contexto. Sempre que puder escolher, empurre a lógica do seu programa para funções puras, e deixe as impurezas, como ler arquivo e imprimir, nas bordas."
+  },
+  {
+   "tipo": "conceito",
+   "kicker": "PARTE 3 DE 8",
+   "frase": "Um projeto, uma caixinha: ambientes reprodutíveis com uv.",
+   "fala": "Parte três: ambientes. Essa parte é curta, mas evita as dores de cabeça mais clássicas da profissão. O problema é antigo: cada projeto Python depende de bibliotecas em versões específicas, e instalar tudo solto na máquina cria um nó de conflitos. A solução é dar a cada projeto a sua própria caixinha: um ambiente isolado, com as dependências dele, registradas em arquivo. A ferramenta que usamos na Academia para isso é a uv, moderna e muito rápida. Você já a conheceu no módulo zero; agora ela vira rotina de trabalho. São três comandos que você vai digitar no começo de todo projeto, pelo resto do curso."
+  },
+  {
+   "tipo": "code",
+   "kicker": "AMBIENTES COM UV",
+   "titulo": "A rotina de todo projeto",
+   "code": "uv init analise-vendas && cd analise-vendas\nuv add pandas matplotlib\n# dependências registradas no pyproject.toml\n\nuv run python analise.py\n# roda dentro do ambiente do projeto\n\n# Em outra máquina, reproduzir tudo:\nuv sync",
+   "fala": "A rotina completa está na tela. Primeiro comando: uv init cria o projeto, com a estrutura de pastas e o arquivo pyproject ponto toml, que é a certidão de nascimento do projeto. Segundo: uv add pandas matplotlib instala as bibliotecas e, mais importante, registra cada versão exata no pyproject e no arquivo de trava, o uv ponto lock. Terceiro: uv run executa o seu script dentro do ambiente do projeto, sem interferir em nada fora dele. E o gran finale: quando um colega clonar o seu repositório, ou quando você trocar de máquina, um único uv sync reconstrói o ambiente idêntico, byte a byte. Guarde o par de arquivos: pyproject ponto toml mais uv ponto lock igual a ambiente reprodutível em qualquer lugar."
+  },
+  {
+   "tipo": "conceito",
+   "kicker": "REPRODUTIBILIDADE",
+   "frase": "Em empresa, o funciona na minha máquina morreu: o ambiente é parte do código.",
+   "fala": "Deixe-me insistir nesse ponto com a franqueza de quem já viu muito projeto quebrar por isso. A frase funciona na minha máquina já derrubou entregas, atrasou times inteiros e queimou reputações. Em ambiente profissional, ela morreu. Hoje, o ambiente é parte do código: as versões das dependências são versionadas no Git junto com os arquivos fonte, e qualquer pessoa, ou qualquer servidor, reproduz tudo com um comando. Quando você entregar o mini-projeto desta aula com o pyproject versionado, você não está cumprindo burocracia: está treinando o padrão que separa um script de estudante de um projeto que uma empresa consegue rodar. Fechamos a base. Agora vamos ao coração numérico da aula."
+  },
+  {
+   "tipo": "conceito",
+   "kicker": "PARTE 4 DE 8",
+   "frase": "NumPy: pare de escrever loops sobre números.",
+   "fala": "Parte quatro: NumPy, a biblioteca que sustenta praticamente toda a computação numérica em Python, incluindo os frameworks de deep learning que veremos em módulos futuros. A ideia central cabe numa frase: pare de escrever loops sobre números. O NumPy guarda os números em arrays, e opera sobre o array inteiro de uma vez só. Essa mudança de mentalidade, de pensar elemento por elemento para pensar no conjunto todo, é a tal vetorização que anunciei na abertura da aula. E vem com uma regra do jogo que quero que você memorize: se você escreveu um for sobre um array, provavelmente existe um jeito NumPy melhor de fazer a mesma coisa."
+  },
+  {
+   "tipo": "topico",
+   "kicker": "NUMPY",
+   "titulo": "Por que arrays são rápidos",
+   "bullets": [
+    "Array: números contíguos na memória",
+    "A operação inteira executa em C",
+    "Sem custo do interpretador por elemento",
+    "Lista Python: caixinhas espalhadas",
+    "É por isso que dá 100x de diferença"
+   ],
+   "fala": "Antes de digitar qualquer código, entenda de onde vem a velocidade, porque isso cai em entrevista e explica tudo o que faremos. Uma lista comum de Python é uma coleção de caixinhas espalhadas pela memória: cada número é um objeto completo, e o loop visita um por um, pagando o custo do interpretador a cada passo. Um array NumPy é o oposto: os números ficam lado a lado, contíguos na memória, todos do mesmo tipo. Quando você escreve preços vezes zero vírgula nove, o NumPy despacha a operação inteira para código compilado em C, que varre essa memória de uma vez, sem interpretador no meio. É essa diferença de arquitetura que produz os ganhos de cem vezes. Não é mágica, é organização de memória. E é por isso que a vetorização não é opcional para quem trabalha com dados: é o modo normal de operar."
+  },
+  {
+   "tipo": "code",
+   "kicker": "VETORIZAÇÃO",
+   "titulo": "Opere no array inteiro",
+   "code": "import numpy as np\n\nprecos = np.array([100.0, 250.0, 80.0, 40.0])\n\ncom_desconto = precos * 0.9\n# multiplica TODOS de uma vez, sem loop\n\nacima_de_50 = precos[precos > 50]\n# filtro booleano -> array([100., 250., 80.])",
+   "fala": "Vamos ver a vetorização em ação. Crio um array com quatro preços: cem, duzentos e cinquenta, oitenta e quarenta. Primeira operação: preços vezes zero vírgula nove. Nada de loop: essa única expressão aplica dez por cento de desconto aos quatro preços ao mesmo tempo. Segunda operação, e essa é uma das ideias mais usadas de toda a análise de dados: o filtro booleano. Dentro dos colchetes, preços maior que cinquenta produz um array de verdadeiros e falsos, um para cada elemento. Ao indexar o array com essa máscara, sobram apenas os elementos onde deu verdadeiro: cem, duzentos e cinquenta e oitenta. Leia de novo: seleciono os preços onde preços é maior que cinquenta. A sintaxe é quase a frase. Esse padrão de máscara booleana vai reaparecer no Pandas daqui a pouco, idêntico."
+  },
+  {
+   "tipo": "topico",
+   "kicker": "BROADCASTING",
+   "titulo": "Formatos diferentes, uma conta",
+   "bullets": [
+    "Operar arrays de shapes diferentes",
+    "NumPy estica o menor virtualmente",
+    "Sem copiar dados, sem loop escrito",
+    "Exemplo: notas (3,2) vezes pesos (2,)",
+    "O shape é o RG de cada array"
+   ],
+   "fala": "Agora o conceito mais importante e mais temido do NumPy: broadcasting. O problema que ele resolve: com frequência você precisa operar dois arrays de formatos diferentes. O formato de um array é o shape dele: quantas linhas, quantas colunas. O broadcasting é a regra que permite ao NumPy esticar virtualmente o array menor para casar com o maior, sem copiar dados e sem você escrever loop nenhum. Vou te dar um exemplo com números pequenos, de propósito, para você conferir cada conta de cabeça: três alunos fizeram duas provas, então as notas formam uma tabela de shape três por dois. E cada prova tem um peso: a primeira vale quarenta por cento, a segunda sessenta. Os pesos formam um vetor de shape dois. Quero a média ponderada de cada aluno. Acompanhe na próxima tela."
+  },
+  {
+   "tipo": "code",
+   "kicker": "BROADCASTING",
+   "titulo": "Notas vezes pesos",
+   "code": "notas = np.array([[8.0, 6.0],\n                  [5.0, 9.0],\n                  [7.0, 7.0]])  # shape (3, 2)\n\npesos = np.array([0.4, 0.6])    # shape (2,)\n\nponderadas = notas * pesos\n# o vetor de pesos é \"replicado\" p/ cada linha\n# [[8*0.4, 6*0.6],     [[3.2, 3.6],\n#  [5*0.4, 9*0.6],  =>  [2.0, 5.4],\n#  [7*0.4, 7*0.6]]      [2.8, 4.2]]",
+   "fala": "Aqui está a conta. Notas é a matriz três por dois: o aluno um tirou oito e seis, o aluno dois tirou cinco e nove, o aluno três tirou sete e sete. Pesos é o vetor com zero vírgula quatro e zero vírgula seis. Quando escrevo notas vezes pesos, os shapes são diferentes: três por dois de um lado, dois do outro. O broadcasting entra em cena: o NumPy replica virtualmente o vetor de pesos para cada uma das três linhas, e multiplica elemento a elemento. Confira comigo a primeira linha: oito vezes zero vírgula quatro dá três vírgula dois; seis vezes zero vírgula seis dá três vírgula seis. O aluno dois: cinco vezes zero quatro, dois; nove vezes zero seis, cinco vírgula quatro. Nenhum loop, nenhuma cópia real dos pesos na memória, e a intenção da conta continua visível: notas vezes pesos."
+  },
+  {
+   "tipo": "code",
+   "kicker": "BROADCASTING",
+   "titulo": "Somando no eixo certo",
+   "code": "medias = ponderadas.sum(axis=1)\n# axis=1: soma ao longo das colunas,\n# ou seja, dentro de cada linha\n\n# aluno 1: 3.2 + 3.6 = 6.8\n# aluno 2: 2.0 + 5.4 = 7.4\n# aluno 3: 2.8 + 4.2 = 7.0\n\n# medias -> array([6.8, 7.4, 7.0])",
+   "fala": "Falta fechar a média de cada aluno: somar as duas notas ponderadas de cada linha. Para isso uso sum com o argumento axis igual a um, que diz em qual direção somar. Axis um significa: ande ao longo das colunas, dentro de cada linha, e devolva um resultado por linha. Aluno um: três vírgula dois mais três vírgula seis, seis vírgula oito. Aluno dois: dois mais cinco vírgula quatro, sete vírgula quatro. Aluno três: dois vírgula oito mais quatro vírgula dois, sete em ponto. O resultado é um array com as três médias finais. Repare no tamanho da solução: duas linhas de código para calcular médias ponderadas de uma turma inteira, e funcionaria igual para três mil alunos e dez provas. Essa é a promessa da vetorização cumprida: o código descreve a conta, e a escala vem de graça."
+  },
+  {
+   "tipo": "conceito",
+   "kicker": "A REGRA DOS SHAPES",
+   "frase": "Da direita para a esquerda: cada dimensão igual, um, ou inexistente.",
+   "fala": "E como saber se dois shapes são compatíveis para broadcasting? Existe uma regra formal, e ela é o seu mapa. Compare os shapes da direita para a esquerda, dimensão por dimensão. Em cada posição, os dois números precisam ser iguais, ou um deles precisa ser um, ou a dimensão simplesmente não existe num dos lados. Aplique ao nosso exemplo: três por dois contra dois. Da direita: dois contra dois, iguais, passou. Próxima posição: três contra nada, dimensão inexistente, passou. Compatível. Agora o contraexemplo clássico: três por dois contra três. Da direita: dois contra três. Nem iguais, nem um. Incompatível, e o NumPy levanta erro de shape na hora. Decore essa regra: da direita para a esquerda, igual, um, ou inexistente."
+  },
+  {
+   "tipo": "topico",
+   "kicker": "DEPURANDO SHAPES",
+   "titulo": "O erro que vai te acompanhar",
+   "bullets": [
+    "Erro de shape é rotina, não vergonha",
+    "Imprima array.shape dos dois lados",
+    "Aplique a regra da direita p/ esquerda",
+    "(3,2) com (2,) passa",
+    "(3,2) com (3,) não passa"
+   ],
+   "fala": "Uma palavra de conforto e de método. O erro de shapes incompatíveis vai ser seu companheiro de carreira: aparece em NumPy, em Pandas, e com força total em deep learning, onde tudo é multiplicação de matrizes. Errar shape não é vergonha, é rotina; o que diferencia o profissional é o método para resolver em um minuto em vez de uma tarde. O método: quando o erro aparecer, não fique encarando o código. Imprima o ponto shape dos dois arrays envolvidos, escreva os dois shapes lado a lado, e aplique a regra: da direita para a esquerda, igual, um, ou inexistente. Em segundos você enxerga qual dimensão não casa, e aí decide o conserto: transpor, remodelar com reshape, ou repensar a conta. Impressão de shape primeiro, conserto depois. Sempre nessa ordem."
+  },
+  {
+   "tipo": "conceito",
+   "kicker": "PARTE 5 DE 8",
+   "frase": "Pandas: a planilha programável do engenheiro de IA.",
+   "fala": "Parte cinco, e agora chegamos à ferramenta em que você vai passar mais horas da sua vida profissional: o Pandas. Pense nele como uma planilha programável. A estrutura central chama-se DataFrame: uma tabela com linhas e colunas nomeadas, onde cada coluna é, por baixo do capô, um array NumPy com nome. Isso significa que tudo que aprendemos na parte quatro, vetorização e filtros booleanos, funciona aqui dentro, coluna a coluna. Sobre essa tabela, o Pandas oferece as operações que uma análise pede: carregar arquivos, selecionar, filtrar, agrupar, agregar e limpar. Vamos construir esse repertório na ordem em que você o usa num projeto real, começando pelo ritual de abertura de qualquer dataset."
+  },
+  {
+   "tipo": "code",
+   "kicker": "O RITUAL DE ABERTURA",
+   "titulo": "Os quatro primeiros comandos",
+   "code": "import pandas as pd\n\ndf = pd.read_csv(\"vendas.csv\")  # 1. carregar\n\ndf.head()      # 2. espiar as primeiras linhas\ndf.info()      # 3. tipos e nulos por coluna\ndf.describe()  # 4. estatísticas numéricas",
+   "fala": "Todo dataset que chegar na sua mão, pelo resto da carreira, recebe este ritual de quatro comandos antes de qualquer análise. Um: read csv carrega o arquivo para um DataFrame, que por convenção universal chamamos de df. Dois: df ponto head mostra as cinco primeiras linhas, o seu primeiro contato visual com os dados. Três, e este é o mais importante: df ponto info, o raio-X da tabela. Ele lista cada coluna com seu tipo e a contagem de valores não nulos, e é aqui que você descobre as encrencas: a coluna de data que veio como texto, a coluna de idade cheia de buracos. Quatro: df ponto describe, as estatísticas das colunas numéricas: média, desvio, mínimo, máximo e quartis. Trinta segundos de ritual, e você já conhece o terreno antes de dar o primeiro passo. Nunca pule o ritual."
+  },
+  {
+   "tipo": "code",
+   "kicker": "SELEÇÃO E FILTRO",
+   "titulo": "Perguntas viram filtros",
+   "code": "df[\"valor\"]             # uma coluna (Series)\n\ndf[df[\"valor\"] > 1000]  # filtro booleano:\n                        # vendas acima de 1000\n\n# filtro + colunas específicas, com .loc\ndf.loc[df[\"uf\"] == \"SP\", [\"valor\", \"data\"]]",
+   "fala": "Com o terreno conhecido, começam as perguntas, e no Pandas pergunta vira filtro. Primeira linha: df com o nome da coluna entre colchetes devolve aquela coluna sozinha, que o Pandas chama de Series. Segunda: o filtro booleano que prometi que voltaria. Df de valor maior que mil gera a máscara de verdadeiros e falsos, e o DataFrame indexado por ela devolve só as linhas verdadeiras: as vendas acima de mil. Exatamente o padrão do NumPy, agora em tabela. Terceira: o ponto loc combina as duas coisas, filtro de linhas e escolha de colunas, numa expressão só: das vendas de São Paulo, quero apenas valor e data. Leia qualquer análise profissional de Pandas e você verá isso em toda parte: perguntas de negócio traduzidas, uma a uma, em filtros como estes."
+  },
+  {
+   "tipo": "topico",
+   "kicker": "GROUPBY",
+   "titulo": "Dividir, calcular, juntar",
+   "bullets": [
+    "O coração analítico do Pandas",
+    "Split: divide a tabela em grupos",
+    "Apply: calcula algo em cada grupo",
+    "Combine: junta tudo num resumo",
+    "Quase toda pergunta de negócio é isso"
+   ],
+   "fala": "Chegamos ao coração analítico do Pandas: o groupby. Preste atenção especial aqui, porque quase toda pergunta de negócio que você vai responder na carreira tem essa forma. Qual o faturamento por estado? Qual a nota média por categoria? Quantos clientes por mês? Todas seguem o mesmo ritmo de três tempos, que a literatura chama split, apply, combine: dividir, calcular, juntar. Primeiro o Pandas divide a tabela em grupos, um para cada valor da coluna escolhida: um grupo para São Paulo, um para o Rio, e assim por diante. Depois aplica uma agregação dentro de cada grupo: soma, média, contagem. Por fim, junta os resultados numa tabela resumo, com uma linha por grupo. Você escreve uma linha de código; o Pandas rege os três tempos. Vamos ver a sintaxe."
+  },
+  {
+   "tipo": "code",
+   "kicker": "GROUPBY",
+   "titulo": "Faturamento por estado",
+   "code": "resumo = (df.groupby(\"uf\")[\"valor\"]\n            .agg(total=\"sum\",\n                 ticket_medio=\"mean\"))\n\nresumo.sort_values(\n    \"total\", ascending=False\n).head(10)\n# uma linha por UF: total e ticket médio",
+   "fala": "Leia a expressão da tela por partes, na ordem em que ela executa. Df ponto groupby de uf: divida a tabela em um grupo por estado. Colchetes valor: dentro de cada grupo, olhe só a coluna valor. Ponto agg com dois nomes: calcule duas agregações de uma vez, a soma, que batizo de total, e a média, que batizo de ticket médio. O resultado é uma tabela nova com uma linha por estado e essas duas colunas. Na sequência, sort values ordena pelo total, do maior para o menor, e head de dez mostra os dez primeiros. Uma frase de código, e a pergunta qual estado fatura mais e com qual ticket médio está respondida. Esse molde, groupby, coluna, agregação, ordenação, resolve uma quantidade absurda das perguntas do dia a dia. Guarde-o como um martelo de bolso."
+  },
+  {
+   "tipo": "topico",
+   "kicker": "LIMPEZA DE DADOS",
+   "titulo": "Onde mora a vida real",
+   "bullets": [
+    "df.isna().sum() mostra os buracos",
+    "fillna(mediana): resiste a outliers",
+    "drop_duplicates() tira repetidas",
+    "to_datetime conserta data lida como texto",
+    "Toda decisão de limpeza fica anotada"
+   ],
+   "fala": "E agora a parte menos glamourosa e mais importante: limpeza, onde mora a vida real dos dados. Dados reais chegam sujos: valores faltando, linhas duplicadas, datas gravadas como texto. O arsenal básico: df isna soma mostra quantos nulos há em cada coluna, o mapa dos buracos. Para preencher, fillna: e aqui vai uma decisão clássica: preencher idade com a mediana, e não com a média, porque a mediana resiste a valores absurdos: um único cadastro com idade novecentos e noventa e nove arrasta a média para cima, mas mal encosta na mediana. Drop duplicates elimina linhas repetidas. E to datetime converte a coluna de data que veio como texto para data de verdade, destravando operações de tempo. Quatro ferramentas, noventa por cento da limpeza cotidiana."
+  },
+  {
+   "tipo": "conceito",
+   "kicker": "DECISÃO DE MODELAGEM",
+   "frase": "Preencher ou descartar nulos é decisão de modelagem — anote o que fez e por quê.",
+   "fala": "Sobre limpeza, um princípio que eu faço questão de elevar a regra da casa. Preencher um nulo ou descartar uma linha parece detalhe técnico, mas é uma escolha de modelagem: você está decidindo o que o seu dataset vai afirmar sobre o mundo. Preencher idades faltantes com a mediana embute uma suposição; jogar fora as linhas sem idade embute outra, e as conclusões podem mudar. Por isso, a regra: toda decisão de limpeza fica anotada, com uma linha de justificativa ao lado do código. Coluna descartada? Anote: setenta e sete por cento de nulos, inaproveitável. Nulos preenchidos? Anote: mediana, robusta a outliers. Quem lê a sua análise, incluindo você no futuro, precisa saber o que foi feito com os dados e por quê. Análise sem essas anotações não é ciência, é achismo com gráfico."
+  },
+  {
+   "tipo": "conceito",
+   "kicker": "PARTE 6 DE 8",
+   "frase": "Estatísticas resumem; gráficos revelam.",
+   "fala": "Parte seis: visualização com Matplotlib. A frase que organiza esta parte: estatísticas resumem, gráficos revelam. Há um exemplo célebre na estatística, o quarteto de Anscombe: quatro conjuntos de dados com médias e correlações praticamente idênticas que, quando plotados, revelam formas completamente diferentes: um é uma reta, outro uma curva, outro tem um ponto fora arrastando tudo. A moral é direta: número resumido esconde estrutura, e olho humano encontra estrutura em um segundo de gráfico. Por isso, na exploração de dados, ver vem antes de concluir. A boa notícia: você não precisa de vinte tipos de gráfico. Quatro deles cobrem noventa por cento do trabalho exploratório, e são os quatro da próxima tela."
+  },
+  {
+   "tipo": "code",
+   "kicker": "QUATRO GRÁFICOS",
+   "titulo": "90% da exploração",
+   "code": "import matplotlib.pyplot as plt\n\ndf[\"valor\"].hist(bins=30)        # distribuição\ndf.plot.scatter(x=\"idade\", y=\"valor\")  # relação\ndf.groupby(\"uf\")[\"valor\"].sum().plot.bar()\ndf.groupby(\"mes\")[\"valor\"].sum().plot.line()\n\nplt.title(\"Faturamento por UF\")\nplt.xlabel(\"UF\"); plt.ylabel(\"total\")\nplt.show()",
+   "fala": "Os quatro gráficos, cada um respondendo um tipo de pergunta. O histograma responde: como uma variável se distribui? Ele fatia os valores em caixas, os bins, e mostra quantos caem em cada uma: é onde você enxerga assimetrias e valores extremos. O scatter, gráfico de dispersão, responde: duas variáveis andam juntas? Cada ponto é uma linha da tabela, idade contra valor. O gráfico de barras compara categorias: o faturamento de cada estado, direto de um groupby, lado a lado. E o de linha mostra evolução no tempo: o faturamento mês a mês. Repare que os dois últimos nascem de um groupby com plot emendado no final: análise e gráfico na mesma frase. Pergunta de distribuição, histograma. De relação, scatter. De comparação, barras. De tempo, linha. Com esses quatro reflexos, você explora qualquer dataset."
+  },
+  {
+   "tipo": "conceito",
+   "kicker": "RÓTULOS",
+   "frase": "Gráfico sem título e sem eixos é adivinhação com estilo.",
+   "fala": "E o hábito profissional da visualização, simples e inegociável: todo gráfico com título e eixos nomeados. Na tela anterior, as três últimas linhas faziam exatamente isso: plt título, plt xlabel, plt ylabel. Parece detalhe, até você receber, numa reunião, um gráfico pelado: barras subindo e descendo, nenhum título, eixos mudos. Bonito, colorido, e impossível de interpretar: aquilo é adivinhação com estilo. O seu gráfico vai circular sem você do lado para explicar: vai parar num slide, num relatório, numa mensagem encaminhada. Ele precisa se defender sozinho. Três linhas de código compram isso. No seu mini-projeto, gráfico sem rótulo é critério de reprovação, e no seu trabalho, é reputação que se perde."
+  },
+  {
+   "tipo": "topico",
+   "kicker": "PARTE 7 DE 8",
+   "titulo": "Notebooks contra scripts",
+   "bullets": [
+    "Notebook: explorar, ver, iterar rápido",
+    "Perigo: células rodadas fora de ordem",
+    "Script .py: roda de cima a baixo, sempre",
+    "Explore no notebook, extraia para .py",
+    "É assim que times de IA trabalham"
+   ],
+   "fala": "Parte sete, uma discussão de fluxo de trabalho: notebook ou script? Resposta de professor: cada um no seu papel. O notebook, o arquivo ponto ipynb do Jupyter e do Colab, é o ambiente ideal para explorar: você roda uma célula, vê o resultado na hora, ajusta, mistura texto, código e gráfico no mesmo documento. Para análise exploratória, é imbatível. O script ponto py é o ideal para entregar: roda de cima a baixo, sempre na mesma ordem, versiona bem no Git e agenda no servidor. O fluxo maduro, que os times de IA praticam, usa os dois: explore no notebook e, quando a lógica estabilizar, extraia as partes reutilizáveis para funções num arquivo ponto py, com tipos, docstrings e asserts, e importe essas funções de volta no notebook. Exploração com liberdade, entrega com disciplina. Mas o notebook tem uma armadilha famosa, que merece a próxima tela."
+  },
+  {
+   "tipo": "conceito",
+   "kicker": "ESTADO FANTASMA",
+   "frase": "Antes de dar por encerrado: Restart and Run All.",
+   "fala": "A armadilha do notebook chama-se estado fantasma. Como as células rodam na ordem que você quiser, é fácil criar uma situação em que a memória do notebook não corresponde ao código visível: você rodou a célula oito, voltou e editou a três, rodou de novo a cinco. Agora há variáveis com valores que nenhuma leitura do código explica: fantasmas. Você mostra um resultado, um colega tenta reproduzir do zero, e quebra na segunda célula. O antídoto é um ritual de uma linha: antes de dar qualquer trabalho por encerrado, vá ao menu e execute Restart and Run All: reinicie o kernel, zere a memória, e rode tudo de cima a baixo. Se executar de ponta a ponta sem erro, o notebook é reproduzível e pode ser entregue. Se quebrar, agradeça: você descobriu antes do seu leitor."
+  },
+  {
+   "tipo": "topico",
+   "kicker": "PARTE 8 DE 8",
+   "titulo": "Dados chegam por API",
+   "bullets": [
+    "API: pedir dados a outro sistema, via HTTP",
+    "Todos os LLMs são consumidos assim",
+    "requests: o padrão do ecossistema Python",
+    "GET busca; a resposta vem em JSON",
+    "resp.json() vira dicionário Python"
+   ],
+   "fala": "Parte oito, a última do conteúdo: consumir APIs. Uma API é a porta pela qual um sistema pede dados ou serviços a outro pela rede, quase sempre por HTTP, o mesmo protocolo do navegador. Por que isso está num curso de IA? Primeiro, porque muitos dados de verdade não chegam em arquivo: chegam por API: cotações, clima, dados públicos. Segundo, e decisivo: todos os grandes modelos de linguagem, das APIs da Anthropic e da OpenAI em diante, são consumidos exatamente assim. Desde o módulo dois, você faz isso o tempo todo; hoje montamos a base. A biblioteca padrão do ecossistema é a requests. O fluxo: um GET para a URL busca os dados; a resposta chega em JSON, o formato texto universal das APIs; e resp ponto json converte tudo para um dicionário Python. Simples. Mas há três disciplinas de produção que quero instalar em você desde a primeira chamada."
+  },
+  {
+   "tipo": "code",
+   "kicker": "REQUESTS",
+   "titulo": "O padrão profissional",
+   "code": "import requests\n\nresp = requests.get(\n    \"https://api.github.com/repos/\"\n    \"python/cpython\",\n    timeout=10,  # nunca chame API sem timeout\n)\nresp.raise_for_status()  # 4xx/5xx vira exceção\n\ndados = resp.json()\nprint(dados[\"stargazers_count\"])",
+   "fala": "O exemplo da tela consulta a API pública do GitHub e pergunta quantas estrelas tem o repositório do próprio Python. Observe os dois parâmetros que fazem a diferença entre código de tutorial e código profissional. Primeiro: timeout igual a dez. Rede trava. Se o servidor do outro lado parar de responder, sem timeout o seu programa congela para sempre, e você só descobre em produção, de madrugada. Com timeout, ele desiste em dez segundos e levanta um erro que você pode tratar. Segundo: raise for status. Se a resposta vier com código de erro, quatrocentos e pouco ou quinhentos e pouco, essa chamada transforma o erro em exceção imediatamente. Sem ela, você seguiria adiante processando uma resposta de erro como se fossem dados, e a falha silenciosa viraria um bug escondido. Depois disso, resp ponto json entrega o dicionário, e eu leio o campo de estrelas."
+  },
+  {
+   "tipo": "conceito",
+   "kicker": "TRÊS DISCIPLINAS",
+   "frase": "Timeout sempre. Raise for status sempre. E nunca confie no formato da resposta.",
+   "fala": "Fixe as três disciplinas de quem chama API profissionalmente. Um: timeout, sempre. Não existe chamada de rede confiável; existe chamada com prazo para desistir. Dois: raise for status, sempre. Erro de servidor precisa explodir cedo e alto, nunca escorrer silenciosamente pelo resto do programa. Três: nunca confie cegamente no formato da resposta. A documentação promete um campo, mas o servidor muda, o campo some, e o seu código quebra feio no acesso direto. Quando um campo puder faltar, use dados ponto get com o nome do campo, que devolve None em vez de estourar, e trate o caso. Parecem detalhes: são as cicatrizes de toda uma geração de engenheiros convertidas em três hábitos. Adote-os agora, de graça, sem precisar das cicatrizes. E com isso, fechamos o conteúdo. Hora de praticar tudo de uma vez."
+  },
+  {
+   "tipo": "conceito",
+   "kicker": "LAB GUIADO",
+   "frase": "Titanic: 891 passageiros, 15 colunas, uma pergunta — quem sobreviveu?",
+   "fala": "Chegou o laboratório guiado, o momento em que as oito partes viram uma análise só. O dataset é um clássico absoluto do ensino de dados: a lista de passageiros do Titanic, o transatlântico que afundou em mil novecentos e doze. São oitocentas e noventa e uma linhas, uma por passageiro, e quinze colunas: idade, sexo, classe da passagem, porto de embarque, tarifa, e a coluna que dá sentido a tudo: survived, um se a pessoa sobreviveu, zero se não. A pergunta que guia o lab: quem sobreviveu, e o que explicava sobreviver? Vamos responder com o ritual completo: carregar, radiografar, limpar com justificativa, perguntar com groupby, visualizar e concluir. Faça junto: rode no Colab ou localmente com uv, digitando cada célula, sem copiar em bloco. Digitar é parte do treino: é onde a sintaxe entra no dedo."
+  },
+  {
+   "tipo": "code",
+   "kicker": "LAB · CÉLULA 1",
+   "titulo": "Carregar os dados",
+   "code": "# Célula 1 — Carregar os dados\nimport pandas as pd\nimport matplotlib.pyplot as plt\nimport seaborn as sns  # só p/ baixar o dataset\n\ndf = sns.load_dataset(\"titanic\")\nprint(df.shape)  # (891, 15)\ndf.head()",
+   "fala": "Célula um: carregar. Importo o Pandas e o Matplotlib, nossos conhecidos, e o seaborn, que aqui tem um papel modesto: a função load dataset baixa o Titanic pronto para uso, ótimo para aula. O print de df ponto shape confirma o tamanho: oitocentas e noventa e uma linhas por quinze colunas: shape, repare, é o mesmo conceito que vimos no NumPy, agora numa tabela. E df ponto head mostra os cinco primeiros passageiros. Já dá para ver as colunas principais: survived, a classe, o sexo, a idade, a tarifa paga. Primeiro contato feito: sabemos o tamanho e a cara dos dados. Nada de sair calculando: o ritual manda radiografar primeiro, e é o que faremos na célula dois."
+  },
+  {
+   "tipo": "code",
+   "kicker": "LAB · CÉLULA 2",
+   "titulo": "Raio-X do dataset",
+   "code": "# Célula 2 — Raio-X: tipos, nulos, estatísticas\ndf.info()   # 'age' e 'deck' têm muitos nulos\n\nprint(df.isna().sum()\n        .sort_values(ascending=False)\n        .head())\n\ndf.describe()",
+   "fala": "Célula dois: o raio-X. Df ponto info lista as quinze colunas com tipos e contagem de não nulos, e duas encrencas saltam aos olhos. A coluna deck, o convés da cabine, está quase toda vazia: só duzentos e três valores em oitocentos e noventa e um: setenta e sete por cento de buraco. E a coluna age, a idade, tem cento e setenta e sete faltas: quase um em cada cinco passageiros sem idade registrada. A soma de isna ordenada confirma o ranking dos buracos. E o describe conta a primeira história: a idade mediana era vinte e oito anos, e a média da coluna survived é zero vírgula trinta e oito: só trinta e oito por cento sobreviveram. O raio-X nos deu o diagnóstico; a célula três decide o tratamento, e cada decisão vai anotada."
+  },
+  {
+   "tipo": "code",
+   "kicker": "LAB · CÉLULA 3",
+   "titulo": "Limpeza justificada",
+   "code": "# Célula 3 — Limpeza mínima e justificada\ndf = df.drop(columns=[\"deck\"])  # 77% nulo\n\ndf[\"age\"] = df[\"age\"].fillna(\n    df[\"age\"].median())  # mediana: robusta\n\ndf[\"embark_town\"] = df[\"embark_town\"].fillna(\n    df[\"embark_town\"].mode()[0])  # moda\n\nassert df[[\"age\", \"embark_town\"]] \\\n    .isna().sum().sum() == 0  # prova da limpeza",
+   "fala": "Célula três: a limpeza, com justificativa linha a linha, como manda a regra da casa. Decisão um: descartar a coluna deck inteira. Com setenta e sete por cento de nulos, qualquer preenchimento seria invenção: coluna inaproveitável, fora, e o comentário registra o motivo. Decisão dois: preencher as idades faltantes com a mediana, aquela escolha que discutimos: robusta a outliers, não se deixa arrastar por valores extremos. Decisão três: a cidade de embarque, que é categórica: não existe mediana de cidade: então uso a moda, o valor mais frequente. E o fecho de ouro: um assert provando que, nas colunas tratadas, não restou nulo nenhum. A limpeza termina com prova, não com esperança. Se amanhã alguém mexer acima e um nulo escapar, esse assert estoura na hora."
+  },
+  {
+   "tipo": "code",
+   "kicker": "LAB · CÉLULA 4",
+   "titulo": "Perguntas ao dado",
+   "code": "# Célula 4 — Quem sobreviveu?\ndf[\"survived\"].mean()                 # ~0.38\n\ndf.groupby(\"sex\")[\"survived\"].mean()\n# mulheres ~0.74 · homens ~0.19\n\ndf.groupby(\"pclass\")[\"survived\"].mean()\n# 1a classe ~0.63 · 3a classe ~0.24\n\ntabela = df.pivot_table(\n    values=\"survived\", index=\"sex\",\n    columns=\"pclass\", aggfunc=\"mean\")",
+   "fala": "Célula quatro, o clímax analítico: as perguntas. A média geral de survived é zero trinta e oito: trinta e oito por cento de sobreviventes. Agora o groupby brilha. Agrupando por sexo: mulheres, setenta e quatro por cento de sobrevivência; homens, dezenove. Uma razão de quase quatro vezes. Agrupando por classe: primeira classe, sessenta e três por cento; terceira, vinte e quatro. Duas linhas de código, duas descobertas históricas: a política de mulheres e crianças primeiro, e a geografia do navio, com a terceira classe nos conveses de baixo, longe dos botes. E a pivot table cruza os dois fatores de uma vez: sexo nas linhas, classe nas colunas, taxa em cada célula: mulheres da primeira classe, noventa e sete por cento; homens da terceira, treze. O dado conta a história inteira quando você faz a pergunta certa."
+  },
+  {
+   "tipo": "code",
+   "kicker": "LAB · CÉLULA 5",
+   "titulo": "Visualizar as descobertas",
+   "code": "# Célula 5 — Visualizar as descobertas\nfig, eixos = plt.subplots(1, 3, figsize=(15, 4))\n\ndf[\"age\"].hist(bins=30, ax=eixos[0])\n\ndf.groupby(\"sex\")[\"survived\"] \\\n  .mean().plot.bar(ax=eixos[1], rot=0)\n\ndf.groupby(\"pclass\")[\"survived\"] \\\n  .mean().plot.bar(ax=eixos[2], rot=0)\n\nplt.tight_layout(); plt.show()",
+   "fala": "Célula cinco: dar olhos às descobertas. O subplots cria uma figura com três eixos lado a lado: um painel, três gráficos. No primeiro, o histograma das idades: a distribuição concentrada nos vinte e trinta anos, com o pico de crianças pequenas à esquerda. No segundo, a sobrevivência por sexo em barras: a barra das mulheres quase quatro vezes a altura da dos homens: a diferença que era número vira contraste visual imediato. No terceiro, a sobrevivência por classe: uma escada descendo da primeira para a terceira. Repare como cada gráfico nasce de uma linha de análise que já tínhamos: o histograma da coluna age, os dois bar de um groupby. No seu notebook, complete cada eixo com título e rótulos, como fizemos na parte seis: painel sem rótulo não se defende sozinho."
+  },
+  {
+   "tipo": "topico",
+   "kicker": "LAB · CÉLULA 6",
+   "titulo": "Conclusões com números",
+   "bullets": [
+    "Mulheres: sobrevivência ~4x maior",
+    "1a classe: ~2,6x mais que a 3a",
+    "Protocolo + posição no navio explicam",
+    "Conclusão sempre acompanhada do número",
+    "Feche com Restart & Run All"
+   ],
+   "fala": "Célula seis, e o lab se fecha como toda análise séria deve se fechar: com conclusões escritas, em texto, cada uma sustentada por um número. Conclusão um: mulheres tiveram taxa de sobrevivência cerca de quatro vezes maior que homens: setenta e quatro por cento contra dezenove. Conclusão dois: passageiros da primeira classe sobreviveram cerca de duas vezes e meia mais que os da terceira: sessenta e três contra vinte e quatro por cento. Conclusão três: o protocolo de mulheres e crianças primeiro, somado à posição das classes no navio, explica boa parte do padrão. Repare no formato: afirmação, vírgula, número. Conclusão sem número é opinião. E o gesto final, você já sabe: Restart and Run All. Rodou de ponta a ponta sem erro? Lab entregue, análise reproduzível."
+  },
+  {
+   "tipo": "topico",
+   "kicker": "MINI-PROJETO",
+   "titulo": "Sua primeira análise real",
+   "bullets": [
+    "Um dataset real que NÃO seja o Titanic",
+    "Kaggle: filmes, futebol, imóveis, música",
+    "500+ linhas, 1 numérica + 1 categórica",
+    "3 perguntas ANTES de olhar os dados",
+    "Qual grupo...? Como varia...? Há relação?"
+   ],
+   "fala": "E agora é com você: o mini-projeto do módulo. O enunciado: escolha um dataset real, que não seja o Titanic, e conduza uma análise exploratória completa que responda três perguntas formuladas por você. No Kaggle há milhares de datasets gratuitos: procure um tema que te dê prazer: cinema, futebol, imóveis, música: análise boa nasce de curiosidade verdadeira. Critérios de escolha: quinhentas linhas ou mais, pelo menos uma coluna numérica e uma categórica. E o detalhe mais importante do enunciado: escreva as três perguntas antes de abrir os dados. Isso é método científico: quem olha os dados primeiro sai caçando padrão a esmo e acha padrão até em ruído. Use os moldes: qual grupo tem maior tal coisa? Como x varia com y? Existe relação entre x e y? Perguntas primeiro, dados depois."
+  },
+  {
+   "tipo": "topico",
+   "kicker": "MINI-PROJETO",
+   "titulo": "O que a entrega precisa ter",
+   "bullets": [
+    "Projeto uv + notebook no repositório",
+    "3 perguntas em Markdown no topo",
+    "Limpeza: justificativa linha a linha",
+    "1 groupby + 3 gráficos rotulados",
+    "utils.py: função pura + 2 asserts"
+   ],
+   "fala": "Os requisitos da entrega, e repare que cada um treina uma parte da aula. Primeiro: projeto criado com uv, com o pyproject versionado, e o notebook dentro do seu repositório academia ia no GitHub: partes três e sete. Segundo: as três perguntas escritas em Markdown no topo do notebook, antes de qualquer código. Terceiro: a etapa de limpeza documentada, cada decisão sobre nulos e duplicatas com sua linha de justificativa: parte cinco e a regra da casa. Quarto: pelo menos um groupby com agregação e pelo menos três gráficos, todos com título e eixos nomeados: partes cinco e seis. Quinto: uma função pura, com docstring, tipos e dois asserts, extraída para um arquivo utils ponto py e importada no notebook: parte dois. E o fecho: uma seção de conclusões respondendo as três perguntas, cada resposta com seu número."
+  },
+  {
+   "tipo": "topico",
+   "kicker": "MINI-PROJETO",
+   "titulo": "Quatro horas bem divididas",
+   "bullets": [
+    "1. Dataset + 3 perguntas (30 min)",
+    "2. Projeto uv + Jupyter no ar (15 min)",
+    "3. Esqueleto do notebook (10 min)",
+    "4-5. Raio-X e limpeza (1h)",
+    "6-8. Análise, utils.py, entrega (2h)"
+   ],
+   "fala": "Reserve cerca de quatro horas, e pode dividir em duas ou três sessões: o site da Academia traz esse passo a passo por etapa, cada uma com seu checkpoint. O percurso: meia hora para escolher o dataset e escrever as três perguntas. Quinze minutos para criar o projeto com uv e subir o Jupyter. Dez para estruturar o esqueleto do notebook: as perguntas no topo e as seções vazias: carga, limpeza, análise, gráficos, conclusões: preencher esqueleto é muito mais fácil que encarar página em branco. Depois, uma hora para o raio-X e a limpeza documentada, terminando com um assert que prova a limpeza. E as duas horas finais: responder cada pergunta com groupby e gráfico, extrair a função repetida para o utils ponto py, escrever as conclusões, rodar Restart and Run All e dar commit e push. Só avance de etapa quando o checkpoint da etapa passar."
+  },
+  {
+   "tipo": "topico",
+   "kicker": "SE TRAVAR",
+   "titulo": "Plano de resgate",
+   "bullets": [
+    "FileNotFoundError: confira com ls dados/",
+    "Erro de shape: imprima dtypes e shape",
+    "30 min travado? Chame o assistente de IA",
+    "Peça a explicação, não só a resposta",
+    "Limpeza comendo metade do tempo é normal"
+   ],
+   "fala": "E se travar? Primeiro, os dois tropeços mais comuns têm diagnóstico pronto. FileNotFoundError quase sempre é caminho errado do CSV: liste a pasta dados e confira o nome exato do arquivo. Erro de tipo ou de shape: imprima df ponto dtypes e df ponto shape e olhe o que os dados realmente são, em vez do que você supôs que fossem. Segundo: se ficar mais de trinta minutos parado no mesmo ponto, chame seu assistente de IA: cole o erro completo e diga em qual etapa está. Mas atenção à forma de pedir: peça a explicação do erro, não a solução pronta. Quem recebe só a resposta economiza dez minutos hoje e paga com a mesma dúvida para sempre. E um consolo de veterano: se a limpeza estiver consumindo metade do tempo do projeto, você não está fazendo nada errado: o trabalho real é assim mesmo."
+  },
+  {
+   "tipo": "topico",
+   "kicker": "ERROS COMUNS",
+   "titulo": "Os 5 tropeços do módulo 3",
+   "bullets": [
+    "Loop for onde a vetorização resolvia",
+    "Preencher nulo sem anotar o porquê",
+    "Notebook entregue sem Restart & Run All",
+    "Gráfico sem título e sem eixos",
+    "Chamada de API sem timeout"
+   ],
+   "fala": "Antes de recapitular, deixe-me listar os cinco tropeços que eu mais vejo em quem termina este módulo, para você conferir a sua própria entrega contra eles. Primeiro: o loop for percorrendo um array ou uma coluna, onde uma operação vetorizada resolvia em uma linha: relembre a regra do jogo do NumPy. Segundo: nulos preenchidos ou descartados sem a linha de justificativa: a análise perde a rastreabilidade e vira achismo. Terceiro: notebook entregue sem passar pelo Restart and Run All: e o estado fantasma vai junto, escondido, até quebrar na máquina de outra pessoa. Quarto: gráfico pelado, sem título e sem eixos nomeados: adivinhação com estilo. E quinto: chamada de API sem timeout e sem verificação de status: funciona na demonstração e trava no primeiro soluço de rede. Releia a sua entrega com essa lista na mão antes do commit final: é o seu controle de qualidade."
+  },
+  {
+   "tipo": "conceito",
+   "kicker": "RECAPITULANDO",
+   "frase": "Vetorize as contas, limpe com critério, rotule os gráficos, entregue código que se lê.",
+   "fala": "Vamos amarrar os fios da aula. Você aprendeu a escrever Python idiomático: comprehensions, enumerate, zip, f-strings: intenção no lugar de mecânica. A desenhar funções puras com tipos, docstring e o teste mínimo de assert. A dar a cada projeto sua caixinha reprodutível com uv. No NumPy, a vetorizar: operar o array inteiro de uma vez: e a ler broadcasting com a regra dos shapes, da direita para a esquerda. No Pandas, o ritual de abertura, filtros booleanos, o groupby de três tempos e a limpeza com justificativa anotada. Os quatro gráficos que cobrem a exploração, sempre rotulados. Notebook para explorar, script para entregar, Restart and Run All como juramento. E as três disciplinas de API: timeout, raise for status, desconfiança do formato. Isso é o Python que o mercado chama de fluente."
+  },
+  {
+   "tipo": "fim",
+   "proximo": "Módulo 4 — Matemática Essencial",
+   "bullets": [
+    "Kaggle Learn: Python e Pandas concluídos",
+    "Broadcasting explicado com um exemplo",
+    "Lab do Titanic rodado de ponta a ponta",
+    "Mini-projeto publicado no academia-ia",
+    "Uma chamada de API com timeout e status"
+   ],
+   "fala": "Antes de encerrar, o checklist de conclusão do módulo três. Os cursos de Python e Pandas do Kaggle Learn, concluídos, com os certificados salvos. Saber explicar broadcasting em voz alta, com um exemplo numérico de shapes: teste de verdade: explique para alguém. O lab do Titanic executado de ponta a ponta com Restart and Run All. O mini-projeto publicado no seu repositório academia ia, com todos os critérios de aceite marcados. E ao menos uma chamada de API real, com timeout e verificação de status. Cumpriu tudo? Então você já opera a ferramenta número um da profissão. Na próxima aula, o módulo quatro: Matemática Essencial, com abordagem visual: vetores, matrizes, derivadas e probabilidade, a gramática por trás de todo modelo de IA, sem pânico e com muito NumPy. Eu te espero lá. Até a próxima aula."
+  }
+ ]
+}

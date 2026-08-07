@@ -1,0 +1,233 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:01.667
+Bem-vindo ao módulo cinco:
+
+2
+00:00:01.667 --> 00:00:03.655
+Transformers e LLMs por dentro.
+
+3
+00:00:03.655 --> 00:00:06.285
+Você vai abrir o capô do GPT e do Claude:
+
+4
+00:00:06.285 --> 00:00:13.082
+como texto vira token, como a atenção decide o que importa, e como um modelo pré-treinado vira assistente.
+
+5
+00:00:13.082 --> 00:00:15.840
+No fim, você gera texto com um modelo real.
+
+6
+00:00:16.133 --> 00:00:20.014
+O transformer sustenta quase toda IA generativa em produção:
+
+7
+00:00:20.014 --> 00:00:21.760
+GPT, Claude, Gemini, Llama.
+
+8
+00:00:21.760 --> 00:00:28.746
+Quando o modelo alucina, corta texto ou cobra caro, a explicação está em tokenização, atenção ou pós-treino.
+
+9
+00:00:28.746 --> 00:00:32.885
+Este módulo te dá o vocabulário que entrevistas técnicas cobram.
+
+10
+00:00:33.167 --> 00:00:35.792
+LLMs leem tokens, não letras nem palavras.
+
+11
+00:00:35.792 --> 00:00:42.105
+O BPE funde os pares mais frequentes do corpus até um vocabulário de cinquenta a duzentos mil tokens.
+
+12
+00:00:42.105 --> 00:00:46.106
+Português gasta mais tokens que inglês, e APIs cobram por token.
+
+13
+00:00:46.106 --> 00:00:49.919
+É por isso que o modelo erra ao contar letras de uma palavra.
+
+14
+00:00:50.200 --> 00:00:53.297
+Cada token tem um vetor denso aprendido no treino.
+
+15
+00:00:53.297 --> 00:00:57.014
+Nesse espaço, proximidade geométrica é semelhança semântica:
+
+16
+00:00:57.014 --> 00:00:59.615
+rei perto de rainha, gato perto de felino.
+
+17
+00:00:59.615 --> 00:01:05.128
+Essa ideia, texto virar vetor comparável, é a fundação do RAG que você vê no módulo sete.
+
+18
+00:01:05.400 --> 00:01:08.499
+Attention deixa cada token olhar para os outros.
+
+19
+00:01:08.499 --> 00:01:14.374
+Cada um gera query, o que procura; key, o que oferece; e value, o que entrega se escolhido.
+
+20
+00:01:14.374 --> 00:01:16.375
+É como uma busca em biblioteca:
+
+21
+00:01:16.375 --> 00:01:20.507
+sua pergunta é a query, a lombada é a key, o conteúdo é o value.
+
+22
+00:01:20.507 --> 00:01:22.896
+A máscara causal impede ver o futuro.
+
+23
+00:01:23.167 --> 00:01:24.430
+Um exemplo minúsculo:
+
+24
+00:01:24.430 --> 00:01:31.466
+o token dois compara sua query com a key de cada token, tira softmax dos scores, e mistura os values por esses pesos.
+
+25
+00:01:31.466 --> 00:01:35.135
+Aqui, setenta e três por cento da informação vem do token um.
+
+26
+00:01:35.135 --> 00:01:38.383
+Na fórmula real ainda existe a divisão pela raiz de d.
+
+27
+00:01:38.667 --> 00:01:43.473
+O modelo roda várias attentions em paralelo, cada cabeça focada numa relação:
+
+28
+00:01:43.473 --> 00:01:45.408
+sintaxe, correferência, código.
+
+29
+00:01:45.408 --> 00:01:50.464
+Attention sozinha não sabe ordem — João ama Maria ficaria igual a Maria ama João.
+
+30
+00:01:50.464 --> 00:01:53.211
+A solução é injetar posição direto no vetor.
+
+31
+00:01:53.500 --> 00:01:56.671
+Um GPT empilha attention e MLP dezenas de vezes:
+
+32
+00:01:56.671 --> 00:02:00.569
+a attention mistura tokens, o MLP processa cada um sozinho.
+
+33
+00:02:00.569 --> 00:02:04.071
+No fim, logits dão um score por token do vocabulário.
+
+34
+00:02:04.071 --> 00:02:06.581
+Greedy escolhe sempre o mais provável.
+
+35
+00:02:06.581 --> 00:02:11.404
+Temperatura ajusta a distribuição, e top-p corta a cauda de tokens ruins.
+
+36
+00:02:11.700 --> 00:02:15.160
+Três linhas de Hugging Face já geram texto com o gpt2.
+
+37
+00:02:15.160 --> 00:02:18.683
+Com do sample falso, a geração é greedy e sempre igual.
+
+38
+00:02:18.683 --> 00:02:23.489
+Com do sample verdadeiro, temperatura e top-p, cada execução sai diferente.
+
+39
+00:02:23.489 --> 00:02:26.628
+É esse experimento que você repete no lab guiado.
+
+40
+00:02:26.900 --> 00:02:28.456
+O treino tem dois atos.
+
+41
+00:02:28.456 --> 00:02:29.200
+Pré-treino:
+
+42
+00:02:29.200 --> 00:02:37.994
+prever o próximo token em trilhões de tokens, por meses, em milhares de GPUs — o resultado é um modelo base que só completa texto.
+
+43
+00:02:37.994 --> 00:02:40.767
+Pós-treino transforma isso em assistente:
+
+44
+00:02:40.767 --> 00:02:46.652
+SFT ensina o formato, e RLHF, ou RLAIF com uma IA avaliando, ajusta pelas preferências.
+
+45
+00:02:46.933 --> 00:02:49.382
+Fechados como GPT, Claude e Gemini:
+
+46
+00:02:49.382 --> 00:02:52.041
+você paga por token, sem ver os pesos.
+
+47
+00:02:52.041 --> 00:02:54.560
+Abertos como Llama, Qwen e DeepSeek:
+
+48
+00:02:54.560 --> 00:02:57.289
+você baixa os pesos e roda onde quiser.
+
+49
+00:02:57.289 --> 00:03:00.437
+Contexto vai de 128 mil a 1 milhão de tokens.
+
+50
+00:03:00.437 --> 00:03:05.125
+KV cache guarda K e V já processados; contexto maior custa memória.
+
+51
+00:03:05.400 --> 00:03:11.298
+O mini-projeto é um relatório de anatomia de um LLM, o material pra explicar transformers a um colega.
+
+52
+00:03:11.298 --> 00:03:20.088
+Compare tokenização em PT e EN, mostre o top-dez do próximo token em três prompts, varie temperatura e top-p, e compare um modelo base com um instruído.
+
+53
+00:03:20.367 --> 00:03:21.316
+Recapitulando:
+
+54
+00:03:21.316 --> 00:03:29.110
+BPE, query, key e value, a pilha decoder-only, temperatura e top-p, e a diferença entre modelo base e pós-treinado.
+
+55
+00:03:29.110 --> 00:03:33.177
+Essa é a base de todo LLM que você vai usar daqui em diante.
+
+56
+00:03:33.177 --> 00:03:34.397
+No próximo módulo:
+
+57
+00:03:34.397 --> 00:03:38.396
+prompt engineering e como chamar APIs de LLM no seu código.
+
+58
+00:03:38.396 --> 00:03:38.871
+Até lá.

@@ -1,0 +1,336 @@
+{
+  "id": "Aula05",
+  "slug": "aula05",
+  "modulo": 5,
+  "titulo": "Machine Learning Clássico",
+  "periodo": "Período 2",
+  "carga": "8h",
+  "scenes": [
+    {
+      "tipo": "capa",
+      "fala": "Muito boa aula para você. Esta é a aula completa do módulo cinco da Academia de Engenharia de IA: Machine Learning Clássico. Este é o módulo em que as ideias matemáticas do módulo quatro viram modelos de verdade, treinados com scikit-learn, avaliados com honestidade e, no final, submetidos a uma competição real do Kaggle. Vamos percorrer oito partes: os dois grandes modos de aprender, modelos lineares, árvores e ensembles, overfitting e underfitting, a separação entre treino, validação e teste, as métricas e as mentiras de cada uma, feature engineering, e o vilão número um do iniciante, o data leakage. Depois, o laboratório guiado com o pipeline completo do Titanic, e o mini-projeto em que você compete de verdade, com submissão no leaderboard. É uma aula longa e densa, do jeito que a matéria merece. Papel, caneta, e vamos começar."
+    },
+    {
+      "tipo": "conceito",
+      "kicker": "POR QUE ISSO IMPORTA",
+      "frase": "Para dado tabular, gradient boosting ainda vence rede neural — e as disciplinas daqui valem para toda a IA.",
+      "fala": "Sim, estamos na era dos modelos de linguagem gigantes. E mesmo assim uma fatia enorme dos problemas de dados nas empresas continua sendo resolvida com machine learning clássico: prever churn, aprovar crédito, estimar demanda, detectar fraude, ranquear leads. Para dados tabulares, planilhas e tabelas de banco, o gradient boosting ainda vence redes neurais na maioria dos casos, custando uma fração do preço. O engenheiro que só sabe chamar API de LLM usa um canhão de quinhentos reais para matar mosquitos que um XGBoost de cinquenta centavos mata melhor. Mas o motivo mais profundo é outro: o ML clássico é onde você aprende as disciplinas que valem para toda a IA. Separar treino de teste. Desconfiar de resultado bom demais. Escolher a métrica que reflete o negócio. Caçar vazamento de dados. Avaliar um sistema com LLM em dois mil e vinte e seis usa exatamente os mesmos fundamentos que você aprende nesta aula. Errar essas disciplinas custa caro, e constrange: modelo aprovado em teste e falhando em produção é dos incidentes mais comuns da área."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "ROTEIRO DA AULA",
+      "titulo": "O plano de hoje",
+      "bullets": [
+        "Partes 1 a 3: modos de aprender e modelos",
+        "Partes 4 e 5: generalizar e validar",
+        "Partes 6 a 8: metricas, features, leakage",
+        "Lab: pipeline completo no Titanic",
+        "Mini-projeto: competir no Kaggle"
+      ],
+      "fala": "O plano de hoje, em três blocos. Primeiro bloco, os modelos: a diferença entre aprendizado supervisionado e não-supervisionado, os modelos lineares que servem de baseline, e os reis do dado tabular: árvores de decisão, Random Forest e gradient boosting. Segundo bloco, a honestidade: overfitting e underfitting com o trade-off viés-variância, e o protocolo sagrado de treino, validação e teste, com a validação cruzada. Terceiro bloco, o discernimento: as métricas de classificação e regressão, e como cada uma engana de um jeito diferente: a arte de criar features que tornam o padrão visível: e o data leakage, o erro que faz o modelo brilhar no papel e fracassar em produção. Fechamos com o laboratório do Titanic, seis células que montam um pipeline completo com validação cruzada, e com o mini-projeto mais empolgante do período dois: sua primeira competição real no Kaggle, com submissão e score público. Guarde desde já a palavra da aula: generalizar."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "COMO ESTUDAR",
+      "titulo": "Dezesseis horas bem investidas",
+      "bullets": [
+        "Andrew Ng, curso 1, semanas 1 a 3: 4h",
+        "Kaggle Learn: Intro + Intermediate ML: 4h30",
+        "Crash Course do Google: 3h",
+        "StatQuest: arvores, florestas, ROC: 2h",
+        "Leituras + lab guiado: 2h30 + projeto"
+      ],
+      "fala": "O guia de estudo do módulo, que é o mais longo do período dois: dezesseis horas estimadas. O prato principal é a Machine Learning Specialization do Andrew Ng, no Coursera, auditável de graça: as semanas um a três do primeiro curso, umas quatro horas. É o professor mais didático da área explicando regressão e classificação do zero. Depois, dois cursos práticos do Kaggle Learn com certificado: Intro to Machine Learning e Intermediate Machine Learning, quatro horas e meia somadas, direto no navegador. O Machine Learning Crash Course do Google, interativo, cobre o mesmo terreno por outro ângulo, três horas. No StatQuest, os vídeos de árvores, Random Forest, gradient boost e curva ROC, duas horas de animações que desmancham qualquer confusão. As leituras da semana: os módulos de regressão e classificação do ML For Beginners da Microsoft, e o guia do usuário do scikit-learn sobre pipelines e validação cruzada. E o lab guiado desta aula, mais o mini-projeto do Kaggle. Parece muito? Divida em duas semanas sem culpa."
+    },
+    {
+      "tipo": "conceito",
+      "kicker": "PARTE 1 DE 8",
+      "frase": "Pergunta-guia: eu tenho a resposta certa para exemplos do passado? Tem: supervisionado. Não tem: repense.",
+      "fala": "Parte um: os dois grandes modos de aprender. No aprendizado supervisionado, os dados vêm com a resposta certa, o chamado rótulo. Prever o preço de uma casa a partir de vendas passadas: cada casa histórica traz o preço pelo qual foi vendida. Prever se o cliente vai cancelar: cada cliente do passado traz a informação de que cancelou ou ficou. Quando a resposta é numérica, preço, demanda, temperatura, chamamos de regressão. Quando é uma categoria, cancela ou não cancela, spam ou não spam, chamamos de classificação. O supervisionado é noventa por cento do machine learning nas empresas. Já no aprendizado não-supervisionado não há rótulo nenhum: o algoritmo procura estrutura sozinho, como agrupar clientes parecidos em segmentos, o clustering, ou reduzir dimensões para visualizar. E aqui vai a pergunta-guia que resolve todo início de projeto: eu tenho a resposta certa para exemplos do passado? Tem: supervisionado. Não tem: não-supervisionado, ou, muitas vezes, repense o problema antes de sair modelando."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "OS DOIS MODOS",
+      "titulo": "Regressão, classificação, clustering",
+      "bullets": [
+        "Prever preco do imovel: regressao",
+        "Cliente cancela ou fica: classificacao",
+        "Estimar demanda de amanha: regressao",
+        "Segmentar clientes sem rotulo: clustering",
+        "90% do ML nas empresas: supervisionado"
+      ],
+      "fala": "Vamos treinar o olho com casos reais de empresa, porque classificar o problema certo é metade do projeto. Prever o preço de venda de um imóvel: existe rótulo, os preços históricos, e a resposta é um número: regressão supervisionada. Prever se o cliente cancela a assinatura no próximo mês: existe rótulo, quem cancelou no passado, e a resposta é sim ou não: classificação supervisionada. Estimar quantas unidades vão vender amanhã: número com histórico, regressão. Detectar fraude numa transação: fraude ou legítima, classificação, e das difíceis, pelo desbalanceamento que discutiremos na parte seis. Agora: segmentar a base de clientes em grupos parecidos para o marketing, sem nenhuma definição prévia de grupo: não há rótulo, é clustering, não-supervisionado. Repare que a pergunta-guia resolveu todos em segundos: tenho a resposta certa para exemplos do passado? E um aviso de estrada: se alguém te pede para prever algo de que não existe nenhum exemplo histórico rotulado, o primeiro trabalho não é modelar: é começar a coletar rótulos."
+    },
+    {
+      "tipo": "conceito",
+      "kicker": "PARTE 2 DE 8",
+      "frase": "Comece simples, sempre: se o modelo sofisticado não bate a regressão logística, o problema é o dado.",
+      "fala": "Parte dois: modelos lineares, e a regra de ouro que os acompanha: comece simples, sempre. A regressão linear você já implementou com as próprias mãos no módulo quatro: y igual a w vezes x mais b, ajustada por descida do gradiente. A novidade é a regressão logística, e cuidado com o nome, porque apesar de se chamar regressão, ela é um classificador. A ideia: calcula a mesma saída linear de sempre e a passa por uma função chamada sigmoide, que espreme qualquer número, de menos infinito a mais infinito, para dentro do intervalo entre zero e um. E um número entre zero e um tem leitura natural: probabilidade. A saída da logística é a probabilidade de o exemplo ser da classe positiva. Por que começar por modelos lineares? Três razões. São rápidos de treinar. São interpretáveis: os coeficientes dizem o peso de cada variável, dá para explicar para o gestor. E formam o baseline, a régua: se o seu modelo sofisticado não bate a regressão logística, o problema não é falta de sofisticação: é o dado ou a formulação do problema."
+    },
+    {
+      "tipo": "code",
+      "kicker": "MODELOS LINEARES",
+      "titulo": "Regressão logística em quatro linhas",
+      "code": "from sklearn.linear_model import (\n    LogisticRegression)\n\nmodelo = LogisticRegression(max_iter=1000)\nmodelo.fit(X_treino, y_treino)\n\nprobs = modelo.predict_proba(X_teste)[:, 1]\n# probabilidade da classe positiva",
+      "fala": "E aqui você conhece a biblioteca que vai te acompanhar pelo resto da carreira: o scikit-learn. Olhe a tela e repare na elegância da interface. Importamos a LogisticRegression do módulo de modelos lineares. Criamos o modelo, passando max iter igual a mil, que é o limite de iterações da otimização interna, para garantir a convergência. E então as duas chamadas que definem o scikit-learn inteiro: fit e predict. O fit recebe X treino e y treino, as features e os rótulos, e treina: por baixo do capô está rodando uma prima da descida do gradiente que você fez à mão no módulo quatro: agora você sabe o que o fit esconde. E o predict proba recebe o X de teste e devolve probabilidades: pegamos a coluna um, que é a probabilidade da classe positiva. Essa interface, fit e predict, é a mesma para todo modelo da biblioteca: árvore, floresta, boosting, o que for. Aprendeu uma vez, aprendeu todas. Troque a classe do modelo e o resto do código nem percebe."
+    },
+    {
+      "tipo": "conceito",
+      "kicker": "PARTE 3 DE 8",
+      "frase": "Uma árvore decora; um comitê generaliza. Random Forest vota em paralelo, boosting corrige em sequência.",
+      "fala": "Parte três: árvores, florestas e boosting, os reis do dado tabular. Uma árvore de decisão aprende regras do tipo se e então: se a idade é menor que dez e a classe é primeira, então sobreviveu. É o modelo mais interpretável que existe, você literalmente desenha as regras. Mas tem um vício grave: uma árvore sozinha, se deixada crescer, decora o conjunto de treino com facilidade, criando uma regra específica para cada exemplo, ruído incluído. É o overfitting em estado puro, e já já damos nome formal a isso. A solução da área foi tão simples quanto brilhante: se um modelo decora, use um comitê de modelos, um ensemble. Em vez de confiar numa árvore, treine centenas, cada uma um pouco diferente, e combine as opiniões. Os erros idiossincráticos de cada árvore se cancelam na média, e o que sobra é o padrão verdadeiro. Há duas grandes famílias de comitê, Random Forest e gradient boosting, e a diferença entre elas cabe numa analogia de médicos que eu te conto na próxima tela."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "ENSEMBLES",
+      "titulo": "Floresta vota, boosting corrige",
+      "bullets": [
+        "RF: centenas de arvores independentes",
+        "Cada uma ve amostra aleatoria de dados",
+        "Previsao = votacao do comite",
+        "Boosting: arvores em sequencia",
+        "Cada nova corrige os erros das anteriores"
+      ],
+      "fala": "A analogia prometida. Random Forest é pedir opinião a trezentos médicos independentes e ficar com a maioria: cada árvore é treinada com uma amostra aleatória dos dados e das colunas, então cada uma vê o problema por um ângulo levemente diferente, e a previsão final é a votação do comitê. Erros individuais se cancelam. Na prática, o Random Forest é robusto, quase não precisa de ajuste fino, e é uma excelente segunda tentativa depois do baseline linear. Já o gradient boosting é outro filme: é um médico estudando, caso a caso, exatamente os pacientes que os colegas anteriores erraram. As árvores são construídas em sequência, e cada nova árvore foca em corrigir os erros das anteriores. As implementações famosas se chamam XGBoost e LightGBM, e formam o padrão-ouro do dado tabular: anos de competições do Kaggle confirmam, vence quase sempre. Guarde o contraste: floresta é paralela e vota: boosting é sequencial e corrige. No lab e no mini-projeto você vai colocar os dois na pista contra a logística."
+    },
+    {
+      "tipo": "conceito",
+      "kicker": "PARTE 4 DE 8",
+      "frase": "O objetivo não é acertar o passado — é generalizar para dados novos.",
+      "fala": "Parte quatro, e aqui chegamos à ideia mais importante da aula. O objetivo do machine learning não é acertar o passado: é generalizar, ou seja, funcionar bem em dados novos, que o modelo nunca viu. Parece óbvio, mas quase todos os desastres da área nascem de esquecer essa frase. Há dois modos de fracassar, e eu quero que você os memorize como personagens. O underfitting, ou alto viés: o modelo é simples demais para o padrão que existe nos dados. Ele vai mal no treino e mal no teste. É o aluno que não estudou: erra o simulado e erra a prova. E o overfitting, ou alta variância: o modelo decorou o treino, incluindo o ruído, as coincidências, as impressões digitais de cada exemplo. Ele brilha no treino e fracassa no teste. É o aluno que decorou o gabarito do simulado: tira dez no simulado e trava na prova de verdade, porque nunca aprendeu a matéria, aprendeu as respostas. Todo modelo que você treinar na vida vai pender para um desses dois lados, e o seu trabalho é diagnosticar para qual."
+    },
+    {
+      "tipo": "conceito",
+      "kicker": "VIÉS-VARIÂNCIA",
+      "frase": "Treino bom + teste ruim = overfitting. Treino ruim = underfitting. O diagnóstico é sempre comparativo.",
+      "fala": "E como diagnosticar? A regra cabe numa linha, e é sempre comparativa, nunca um número isolado. Treino bom e teste ruim: overfitting, o modelo decorou. Treino ruim, independente do teste: underfitting, o modelo não dá conta. Noventa e nove por cento no treino e setenta e um no teste? O abismo entre os dois é a assinatura do overfitting. Agora, os remédios, e repare que são opostos, por isso o diagnóstico vem primeiro. Para overfitting: mais dados, modelo mais simples, regularização, que é penalizar a complexidade, ou menos features. Para underfitting: modelo mais capaz, ou melhores features. Esse cabo de guerra tem nome de batismo, trade-off viés-variância: simplificar demais aumenta o viés, flexibilizar demais aumenta a variância, e o ponto ótimo está no meio, encontrado experimentalmente. E não pense que isso é assunto de ML antigo: você vai gerenciar exatamente este trade-off no fine-tuning de modelos de linguagem, no módulo nove. O vocabulário que você aprende hoje é o mesmo de lá."
+    },
+    {
+      "tipo": "conceito",
+      "kicker": "PARTE 5 DE 8",
+      "frase": "Regra sagrada: o modelo só pode ser avaliado em dados que nunca viu — e o teste é tocado uma única vez.",
+      "fala": "Parte cinco: a liturgia da avaliação honesta. A regra sagrada do machine learning, e eu uso a palavra sagrada sem ironia: o modelo só pode ser avaliado em dados que ele nunca viu. O protocolo padrão divide o dataset em três pedaços. Treino, uns setenta por cento: onde o modelo aprende. Validação, uns quinze por cento: onde você compara modelos candidatos e ajusta hiperparâmetros, aquelas escolhas como a profundidade da árvore ou o número de vizinhos. E teste, os quinze por cento finais: tocado uma única vez, no fim de tudo, para a estimativa honesta de como o modelo se sai no mundo real. Por que a cerimônia toda? Porque quem ajusta o modelo olhando o resultado do teste transforma o teste em validação: cada espiada vaza um pouco de informação, o modelo vai sendo moldado para aquele conjunto específico, e no final você fica sem estimativa honesta nenhuma. O número que você reporta para o chefe vira ficção otimista. Teste é urna lacrada: abre uma vez, no final, e pronto."
+    },
+    {
+      "tipo": "code",
+      "kicker": "VALIDAÇÃO CRUZADA",
+      "titulo": "K-fold: todo dado treina e valida",
+      "code": "from sklearn.model_selection import (\n    cross_val_score)\n\nscores = cross_val_score(modelo, X, y,\n                         cv=5, scoring=\"f1\")\nprint(f\"F1: {scores.mean():.3f}\"\n      f\" +- {scores.std():.3f}\")",
+      "fala": "E quando os dados são poucos e você não pode se dar ao luxo de separar quinze por cento para validação? A resposta é a validação cruzada, o k-fold, e a ideia é elegante. Divida os dados em cinco pedaços, os folds. Treine cinco vezes: em cada rodada, quatro pedaços treinam e o quinto valida, e o pedaço de validação vai rodando. No final, todo exemplo foi usado para treinar e para validar, e você tem cinco medições em vez de uma. Reporte a média e o desvio-padrão. O código na tela faz tudo isso numa chamada: cross val score recebe o modelo, os dados, cv igual a cinco para os cinco folds, e a métrica escolhida, aqui o F1, que você conhece na parte seis. Repare no print: média mais ou menos desvio. Esse mais ou menos vale ouro e é a marca do profissional: um F1 de zero oitenta e dois mais ou menos zero zero dois é um modelo estável: o mesmo zero oitenta e dois mais ou menos zero quinze é uma loteria, o desempenho depende de qual fatia dos dados caiu no treino. Número sem barra de erro é meia informação."
+    },
+    {
+      "tipo": "conceito",
+      "kicker": "PARTE 6 DE 8",
+      "frase": "Cada métrica engana de um jeito — e a escolha da métrica é decisão de negócio, não de código.",
+      "fala": "Parte seis: métricas, e o subtítulo honesto desta parte é: cada uma engana de um jeito. Para classificação, tudo nasce de uma tabelinha dois por dois chamada matriz de confusão, que cruza o que o modelo disse com o que era verdade. Quatro células: verdadeiros positivos, o modelo disse sim e era sim: falsos positivos, disse sim e era não, o alarme falso: falsos negativos, disse não e era sim, o caso que escapou: e verdadeiros negativos. Toda métrica de classificação é uma conta sobre essas quatro células, e cada conta ilumina um canto e esconde outro. A primeira e mais famosa é a acurácia: a porcentagem total de acertos. E é também a que mais engana, pelo motivo que você já conhece do módulo quatro, a taxa base: com fraude em um por cento dos casos, o modelo preguiçoso que sempre diz não é fraude crava noventa e nove por cento de acurácia com utilidade zero. Em classes desbalanceadas, e o mundo real é desbalanceado, acurácia sozinha é quase desinformação. Vamos às métricas que olham onde dói."
+    },
+    {
+      "tipo": "code",
+      "kicker": "MATRIZ DE CONFUSÃO",
+      "titulo": "Os quatro números da verdade",
+      "code": "# fraude: 1000 transacoes, 10 fraudes\n\n              era fraude   era legitima\nmarcou fraude     VP = 7       FP = 40\nmarcou ok         FN = 3       VN = 950\n\nacuracia = (7 + 950) / 1000 = 95.7%\nprecisao = 7 / (7 + 40)     = 14.9%\nrecall   = 7 / (7 + 3)      = 70.0%",
+      "fala": "Vamos dar corpo à matriz com um exemplo de fraude, e eu quero que você confira cada conta comigo. Mil transações, dez fraudes reais. O modelo marcou quarenta e sete como fraude, e olhe a matriz na tela. Verdadeiros positivos, sete: fraudes que ele pegou. Falsos negativos, três: fraudes que escaparam. Falsos positivos, quarenta: transações legítimas marcadas por engano, quarenta clientes honestos bloqueados. Verdadeiros negativos, novecentas e cinquenta. Agora as três leituras do mesmo modelo. Acurácia: sete mais novecentos e cinquenta acertos em mil, noventa e cinco vírgula sete por cento. Soa ótimo. Precisão: das quarenta e sete marcadas, só sete eram fraude: quatorze vírgula nove por cento: de cada sete alarmes, seis são falsos. Recall: das dez fraudes reais, pegou sete: setenta por cento. Três números, três histórias completamente diferentes, sobre o mesmo modelo, com as mesmas previsões. Quem olha só a acurácia aprova: quem olha a precisão vê o time de atendimento afogado em alarme falso. Por isso a matriz vem antes de qualquer métrica: ela é a verdade crua."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "MÉTRICAS",
+      "titulo": "Precisão, recall e as irmãs",
+      "bullets": [
+        "Precisao: dos que marquei, quantos eram?",
+        "Recall: dos reais, quantos achei?",
+        "F1: media harmonica das duas",
+        "ROC-AUC: ranking em todos os cortes",
+        "MAE vs RMSE: RMSE pune erro grande"
+      ],
+      "fala": "As quatro métricas de trabalho. Precisão: dos que eu marquei como positivos, quantos eram de verdade? Ela pune o alarme falso, mas ignora os positivos que deixei escapar. Recall: dos positivos reais que existiam, quantos eu achei? Pune o caso que escapou, mas ignora os alarmes: marcar tudo como positivo dá recall de cem por cento. Percebeu que uma é o espelho da outra? O F1 tenta o equilíbrio: é a média harmônica de precisão e recall, que só é alta quando as duas são altas. O defeito: esconde qual das duas está ruim, e ignora que os custos raramente são simétricos. E a ROC-AUC mede a qualidade do ranking de probabilidades em todos os cortes possíveis: zero e meio é chute de moeda, um é perfeição: mas pode parecer ótima em classes desbalanceadas e não diz nada sobre o threshold que você vai usar. E as métricas de regressão, MAE e RMSE, ganham uma cena própria daqui a pouco, com uma conta que revela outliers."
+    },
+    {
+      "tipo": "conceito",
+      "kicker": "MÉTRICAS",
+      "frase": "Câncer prioriza recall: falso negativo custa vidas. Spam prioriza precisão: e-mail legítimo no lixo irrita.",
+      "fala": "E qual métrica escolher? Essa é a pegadinha: não é uma decisão técnica, é uma decisão de negócio, e o seu papel de engenheiro é traduzi-la. A pergunta certa é: qual erro custa mais caro neste problema? Triagem de câncer: deixar passar um doente, o falso negativo, custa uma vida: um alarme falso custa um exame a mais. Prioridade absoluta: recall. Filtro de spam: jogar o e-mail legítimo do cliente na caixa de spam, o falso positivo, custa um contrato perdido: deixar passar um spam custa um incômodo. Prioridade: precisão. Mesmo tipo de modelo, prioridades opostas, porque os custos dos erros são opostos. Quando alguém te pedir um modelo bom, devolva a pergunta: bom em quê? Qual erro a empresa prefere cometer? Essa conversa, feita antes de escrever qualquer linha de código, vale mais que semanas de ajuste de hiperparâmetro. E anote a versão curta para a vida: a métrica é o contrato entre o modelo e o negócio. Contrato mal escrito, modelo otimizando a coisa errada, com precisão de cirurgião."
+    },
+    {
+      "tipo": "code",
+      "kicker": "REGRESSÃO",
+      "titulo": "MAE, RMSE e o dedo-duro",
+      "code": "erros = [1, 1, 1, 1, 16]  # em R$ mil\n\nMAE  = (1+1+1+1+16) / 5 = 4.0\n\nRMSE = raiz((1+1+1+1+256) / 5)\n     = raiz(52) ~ 7.2\n\n# RMSE >> MAE:\n# um erro grande dominando",
+      "fala": "E para regressão, quando a resposta é um número, duas réguas. O MAE, erro absoluto médio: a média dos tamanhos dos erros, ignorando o sinal. A virtude é falar na unidade do problema: um MAE de quatro mil reais num modelo de preço de imóvel significa que, em média, erramos quatro mil reais, qualquer gestor entende. E o RMSE, raiz do erro quadrático médio: eleva cada erro ao quadrado antes de tirar a média, e depois tira a raiz. O quadrado faz os erros grandes pesarem desproporcionalmente: prefira o RMSE quando errar feio é muito pior que errar pouco. Agora a conta da tela, que vale a pena conferir. Cinco previsões, quatro erros de mil reais e um erro de dezesseis mil. MAE: a média de um, um, um, um e dezesseis, quatro. RMSE: os quadrados são um, um, um, um e duzentos e cinquenta e seis: a média dá cinquenta e dois, e a raiz, cerca de sete vírgula dois. Quase o dobro do MAE. E essa é a dica de diagnóstico: RMSE muito maior que o MAE denuncia outliers dominando o erro: alguns poucos casos em que o modelo erra feio. Vá olhar esses casos, um a um: quase sempre há história ali."
+    },
+    {
+      "tipo": "conceito",
+      "kicker": "PARTE 7 DE 8",
+      "frase": "O modelo só enxerga as colunas que você entrega — feature engineering torna o padrão visível.",
+      "fala": "Parte sete: feature engineering, a arte onde se ganha o jogo em dado tabular. O ponto de partida é uma limitação que muita gente esquece: o modelo enxerga apenas as colunas que você entrega. Ele não sabe que existe um mundo lá fora, não deduz contexto, não adivinha. Feature engineering é criar representações que tornam o padrão visível para o modelo. O repertório básico: extrair, de uma data crua, criar dia da semana, mês, é feriado, porque a sazonalidade mora aí. Combinar: renda dividida por número de dependentes pode dizer mais sobre o aperto financeiro que as duas colunas separadas. Transformar: o logaritmo do preço doma distribuições muito assimétricas, aquelas com cauda longa de valores altos. Codificar categorias: one-hot encoding transforma a coluna UF em várias colunas de zero e um, porque modelo não come texto. E escalar: modelos lineares e de distância precisam das features na mesma escala, o StandardScaler resolve: árvores não se importam, elas só fazem cortes."
+    },
+    {
+      "tipo": "conceito",
+      "kicker": "FEATURE ENGINEERING",
+      "frase": "No Titanic, o título extraído do nome prevê melhor que a idade crua — feature boa vem do domínio.",
+      "fala": "E o exemplo que prova que feature boa vem de entender o domínio, não de força bruta. No Titanic, o dataset que você conhece do módulo três, existe uma coluna de nome completo do passageiro, aparentemente inútil para prever sobrevivência. Mas dentro do nome mora um tesouro: o título. Mister, Missis, Miss, e o precioso Master, que na época era o tratamento para meninos. Extraia o título com uma expressão regular e você criou uma feature que prevê sobrevivência melhor que a idade crua. Por quê? Porque Master identifica meninos, e crianças tinham prioridade nos botes: e porque a idade tem um monte de valores faltantes, enquanto o nome está sempre lá. Nenhum algoritmo do mundo descobriria isso sozinho olhando a coluna de texto: foi um humano que conhecia o costume da época que enxergou. Essa é a lição da parte sete: uma hora conversando com quem entende do negócio, ou estudando o domínio, rende mais que uma noite de ajuste de hiperparâmetros. No mini-projeto, o título é uma das features que você vai criar."
+    },
+    {
+      "tipo": "conceito",
+      "kicker": "PARTE 8 DE 8",
+      "frase": "Data leakage: informação que não existiria na hora da previsão contamina o treino.",
+      "fala": "Parte oito, o vilão da aula: data leakage, o vazamento de dados, o erro número um do iniciante e de muito veterano desatento. A definição: leakage é quando informação que não existiria no momento da previsão contamina o treino. O modelo aprende com uma cola que não estará disponível na prova, fica ótimo no papel, e vai para produção fazer papelão. É traiçoeiro justamente porque os números melhoram: nada no seu notebook grita erro, pelo contrário, tudo parece maravilhoso. O exemplo caricato: prever inadimplência usando a coluna data do calote. Se a data do calote está preenchida, o cliente obviamente deu calote: o modelo aprende essa tautologia e crava acurácia altíssima. Absurdo explícito assim é raro. O perigo real são as versões disfarçadas: um status da conta que foi atualizado depois do evento que você quer prever, uma média calculada sobre o dataset inteiro, uma duplicata atravessando o split. Vamos ver as três formas clássicas com calma, porque é caçando essas três que você se salva."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "DATA LEAKAGE",
+      "titulo": "As três formas clássicas",
+      "bullets": [
+        "1. Feature do futuro (status pos-evento)",
+        "2. Pre-processar antes do split",
+        "3. Duplicatas atravessando o split",
+        "Sintoma: resultado bom demais",
+        "Antidoto estrutural: Pipeline"
+      ],
+      "fala": "Forma um: a feature do futuro. Qualquer coluna preenchida ou atualizada depois do evento que você quer prever. A pergunta-antídoto, para cada coluna do seu dataset: essa informação existiria no exato momento em que o modelo precisaria prever? Se a resposta é não, fora. Forma dois: pré-processamento antes do split. Calcular a média e o desvio para normalizar usando o dataset inteiro, antes de separar treino e teste. Parece inofensivo, mas as estatísticas do teste vazaram para dentro do treino: o modelo já sabe algo sobre os dados que deveria nunca ter visto. Forma três: duplicatas atravessando o split. O mesmo cliente, ou uma quase-duplicata dele, cai no treino e no teste: o modelo decora no treino e finge generalizar no teste. E o sintoma clássico das três: resultado bom demais. Noventa e nove por cento num problema difícil? Desconfie primeiro do leakage, não do seu gênio. Essa desconfiança reflexa diante de números maravilhosos é, talvez, a marca mais confiável de um profissional experiente."
+    },
+    {
+      "tipo": "conceito",
+      "kicker": "PIPELINE",
+      "frase": "Pipeline é dispositivo de segurança: o fit das transformações acontece só no treino.",
+      "fala": "E o antídoto estrutural para a forma dois, que é a mais sorrateira: o Pipeline do scikit-learn. A ideia: encadear pré-processamento e modelo num único objeto. Imputação de valores faltantes, escala, one-hot encoding e o modelo final viram uma coisa só, com a mesma interface de sempre, fit e predict. E aqui está a mágica que justifica a cerimônia: quando você roda validação cruzada sobre um pipeline, o fit das transformações acontece só no pedaço de treino de cada fold, automaticamente. A média usada para imputar, o desvio usado para escalar, tudo é calculado apenas com os dados de treino daquela rodada, e depois apenas aplicado à validação. O vazamento da forma dois fica estruturalmente impossível, sem depender da sua disciplina num notebook às onze da noite de uma sexta-feira. Por isso eu insisto: pipeline não é frescura de organização, é dispositivo de segurança, o cinto do carro. No lab, agora mesmo, você monta o seu primeiro, e a partir de hoje todo pré-processamento seu vive dentro de um."
+    },
+    {
+      "tipo": "conceito",
+      "kicker": "LAB GUIADO",
+      "frase": "Pipeline completo no Titanic: pré-processamento, dois modelos, validação cruzada e avaliação final honesta.",
+      "fala": "Chegou o laboratório guiado: o pipeline completo no Titanic, do dado cru à avaliação honesta, em seis células. O velho conhecido do módulo três volta, mas o olhar mudou: lá você explorava os dados, agora você vai prever quem sobrevive, com todas as disciplinas da aula aplicadas de uma vez. O roteiro: célula um, carregar os dados e definir alvo e features. Célula dois, o split entre treino e teste, antes de qualquer pré-processamento, e você já sabe por quê. Célula três, a construção do pipeline: imputação, escala e one-hot dentro de um ColumnTransformer, com a regressão logística na ponta. Célula quatro, o duelo por validação cruzada: baseline logístico contra Random Forest. Célula cinco, a avaliação final no teste, tocado uma única vez, com matriz de confusão, relatório de métricas e ROC-AUC. E célula seis, a interpretação: quais features o modelo achou importantes. Rode no Colab ou localmente, com uv add scikit-learn pandas matplotlib seaborn. Vamos célula a célula."
+    },
+    {
+      "tipo": "code",
+      "kicker": "LAB · CÉLULA 1",
+      "titulo": "Dados e alvo",
+      "code": "import pandas as pd\nimport numpy as np\nimport seaborn as sns\n\ndf = sns.load_dataset(\"titanic\")\nalvo = \"survived\"\nfeatures = [\"pclass\", \"sex\", \"age\",\n            \"sibsp\", \"parch\", \"fare\",\n            \"embarked\"]\nX, y = df[features], df[alvo]\nprint(X.shape, y.mean().round(3))",
+      "fala": "Célula um: dados e alvo. Carregamos o Titanic direto do seaborn, como no módulo três. Definimos o alvo, a coluna survived, que vale um para quem sobreviveu e zero para quem não: é ela que queremos prever, um problema de classificação binária. E escolhemos sete features: a classe da passagem, o sexo, a idade, as colunas sibsp e parch, que contam irmãos e cônjuges e pais e filhos a bordo, a tarifa paga, e o porto de embarque. Separamos X maiúsculo, a tabela de features, e y minúsculo, o vetor de respostas: essa convenção de nomes vem da notação matricial e a área inteira usa. O print final mostra o shape, oitocentas e noventa e uma linhas por sete colunas, e um número que eu quero que você olhe com atenção de engenheiro: a média do y, zero trezentos e oitenta e três. Como y é zero ou um, a média é a taxa de sobrevivência: trinta e oito por cento. Ou seja, classes desbalanceadas, sessenta e dois contra trinta e oito: a acurácia já começa devendo, e um chute de todo mundo morre já acerta sessenta e dois por cento. Anote esse baseline mental."
+    },
+    {
+      "tipo": "code",
+      "kicker": "LAB · CÉLULA 2",
+      "titulo": "Split antes de tudo",
+      "code": "from sklearn.model_selection import (\n    train_test_split)\n\nX_treino, X_teste, y_treino, y_teste = \\\n    train_test_split(\n        X, y,\n        test_size=0.2,\n        random_state=42,\n        stratify=y)  # preserva proporcao",
+      "fala": "Célula dois: o split, e repare que ele vem antes de qualquer pré-processamento: é a lição anti-leakage aplicada na prática, o teste sai da mesa antes de qualquer estatística ser calculada. O train test split separa vinte por cento para teste, com três argumentos que merecem comentário. Test size, zero vírgula dois: oitenta e vinte, proporção padrão para um dataset deste tamanho. Random state, quarenta e dois: a semente que congela o sorteio, para o experimento ser reprodutível: rodou de novo, obteve o mesmo split, essa disciplina vem desde o módulo quatro. E o stratify igual a y, o detalhe fino da célula: ele garante que a proporção de sobreviventes seja a mesma no treino e no teste, os trinta e oito por cento preservados dos dois lados. Sem stratify, o sorteio poderia, por azar, concentrar sobreviventes num lado só, e você estaria treinando num problema e testando em outro. Em classes desbalanceadas, estratificar é regra, não opção. Quatro variáveis saem daqui, e o X teste e o y teste entram na urna lacrada: só voltam na célula cinco."
+    },
+    {
+      "tipo": "code",
+      "kicker": "LAB · CÉLULA 3A",
+      "titulo": "Um tratamento para cada tipo",
+      "code": "numericas = [\"age\",\"sibsp\",\"parch\",\"fare\"]\ncategoricas = [\"pclass\",\"sex\",\"embarked\"]\n\nnum = Pipeline([\n  (\"imputar\",\n   SimpleImputer(strategy=\"median\")),\n  (\"escalar\", StandardScaler())])\ncat = Pipeline([\n  (\"imputar\", SimpleImputer(\n      strategy=\"most_frequent\")),\n  (\"onehot\", OneHotEncoder(\n      handle_unknown=\"ignore\"))])",
+      "fala": "Célula três, o coração do lab, e vamos por partes: primeiro o tratamento de cada tipo de coluna. Separamos as features em duas listas: as numéricas, idade, sibsp, parch e tarifa: e as categóricas, classe, sexo e porto de embarque. Cada grupo ganha o seu mini-pipeline de dois passos. Para as numéricas: o SimpleImputer com estratégia de mediana preenche os valores faltantes, e a idade tem muitos, com a mediana da coluna: a mediana em vez da média, para outliers não distorcerem o preenchimento: e o StandardScaler coloca tudo na mesma escala, média zero e desvio um, que os modelos lineares agradecem, como você viu na parte sete. Para as categóricas: imputação pelo valor mais frequente, que é o que faz sentido para categorias: e o OneHotEncoder transformando cada categoria em colunas de zero e um, porque modelo não come texto. O handle unknown igual a ignore é o cinto de segurança: se aparecer uma categoria nova no futuro, ele a codifica como tudo zero em vez de quebrar em produção."
+    },
+    {
+      "tipo": "code",
+      "kicker": "LAB · CÉLULA 3B",
+      "titulo": "Montando o pipeline completo",
+      "code": "pre = ColumnTransformer([\n    (\"num\", num, numericas),\n    (\"cat\", cat, categoricas),\n])\n\npipe_lr = Pipeline([\n    (\"pre\", pre),\n    (\"modelo\",\n     LogisticRegression(max_iter=1000)),\n])",
+      "fala": "E agora a montagem final, olhe como as peças se encaixam. O ColumnTransformer recebe os dois mini-pipelines da tela anterior e diz qual grupo de colunas cada um trata: o tratamento numérico nas quatro colunas numéricas, o categórico nas três categóricas, tudo em paralelo, e os resultados são concatenados numa tabela só, pronta para o modelo. E o Pipeline final encadeia esse pré-processamento inteiro com a regressão logística na ponta. O objeto pipe lr que sai daqui é uma coisa só: chame fit, e ele imputa, escala, codifica e treina: chame predict, e ele aplica as mesmas transformações, com as estatísticas aprendidas no treino, e prevê. E aqui se cumpre a promessa da parte oito: quando a validação cruzada rodar sobre este objeto, a mediana da imputação e a média da escala serão recalculadas dentro de cada fold, só com os dados de treino daquele fold. O vazamento da forma dois ficou estruturalmente impossível. Este esqueleto de célula, ColumnTransformer mais Pipeline, você vai reutilizar em todo projeto tabular da sua vida: guarde-o com carinho."
+    },
+    {
+      "tipo": "code",
+      "kicker": "LAB · CÉLULA 4",
+      "titulo": "Baseline contra Random Forest",
+      "code": "pipe_rf = Pipeline([(\"pre\", pre),\n  (\"modelo\", RandomForestClassifier(\n      n_estimators=300,\n      random_state=42))])\n\nfor nome, pipe in [(\"Logistica\", pipe_lr),\n                   (\"RandForest\", pipe_rf)]:\n    scores = cross_val_score(\n        pipe, X_treino, y_treino,\n        cv=5, scoring=\"accuracy\")\n    print(nome, scores.mean().round(3),\n          scores.std().round(3))",
+      "fala": "Célula quatro: o duelo. Montamos o segundo competidor, o mesmo pré-processamento com um RandomForestClassifier de trezentas árvores na ponta, e repare como o pipeline paga o investimento: trocamos só a última peça, o resto é idêntico. E colocamos os dois para brigar em pé de igualdade, com validação cruzada de cinco folds sobre o conjunto de treino. Atenção ao detalhe que separa o amador do profissional: a validação cruzada roda sobre o treino, o teste continua na urna. O loop imprime, para cada modelo, a média e o desvio da acurácia nos cinco folds. Os resultados ficam na casa dos oitenta por cento, com a floresta tipicamente um pouco à frente da logística, e os desvios pequenos, sinal de estabilidade. Lembra do baseline mental da célula um? Chutar todo mundo morre dava sessenta e dois por cento: os dois modelos batem isso com folga, então há sinal real nos dados. E o comentário no código diz o essencial: dentro de cada fold, imputação e escala foram ajustadas só no treino daquele fold. O pipeline trabalhando de segurança, sem você pensar nisso."
+    },
+    {
+      "tipo": "code",
+      "kicker": "LAB · CÉLULA 5",
+      "titulo": "A urna é aberta: teste final",
+      "code": "melhor = pipe_rf.fit(X_treino, y_treino)\npred = melhor.predict(X_teste)\nprobs = melhor.predict_proba(X_teste)[:, 1]\n\nprint(confusion_matrix(y_teste, pred))\nprint(classification_report(y_teste, pred,\n                            digits=3))\nprint(\"ROC-AUC:\",\n      roc_auc_score(y_teste, probs)\n      .round(3))\nassert roc_auc_score(y_teste, probs) > 0.8",
+      "fala": "Célula cinco: o momento solene. A urna é aberta, uma única vez. Treinamos o vencedor da validação cruzada, a floresta, com todo o conjunto de treino, e o avaliamos no teste, aqueles vinte por cento que nenhuma decisão nossa jamais tocou. Três relatórios saem. A matriz de confusão, os quatro números crus da parte seis: olhe principalmente os dois cantos dos erros, os falsos positivos e os falsos negativos, e pergunte qual dos dois doeria mais no seu problema. O classification report, com precisão, recall e F1 por classe: repare que o recall da classe sobreviveu costuma vir mais baixo que o da outra, o modelo encontra os que morreram com mais facilidade. E a ROC-AUC sobre as probabilidades, que deve passar de zero oitenta e cinco: bem acima do zero e meio da moeda. E a última linha é uma assinatura da academia que você conhece: o assert. Se a AUC cair abaixo de zero oitenta, o notebook quebra na sua cara em vez de sorrir e deixar passar. Este número final, do teste intocado, é o único que você reportaria para alguém. Os da célula quatro eram bússola: este é o mapa."
+    },
+    {
+      "tipo": "code",
+      "kicker": "LAB · CÉLULA 6",
+      "titulo": "Quais features pesam?",
+      "code": "nomes = (melhor.named_steps[\"pre\"]\n         .get_feature_names_out())\nimp = (melhor.named_steps[\"modelo\"]\n       .feature_importances_)\n\npd.Series(imp, index=nomes) \\\n  .sort_values() \\\n  .plot.barh(figsize=(8, 5))\nplt.title(\"Importancia das features\")\nplt.tight_layout(); plt.show()",
+      "fala": "Célula seis, a pergunta que todo gestor faz e todo bom engenheiro antecipa: o modelo decide com base em quê? A floresta oferece as feature importances, uma pontuação de quanto cada feature contribuiu para as decisões das trezentas árvores. O código pesca dentro do pipeline: o named steps pre nos dá os nomes das colunas depois do one-hot, porque sexo virou duas colunas e embarque virou três: e o named steps modelo entrega as importâncias. Juntamos num Series do pandas, ordenamos e plotamos na horizontal. E o resultado conta uma história coerente: sexo e tarifa dominam o gráfico, exatamente o que a sua exploração do módulo três já sugeria: mulheres sobreviveram muito mais, e tarifa alta é um espelho da classe social e da proximidade dos botes. Essa checagem de coerência é o ponto da célula: quando a importância confirma o que a exploração mostrou, a confiança no modelo cresce: quando aparece uma feature suspeita dominando do nada, acende o alerta, inclusive de leakage. Modelo que você não consegue explicar é modelo em que você não deveria confiar cegamente."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "MINI-PROJETO",
+      "titulo": "Compita de verdade",
+      "bullets": [
+        "Kaggle: competicao Titanic (ou HousePrices)",
+        "Pipeline completo + validacao cruzada",
+        "2+ features criadas por voce",
+        "3 modelos comparados em tabela",
+        "Submissao real + score no leaderboard"
+      ],
+      "fala": "O mini-projeto do módulo cinco tem um sabor especial: pela primeira vez, você compete de verdade. O enunciado: inscreva-se na competição Titanic do Kaggle, aquela mesma que serve de porta de entrada para a comunidade inteira, construa o seu pipeline e submeta as suas previsões ao leaderboard público. Se preferir um problema de regressão, a competição House Prices segue exatamente o mesmo roteiro. Os requisitos: baixar os dados da competição e explorá-los, reaproveitando o seu roteiro de exploração do módulo três. Montar um pipeline scikit-learn com pré-processamento completo: imputação, one-hot, escala onde necessário. Criar pelo menos duas features novas de sua autoria, e o título extraído do nome é candidato óbvio. Comparar no mínimo três modelos via validação cruzada, numa tabela: logística, Random Forest e gradient boosting. Submeter ao Kaggle e registrar o score público no notebook. E fechar com uma seção de post-mortem: o que funcionou, o que não funcionou, qual seria o próximo passo. Reserve umas cinco horas, em duas ou três sessões."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "PASSO A PASSO · 1 A 4",
+      "titulo": "Da inscrição ao pipeline",
+      "bullets": [
+        "Join Competition + baixar os 3 CSVs",
+        "uv init modulo05 + raio-X do train.csv",
+        "Submeter gender_submission: baseline 0.765",
+        "Adaptar celulas 3 e 4 do lab",
+        "Validacao local = validacao cruzada"
+      ],
+      "fala": "O passo a passo, primeira metade. Etapa um, vinte minutos: entre na página da competição Titanic logado, clique em Join Competition, aceite as regras, e baixe os três arquivos da aba Data: o train ponto csv, que tem a resposta: o test ponto csv, que não tem, é ele que você vai prever: e o gender submission, o exemplo do formato de entrega. Etapa dois, quarenta minutos: crie o projeto modulo zero cinco kaggle com uv, suba o Jupyter e repita o raio-X do módulo três no train: shape, info, contagem de nulos. Atenção: as colunas do Kaggle vêm com maiúsculas, Age, Sex, Pclass, diferente do dataset do seaborn do lab. Etapa três, vinte minutos, e esta é uma esperteza de veterano: faça a primeira submissão antes de modelar, enviando o próprio gender submission. Destrava o processo, e o score que aparecer, perto de zero setecentos e sessenta e cinco, vira o seu baseline a bater, anotado no notebook. Etapa quatro, quarenta e cinco minutos: adapte as células três e quatro do lab. Sem split de teste local: o teste é o do Kaggle: sua avaliação local é a validação cruzada."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "PASSO A PASSO · 5 A 8",
+      "titulo": "Features, duelo e submissão",
+      "bullets": [
+        "Titulo via regex + TamFamilia",
+        "Tabela: logistica, RF, GradBoosting",
+        "Treinar vencedor com TODO o treino",
+        "submissao.csv: 418 linhas + assert",
+        "Post-mortem + Restart & Run All + push"
+      ],
+      "fala": "Segunda metade. Etapa cinco, quarenta e cinco minutos: as features novas, criadas nos dois dataframes, treino e teste. O título sai do nome com uma expressão regular que pega o que está entre a vírgula e o ponto: e o tamanho da família é sibsp mais parch mais um. Adicione as colunas novas ao ColumnTransformer e confira: o value counts do título deve mostrar Mister, Miss, Missis e Master no topo, e a validação cruzada deve melhorar, ou você deve saber explicar por que não. Etapa seis, quarenta e cinco minutos: o duelo de três, logística, Random Forest e GradientBoosting, com a tabela de média e desvio, e um vencedor escolhido pela média. Etapa sete, meia hora: treine o vencedor com todo o treino, gere o submissao ponto csv com PassengerId e Survived, quatrocentas e dezoito linhas, sem coluna de índice, e proteja com um assert antes do upload. Submeta e anote o segundo score ao lado do baseline. Etapa oito, meia hora: o post-mortem honesto, uma frase para cada pergunta: a conferência anti-leakage: nenhum fit fora do pipeline: e o ritual de entrega, Restart and Run All, commit e push."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "SE TRAVAR",
+      "titulo": "Primeiros socorros do projeto",
+      "bullets": [
+        "Kaggle rejeitou: espelhe o sample (418)",
+        "KeyError age: no Kaggle e Age, maiuscula",
+        "Local >> leaderboard: cheiro de leakage",
+        "30 min travado: pergunte a IA com contexto",
+        "Peca a explicacao, nao so a resposta"
+      ],
+      "fala": "Os primeiros socorros do projeto. O Kaggle rejeitou a submissão reclamando de linhas ou colunas: o seu CSV precisa espelhar exatamente o sample submission: quatrocentas e dezoito linhas, as colunas PassengerId e Survived, e index igual a false no to csv: o assert da etapa sete existe para pegar isso antes do upload. Apareceu um KeyError na coluna age minúscula: as colunas do Kaggle são maiúsculas, Age, diferente do dataset do seaborn que o lab usou: é a pegadinha mais comum do projeto. A validação local deu bem acima do leaderboard: cheiro forte de leakage, volte à parte oito e procure: alguma estatística calculada fora do pipeline, alguma feature que usa informação do futuro. E a regra geral de sempre: travou por mais de trinta minutos em qualquer etapa, pergunte ao seu assistente de IA, colando o erro completo e dizendo em qual etapa do projeto está. Mas peça a explicação, não só a resposta pronta. O leaderboard do Kaggle ninguém sobe por você: e é exatamente por isso que ele ensina."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "ERROS COMUNS",
+      "titulo": "Cinco tropeços clássicos",
+      "bullets": [
+        "Confiar na acuracia com classe rara",
+        "Ajustar o modelo espiando o teste",
+        "fit de scaler/imputer fora do pipeline",
+        "Pular o baseline linear",
+        "Celebrar 99% em vez de desconfiar"
+      ],
+      "fala": "Os cinco tropeços clássicos do módulo. Primeiro: confiar na acurácia em classes desbalanceadas. Noventa e nove por cento com fraude de um por cento é o chute na classe majoritária de terno e gravata: olhe precisão, recall e a matriz de confusão. Segundo: ajustar o modelo espiando o teste. Cada espiada transforma um pouco do teste em validação, e no final o número que você reporta é ficção: teste é urna, abre uma vez. Terceiro: dar fit no scaler ou no imputer fora do pipeline, sobre o dataset inteiro. É a forma dois de leakage, silenciosa e comuníssima: dentro do pipeline ela é estruturalmente impossível. Quarto: pular o baseline linear e ir direto para o modelo da moda. Sem a régua da logística, você não sabe se o seu boosting é bom ou se o problema é fácil: e às vezes a logística ganha. Quinto: celebrar um noventa e nove por cento em vez de desconfiar dele. Resultado bom demais é sintoma, não conquista: procure o vazamento primeiro. Se não achar, aí sim, comemore, com a consciência tranquila de quem procurou."
+    },
+    {
+      "tipo": "conceito",
+      "kicker": "RECAPITULANDO",
+      "frase": "Comece simples, valide sem vazar, escolha a métrica pelo custo do erro — e desconfie do bom demais.",
+      "fala": "Vamos amarrar os fios. Supervisionado tem rótulo, e se divide em regressão e classificação: a pergunta-guia é: tenho a resposta certa para o passado? Comece sempre pelo modelo linear: a logística é o classificador baseline, rápida e interpretável. Para dado tabular, os comitês mandam: Random Forest vota em paralelo, gradient boosting corrige em sequência e é o padrão-ouro. O objetivo é generalizar: treino bom com teste ruim é overfitting, treino ruim é underfitting, e os remédios são opostos: por isso o diagnóstico vem primeiro. O protocolo sagrado: treino, validação e teste, com o teste tocado uma única vez: e com poucos dados, validação cruzada, reportando média mais ou menos desvio. Métrica é decisão de negócio: câncer prioriza recall, spam prioriza precisão, e a acurácia engana em classe desbalanceada. Feature engineering torna o padrão visível, e feature boa vem do domínio, como o título do Titanic. E o leakage tem três formas clássicas, um sintoma, o bom demais, e um antídoto estrutural, o pipeline. Isso é machine learning profissional."
+    },
+    {
+      "tipo": "fim",
+      "proximo": "Módulo 6 — Como LLMs Funcionam",
+      "bullets": [
+        "Andrew Ng semanas 1-3 + Kaggle Learn",
+        "Matriz de confusao: derivar P, R e F1",
+        "3 formas de leakage + antidoto Pipeline",
+        "Lab Titanic com AUC acima de 0.8",
+        "Submissao no Kaggle com score anotado"
+      ],
+      "fala": "Antes de encerrar, o checklist de conclusão do módulo cinco. As semanas um a três do curso do Andrew Ng, ou o equivalente no Crash Course, concluídas. Os certificados de Intro e de Intermediate Machine Learning do Kaggle Learn, obtidos. Saber desenhar a matriz de confusão de cabeça e derivar dela precisão, recall e F1: teste de verdade, explique em voz alta. Saber citar as três formas clássicas de data leakage e como o pipeline previne a segunda. O lab do Titanic executado, com validação cruzada e ROC-AUC acima de zero oitenta. A primeira submissão real feita no Kaggle, com o score público registrado no notebook: acima de zero setenta e sete já é um bom começo. E o mini-projeto com post-mortem publicado no repositório academia ia. Cumpriu tudo? Então você acabou de atravessar o rito de passagem da área. Na próxima aula, o módulo seis: Como LLMs Funcionam, onde os neurônios entram em cena: redes neurais, backpropagation, PyTorch, e o motivo de tudo o que você aprendeu hoje continuar valendo lá. Eu te espero. Até a próxima aula."
+    }
+  ]
+}

@@ -1,305 +1,237 @@
 WEBVTT
 
 1
-00:00:00.000 --> 00:00:02.497
+00:00:00.000 --> 00:00:02.928
 Bem-vindo à Academia de Engenharia de IA.
 
 2
-00:00:02.497 --> 00:00:03.776
-Este é o módulo zero:
+00:00:02.928 --> 00:00:03.785
+Módulo zero:
 
 3
-00:00:03.776 --> 00:00:04.994
-boas-vindas e setup.
+00:00:03.785 --> 00:00:06.499
+boas-vindas, setup e primeiro produto.
 
 4
-00:00:04.994 --> 00:00:12.241
-Antes de qualquer linha de machine learning, vamos preparar as duas coisas que vão te acompanhar pela formação inteira:
+00:00:06.499 --> 00:00:14.712
+Você monta a bancada, configura o método de estudo e entrega um produto real dirigindo uma IA, publicado no GitHub.
 
 5
-00:00:12.241 --> 00:00:14.616
-a sua máquina e o seu método de estudo.
+00:00:15.000 --> 00:00:21.930
+Em 2026 a execução de código foi absorvida pelas ferramentas de agentic coding; o valor migrou para a direção.
 
 6
-00:00:14.900 --> 00:00:19.534
-Todo engenheiro de IA já passou pela fase de instalar Python e torcer para funcionar.
+00:00:21.930 --> 00:00:25.899
+Por isso o lema da casa é Pensar, Dirigir, Verificar, Entregar.
 
 7
-00:00:19.534 --> 00:00:24.549
-A diferença entre quem avança rápido e quem trava por semanas está quase sempre no ambiente.
+00:00:25.899 --> 00:00:31.632
+A IA multiplica quem tem critério e afunda quem não tem; este programa constrói o critério.
 
 8
-00:00:24.549 --> 00:00:28.201
-E nas empresas essa habilidade aparece no primeiro dia de trabalho:
+00:00:31.900 --> 00:00:33.913
+Cada módulo combina seis formatos:
 
 9
-00:00:28.201 --> 00:00:32.780
-você recebe um repositório e precisa reproduzir o ambiente do time sem quebrar nada.
+00:00:33.913 --> 00:00:41.611
+vídeo e leitura, lab guiado onde você explica cada célula, Sessão de Direção, quiz que força a lembrar, flashcards e mini-projeto.
 
 10
-00:00:33.067 --> 00:00:36.288
-Cada módulo combina cinco formatos, de propósito.
+00:00:41.611 --> 00:00:44.572
+Nenhum módulo conclui sem o mini-projeto entregue.
 
 11
-00:00:36.288 --> 00:00:38.917
-Vídeo e leitura para o primeiro contato.
+00:00:44.867 --> 00:00:48.311
+Nada aqui proíbe IA; o que se cobra é compreensão.
 
 12
-00:00:38.917 --> 00:00:42.467
-Lab guiado, onde você digita e executa o código junto.
+00:00:48.311 --> 00:00:51.618
+Ao final de cada projeto vem a Defesa no Campus:
 
 13
-00:00:42.467 --> 00:00:45.754
-Quiz, que força você a lembrar, não só reconhecer.
+00:00:51.618 --> 00:00:56.578
+uma entrevista curta, conduzida por um LLM, sobre o seu próprio projeto.
 
 14
-00:00:45.754 --> 00:00:48.515
-Flashcards para revisar em doses pequenas.
+00:00:56.578 --> 00:01:01.883
+Dirigiu com critério, é tranquila; só aprovou o que a IA cuspiu, ela te pega.
 
 15
-00:00:48.515 --> 00:00:50.948
-E o mini-projeto, que é a prova real.
+00:01:02.167 --> 00:01:03.027
+Especificar:
 
 16
-00:00:50.948 --> 00:00:52.000
-A regra de ouro:
+00:01:03.027 --> 00:01:10.194
+objetivo, restrições e critérios de aceite; se você não sabe escrever o que quer, a IA não adivinha.
 
 17
-00:00:52.000 --> 00:00:55.747
-nenhum módulo está concluído sem o mini-projeto entregue.
+00:01:10.194 --> 00:01:10.767
+Dirigir:
 
 18
-00:00:56.033 --> 00:00:59.964
-Três descobertas da ciência cognitiva sustentam esse desenho.
+00:01:10.767 --> 00:01:13.061
+conduzir a IA e corrigir o rumo.
 
 19
-00:00:59.964 --> 00:01:00.866
-Active recall:
+00:01:13.061 --> 00:01:13.777
+Verificar:
 
 20
-00:01:00.866 --> 00:01:04.603
-o cérebro fixa o que ele se esforça para puxar da memória.
+00:01:13.777 --> 00:01:15.139
+ler, testar, medir.
 
 21
-00:01:04.603 --> 00:01:05.827
-Repetição espaçada:
+00:01:15.139 --> 00:01:23.023
+Todo projeto tem SPEC ponto md antes do código e DECISIONS ponto md, o diário do que você escolheu e rejeitou.
 
 22
-00:01:05.827 --> 00:01:11.948
-revisar em intervalos crescentes de um, três, sete e trinta dias vence a curva do esquecimento.
+00:01:23.300 --> 00:01:24.171
+Active recall:
 
 23
-00:01:11.948 --> 00:01:14.268
-E projetos acima de consumo passivo.
+00:01:24.171 --> 00:01:29.955
+o cérebro fixa o que puxa da memória; errar no quiz e corrigir grava mais que o acerto fácil.
 
 24
-00:01:14.268 --> 00:01:15.105
-Uma analogia:
+00:01:29.955 --> 00:01:31.137
+Repetição espaçada:
 
 25
-00:01:15.105 --> 00:01:17.361
-assistir aula é ver alguém dirigir.
+00:01:31.137 --> 00:01:35.801
+intervalos crescentes vencem o esquecimento; o Campus agenda os flashcards.
 
 26
-00:01:17.361 --> 00:01:18.520
-Quiz é o simulado.
+00:01:35.801 --> 00:01:36.485
+E projetos:
 
 27
-00:01:18.520 --> 00:01:21.291
-Projeto é pegar o carro e ir até a padaria.
+00:01:36.485 --> 00:01:39.284
+conhecimento que nunca virou entrega evapora.
 
 28
-00:01:21.291 --> 00:01:23.417
-Só a terceira te torna motorista.
+00:01:39.567 --> 00:01:42.823
+O cientista de dados extrai conhecimento dos dados.
 
 29
-00:01:23.700 --> 00:01:31.240
-O termo AI Engineer ganhou nome próprio no ensaio The Rise of the AI Engineer, e virou a profissão que mais cresce na área.
+00:01:42.823 --> 00:01:45.760
+O ML engineer treina e serve modelos próprios.
 
 30
-00:01:31.240 --> 00:01:35.347
-O cientista de dados pergunta o que os dados dizem sobre o negócio.
+00:01:45.760 --> 00:01:52.784
+O engenheiro de IA especifica, dirige e verifica produtos sobre modelos de fundação e responde pela qualidade.
 
 31
-00:01:35.347 --> 00:01:39.270
-O ML engineer pergunta como treinar e escalar um modelo próprio.
+00:01:52.784 --> 00:01:56.871
+A execução as ferramentas absorvem; o mercado paga o julgamento.
 
 32
-00:01:39.270 --> 00:01:40.986
-O engenheiro de IA pergunta:
+00:01:57.167 --> 00:02:00.792
+Python é a língua franca da IA, e o uv é seu gerenciador:
 
 33
-00:01:40.986 --> 00:01:44.174
-como transformo este modelo em um produto confiável?
+00:02:00.792 --> 00:02:04.798
+rápido, instala versões do Python e cria ambientes por projeto.
 
 34
-00:01:44.174 --> 00:01:52.020
-Em 2026, a maior parte do valor vem de aplicar modelos de fundação a problemas reais — e é exatamente isso que a Academia forma.
+00:02:04.798 --> 00:02:08.042
+Ambiente virtual é uma caixinha isolada de pacotes:
 
 35
-00:01:52.300 --> 00:01:57.313
-Python é a língua franca da IA, e o uv é o gerenciador moderno que cuida de tudo:
+00:02:08.042 --> 00:02:10.649
+cada projeto com suas versões, sem briga.
 
 36
-00:01:57.313 --> 00:02:01.336
-versões do Python, ambientes virtuais e dependências por projeto.
+00:02:10.649 --> 00:02:14.783
+Sem isso você quebra a instalação global; é cicatriz de veterano.
 
 37
-00:02:01.336 --> 00:02:03.688
-O conceito-chave é o ambiente virtual:
+00:02:15.067 --> 00:02:19.884
+A ferramenta lê seu projeto, edita arquivos e roda comandos sob a sua direção.
 
 38
-00:02:03.688 --> 00:02:06.783
-uma caixinha isolada de pacotes para cada projeto.
+00:02:19.884 --> 00:02:25.628
+Gemini CLI é gratuita com conta Google; Claude Code, a referência; Cursor, editor com agente.
 
 39
-00:02:06.783 --> 00:02:12.167
-O projeto A pode usar NumPy um ponto vinte e seis e o projeto B, NumPy dois, sem briga.
+00:02:25.628 --> 00:02:27.789
+O que importa é aprender a dirigir:
 
 40
-00:02:12.167 --> 00:02:18.604
-Sem isso, mais cedo ou mais tarde você quebra a instalação do sistema — todo veterano tem essa cicatriz.
+00:02:27.789 --> 00:02:33.595
+nunca aceite um diff que você não leu, contexto é combustível, peça explicação, não só código.
 
 41
-00:02:18.900 --> 00:02:23.693
-O VS Code é o editor padrão da indústria — instale as extensões Python e Jupyter.
+00:02:33.867 --> 00:02:42.624
+Cada commit é uma fotografia do projeto; o GitHub é onde seu portfólio nasce, e todo projeto da Academia vive num repositório desde o dia um.
 
 42
-00:02:23.693 --> 00:02:29.728
-O Jupyter Notebook mistura código, resultado e texto no mesmo documento, perfeito para explorar dados.
+00:02:42.624 --> 00:02:43.866
+Crie as três contas:
 
 43
-00:02:29.728 --> 00:02:33.101
-E o Google Colab é um Jupyter na nuvem, grátis e com GPU:
+00:02:43.866 --> 00:02:49.083
+GitHub, Hugging Face e Google AI Studio, cuja chave gratuita a Defesa do Campus usa.
 
 44
-00:02:33.101 --> 00:02:36.237
-se a sua máquina for modesta, ele é seu melhor amigo.
+00:02:49.367 --> 00:02:50.810
+Chave de API é senha:
 
 45
-00:02:36.237 --> 00:02:37.597
-Guarde a regra prática:
+00:02:50.810 --> 00:02:56.998
+nunca no código, nunca no GitHub; variável de ambiente ou ponto env fora do versionamento.
 
 46
-00:02:37.597 --> 00:02:40.260
-notebook para explorar, script para entregar.
+00:02:56.998 --> 00:02:58.098
+Commitou, vazou:
 
 47
-00:02:40.533 --> 00:02:42.762
-Git é o controle de versões do código:
+00:02:58.098 --> 00:02:58.648
+revogue.
 
 48
-00:02:42.762 --> 00:02:46.516
-cada commit é uma fotografia do projeto que você pode revisitar.
+00:02:58.648 --> 00:03:02.085
+Na rotina, pomodoros e blocos fixos no calendário:
 
 49
-00:02:46.516 --> 00:02:51.208
-O GitHub é onde essas fotografias ficam na nuvem — e onde o seu portfólio nasce.
+00:03:02.085 --> 00:03:04.079
+constância vence intensidade.
 
 50
-00:02:51.208 --> 00:02:53.260
-Não precisa dominar branches agora.
+00:03:04.367 --> 00:03:06.608
+Entregue seu primeiro produto real:
 
 51
-00:02:53.260 --> 00:02:54.609
-Precisa criar o hábito:
+00:03:06.608 --> 00:03:11.282
+especifique à mão, dirija a IA, verifique critério a critério e publique.
 
 52
-00:02:54.609 --> 00:02:58.773
-todo projeto da Academia vive num repositório Git desde o primeiro dia.
+00:03:11.282 --> 00:03:14.931
+O histórico do Git prova que a spec veio antes do código.
 
 53
-00:02:59.067 --> 00:03:03.218
-Crie hoje três contas, mesmo que só use daqui a alguns módulos.
+00:03:14.931 --> 00:03:19.733
+Monte o quartel-general academia-ia, com plano semanal e o link do produto.
 
 54
-00:03:03.218 --> 00:03:05.524
-Hugging Face, o GitHub dos modelos.
+00:03:19.733 --> 00:03:23.063
+Feche passando na Defesa, explicando qualquer linha.
 
 55
-00:03:05.524 --> 00:03:14.157
-Google AI Studio, que dá uma chave de API gratuita para os modelos Gemini — suas primeiras chamadas a um LLM sem gastar um centavo.
+00:03:23.333 --> 00:03:31.352
+Bancada montada, método configurado e primeiro produto entregue dirigindo uma IA, com spec e decisões registradas.
 
 56
-00:03:14.157 --> 00:03:18.374
-E deixe as plataformas pagas para quando o módulo de LLMs pedir.
+00:03:31.352 --> 00:03:35.080
+Você estreou o ciclo especificar, dirigir, verificar.
 
 57
-00:03:18.374 --> 00:03:20.680
-Uma regra de segurança inegociável:
+00:03:35.080 --> 00:03:39.371
+A seguir, o módulo um, Direção de IA, aprofunda essa prática:
 
 58
-00:03:20.680 --> 00:03:22.064
-chave de API é senha.
+00:03:39.371 --> 00:03:42.185
+conduzir a ferramenta como profissional.
 
 59
-00:03:22.064 --> 00:03:24.238
-Nunca no código, nunca no GitHub.
-
-60
-00:03:24.238 --> 00:03:29.115
-Sempre em variável de ambiente ou arquivo ponto env fora do versionamento.
-
-61
-00:03:29.400 --> 00:03:29.941
-Pomodoro:
-
-62
-00:03:29.941 --> 00:03:34.085
-vinte e cinco minutos de foco total, celular longe, e cinco de pausa.
-
-63
-00:03:34.085 --> 00:03:39.131
-Reserve blocos fixos no calendário, como três sessões de uma hora e meia por semana.
-
-64
-00:03:39.131 --> 00:03:40.873
-Constância vence intensidade:
-
-65
-00:03:40.873 --> 00:03:46.339
-oito horas por semana durante meses supera maratonas de fim de semana seguidas de abandono.
-
-66
-00:03:46.339 --> 00:03:50.544
-E revise os flashcards nos intervalos de um, três, sete e trinta dias.
-
-67
-00:03:50.833 --> 00:03:54.644
-O mini-projeto deste módulo é montar o seu quartel-general de estudos:
-
-68
-00:03:54.644 --> 00:03:59.599
-um repositório público chamado academia-ia, que será o diário de bordo da formação inteira.
-
-69
-00:03:59.599 --> 00:04:07.983
-README dizendo quem você é e seu plano semanal, o script de verificação do ambiente rodando sem erros, e um notebook executando de ponta a ponta no Colab.
-
-70
-00:04:07.983 --> 00:04:11.521
-Escreva o README como se fosse para o você de daqui a seis meses.
-
-71
-00:04:11.800 --> 00:04:13.399
-Recapitulando o checklist:
-
-72
-00:04:13.399 --> 00:04:23.795
-uv instalado com Python três ponto doze ou superior, VS Code configurado, notebook rodando local e no Colab, contas criadas e o repositório publicado com o mini-projeto.
-
-73
-00:04:23.795 --> 00:04:25.886
-Ambiente pronto, método instalado.
-
-74
-00:04:25.886 --> 00:04:28.654
-No próximo módulo começa o código de verdade:
-
-75
-00:04:28.654 --> 00:04:33.329
-Python idiomático, NumPy, Pandas e a sua primeira análise de dados completa.
-
-76
-00:04:33.329 --> 00:04:33.760
+00:03:42.185 --> 00:03:42.677
 Até lá.

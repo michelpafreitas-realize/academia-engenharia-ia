@@ -2,119 +2,128 @@
   "id": "Modulo06",
   "slug": "mod06",
   "modulo": 6,
-  "titulo": "Prompt Engineering & APIs de LLM",
-  "periodo": "Período 3",
+  "titulo": "Como LLMs Funcionam",
+  "periodo": "Período 2",
   "carga": "10h",
   "scenes": [
     {
       "tipo": "capa",
-      "fala": "Bem-vindo ao módulo seis: Prompt Engineering e APIs de LLM. É a habilidade de maior retorno imediato do programa. Você vai escrever prompts profissionais, garantir saída estruturada e chamar as APIs da Anthropic e da OpenAI, medindo custo e tratando erros como profissional."
+      "fala": "Bem-vindo ao módulo seis: Como LLMs Funcionam. Você chama modelos por API desde o módulo dois; agora abrimos o capô. Tokens, atenção, treinamento e limites: o suficiente para dirigir a máquina bem, sem virar curso de pesquisa."
     },
     {
       "tipo": "conceito",
       "kicker": "POR QUE ISSO IMPORTA",
-      "frase": "Prompt bem estruturado com saída validada é a diferença entre feature confiável e chatbot quebrado.",
-      "fala": "Prompt engineering não é truque de rede social: é especificação de comportamento, contrato entre seu sistema e um modelo probabilístico. Prompt bem estruturado separa feature confiável de chatbot que quebra o parser. Ele viaja numa API que custa e falha — isso alimenta RAG e Agentes."
+      "frase": "Quem dirige IA sem esse mapa aprova o que não entende; quem tem o mapa reconhece a falha pelo cheiro.",
+      "fala": "O modelo alucina, corta resposta, erra conta de padaria e cobra mais caro em português. Quase tudo tem explicação em uma ideia daqui: tokenização, amostragem, pós-treino ou janela de contexto. É a diferença entre supervisionar e só assistir."
+    },
+    {
+      "tipo": "code",
+      "kicker": "GRADIENTE",
+      "titulo": "Sensibilidade da loss a um peso",
+      "code": "# modelo de um peso: z = w*x\nx, w, alvo = 2, 3, 10\nz = w * x              # 6\nloss = (z - alvo)**2   # 16\n\n# regra da cadeia, de trás pra frente\ndloss_dz = 2 * (z - alvo)   # -8\ndloss_dw = dloss_dz * x     # -16\n\n# gradiente negativo:\n# AUMENTAR w diminui a loss\nw = w - lr * dloss_dw  # lr = tamanho do passo",
+      "fala": "Treinar uma rede é perguntar bilhões de vezes: se eu mexer neste peso, o erro sobe ou desce? A resposta é o gradiente, e o treino é dar passinhos na direção que diminui a loss. Faça uma vez à mão. E o diagnóstico: loss que explode é learning rate alto, loss parada é bug, validação péssima é decoreba."
     },
     {
       "tipo": "topico",
-      "kicker": "ESTRUTURA DO PROMPT",
-      "titulo": "System vs. user",
+      "kicker": "TOKENIZAÇÃO",
+      "titulo": "O que o modelo realmente vê",
       "bullets": [
-        "System — persona, regras e formato",
-        "User — dado variável da requisição",
-        "Nunca misture as duas coisas",
-        "Injeção de prompt mora nesse erro"
+        "BPE funde os pares mais frequentes",
+        "Português gasta 20 a 30% mais tokens",
+        "O espaço faz parte do token",
+        "Números fatiados de forma imprevisível",
+        "Strawberry: 1 a 3 tokens opacos"
       ],
-      "fala": "As APIs de chat separam papéis. O system é o manual do funcionário: quem o modelo é, as regras, o formato — escrito por você. O user carrega só o dado da vez. Misturar tudo numa string funciona em demo e apodrece em produção; concatenar input do usuário no system facilita prompt injection."
-    },
-    {
-      "tipo": "topico",
-      "kicker": "TÉCNICAS QUE IMPORTAM",
-      "titulo": "Few-shot, CoT e tags XML",
-      "bullets": [
-        "Few-shot — 2 a 5 exemplos entrada→saída",
-        "Chain-of-thought — peça o raciocínio antes",
-        "Tags XML — separam dado de instrução",
-        "Peça o formato de saída, sempre"
-      ],
-      "fala": "Few-shot: dois a cinco exemplos de entrada e saída — o modelo imita padrão melhor do que segue descrição. Chain-of-thought pede o raciocínio antes da resposta. Tags XML separam dado de instrução. Peça o formato de saída sempre — sem isso, vem prosa que ninguém parseia."
+      "fala": "LLMs não leem letras: leem tokens, pedaços que o BPE cria fundindo pares frequentes do corpus. Português quebra em mais pedaços que inglês, e API cobra por token: custo real. Contar os erres de strawberry falha porque o modelo vê tokens opacos, não dez letras. Falha estranha? Pergunte: como isso foi tokenizado?"
     },
     {
       "tipo": "conceito",
-      "kicker": "SAÍDA GARANTIDA",
-      "frase": "JSON prometido falha na cauda dos casos; structured output restringe a geração e garante o schema.",
-      "fala": "Pedir JSON no prompt acerta noventa e cinco por cento das vezes — e os cinco por cento restantes derrubam o pipeline às três da manhã. Structured output resolve na raiz: você passa um schema Pydantic e a API restringe a geração a ele. Use sempre que a resposta alimentar código."
+      "kicker": "EMBEDDINGS",
+      "frase": "O modelo não manipula símbolos: manipula coordenadas em um espaço de significado.",
+      "fala": "Cada token vira um vetor denso onde proximidade geométrica é semelhança semântica: rei perto de rainha. As camadas movem esses vetores para o significado em contexto: banco da praça e banco de dados entram iguais e saem distantes. Texto vira vetor comparável: a fundação do RAG, no módulo sete."
     },
     {
       "tipo": "code",
-      "kicker": "CHAMANDO A API",
-      "titulo": "Anthropic em Python",
-      "code": "import anthropic\nclient = anthropic.Anthropic()  # lê a chave\npergunta = \"O que é um token?\"\nresp = client.messages.create(\n    model=\"claude-opus-4-8\",\n    max_tokens=1024,\n    system=\"Responda em português.\",\n    messages=[\n        {\"role\": \"user\", \"content\": pergunta}\n    ],\n)\nprint(resp.content[0].text)",
-      "fala": "Instale o SDK com pip install anthropic e nunca coloque a chave no código: exporte-a numa variável de ambiente. A chamada leva modelo, system com as regras estáveis e a lista de mensagens. A resposta vem em resp ponto content, e resp ponto usage traz os tokens gastos — é ali que a conta chega."
-    },
-    {
-      "tipo": "code",
-      "kicker": "STREAMING",
-      "titulo": "Token a token, sem travar",
-      "code": "with client.messages.stream(\n    model=\"claude-opus-4-8\",\n    max_tokens=2048,\n    messages=[{\"role\": \"user\",\n               \"content\": pergunta}],\n) as stream:\n    for texto in stream.text_stream:\n        print(texto, end=\"\", flush=True)\n    final = stream.get_final_message()",
-      "fala": "Resposta longa deve ser transmitida token a token, não entregue de uma vez após vinte segundos de spinner. Nos SDKs isso é um gerenciador de contexto: você abre o stream e imprime cada pedaço assim que chega. Regra prática: chat com humano, sempre streaming; lote pode ser síncrono."
+      "kicker": "ATENÇÃO",
+      "titulo": "Q, K e V feitos à mão",
+      "code": "q2 = [1, 0]               # o que procuro\nk1 = [1, 0]   v1 = [10, 0]\nk2 = [0, 1]   v2 = [0, 10]\n\nscores:  q2·k1 = 1    q2·k2 = 0\nsoftmax([1, 0]) ≈ [0.73, 0.27]\n\nsaída = 0.73·[10, 0] + 0.27·[0, 10]\n      = [7.3, 2.7]\n\n# o token 2 puxou 73% da informação\n# do token 1",
+      "fala": "Cada token decide de quem absorver informação. A query é sua pergunta, a key é a lombada do livro, o value é o conteúdo: você compara, dá notas e leva a mistura ponderada pelas notas. Faça no papel: produto escalar, softmax e média ponderada, três operações do módulo quatro."
     },
     {
       "tipo": "topico",
-      "kicker": "CUSTO E CACHE",
-      "titulo": "Tokens: o que você paga",
+      "kicker": "ARQUITETURA",
+      "titulo": "Decoder-only em nível de diagrama",
       "bullets": [
-        "Output custa ~5× mais que input",
-        "count_tokens mede sem gastar nada",
-        "max_tokens como teto de gasto",
-        "Cache = prefixo idêntico, ~10% do preço"
+        "Atenção mistura informação entre tokens",
+        "MLP processa cada token sozinho",
+        "Máscara causal: ninguém vê o futuro",
+        "Mesmo bloco repetido dezenas de vezes",
+        "Caminhe pelo GPT em 3D peça por peça"
       ],
-      "fala": "Você paga por token, e output custa cerca de cinco vezes mais que input. Meça antes com o método que conta tokens de graça; controle o output, a parte cara; use prompt caching quando o início do prompt se repete — leitura custa uns dez por cento. Cache exige prefixo idêntico."
-    },
-    {
-      "tipo": "code",
-      "kicker": "ERROS E SEGURANÇA",
-      "titulo": "Retry e a regra número 1",
-      "code": "try:\n    resp = client.messages.create(...)\nexcept anthropic.RateLimitError:\n    ...  # aguarde e tente de novo\nexcept anthropic.APIStatusError as e:\n    ...  # logue e.status_code\nexcept anthropic.APIConnectionError:\n    ...  # problema de rede",
-      "fala": "Chamadas falham: limite de requisições, servidor sobrecarregado, rede. O SDK já faz retry com espera crescente; capture as exceções tipadas e nunca repita erro de validação, que só queima cota. Regra número um: chave de API nunca vai pro código nem pro Git — se vazar, revogue na hora."
+      "fala": "Um GPT moderno é o mesmo bloco repetido dezenas de vezes. A atenção mistura informação entre tokens; o MLP processa cada token sozinho, e é onde mora boa parte do conhecimento. Não decore o diagrama: caminhe pelo GPT em três dê e narre o caminho de um token até o logit."
     },
     {
       "tipo": "topico",
-      "kicker": "AVALIAÇÃO",
-      "titulo": "Meça, não opine",
+      "kicker": "AMOSTRAGEM",
+      "titulo": "Logits, temperatura e top-p",
       "bullets": [
-        "Conjunto de teste: 20-50 exemplos",
-        "Rode cada versão do prompt nele todo",
-        "Meça acurácia, custo e latência",
-        "Só promova quem vence nos números"
+        "Modelo produz um score por token",
+        "Gerar é prever, escolher, anexar",
+        "T baixa afia: factual e conservador",
+        "T alta achata: criativo e arriscado",
+        "Top-p corta a cauda de absurdos"
       ],
-      "fala": "Esse prompt parece melhor não é engenharia. Monte um conjunto de teste com vinte a cinquenta exemplos e gabarito; rode cada versão do prompt nele; meça acurácia, custo e latência; e só promova quem vence nos números. Duas versões podem parecer iguais e diferir quinze pontos de acurácia."
+      "fala": "O modelo só produz logits, um score por token, que viram probabilidades no softmax. Temperatura baixa afia a distribuição, para extração; alta achata, para criar. Top-p sorteia do menor conjunto que acumula a probabilidade pê, cortando a cauda de absurdos. Respondeu diferente ontem? Amostragem, não humor."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "TREINAMENTO",
+      "titulo": "De autocompletador a assistente",
+      "bullets": [
+        "Pré-treino: prever o próximo token",
+        "Modelo base não conversa",
+        "SFT ensina o formato assistente",
+        "RLHF alinha com preferências",
+        "Leis de escala: melhora previsível"
+      ],
+      "fala": "O pré-treino prevê o próximo token em trilhões de tokens e entrega um autocompletador que não conversa. O pós-treino transforma: SFT ensina o formato assistente, e o RLHF otimiza para agradar, de onde vêm o tom, as recusas e a concordância servil do módulo um. Leis de escala: crescer modelo, dados e computação melhora previsivelmente."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "CONTEXTO LONGO",
+      "titulo": "Por que custa tão caro",
+      "bullets": [
+        "Atenção quadrática: 10x vira 100x",
+        "KV cache devora memória de GPU",
+        "Prompt caching reaproveita o cache",
+        "Jogar tudo no contexto nem sempre vale"
+      ],
+      "fala": "Atenção é quadrática: cada token compara com todos os anteriores; dez vezes o contexto, cem vezes mais comparações. E o KV cache guarda os vetores anteriores para não recalcular, devorando memória de GPU. Daí o prompt caching com desconto, e daí o RAG trazer só o trecho relevante."
     },
     {
       "tipo": "topico",
       "kicker": "MINI-PROJETO",
-      "titulo": "Extrator de currículos",
+      "titulo": "Relatório de anatomia de um LLM",
       "bullets": [
-        "Schema Pydantic com lista e Literal",
-        "Structured output, sem json.loads torcendo",
-        "≥15 exemplos de teste com gabarito",
-        "v1 sem few-shot × v2 com 3 exemplos",
-        "Relatório: acurácia, custo e vencedor"
+        "SPEC.md commitado antes do código",
+        "Tokenização: 5 pares PT/EN medidos",
+        "Varredura de temperatura com métrica",
+        "Atenção à mão + verificação em NumPy",
+        "Explicar tudo: a Defesa vai perguntar"
       ],
-      "fala": "O mini-projeto é um extrator estruturado de currículos: texto livre entra, JSON validado sai, com nome, cargo, skills, experiência e senioridade. Schema Pydantic com cinco campos. Teste com quinze exemplos, v1 sem few-shot contra v2 com três. Vence quem ganha nos números."
+      "fala": "Produza o relatório de anatomia de um LLM: experimentos reais via API e explicações suas, com o SPEC antes do código. Meça a tokenização em pares português inglês, provoque uma falha de contagem, varra a temperatura e confira sua atenção em NumPy. Você só entrega o que consegue explicar e defender."
     },
     {
       "tipo": "fim",
       "bullets": [
-        "System/user, few-shot, CoT e tags XML",
-        "Structured output para saída confiável",
-        "APIs Anthropic/OpenAI com streaming",
-        "Custo medido e prompt caching",
-        "Retry, segurança e avaliação v1×v2"
+        "Gradiente: sensibilidade da loss",
+        "Tokens explicam as falhas famosas",
+        "Atenção: softmax de query vezes key",
+        "Temperatura e top-p na geração",
+        "Contexto longo: quadrática + KV cache"
       ],
-      "proximo": "Módulo 7 — RAG: Retrieval-Augmented Generation",
-      "fala": "Recapitulando: você sabe estruturar prompt com system e user, usar few-shot e chain-of-thought, e delimitar dado com tags XML. Sabe garantir saída estruturada, chamar APIs com streaming, medir e cachear custo, tratar erros com retry. Próximo módulo, o sete, é RAG: retrieval-augmented generation. Até lá."
+      "proximo": "Módulo 7 — RAG",
+      "fala": "Você abriu o capô: gradiente, tokens, atenção, o transformer, amostragem, treino e o custo do contexto. Quer descer ao metal? Trilha optativa, módulo treze. A seguir, embeddings viram produto: módulo sete, RAG, o assistente sobre seus documentos. Até lá."
     }
   ]
 }

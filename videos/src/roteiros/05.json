@@ -2,142 +2,135 @@
   "id": "Modulo05",
   "slug": "mod05",
   "modulo": 5,
-  "titulo": "Transformers & LLMs por Dentro",
+  "titulo": "Disciplinas de ML: validação, métricas e leakage",
   "periodo": "Período 2",
-  "carga": "16h",
+  "carga": "8h",
   "scenes": [
     {
       "tipo": "capa",
-      "fala": "Bem-vindo ao módulo cinco: Transformers e LLMs por dentro. Você vai abrir o capô do GPT e do Claude: como texto vira token, como a atenção decide o que importa, e como um modelo pré-treinado vira assistente. No fim, você gera texto com um modelo real."
+      "fala": "Bem-vindo ao módulo cinco: disciplinas de ML, validação, métricas e leakage. Aqui você aprende o que decide se um modelo presta: como separar dados, como medir e como desconfiar. São as disciplinas para verificar qualquer sistema de IA."
     },
     {
       "tipo": "conceito",
       "kicker": "POR QUE ISSO IMPORTA",
-      "frase": "Quando o modelo alucina, corta texto ou cobra caro, a explicação mora neste módulo.",
-      "fala": "O transformer sustenta quase toda IA generativa em produção: GPT, Claude, Gemini, Llama. Quando o modelo alucina, corta texto ou cobra caro, a explicação está em tokenização, atenção ou pós-treino. Este módulo te dá o vocabulário que entrevistas técnicas cobram."
+      "frase": "Aquele AUC de 0,99 é gênio ou vazamento? Decidir isso é o trabalho que a IA não faz por você.",
+      "fala": "Treinar um modelo virou uma frase para a IA. O que ela não decide é se o resultado vai para produção: o split respeitou o tempo? A métrica reflete o custo do erro? Modelo com leakage aprovado em teste e desmoronando em produção é um incidente clássico da área."
     },
     {
       "tipo": "topico",
-      "kicker": "TOKENIZAÇÃO",
-      "titulo": "BPE: texto vira números",
+      "kicker": "O QUE SOBROU",
+      "titulo": "Modelos viraram commodity",
       "bullets": [
-        "BPE funde os pares mais frequentes",
-        "Vocabulário típico: 50 mil a 200 mil",
-        "Português gasta mais tokens que inglês",
-        "APIs cobram por token, PT custa mais",
-        "LLM não vê letras, só tokens opacos"
+        "Regressão, floresta, XGBoost: a IA digita",
+        "As disciplinas de rigor não viraram",
+        "Supervisionado: passado com rótulo",
+        "Generalizar: acertar o dado novo",
+        "Quem responde pelo modelo é você"
       ],
-      "fala": "LLMs leem tokens, não letras nem palavras. O BPE funde os pares mais frequentes do corpus até um vocabulário de cinquenta a duzentos mil tokens. Português gasta mais tokens que inglês, e APIs cobram por token. É por isso que o modelo erra ao contar letras de uma palavra."
+      "fala": "Regressão logística, Random Forest e XGBoost são uma instrução bem escrita para a IA: quem digita é ela, quem responde é você. Duas ideias carregam tudo: supervisionado, o passado vem com o rótulo; e generalizar, acertar o dado novo, não o passado."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "VALIDAÇÃO",
+      "titulo": "Holdout, k-fold ou temporal?",
+      "bullets": [
+        "Teste tocado uma única vez, no final",
+        "Holdout: corte único, muitos dados",
+        "k-fold: poucos dados, média e desvio",
+        "Temporal: treina no passado, avalia no futuro",
+        "Há datas? Sorteio aleatório é crime"
+      ],
+      "fala": "Regra sagrada: o modelo só é avaliado em dados que nunca viu, e o teste é tocado uma única vez, no final. Muitos dados, holdout; poucos, k-fold com média e desvio. Há datas? Corte por data: sorteio coloca o futuro no treino, e a métrica vira ficção."
     },
     {
       "tipo": "conceito",
-      "kicker": "EMBEDDINGS",
-      "frase": "O modelo não manipula símbolos: manipula coordenadas em um espaço de significado.",
-      "fala": "Cada token tem um vetor denso aprendido no treino. Nesse espaço, proximidade geométrica é semelhança semântica: rei perto de rainha, gato perto de felino. Essa ideia, texto virar vetor comparável, é a fundação do RAG que você vê no módulo sete."
+      "kicker": "REGRA DE BOLSO",
+      "frase": "No momento em que o modelo fizer a previsão de verdade, o que ele saberá? A validação imita essa cena.",
+      "fala": "Pergunte: no momento em que o modelo fizer a previsão de verdade, o que ele saberá? Faça a validação imitar essa cena. Vale para churn, demanda, fraude e preço: treine no passado, valide no futuro."
     },
     {
       "tipo": "topico",
-      "kicker": "SELF-ATTENTION",
-      "titulo": "Q, K e V: quem atende quem",
+      "kicker": "MÉTRICAS",
+      "titulo": "Tudo nasce da matriz de confusão",
       "bullets": [
-        "Query: o que este token procura",
-        "Key: o que cada token oferece",
-        "Value: o que ele entrega, se escolhido",
-        "Analogia: pergunta, lombada e livro",
-        "Máscara causal: ninguém vê o futuro"
+        "VP, FP, FN, VN: quatro números",
+        "Acurácia engana com classe desbalanceada",
+        "Precisão: dos marcados, quantos eram?",
+        "Recall: dos reais, quantos achei?",
+        "F1 assume que os dois erros custam igual"
       ],
-      "fala": "Attention deixa cada token olhar para os outros. Cada um gera query, o que procura; key, o que oferece; e value, o que entrega se escolhido. É como uma busca em biblioteca: sua pergunta é a query, a lombada é a key, o conteúdo é o value. A máscara causal impede ver o futuro."
+      "fala": "Quatro números contam a história: verdadeiro positivo, falso positivo, falso negativo e verdadeiro negativo. Monte essa tabela à mão: quem deriva uma vez nunca confunde precisão com recall. Com um por cento de fraude, chutar que nada é fraude dá noventa e nove por cento de acurácia e utilidade zero."
+    },
+    {
+      "tipo": "conceito",
+      "kicker": "A ESCOLHA DA MÉTRICA",
+      "frase": "Escolher métrica é decisão de negócio, não de estatística: o custo assimétrico do erro decide.",
+      "fala": "Triagem de câncer: falso negativo custa uma vida, recall manda. Filtro de spam: falso positivo some com e-mail legítimo, precisão manda. Quando a IA sugerir F1, pergunte: os dois erros custam o mesmo neste negócio?"
+    },
+    {
+      "tipo": "topico",
+      "kicker": "DATA LEAKAGE",
+      "titulo": "O inimigo número um",
+      "bullets": [
+        "Feature do futuro ou derivada do alvo",
+        "Pré-processamento antes do split",
+        "Duplicatas atravessando o split",
+        "Shuffle em dados temporais",
+        "Sintoma: resultado bom demais"
+      ],
+      "fala": "Leakage é informação que não existiria na hora da previsão contaminando o treino: modelo ótimo no papel, inútil em produção. Quatro formas clássicas: feature derivada do alvo, pré-processamento antes do split, duplicatas e shuffle temporal. Sintoma: resultado bom demais; desconfie do vazamento antes do seu gênio."
     },
     {
       "tipo": "code",
-      "kicker": "NA PRÁTICA",
-      "titulo": "Attention: exemplo numérico",
-      "code": "# token 2 decide a quem prestar atenção\nq2 = [1, 0]\nk1, v1 = [1, 0], [10, 0]\nk2, v2 = [0, 1], [0, 10]\n\nscores = [q2·k1, q2·k2]  # = [1, 0]\npesos = softmax(scores)  # ≈ [0.73, 0.27]\nsaida = 0.73*v1 + 0.27*v2\n# saida ≈ [7.3, 2.7] -> 73% veio de v1",
-      "fala": "Um exemplo minúsculo: o token dois compara sua query com a key de cada token, tira softmax dos scores, e mistura os values por esses pesos. Aqui, setenta e três por cento da informação vem do token um. Na fórmula real ainda existe a divisão pela raiz de d."
-    },
-    {
-      "tipo": "topico",
-      "kicker": "MULTI-HEAD",
-      "titulo": "Várias cabeças, uma ordem",
-      "bullets": [
-        "Várias attentions em paralelo (ex: 32)",
-        "Cada cabeça foca uma relação diferente",
-        "Sintaxe, correferência, padrão de código",
-        "Attention sozinha não sabe ordem",
-        "Posição entra como parte do vetor"
-      ],
-      "fala": "O modelo roda várias attentions em paralelo, cada cabeça focada numa relação: sintaxe, correferência, código. Attention sozinha não sabe ordem — João ama Maria ficaria igual a Maria ama João. A solução é injetar posição direto no vetor."
-    },
-    {
-      "tipo": "topico",
-      "kicker": "COMO O GPT GERA",
-      "titulo": "Da pilha de blocos ao próximo token",
-      "bullets": [
-        "Pilha de attention + MLP × N camadas",
-        "Logits: 1 score por token do vocabulário",
-        "Greedy: sempre o mais provável",
-        "Temperatura ajusta a distribuição",
-        "Top-p corta a cauda de tokens ruins"
-      ],
-      "fala": "Um GPT empilha attention e MLP dezenas de vezes: a attention mistura tokens, o MLP processa cada um sozinho. No fim, logits dão um score por token do vocabulário. Greedy escolhe sempre o mais provável. Temperatura ajusta a distribuição, e top-p corta a cauda de tokens ruins."
+      "kicker": "O LAB",
+      "titulo": "O pipeline bom demais",
+      "code": "# entregue \"pela IA\": 2 leakages plantados\nfeatures = [\"meses_de_casa\", \"uso_mensal_gb\",\n            \"reclamacoes\", \"desconto_retencao\"]\nX, y = df[features], df[\"churn\"]\n\nX_norm = scaler.fit_transform(X)  # antes do split!\n\nX_tr, X_te, y_tr, y_te = train_test_split(\n    X_norm, y, test_size=0.2, stratify=y)\nmodelo = LogisticRegression().fit(X_tr, y_tr)\nprint(auc)   # 0.97 — bom DEMAIS",
+      "fala": "Este pipeline de churn imprime AUC de zero vírgula noventa e sete, e sua missão no lab é caçar os dois leakages plantados. Primeiro: desconto de retenção é consequência do cancelamento; na previsão real, a coluna não existe. Segundo: o scaler ajustado antes do split vazou estatísticas do teste para o treino."
     },
     {
       "tipo": "code",
-      "kicker": "HANDS-ON",
-      "titulo": "Python: do prompt ao texto",
-      "code": "from transformers import pipeline\n\ng = pipeline(\"text-generation\", model=\"gpt2\")\n\n# greedy: sempre igual\ng(prompt, do_sample=False)\n\n# amostragem com temperatura e top-p\ng(prompt, do_sample=True,\n  temperature=0.9, top_p=0.9)",
-      "fala": "Três linhas de Hugging Face já geram texto com o gpt2. Com do sample falso, a geração é greedy e sempre igual. Com do sample verdadeiro, temperatura e top-p, cada execução sai diferente. É esse experimento que você repete no lab guiado."
+      "kicker": "O ANTÍDOTO",
+      "titulo": "Pipeline é dispositivo de segurança",
+      "code": "from sklearn.pipeline import Pipeline\n\nlimpas = [\"meses_de_casa\", \"uso_mensal_gb\",\n          \"reclamacoes\"]  # passaram no relógio\nX_tr, X_te, y_tr, y_te = train_test_split(\n    df[limpas], y, test_size=0.2, stratify=y)\n\npipe = Pipeline([\n    (\"escala\", StandardScaler()),\n    (\"modelo\", LogisticRegression())])\npipe.fit(X_tr, y_tr)  # fit SÓ no treino\n# AUC honesta: bem menor — e VERDADEIRA",
+      "fala": "A correção: split antes de tudo, sem a coluna vazada, e todo pré-processamento dentro do Pipeline. Assim o fit acontece só no treino: Pipeline não é organização, é dispositivo de segurança. A AUC honesta é bem menor, e é a verdadeira."
     },
     {
       "tipo": "topico",
-      "kicker": "TREINO EM 2 ATOS",
-      "titulo": "Pré-treino vira assistente",
+      "kicker": "AUDITORIA",
+      "titulo": "O checklist de caça",
       "bullets": [
-        "Pré-treino: prever o próximo token",
-        "Trilhões de tokens, meses de GPUs",
-        "Modelo base só completa, não conversa",
-        "SFT ensina o formato de assistente",
-        "RLHF/RLAIF alinha com preferências"
+        "Alvo primeiro: quando o rótulo existe?",
+        "Cada feature contra o relógio",
+        "Procure fit fora do Pipeline",
+        "Split contra a estrutura: datas, grupos",
+        "Prova = métrica com vs sem + mecanismo"
       ],
-      "fala": "O treino tem dois atos. Pré-treino: prever o próximo token em trilhões de tokens, por meses, em milhares de GPUs — o resultado é um modelo base que só completa texto. Pós-treino transforma isso em assistente: SFT ensina o formato, e RLHF, ou RLAIF com uma IA avaliando, ajusta pelas preferências."
-    },
-    {
-      "tipo": "topico",
-      "kicker": "PANORAMA 2026",
-      "titulo": "Modelos, contexto e KV cache",
-      "bullets": [
-        "Fechado: GPT, Claude, Gemini — só API",
-        "Aberto: Llama, Qwen, DeepSeek — pesos",
-        "Contexto: de 128 mil a 1 milhão+ tokens",
-        "KV cache guarda K e V já processados",
-        "Contexto 10× maior ≈ 10× mais memória"
-      ],
-      "fala": "Fechados como GPT, Claude e Gemini: você paga por token, sem ver os pesos. Abertos como Llama, Qwen e DeepSeek: você baixa os pesos e roda onde quiser. Contexto vai de 128 mil a 1 milhão de tokens. KV cache guarda K e V já processados; contexto maior custa memória."
+      "fala": "Você vai passar a carreira lendo pipelines que não escreveu. O ritual: entenda como o alvo nasce, passe cada feature no teste do relógio, procure fit fora do Pipeline, confira o split contra datas e grupos, cheque duplicatas. Provar não é apontar, é medir: métrica com, métrica sem, e o mecanismo."
     },
     {
       "tipo": "topico",
       "kicker": "MINI-PROJETO",
-      "titulo": "Anatomia de um LLM",
+      "titulo": "Auditoria antes do deploy",
       "bullets": [
-        "Tokenização: PT vs EN em 5 frases",
-        "Logits: top-10 em 3 prompts",
-        "Temperatura: T de 0.2 a 1.5",
-        "Base vs instruído: SFT/RLHF na prática",
-        "Notebook roda de ponta a ponta no Colab"
+        "SPEC.md escrito antes do código",
+        "3 ou mais armadilhas plantadas",
+        "Prova: métrica antes vs depois + mecanismo",
+        "Pipeline corrigido com split temporal",
+        "Asserts de sanidade no final"
       ],
-      "fala": "O mini-projeto é um relatório de anatomia de um LLM, o material pra explicar transformers a um colega. Compare tokenização em PT e EN, mostre o top-dez do próximo token em três prompts, varie temperatura e top-p, e compare um modelo base com um instruído."
+      "fala": "No mini-projeto, outra equipe entrega um dataset armadilhado e um baseline espetacular; sua missão é auditar antes do deploy. Spec antes do código, checklist para achar as armadilhas, e prova com números: métrica antes, depois e mecanismo. A métrica final cai, e isso é uma vitória."
     },
     {
       "tipo": "fim",
       "bullets": [
-        "BPE e por que PT gasta mais tokens",
-        "Q, K, V e a máscara causal",
-        "Decoder-only: attention + MLP × N",
-        "Temperatura, top-p e amostragem",
-        "Pré-treino vs SFT/RLHF"
+        "Holdout, k-fold e corte temporal",
+        "Matriz de confusão montada à mão",
+        "Métrica alinhada ao custo do erro",
+        "Leakage caçado e provado com números",
+        "Todo fit dentro do Pipeline"
       ],
-      "proximo": "Módulo 6 — Prompt Engineering & APIs de LLM",
-      "fala": "Recapitulando: BPE, query, key e value, a pilha decoder-only, temperatura e top-p, e a diferença entre modelo base e pós-treinado. Essa é a base de todo LLM que você vai usar daqui em diante. No próximo módulo: prompt engineering e como chamar APIs de LLM no seu código. Até lá."
+      "proximo": "Módulo 6 — Como LLMs Funcionam",
+      "fala": "Você agora separa dados com honestidade, deriva métricas da matriz de confusão e caça leakage com prova numérica. Essas disciplinas voltam ao avaliar RAG, agentes e evals. No próximo módulo, você abre a caixa-preta: como LLMs funcionam. Até lá."
     }
   ]
 }

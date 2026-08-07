@@ -1,233 +1,265 @@
 WEBVTT
 
 1
-00:00:00.000 --> 00:00:01.667
+00:00:00.000 --> 00:00:01.732
 Bem-vindo ao módulo cinco:
 
 2
-00:00:01.667 --> 00:00:03.655
-Transformers e LLMs por dentro.
+00:00:01.732 --> 00:00:04.997
+disciplinas de ML, validação, métricas e leakage.
 
 3
-00:00:03.655 --> 00:00:06.285
-Você vai abrir o capô do GPT e do Claude:
+00:00:04.997 --> 00:00:08.394
+Aqui você aprende o que decide se um modelo presta:
 
 4
-00:00:06.285 --> 00:00:13.082
-como texto vira token, como a atenção decide o que importa, e como um modelo pré-treinado vira assistente.
+00:00:08.394 --> 00:00:11.659
+como separar dados, como medir e como desconfiar.
 
 5
-00:00:13.082 --> 00:00:15.840
-No fim, você gera texto com um modelo real.
+00:00:11.659 --> 00:00:15.456
+São as disciplinas para verificar qualquer sistema de IA.
 
 6
-00:00:16.133 --> 00:00:20.014
-O transformer sustenta quase toda IA generativa em produção:
+00:00:15.733 --> 00:00:18.431
+Treinar um modelo virou uma frase para a IA.
 
 7
-00:00:20.014 --> 00:00:21.760
-GPT, Claude, Gemini, Llama.
+00:00:18.431 --> 00:00:21.865
+O que ela não decide é se o resultado vai para produção:
 
 8
-00:00:21.760 --> 00:00:28.746
-Quando o modelo alucina, corta texto ou cobra caro, a explicação está em tokenização, atenção ou pós-treino.
+00:00:21.865 --> 00:00:23.459
+o split respeitou o tempo?
 
 9
-00:00:28.746 --> 00:00:32.885
-Este módulo te dá o vocabulário que entrevistas técnicas cobram.
+00:00:23.459 --> 00:00:25.543
+A métrica reflete o custo do erro?
 
 10
-00:00:33.167 --> 00:00:35.792
-LLMs leem tokens, não letras nem palavras.
+00:00:25.543 --> 00:00:31.429
+Modelo com leakage aprovado em teste e desmoronando em produção é um incidente clássico da área.
 
 11
-00:00:35.792 --> 00:00:42.105
-O BPE funde os pares mais frequentes do corpus até um vocabulário de cinquenta a duzentos mil tokens.
+00:00:31.700 --> 00:00:37.196
+Regressão logística, Random Forest e XGBoost são uma instrução bem escrita para a IA:
 
 12
-00:00:42.105 --> 00:00:46.106
-Português gasta mais tokens que inglês, e APIs cobram por token.
+00:00:37.196 --> 00:00:39.782
+quem digita é ela, quem responde é você.
 
 13
-00:00:46.106 --> 00:00:49.919
-É por isso que o modelo erra ao contar letras de uma palavra.
+00:00:39.782 --> 00:00:41.463
+Duas ideias carregam tudo:
 
 14
-00:00:50.200 --> 00:00:53.297
-Cada token tem um vetor denso aprendido no treino.
+00:00:41.463 --> 00:00:47.540
+supervisionado, o passado vem com o rótulo; e generalizar, acertar o dado novo, não o passado.
 
 15
-00:00:53.297 --> 00:00:57.014
-Nesse espaço, proximidade geométrica é semelhança semântica:
+00:00:47.833 --> 00:00:48.804
+Regra sagrada:
 
 16
-00:00:57.014 --> 00:00:59.615
-rei perto de rainha, gato perto de felino.
+00:00:48.804 --> 00:00:55.045
+o modelo só é avaliado em dados que nunca viu, e o teste é tocado uma única vez, no final.
 
 17
-00:00:59.615 --> 00:01:05.128
-Essa ideia, texto virar vetor comparável, é a fundação do RAG que você vê no módulo sete.
+00:00:55.045 --> 00:00:58.998
+Muitos dados, holdout; poucos, k-fold com média e desvio.
 
 18
-00:01:05.400 --> 00:01:08.499
-Attention deixa cada token olhar para os outros.
+00:00:58.998 --> 00:00:59.622
+Há datas?
 
 19
-00:01:08.499 --> 00:01:14.374
-Cada um gera query, o que procura; key, o que oferece; e value, o que entrega se escolhido.
+00:00:59.622 --> 00:01:00.662
+Corte por data:
 
 20
-00:01:14.374 --> 00:01:16.375
-É como uma busca em biblioteca:
+00:01:00.662 --> 00:01:04.753
+sorteio coloca o futuro no treino, e a métrica vira ficção.
 
 21
-00:01:16.375 --> 00:01:20.507
-sua pergunta é a query, a lombada é a key, o conteúdo é o value.
+00:01:05.033 --> 00:01:05.616
+Pergunte:
 
 22
-00:01:20.507 --> 00:01:22.896
-A máscara causal impede ver o futuro.
+00:01:05.616 --> 00:01:10.346
+no momento em que o modelo fizer a previsão de verdade, o que ele saberá?
 
 23
-00:01:23.167 --> 00:01:24.430
-Um exemplo minúsculo:
+00:01:10.346 --> 00:01:12.549
+Faça a validação imitar essa cena.
 
 24
-00:01:24.430 --> 00:01:31.466
-o token dois compara sua query com a key de cada token, tira softmax dos scores, e mistura os values por esses pesos.
+00:01:12.549 --> 00:01:15.205
+Vale para churn, demanda, fraude e preço:
 
 25
-00:01:31.466 --> 00:01:35.135
-Aqui, setenta e três por cento da informação vem do token um.
+00:01:15.205 --> 00:01:17.537
+treine no passado, valide no futuro.
 
 26
-00:01:35.135 --> 00:01:38.383
-Na fórmula real ainda existe a divisão pela raiz de d.
+00:01:17.833 --> 00:01:19.680
+Quatro números contam a história:
 
 27
-00:01:38.667 --> 00:01:43.473
-O modelo roda várias attentions em paralelo, cada cabeça focada numa relação:
+00:01:19.680 --> 00:01:23.820
+verdadeiro positivo, falso positivo, falso negativo e verdadeiro negativo.
 
 28
-00:01:43.473 --> 00:01:45.408
-sintaxe, correferência, código.
+00:01:23.820 --> 00:01:25.162
+Monte essa tabela à mão:
 
 29
-00:01:45.408 --> 00:01:50.464
-Attention sozinha não sabe ordem — João ama Maria ficaria igual a Maria ama João.
+00:01:25.162 --> 00:01:28.239
+quem deriva uma vez nunca confunde precisão com recall.
 
 30
-00:01:50.464 --> 00:01:53.211
-A solução é injetar posição direto no vetor.
+00:01:28.239 --> 00:01:34.393
+Com um por cento de fraude, chutar que nada é fraude dá noventa e nove por cento de acurácia e utilidade zero.
 
 31
-00:01:53.500 --> 00:01:56.671
-Um GPT empilha attention e MLP dezenas de vezes:
+00:01:34.667 --> 00:01:35.942
+Triagem de câncer:
 
 32
-00:01:56.671 --> 00:02:00.569
-a attention mistura tokens, o MLP processa cada um sozinho.
+00:01:35.942 --> 00:01:39.059
+falso negativo custa uma vida, recall manda.
 
 33
-00:02:00.569 --> 00:02:04.071
-No fim, logits dão um score por token do vocabulário.
+00:01:39.059 --> 00:01:40.122
+Filtro de spam:
 
 34
-00:02:04.071 --> 00:02:06.581
-Greedy escolhe sempre o mais provável.
+00:01:40.122 --> 00:01:44.090
+falso positivo some com e-mail legítimo, precisão manda.
 
 35
-00:02:06.581 --> 00:02:11.404
-Temperatura ajusta a distribuição, e top-p corta a cauda de tokens ruins.
+00:01:44.090 --> 00:01:46.428
+Quando a IA sugerir F1, pergunte:
 
 36
-00:02:11.700 --> 00:02:15.160
-Três linhas de Hugging Face já geram texto com o gpt2.
+00:01:46.428 --> 00:01:49.475
+os dois erros custam o mesmo neste negócio?
 
 37
-00:02:15.160 --> 00:02:18.683
-Com do sample falso, a geração é greedy e sempre igual.
+00:01:49.767 --> 00:01:54.655
+Leakage é informação que não existiria na hora da previsão contaminando o treino:
 
 38
-00:02:18.683 --> 00:02:23.489
-Com do sample verdadeiro, temperatura e top-p, cada execução sai diferente.
+00:01:54.655 --> 00:01:57.190
+modelo ótimo no papel, inútil em produção.
 
 39
-00:02:23.489 --> 00:02:26.628
-É esse experimento que você repete no lab guiado.
+00:01:57.190 --> 00:01:58.638
+Quatro formas clássicas:
 
 40
-00:02:26.900 --> 00:02:28.456
-O treino tem dois atos.
+00:01:58.638 --> 00:02:04.070
+feature derivada do alvo, pré-processamento antes do split, duplicatas e shuffle temporal.
 
 41
-00:02:28.456 --> 00:02:29.200
-Pré-treino:
+00:02:04.070 --> 00:02:04.552
+Sintoma:
 
 42
-00:02:29.200 --> 00:02:37.994
-prever o próximo token em trilhões de tokens, por meses, em milhares de GPUs — o resultado é um modelo base que só completa texto.
+00:02:04.552 --> 00:02:08.415
+resultado bom demais; desconfie do vazamento antes do seu gênio.
 
 43
-00:02:37.994 --> 00:02:40.767
-Pós-treino transforma isso em assistente:
+00:02:08.700 --> 00:02:15.958
+Este pipeline de churn imprime AUC de zero vírgula noventa e sete, e sua missão no lab é caçar os dois leakages plantados.
 
 44
-00:02:40.767 --> 00:02:46.652
-SFT ensina o formato, e RLHF, ou RLAIF com uma IA avaliando, ajusta pelas preferências.
+00:02:15.958 --> 00:02:16.493
+Primeiro:
 
 45
-00:02:46.933 --> 00:02:49.382
-Fechados como GPT, Claude e Gemini:
+00:02:16.493 --> 00:02:21.906
+desconto de retenção é consequência do cancelamento; na previsão real, a coluna não existe.
 
 46
-00:02:49.382 --> 00:02:52.041
-você paga por token, sem ver os pesos.
+00:02:21.906 --> 00:02:22.382
+Segundo:
 
 47
-00:02:52.041 --> 00:02:54.560
-Abertos como Llama, Qwen e DeepSeek:
+00:02:22.382 --> 00:02:26.844
+o scaler ajustado antes do split vazou estatísticas do teste para o treino.
 
 48
-00:02:54.560 --> 00:02:57.289
-você baixa os pesos e roda onde quiser.
+00:02:27.133 --> 00:02:27.854
+A correção:
 
 49
-00:02:57.289 --> 00:03:00.437
-Contexto vai de 128 mil a 1 milhão de tokens.
+00:02:27.854 --> 00:02:33.490
+split antes de tudo, sem a coluna vazada, e todo pré-processamento dentro do Pipeline.
 
 50
-00:03:00.437 --> 00:03:05.125
-KV cache guarda K e V já processados; contexto maior custa memória.
+00:02:33.490 --> 00:02:35.718
+Assim o fit acontece só no treino:
 
 51
-00:03:05.400 --> 00:03:11.298
-O mini-projeto é um relatório de anatomia de um LLM, o material pra explicar transformers a um colega.
+00:02:35.718 --> 00:02:39.322
+Pipeline não é organização, é dispositivo de segurança.
 
 52
-00:03:11.298 --> 00:03:20.088
-Compare tokenização em PT e EN, mostre o top-dez do próximo token em três prompts, varie temperatura e top-p, e compare um modelo base com um instruído.
+00:02:39.322 --> 00:02:42.205
+A AUC honesta é bem menor, e é a verdadeira.
 
 53
-00:03:20.367 --> 00:03:21.316
-Recapitulando:
+00:02:42.500 --> 00:02:46.161
+Você vai passar a carreira lendo pipelines que não escreveu.
 
 54
-00:03:21.316 --> 00:03:29.110
-BPE, query, key e value, a pilha decoder-only, temperatura e top-p, e a diferença entre modelo base e pós-treinado.
+00:02:46.161 --> 00:02:46.711
+O ritual:
 
 55
-00:03:29.110 --> 00:03:33.177
-Essa é a base de todo LLM que você vai usar daqui em diante.
+00:02:46.711 --> 00:02:56.108
+entenda como o alvo nasce, passe cada feature no teste do relógio, procure fit fora do Pipeline, confira o split contra datas e grupos, cheque duplicatas.
 
 56
-00:03:33.177 --> 00:03:34.397
-No próximo módulo:
+00:02:56.108 --> 00:02:57.939
+Provar não é apontar, é medir:
 
 57
-00:03:34.397 --> 00:03:38.396
-prompt engineering e como chamar APIs de LLM no seu código.
+00:02:57.939 --> 00:03:00.380
+métrica com, métrica sem, e o mecanismo.
 
 58
-00:03:38.396 --> 00:03:38.871
+00:03:00.667 --> 00:03:08.054
+No mini-projeto, outra equipe entrega um dataset armadilhado e um baseline espetacular; sua missão é auditar antes do deploy.
+
+59
+00:03:08.054 --> 00:03:12.663
+Spec antes do código, checklist para achar as armadilhas, e prova com números:
+
+60
+00:03:12.663 --> 00:03:14.673
+métrica antes, depois e mecanismo.
+
+61
+00:03:14.673 --> 00:03:17.155
+A métrica final cai, e isso é uma vitória.
+
+62
+00:03:17.433 --> 00:03:25.151
+Você agora separa dados com honestidade, deriva métricas da matriz de confusão e caça leakage com prova numérica.
+
+63
+00:03:25.151 --> 00:03:29.044
+Essas disciplinas voltam ao avaliar RAG, agentes e evals.
+
+64
+00:03:29.044 --> 00:03:31.981
+No próximo módulo, você abre a caixa-preta:
+
+65
+00:03:31.981 --> 00:03:33.347
+como LLMs funcionam.
+
+66
+00:03:33.347 --> 00:03:33.825
 Até lá.

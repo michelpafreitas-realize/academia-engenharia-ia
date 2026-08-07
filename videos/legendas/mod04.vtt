@@ -1,221 +1,205 @@
 WEBVTT
 
 1
-00:00:00.000 --> 00:00:01.621
-Bem-vindo ao módulo quatro:
+00:00:00.000 --> 00:00:01.663
+Bem-vindo ao módulo dois:
 
 2
-00:00:01.621 --> 00:00:03.123
-deep learning na prática.
+00:00:01.663 --> 00:00:03.060
+matemática essencial.
 
 3
-00:00:03.123 --> 00:00:07.086
-Aqui você abre a caixa-preta das redes neurais com números na mão.
+00:00:03.060 --> 00:00:09.578
+Você constrói intuição sobre vetores, derivadas e probabilidade — a base de toda engenharia de IA.
 
 4
-00:00:07.086 --> 00:00:13.752
-Ao final, você treina uma rede em PyTorch do zero, na GPU do Colab, e sabe diagnosticar quando o treino quebra.
+00:00:09.578 --> 00:00:13.968
+Cada ideia vem com uma conta calculada à mão e conferida em NumPy.
 
 5
-00:00:14.033 --> 00:00:19.323
-Todo modelo de IA, do classificador de churn ao LLM gigante, é por baixo a mesma máquina:
+00:00:14.267 --> 00:00:21.453
+Você não precisa de mestrado em matemática, só de intuição sobre um punhado de ideias — tudo na área é construído sobre elas.
 
 6
-00:00:19.323 --> 00:00:22.354
-camadas de neurônios treinadas por backpropagation.
+00:00:21.453 --> 00:00:26.340
+Embeddings são vetores, semelhança é produto escalar, treinar é descida do gradiente.
 
 7
-00:00:22.354 --> 00:00:26.693
-Empresas pagam melhor quem entende o que acontece quando o treino quebra:
+00:00:26.340 --> 00:00:29.387
+Sem essa base você trava no primeiro erro inesperado.
 
 8
-00:00:26.693 --> 00:00:30.377
-loss que vira NaN, modelo que decora, GPU que estoura memória.
+00:00:29.667 --> 00:00:31.959
+Um vetor é duas coisas ao mesmo tempo:
 
 9
-00:00:30.667 --> 00:00:35.861
-Um neurônio multiplica cada entrada por um peso, soma com um bias e passa por uma ativação.
+00:00:31.959 --> 00:00:34.492
+uma lista de números e uma seta no espaço.
 
 10
-00:00:35.861 --> 00:00:37.630
-É como um comitê de empréstimo:
+00:00:34.492 --> 00:00:40.826
+Essa dupla identidade é o truque central da IA — o que você descreve com números vira um ponto no espaço.
 
 11
-00:00:37.630 --> 00:00:42.310
-o presidente confia mais no analista, peso alto, do que no estagiário, peso baixo.
+00:00:40.826 --> 00:00:45.411
+Um cliente vira vetor de idade, renda e compras; uma palavra vira embedding.
 
 12
-00:00:42.310 --> 00:00:44.251
-Os pesos são o que a rede aprende.
+00:00:45.700 --> 00:00:49.563
+O produto escalar multiplica coordenada a coordenada e soma tudo.
 
 13
-00:00:44.533 --> 00:00:48.753
-Empilhar camadas lineares sem ativação ainda dá uma função linear:
+00:00:49.563 --> 00:00:54.556
+Mesma direção dá valor grande e positivo, perpendicular dá zero, oposta dá negativo.
 
 14
-00:00:48.753 --> 00:00:50.351
-dez camadas viram uma só.
+00:00:54.556 --> 00:00:59.668
+É assim que a busca semântica funciona — vence quem tem maior similaridade de cosseno.
 
 15
-00:00:50.351 --> 00:00:51.821
-A ativação quebra isso.
+00:00:59.967 --> 00:01:03.033
+Guarde essa frase, ela volta o módulo inteiro:
 
 16
-00:00:51.821 --> 00:00:59.365
-ReLU é o padrão; sigmoid espreme entre zero e um; tanh centra em zero; softmax vira uma distribuição de probabilidade.
+00:01:03.033 --> 00:01:06.099
+produto escalar é a régua de semelhança da IA.
 
 17
-00:00:59.633 --> 00:01:02.357
-Passamos uma entrada por uma rede mínima:
+00:01:06.099 --> 00:01:12.231
+Busca semântica, recomendação, embeddings parecidos — por baixo é sempre essa conta simples.
 
 18
-00:01:02.357 --> 00:01:05.944
-duas entradas, dois neurônios ReLU, uma saída sigmoid.
+00:01:12.500 --> 00:01:17.772
+Uma matriz é uma grade de números e, geometricamente, uma transformação do espaço.
 
 19
-00:01:05.944 --> 00:01:08.268
-O modelo previu zero vírgula cinco:
+00:01:17.772 --> 00:01:21.373
+Multiplicar matrizes compõe transformações em sequência.
 
 20
-00:01:08.268 --> 00:01:10.195
-não sei, cinquenta por cento.
+00:01:21.373 --> 00:01:22.402
+Regra de shapes:
 
 21
-00:01:10.195 --> 00:01:15.641
-Todo forward pass, até de um GPT, é essa mesma mecânica repetida bilhões de vezes.
+00:01:22.402 --> 00:01:26.324
+m por n vezes n por p dá m por p — o n do meio precisa bater.
 
 22
-00:01:15.933 --> 00:01:20.027
-A loss resume o erro do modelo; treinar é minimizar essa loss.
+00:01:26.600 --> 00:01:27.822
+A derivada responde:
 
 23
-00:01:20.027 --> 00:01:23.856
-MSE serve para regressão e pune erros grandes ao quadrado.
+00:01:27.822 --> 00:01:31.242
+se eu mexer um tiquinho na entrada, quanto mexe a saída?
 
 24
-00:01:23.856 --> 00:01:28.214
-Cross-entropy serve para classificação e castiga confiança errada.
+00:01:31.242 --> 00:01:33.991
+Sinal indica direção, magnitude indica força.
 
 25
-00:01:28.214 --> 00:01:32.109
-No PyTorch ela já embute o softmax; não aplique duas vezes.
+00:01:33.991 --> 00:01:40.832
+Com bilhões de entradas, empacotamos essa sensibilidade num gradiente, que aponta para a maior subida da função.
 
 26
-00:01:32.400 --> 00:01:33.736
-A pergunta do treino é:
+00:01:41.100 --> 00:01:44.765
+Treinar um modelo é achar os parâmetros que minimizam a perda.
 
 27
-00:01:33.736 --> 00:01:36.873
-se eu mexer este peso, a loss sobe ou desce, e quanto?
+00:01:44.765 --> 00:01:45.356
+A receita:
 
 28
-00:01:36.873 --> 00:01:42.391
-Backpropagation calcula essa derivada para todos os pesos de uma vez, usando a regra da cadeia:
+00:01:45.356 --> 00:01:50.735
+calcule o gradiente e ande na direção contrária, w menos o learning rate vezes o gradiente.
 
 29
-00:01:42.391 --> 00:01:45.528
-como uma corrente que se percorre de trás para frente.
+00:01:50.735 --> 00:01:55.404
+Os passos encurtam perto do mínimo; learning rate alto demais faz o w explodir.
 
 30
-00:01:45.800 --> 00:01:51.710
-O gradiente dá a direção; o otimizador decide o passo.
+00:01:55.700 --> 00:02:01.152
+Uma distribuição diz quanto de crença vai para cada resultado, e tudo soma um.
 
 31
-00:01:51.710 --> 00:01:56.854
-SGD usa um passo fixo, geralmente com momentum.
+00:02:01.152 --> 00:02:02.061
+Dado honesto:
 
 32
-00:01:56.854 --> 00:02:02.217
-Adam adapta o passo sozinho e é o padrão em 2026.
+00:02:02.061 --> 00:02:03.878
+um sexto por face; normal:
 
 33
-00:02:02.217 --> 00:02:09.768
-Learning rate alto explode a loss; baixo demais, o treino se arrasta.
+00:02:03.878 --> 00:02:04.927
+extremos raros.
 
 34
-00:02:09.768 --> 00:02:12.176
-Comece com um por mil.
+00:02:04.927 --> 00:02:10.868
+Esperança é a média ponderada — em IA, a perda que minimizamos é a esperança do erro.
 
 35
-00:02:12.467 --> 00:02:18.096
-Overfitting é loss de treino baixa e validação alta:
+00:02:11.167 --> 00:02:12.051
+Bayes responde:
 
 36
-00:02:18.096 --> 00:02:19.936
-o modelo decorou.
+00:02:12.051 --> 00:02:15.646
+dado que vi uma evidência, quanto devo acreditar na hipótese?
 
 37
-00:02:19.936 --> 00:02:25.565
-Dropout desliga neurônios ao acaso durante o treino.
+00:02:15.646 --> 00:02:16.883
+Pense em mil pessoas:
 
 38
-00:02:25.565 --> 00:02:29.461
-Weight decay penaliza pesos grandes.
+00:02:16.883 --> 00:02:25.134
+numa doença de um por cento, com teste de noventa por cento de acerto, a chance real de estar doente após um positivo é só quinze por cento.
 
 39
-00:02:29.461 --> 00:02:38.771
-Early stopping para o treino, ou guarda o melhor checkpoint, quando a validação piora.
+00:02:25.134 --> 00:02:26.431
+A taxa base muda tudo.
 
 40
-00:02:39.067 --> 00:02:45.495
-O loop de treino sempre segue a mesma liturgia:
+00:02:26.700 --> 00:02:31.558
+Um classificador produz logits, scores brutos como dois, um e zero vírgula um.
 
 41
-00:02:45.495 --> 00:02:55.069
-zera gradientes, forward, calcula a loss, backward, atualiza os pesos.
+00:02:31.558 --> 00:02:38.035
+A softmax exponencia cada valor, acentuando diferenças, e divide pela soma, garantindo que tudo some um.
 
 42
-00:02:55.069 --> 00:03:00.540
-Esquecer o zero_grad é o bug mais comum.
+00:02:38.035 --> 00:02:41.460
+É o que um modelo de linguagem faz a cada token gerado.
 
 43
-00:03:00.540 --> 00:03:06.831
-Se a loss não desce, treine em um único batch:
+00:02:41.733 --> 00:02:42.606
+O mini-projeto:
 
 44
-00:03:06.831 --> 00:03:13.123
-uma rede saudável decora; se não, o bug é seu.
+00:02:42.606 --> 00:02:46.504
+um notebook com três seções calculadas à mão e conferidas em NumPy.
 
 45
-00:03:13.400 --> 00:03:18.489
-O mini-projeto é treinar o Fashion-MNIST do zero:
+00:02:46.504 --> 00:02:51.158
+Crie embeddings de cinco itens seus e monte a matriz de similaridade de cosseno.
 
 46
-00:03:18.489 --> 00:03:23.370
-dados, modelo e loop à mão, sem Trainer pronto.
+00:02:51.158 --> 00:02:56.277
+Refaça o gradiente para cinco passos e monte um cenário de Bayes com softmax somando um.
 
 47
-00:03:23.370 --> 00:03:35.728
-Separe dez por cento para validação com early stopping, plote as curvas de loss e compare pelo menos duas arquiteturas.
-
-48
-00:03:35.728 --> 00:03:36.247
-Meta:
-
-49
-00:03:36.247 --> 00:03:41.024
-acurácia de teste de oitenta e oito por cento.
-
-50
-00:03:41.300 --> 00:03:42.446
+00:02:56.567 --> 00:02:57.390
 Recapitulando:
 
+48
+00:02:57.390 --> 00:03:06.153
+você entende vetores e embeddings, calcula produto escalar como régua de semelhança, domina as regras de shape, e rodou a descida do gradiente à mão.
+
+49
+00:03:06.153 --> 00:03:09.094
+No próximo módulo entra machine learning clássico:
+
+50
+00:03:09.094 --> 00:03:13.387
+regressão, classificação e seu primeiro modelo treinado do início ao fim.
+
 51
-00:03:42.446 --> 00:03:54.397
-você domina o forward pass à mão, entende backpropagation pela regra da cadeia e sabe diagnosticar loss que não desce ou modelo que decora demais.
-
-52
-00:03:54.397 --> 00:03:57.999
-Treinou uma rede em PyTorch na GPU do Colab.
-
-53
-00:03:57.999 --> 00:04:02.419
-No próximo módulo, você abre o Transformer por dentro:
-
-54
-00:04:02.419 --> 00:04:06.839
-atenção, embeddings e como um LLM funciona de verdade.
-
-55
-00:04:06.839 --> 00:04:07.412
+00:03:13.387 --> 00:03:13.799
 Até lá.

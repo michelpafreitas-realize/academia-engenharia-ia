@@ -1,6 +1,6 @@
 // Offline da Academia: rede primeiro (conteúdo sempre fresco), cache como fallback.
 // Vídeos ficam de fora (cross-origin, pesados); aulas, quiz, cards e material funcionam sem rede.
-const C='academia-v2'; // reforma ago/2026: nova grade
+const C='academia-v3'; // vídeos regravados na numeração nova (videos-v2)
 const SLUGS=['00-boas-vindas-setup','01-direcao-de-ia','02-prompt-engineering-apis','03-python-dados',
   '04-matematica-essencial','05-disciplinas-de-ml','06-como-llms-funcionam','07-rag','08-agentes-tool-use',
   '09-fine-tuning-modelos-abertos','10-avaliacao-seguranca','11-llmops-producao','12-capstone-carreira',

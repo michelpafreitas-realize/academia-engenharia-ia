@@ -1,0 +1,395 @@
+{
+  "id": "Aula04",
+  "slug": "aula04",
+  "modulo": 4,
+  "titulo": "Matemática Essencial",
+  "periodo": "Período 2",
+  "carga": "8h",
+  "scenes": [
+    {
+      "tipo": "capa",
+      "fala": "Muito boa aula para você. Esta é a aula completa do módulo quatro da Academia de Engenharia de IA: Matemática Essencial, com abordagem visual. Antes que você pense em fechar o vídeo, deixe-me acalmar o seu coração: você não precisa de um mestrado em matemática para ser engenheiro de IA. Precisa de intuição sólida sobre um punhado de ideias, e é exatamente isso que vamos construir juntos nos próximos quarenta minutos. Vamos percorrer oito partes: vetores, produto escalar, matrizes, derivada, descida do gradiente, probabilidade, o teorema de Bayes e a softmax. Cada conceito vem com um exemplo numérico que você calcula à mão e depois confere em NumPy. No final, faremos o laboratório da descida do gradiente e eu explico o seu mini-projeto em detalhe. Papel e caneta na mão, porque hoje a gente calcula de verdade. Vamos começar."
+    },
+    {
+      "tipo": "conceito",
+      "kicker": "POR QUE ISSO IMPORTA",
+      "frase": "Tudo na IA é construído sobre meia dúzia de ideias — quem as domina sabe onde olhar quando algo quebra.",
+      "fala": "Deixe-me te dar o mapa antes da caminhada. Tudo o que você vai tocar nesta área é construído sobre as ideias desta aula. Embeddings são vetores. Semelhança semântica é produto escalar. Treinar um modelo é descida do gradiente. A saída de um classificador é uma softmax. A temperatura de um modelo de linguagem mexe numa distribuição de probabilidade. Quem não tem essa base usa as ferramentas como caixas-pretas, e trava no primeiro comportamento inesperado. Quem tem, lê um erro de shape, um loss que não desce, uma probabilidade estranha, e sabe onde olhar. No dia a dia das empresas isso vira decisão concreta: escolher a métrica de similaridade da sua busca, entender por que o fine-tuning divergiu com learning rate alto, explicar para o time de produto o que significa o modelo estar noventa por cento confiante. Matemática que você calculou uma vez com os próprios dedos nunca mais vira caixa-preta."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "ROTEIRO DA AULA",
+      "titulo": "O plano de hoje",
+      "bullets": [
+        "Partes 1 a 3: vetores, semelhança, matrizes",
+        "Partes 4 e 5: derivada e gradient descent",
+        "Partes 6 a 8: probabilidade, Bayes, softmax",
+        "Lab: gradient descent em NumPy puro",
+        "Mini-projeto com os seus próprios números"
+      ],
+      "fala": "Este é o plano de hoje, em três blocos. O primeiro bloco é geometria: vetores como setas e listas ao mesmo tempo, o produto escalar como régua de semelhança, e matrizes como máquinas de transformar o espaço. O segundo bloco é o coração do treinamento: a derivada como medidor de sensibilidade e a descida do gradiente, o algoritmo que treina todo modelo moderno, que vamos executar à mão, passo a passo, numa tabela. O terceiro bloco é incerteza: distribuições e esperança, o teorema de Bayes resolvido por contagens, e a softmax que transforma números quaisquer em probabilidades. Depois vem o laboratório guiado, onde implementamos a descida do gradiente em NumPy puro e vemos a perda cair na tela, e fecho com o mini-projeto, onde você refaz tudo isso com números escolhidos por você. Repare na progressão: primeiro a intuição visual, depois a conta à mão, depois o código que confere."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "COMO ESTUDAR",
+      "titulo": "Dez horas bem investidas",
+      "bullets": [
+        "3Blue1Brown: álgebra linear e cálculo, 2h30",
+        "StatQuest: gradient descent e estatística, 1h30",
+        "Khan Academy em português: reforço, 2h",
+        "Livro MML, capítulo dois: leitura, 1h30",
+        "Lab do gradient descent: 1h30, mais projeto"
+      ],
+      "fala": "Antes do conteúdo, o guia de estudo do módulo, que tem carga estimada de dez horas. O prato principal são as séries visuais do canal três blue um brown: os capítulos um a quatro da essência da álgebra linear, e os capítulos um a três da essência do cálculo, sobre derivadas. São as melhores animações de matemática já feitas, e esta aula conversa diretamente com elas. Depois, o canal StatQuest para descida do gradiente e estatística básica, uma hora e meia. Se precisar de reforço em português, a Khan Academy tem trilhas de álgebra linear e probabilidade, reserve duas horas. A leitura da semana são as seções iniciais do capítulo dois do livro gratuito Mathematics for Machine Learning. E o laboratório desta aula, a descida do gradiente em NumPy puro, leva mais uma hora e meia. Assista aos vídeos antes ou depois desta aula, como preferir: aqui eu te dou a espinha dorsal, eles dão as animações."
+    },
+    {
+      "tipo": "conceito",
+      "kicker": "PARTE 1 DE 8",
+      "frase": "Um vetor é lista de números e seta no espaço — a dupla identidade que transforma geometria em semântica.",
+      "fala": "Parte um: vetores. E eu quero começar com a ideia mais importante da aula inteira, aquela que sustenta todas as outras. Um vetor é duas coisas ao mesmo tempo. Primeiro, uma lista de números, como dois e três entre colchetes. Segundo, uma seta no espaço: a seta que sai do ponto zero zero e chega no ponto dois três. Lista e seta são o mesmo objeto, visto de dois ângulos. Essa dupla identidade é o truque central de toda a inteligência artificial, e eu peço que você guarde esta frase: qualquer coisa que você consiga descrever com números vira um ponto no espaço, e aí geometria vira semântica. Distância entre pontos vira diferença de significado. Ângulo entre setas vira parentesco entre conceitos. Parece abstrato agora, mas em dois minutos você vê isso funcionando com clientes de uma empresa, e daqui a alguns módulos, com palavras dentro de um modelo de linguagem."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "VETORES",
+      "titulo": "Setas e listas ao mesmo tempo",
+      "bullets": [
+        "Lista: [2, 3] — numeros em ordem",
+        "Seta: do (0,0) ate o ponto (2, 3)",
+        "Mesmo objeto, dois pontos de vista",
+        "Embedding: vetor denso que captura sentido",
+        "Intuicao 2D vale em 768 dimensoes"
+      ],
+      "fala": "Deixe-me desenhar a dupla identidade com calma, porque tudo depende dela. Como lista, o vetor dois três é só isso: o número dois e o número três, em ordem. Como seta, é o segmento que sai da origem, o ponto zero zero, e termina no ponto de coordenadas dois três: ande duas unidades para a direita e três para cima. A lista diz os valores: a seta mostra a posição e a direção. Nenhuma das duas leituras é mais verdadeira: são o mesmo objeto por dois pontos de vista, e a força vem de alternar entre eles. Quando você programa, pensa na lista, porque é o que o NumPy guarda. Quando você raciocina, pensa na seta, porque é o que dá intuição. E o vocabulário novo da área: embedding é um vetor denso que representa um objeto, palavra, imagem, usuário, num espaço onde distância significa semelhança. Um embedding de verdade tem centenas de dimensões, mas cada intuição que você formar no plano de duas dimensões continua válida lá em cima. É por isso que começamos no plano."
+    },
+    {
+      "tipo": "code",
+      "kicker": "VETORES",
+      "titulo": "Clientes como pontos no espaço",
+      "code": "import numpy as np\n\ncliente_a = np.array([25, 4000, 3])\ncliente_b = np.array([27, 4300, 4])\n# proximos no espaco = perfis parecidos",
+      "fala": "Olhe o exemplo na tela. Um cliente de uma empresa pode ser descrito pelo vetor idade, renda e compras no mês. O cliente A tem vinte e cinco anos, renda de quatro mil reais, três compras no mês. O cliente B tem vinte e sete anos, renda de quatro mil e trezentos, quatro compras. Repare: os números são parecidos, coordenada a coordenada. Então, como setas no espaço, esses dois clientes apontam quase para o mesmo lugar. Estão próximos. E proximidade no espaço significa perfis parecidos no mundo real. Agora o salto: numa rede neural de linguagem, cada palavra é representada por um vetor de centenas de dimensões, chamado embedding, uma representação numérica densa que captura significado. Nós não conseguimos enxergar setecentas e sessenta e oito dimensões, ninguém consegue. Mas, e essa é a boa notícia, toda a intuição de duas dimensões continua funcionando: distância, ângulo, direção. O que você entende no plano, vale no hiperespaço."
+    },
+    {
+      "tipo": "conceito",
+      "kicker": "PARTE 2 DE 8",
+      "frase": "Produto escalar é a régua de semelhança da IA.",
+      "fala": "Parte dois: o produto escalar, em inglês dot product. Se a parte um te deu a matéria-prima, os vetores, esta parte te dá o instrumento de medida. Eu vou te mostrar a conta, que é simples, e depois a leitura geométrica, que é onde mora o poder. E já adianto a frase que resume tudo, para você guardar desde já: produto escalar é a régua de semelhança da inteligência artificial. Toda busca semântica, todo sistema de recomendação, toda comparação de embeddings que você vai construir nos próximos módulos, no fundo, é essa régua sendo aplicada milhões de vezes por segundo. A conta cabe numa linha, e você confere de cabeça comigo agora."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "PRODUTO ESCALAR",
+      "titulo": "A conta e a leitura geométrica",
+      "bullets": [
+        "a · b: multiplica par a par e soma tudo",
+        "[1,2,3] · [4,5,6] = 4 + 10 + 18 = 32",
+        "Mesma direção: produto grande e positivo",
+        "Perpendiculares: produto igual a zero",
+        "Opostas: produto negativo"
+      ],
+      "fala": "A conta primeiro. O produto escalar de dois vetores multiplica coordenada a coordenada e soma tudo. Vetor um dois três com vetor quatro cinco seis: um vezes quatro dá quatro, dois vezes cinco dá dez, três vezes seis dá dezoito. Quatro mais dez mais dezoito: trinta e dois. Confira de cabeça, é isso mesmo. Agora a leitura geométrica, que é o que importa: o produto escalar é igual ao comprimento de a, vezes o comprimento de b, vezes o cosseno do ângulo entre as setas. Traduzo: setas apontando na mesma direção têm cosseno perto de um, logo produto escalar grande e positivo. Setas perpendiculares têm cosseno zero, logo produto escalar zero: uma não tem nada a ver com a outra. E setas opostas dão produto negativo. Repare no que acabou de acontecer: uma soma de multiplicações, que qualquer computador faz em nanossegundos, virou um medidor de ângulo. É assim que a máquina mede parentesco entre significados."
+    },
+    {
+      "tipo": "code",
+      "kicker": "PRODUTO ESCALAR",
+      "titulo": "Similaridade de cosseno em NumPy",
+      "code": "def similaridade_cosseno(a, b) -> float:\n    \"\"\"Semelhanca entre -1 e 1.\"\"\"\n    return a @ b / (np.linalg.norm(a) *\n                    np.linalg.norm(b))\n\nrei    = np.array([0.9, 0.8, 0.1])\nrainha = np.array([0.85, 0.75, 0.2])\nbanana = np.array([0.1, 0.2, 0.95])\nprint(similaridade_cosseno(rei, rainha))  # ~0.99\nprint(similaridade_cosseno(rei, banana))  # ~0.33",
+      "fala": "Vamos ler o código da tela juntos. A função similaridade cosseno recebe dois vetores e retorna a semelhança entre menos um e um. Na linha do return, o a arroba b é o produto escalar em NumPy: o arroba é o operador de multiplicação vetorial que você conheceu no módulo três. E dividimos pelo produto das normas, ou seja, dos comprimentos das duas setas. Dividir pelos comprimentos é normalizar: sobra só o cosseno do ângulo, a direção pura, sem o tamanho. Abaixo, três embeddings de brinquedo, com três dimensões cada: rei, rainha e banana. A similaridade entre rei e rainha dá aproximadamente zero noventa e nove: quase idênticos, as setas praticamente coincidem. Entre rei e banana, aproximadamente zero trinta e três: pouco parecidos. É exatamente assim que a busca semântica funciona: a pergunta do usuário vira embedding, cada documento vira embedding, e o documento com maior similaridade de cosseno vence. Guarde: produto escalar é a régua de semelhança da IA."
+    },
+    {
+      "tipo": "conceito",
+      "kicker": "BUSCA SEMÂNTICA",
+      "frase": "Pergunta e documentos viram embeddings; vence o documento com maior similaridade de cosseno.",
+      "fala": "Quero que você enxergue o alcance do que acabamos de programar, porque essa funçãozinha de uma linha sustenta produtos inteiros. Na busca semântica, a pergunta do usuário vira um embedding, cada documento da base vira um embedding, e a resposta é simplesmente o documento cuja seta faz o menor ângulo com a seta da pergunta: maior similaridade de cosseno vence. Repare no salto de qualidade em relação à busca por palavra-chave: quem procura por como cancelar minha assinatura encontra o documento que diz encerramento de contrato, mesmo sem nenhuma palavra em comum, porque os significados apontam para a mesma direção do espaço. O mesmo mecanismo movimenta sistemas de recomendação, filmes parecidos têm embeddings parecidos, detecção de duplicatas, e o RAG, a técnica de dar documentos ao modelo de linguagem que você vai construir no módulo sete. Quando chegar lá, a régua já vai ser velha conhecida sua."
+    },
+    {
+      "tipo": "conceito",
+      "kicker": "PARTE 3 DE 8",
+      "frase": "Matriz é uma máquina de transformar vetores; multiplicar matrizes é compor transformações.",
+      "fala": "Parte três: matrizes. Uma matriz é uma grade de números, linhas e colunas. Essa é a definição burocrática. A definição geométrica, a que vale ouro, é esta: uma matriz é uma transformação do espaço. Uma rotação, uma esticada, uma projeção. Multiplicar uma matriz por um vetor é aplicar essa transformação ao vetor: a seta entra de um jeito e sai de outro. E multiplicar matriz por matriz é compor transformações: aplicar uma e depois a outra, como girar e em seguida esticar. Por que você deveria se importar? Porque uma rede neural é, essencialmente, uma pilha de multiplicações de matrizes intercaladas com funções não lineares. Quando alguém diz que um modelo tem sete bilhões de parâmetros, está literalmente contando os números guardados dentro dessas matrizes. Cada camada é uma transformação do espaço, e o aprendizado é ajustar essas transformações até que a geometria final separe gato de cachorro, spam de não spam."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "MATRIZES",
+      "titulo": "Transformar e compor",
+      "bullets": [
+        "Matriz x vetor: aplica a transformacao",
+        "Matriz x matriz: compoe (uma apos a outra)",
+        "Rotacao, esticada, projecao do espaco",
+        "Camada de rede neural = uma transformacao",
+        "Aprender = ajustar essas transformacoes"
+      ],
+      "fala": "Duas operações, duas leituras geométricas, e eu quero as duas na sua memória. Multiplicar uma matriz por um vetor é aplicar a transformação: o vetor entra, a máquina gira, estica ou projeta, e o vetor sai transformado. Multiplicar uma matriz por outra matriz é compor transformações: fabricar uma máquina nova que equivale a aplicar a primeira e depois a segunda, de uma vez só. Girar e depois esticar vira uma única matriz que faz as duas coisas. Essa ideia de compor é o que dá profundidade ao deep learning: cada camada da rede é uma transformação do espaço, e empilhar camadas é compor transformações cada vez mais elaboradas, até que a geometria final coloque todos os gatos de um lado e todos os cachorros do outro. E treinar, à luz da parte cinco que vem aí, é ajustar os números dentro dessas matrizes até a composição inteira fazer o que queremos. Agora vamos aprender a conta em si, à mão, com uma matriz dois por dois."
+    },
+    {
+      "tipo": "code",
+      "kicker": "MATRIZES",
+      "titulo": "Multiplicação 2 por 2 à mão",
+      "code": "A = [1 2]   B = [5 6]\n    [3 4]       [7 8]\n\nAB = [1*5+2*7  1*6+2*8]   [19 22]\n     [3*5+4*7  3*6+4*8] = [43 50]\n\nA = np.array([[1, 2], [3, 4]])\nB = np.array([[5, 6], [7, 8]])\nprint(A @ B)   # [[19 22] [43 50]]",
+      "fala": "Vamos fazer uma multiplicação de matrizes dois por dois à mão, porque quem faz uma vez nunca mais esquece a mecânica. A regra: o elemento da posição linha i coluna j do resultado é o produto escalar da linha i da primeira matriz com a coluna j da segunda. Olhe a tela e acompanhe comigo. Primeiro elemento: linha um de A, que é um e dois, com coluna um de B, que é cinco e sete. Um vezes cinco, cinco. Dois vezes sete, quatorze. Cinco mais quatorze: dezenove. Segundo elemento: linha um com coluna dois, seis e oito. Um vezes seis mais dois vezes oito: seis mais dezesseis, vinte e dois. A linha de baixo segue igual: três vezes cinco mais quatro vezes sete dá quarenta e três, e três vezes seis mais quatro vezes oito dá cinquenta. Resultado: dezenove, vinte e dois, quarenta e três, cinquenta. Embaixo, o NumPy confirma com A arroba B. Repare que a peça fundamental reapareceu: multiplicar matrizes é fazer vários produtos escalares organizados."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "MATRIZES",
+      "titulo": "A regra de compatibilidade",
+      "bullets": [
+        "(m, n) @ (n, p) resulta em (m, p)",
+        "O n do meio precisa bater",
+        "(4, 3) @ (3, 2) resulta em (4, 2)",
+        "Rede neural: pilha de matrizes + nao-linear",
+        "7B de parametros = numeros nas matrizes"
+      ],
+      "fala": "Antes de sair da parte três, a regra de compatibilidade de shapes, que vai te salvar de metade dos erros que você verá em deep learning. Uma matriz m por n só pode multiplicar uma matriz n por p, e o resultado é m por p. Em palavras: o n do meio precisa bater, e depois ele some. Exemplo: uma matriz quatro por três vezes uma matriz três por dois. O três do meio bate, desaparece, e sobra quatro por dois. Se você tentar multiplicar quatro por três com duas por cinco, o NumPy reclama na hora com um erro de shape. E aqui vai o conselho de quem já depurou muita rede neural: quando aparecer um erro de dimensões incompatíveis, e vai aparecer, não saia chutando transposições. Escreva os shapes de cada matriz no papel, aplique a regra do n do meio, e o ponto exato da incompatibilidade se revela. Ler shapes é alfabetização em deep learning, e você acabou de aprender a gramática."
+    },
+    {
+      "tipo": "conceito",
+      "kicker": "PARTE 4 DE 8",
+      "frase": "Derivada responde: se eu mexer um tiquinho na entrada, quanto mexe a saída?",
+      "fala": "Parte quatro: a derivada. Se essa palavra te traz memórias ruins do ensino médio, limites, tabelas de regras decoradas, eu te convido a esquecer tudo por um instante. A derivada responde uma pergunta prática e única: se eu mexer um tiquinho na entrada, quanto mexe a saída? Ela é um medidor de sensibilidade. Só isso. Imagine um botão de volume: a derivada diz o quanto o som muda quando você gira o botão um milímetro. Se a derivada é grande, o sistema é sensível ali: um toque no botão e o som explode. Se é pequena, você gira e quase nada acontece. O sinal da derivada diz a direção: positiva significa que aumentar a entrada aumenta a saída, negativa significa que aumentar a entrada diminui a saída. E a magnitude diz a intensidade da resposta. Com essa leitura, sensibilidade, direção e intensidade, você tem tudo o que precisa para entender como um modelo com bilhões de parâmetros aprende. Deixe-me mostrar com números."
+    },
+    {
+      "tipo": "code",
+      "kicker": "DERIVADA",
+      "titulo": "Sensibilidade com números",
+      "code": "f(w)  = w**2\nf'(w) = 2*w\n\n# em w = 3:\nf'(3) = 6\n# aumentar w em 0.01\n# aumenta f em ~0.06\n\nf(3.00) = 9.0000\nf(3.01) = 9.0601   # subiu ~0.06, confere",
+      "fala": "Vamos conferir a ideia com um exemplo que cabe na cabeça. A função f de w igual a w ao quadrado tem derivada dois w. No ponto w igual a três, a derivada vale seis. Tradução prática: perto de três, se eu aumentar w em um centésimo, f aumenta aproximadamente seis centésimos. Vamos verificar na marra, olhe a tela. Três ao quadrado é nove. Três vírgula zero um ao quadrado é nove vírgula zero seis zero um. A diferença é pouco mais de seis centésimos. Bateu com a previsão da derivada. Agora o passo que leva isso para a IA: um modelo real não tem uma entrada, tem bilhões de parâmetros. Calculamos a sensibilidade da saída em relação a cada um deles e empacotamos tudo num vetor chamado gradiente. E aqui vem a frase que é o coração de todo o deep learning, sublinhe mentalmente: o gradiente aponta na direção de maior subida da função. Logo, o negativo do gradiente aponta para a maior descida. Segure essa frase, porque a parte cinco é toda construída sobre ela."
+    },
+    {
+      "tipo": "conceito",
+      "kicker": "GRADIENTE",
+      "frase": "Gradiente: o vetor das sensibilidades — aponta para a maior subida; o negativo dele, para a maior descida.",
+      "fala": "Vamos dar ao gradiente uma cena só dele, porque ele merece. Um modelo real não tem uma entrada: tem milhões ou bilhões de parâmetros, cada um influenciando o erro final. Para cada parâmetro, calculamos a derivada parcial: a sensibilidade do erro àquele parâmetro específico, com todos os outros congelados. Empacotamos todas essas sensibilidades num único vetor, e esse vetor é o gradiente. E aí vem a propriedade que parece mágica mas é teorema: o gradiente aponta, dentre todas as direções possíveis do espaço de parâmetros, exatamente aquela em que a função mais cresce. A maior subida. Consequência imediata: o negativo do gradiente aponta a maior descida. Pense no gradiente como uma bússola do erro: em qualquer ponto da paisagem, ele indica para onde o erro sobe mais rápido, e nós, que queremos errar menos, caminhamos no sentido oposto da agulha. Se essa frase ficou clara, a parte cinco vai parecer inevitável: é só transformar a bússola em receita."
+    },
+    {
+      "tipo": "conceito",
+      "kicker": "PARTE 5 DE 8",
+      "frase": "Treinar um modelo é descer a montanha do erro seguindo o negativo do gradiente.",
+      "fala": "Parte cinco: a descida do gradiente, gradient descent, o algoritmo que treina praticamente tudo em IA, do modelo linear mais simples ao maior modelo de linguagem do planeta. O cenário: treinar um modelo significa encontrar os parâmetros que minimizam o erro, medido por uma função chamada perda, ou loss. Imagine a perda como uma paisagem montanhosa, onde a altitude é o tamanho do erro. Você está em algum ponto dessa montanha, de olhos vendados, e quer chegar ao vale. A receita tem quatro passos. Um: comece com parâmetros quaisquer, um lugar aleatório da montanha. Dois: calcule o gradiente da perda, que aponta para onde o erro sobe. Três: dê um passinho na direção contrária, w novo igual a w menos learning rate vezes gradiente, onde o learning rate é o tamanho do passo. Quatro: repita até o erro parar de cair. Só isso. Quatro linhas de receita movem indústrias inteiras. E agora vamos executá-la à mão, número por número."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "GRADIENT DESCENT",
+      "titulo": "A receita em quatro passos",
+      "bullets": [
+        "1. Comece com parametros quaisquer",
+        "2. Calcule o gradiente (onde o erro sobe)",
+        "3. w novo = w - lr * gradiente",
+        "4. Repita ate o erro parar de cair",
+        "lr = learning rate, o tamanho do passo"
+      ],
+      "fala": "A receita completa está na tela, e vale a pena ler devagar, porque estes quatro passos treinam desde a regressão do nosso lab até os maiores modelos de linguagem do mundo, sem mudar uma vírgula da lógica. Passo um: comece com parâmetros quaisquer. Sim, aleatórios: o algoritmo não precisa de um bom começo, só de um começo. Passo dois: calcule o gradiente da perda no ponto atual, a bússola apontando para onde o erro sobe. Passo três, a linha mais importante da IA moderna: w novo igual a w menos learning rate vezes gradiente. O sinal de menos é a alma do negócio: andamos contra a bússola. E o learning rate é o tamanho do passo: um número pequeno, tipo zero vírgula zero um, que multiplica o gradiente e controla o quanto nos movemos por iteração. Passo quatro: repita, centenas ou milhares de vezes, até o erro estacionar. Repare no que não tem na receita: não tem fórmula fechada, não tem esperteza: tem passinho repetido. Agora vamos executá-la à mão."
+    },
+    {
+      "tipo": "code",
+      "kicker": "GRADIENT DESCENT",
+      "titulo": "Cinco passos à mão",
+      "code": "f(w) = (w - 3)**2      minimo em w = 3\nf'(w) = 2*(w - 3)      lr = 0.1, w0 = 0\n\npasso  w      grad    w novo\n1      0.000  -6.000  0.600\n2      0.600  -4.800  1.080\n3      1.080  -3.840  1.464\n4      1.464  -3.072  1.771\n5      1.771  -2.458  2.017",
+      "fala": "Vamos minimizar f de w igual a abre parênteses w menos três fecha parênteses ao quadrado. O mínimo é óbvio: w igual a três zera a função. Mas o algoritmo não sabe disso, ele só enxerga o gradiente local, e é isso que o torna geral. A derivada é dois vezes w menos três. Começamos em w igual a zero, learning rate zero vírgula um. Passo um: gradiente é dois vezes zero menos três, menos seis. W novo: zero menos zero vírgula um vezes menos seis, que é zero mais zero vírgula seis: zero vírgula seis. Repare: o gradiente era negativo, a função descia para a direita, e andamos para a direita. Passo dois: gradiente dois vezes zero vírgula seis menos três, menos quatro vírgula oito. W novo: um vírgula zero oito. Passo três: um vírgula quatro seis quatro. Passo quatro: um vírgula sete sete um. Passo cinco: dois vírgula zero um sete. Estamos caminhando para três, exatamente como prometido. Refaça ao menos os dois primeiros passos no papel: é a conta mais importante do módulo."
+    },
+    {
+      "tipo": "conceito",
+      "kicker": "GRADIENT DESCENT",
+      "frase": "Perto do mínimo o gradiente encolhe — os passos encurtam sozinhos. O learning rate é a decisão crítica.",
+      "fala": "Duas observações finas sobre a tabela que acabamos de construir, e a primeira é uma elegância escondida. Repare nos saltos: de zero para zero vírgula seis, andamos seis décimos. Do passo quatro para o cinco, andamos menos de três décimos. Os passos vão encurtando sozinhos, sem ninguém mandar. Por quê? Porque perto do mínimo a função fica plana, o gradiente tende a zero, e o passo é learning rate vezes gradiente: gradiente menor, passo menor. O algoritmo freia naturalmente ao se aproximar do vale, com learning rate fixo. A segunda observação é a decisão crítica do praticante: o learning rate. Com zero vírgula zero um, os passos ficam minúsculos e a convergência demora uma eternidade. Com um vírgula um, acontece o desastre oposto: cada passo pula por cima do mínimo e aterrissa mais longe do que estava, e o w explode para longe, divergiu. Você vai ver as duas patologias com os próprios olhos no laboratório, daqui a pouco."
+    },
+    {
+      "tipo": "conceito",
+      "kicker": "PARTE 6 DE 8",
+      "frase": "Uma distribuição diz quanto de crença vai para cada resultado possível — e tudo soma um.",
+      "fala": "Parte seis: probabilidade. Mudamos de assunto: saímos da geometria e do treinamento e entramos no raciocínio sob incerteza, que é o idioma nativo de todo modelo de IA. O conceito de base é a distribuição de probabilidade: uma repartição de crença entre os resultados possíveis, com uma regra inegociável: tudo tem que somar um. Cem por cento de crença, distribuído. Um dado honesto: um sexto para cada uma das seis faces, seis sextos somam um. As alturas de uma população: a curva do sino, a distribuição normal, onde valores perto da média são prováveis e os extremos são raros. Por que isso importa aqui? Porque a resposta de um modelo de linguagem é, literalmente, uma amostragem de uma distribuição sobre o vocabulário: a cada token o modelo reparte crença entre dezenas de milhares de palavras possíveis e sorteia uma. Quando você entende distribuições, entende o que a temperatura, o top p e o sorteio da próxima palavra realmente fazem."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "DISTRIBUIÇÕES",
+      "titulo": "Repartindo a crença",
+      "bullets": [
+        "Dado honesto: 1/6 para cada face",
+        "Alturas: curva do sino (normal)",
+        "Perto da media: provavel; extremos: raros",
+        "Regra inegociavel: tudo soma 1",
+        "LLM: distribuicao sobre o vocabulario"
+      ],
+      "fala": "Dois exemplos para a distribuição virar imagem mental. O dado honesto é a distribuição mais democrática que existe: um sexto de crença para cada uma das seis faces, todas igualmente prováveis, e seis vezes um sexto fecha em um. É a chamada distribuição uniforme. Já as alturas de uma população desenham outra forma: a curva do sino, a distribuição normal. Muita gente perto da média, e cada vez menos gente conforme você caminha para os extremos: pessoas de dois metros e dez existem, mas são raras, e a curva desce até quase zero lá na ponta. Formas diferentes, mesma regra inegociável: a soma de toda a crença é um. Se você monta probabilidades à mão e a soma dá um vírgula dois, não é uma distribuição, é um erro de conta. E o exemplo que interessa à nossa área: a cada token, um modelo de linguagem mantém uma distribuição sobre o vocabulário inteiro, dezenas de milhares de palavras, cada uma com sua fatia de crença, tudo somando um. Gerar texto é sortear dessa distribuição, fatia por fatia."
+    },
+    {
+      "tipo": "code",
+      "kicker": "ESPERANÇA",
+      "titulo": "Vale a pena comprar o bilhete?",
+      "code": "# bilhete: custa R$5\n# paga R$100 com prob. 3%\n\nE[ganho] = 0.03*100 + 0.97*0 - 5\n         = 3 - 5\n         = -R$2\n\n# no longo prazo: prejuizo",
+      "fala": "O segundo conceito da parte seis é a esperança, também chamada de valor esperado. A pergunta que ela responde: se eu repetisse esse experimento infinitas vezes, qual seria a média? A conta é uma média ponderada pelas probabilidades. Exemplo na tela: um bilhete de rifa custa cinco reais e paga cem reais com três por cento de chance. Vale a pena? Esperança do ganho: três por cento vezes cem, que dá três reais, mais noventa e sete por cento vezes zero, que dá zero, menos os cinco reais do bilhete. Três menos cinco: menos dois reais. Ou seja: a cada bilhete comprado, você perde em média dois reais. Num bilhete isolado você pode ganhar, claro, mas no longo prazo a média manda, e a média é prejuízo. Em IA, a esperança está por toda parte, mesmo quando não é anunciada: a perda que minimizamos com a descida do gradiente é a esperança do erro sobre os dados. Aquela montanha que descemos na parte cinco? A altitude dela é um valor esperado."
+    },
+    {
+      "tipo": "conceito",
+      "kicker": "PARTE 7 DE 8",
+      "frase": "Bayes: dado que vi a evidência, quanto devo acreditar na hipótese? Conte os casos e a resposta aparece.",
+      "fala": "Parte sete: o teorema de Bayes, e eu vou te apresentar o exemplo mais famoso da probabilidade, aquele que derruba médico, juiz e engenheiro. A pergunta que Bayes responde: dado que eu vi uma evidência, quanto devo acreditar numa hipótese? Você não vai precisar decorar fórmula nenhuma: o método intuitivo é pensar em contagens de pessoas. O cenário: uma doença atinge um por cento da população. Existe um teste que acerta noventa por cento dos doentes, e que dá falso positivo em cinco por cento dos saudáveis. Você fez o teste, e ele deu positivo. Pergunta: qual a chance de você estar realmente doente? A intuição grita noventa por cento, afinal o teste acerta noventa por cento, certo? Errado. E não é errado por pouco: a resposta verdadeira é seis vezes menor. Vamos contar as pessoas na próxima tela e ver o número aparecer, e depois eu te mostro por que esse mesmo erro derruba sistemas de IA em produção."
+    },
+    {
+      "tipo": "code",
+      "kicker": "BAYES",
+      "titulo": "O método das mil pessoas",
+      "code": "# doenca: 1% · teste acerta 90%\n# falso positivo: 5% dos saudaveis\n\n1000 pessoas\n  doentes:   10 -> positivos: 9\n  saudaveis: 990 -> falsos:   49.5\n\nP(doente | positivo) = 9 / 58.5\n                     ~ 15%   (nao 90%!)",
+      "fala": "Pense em mil pessoas, olhe a tela e acompanhe as contagens. Doentes: um por cento de mil, dez pessoas. O teste acerta noventa por cento delas: nove positivos verdadeiros. Saudáveis: novecentas e noventa pessoas. O teste erra com cinco por cento delas: novecentos e noventa vezes zero vírgula zero cinco, quarenta e nove vírgula cinco falsos positivos. Agora junte todo mundo que recebeu resultado positivo: nove verdadeiros mais quarenta e nove e meio falsos, cinquenta e oito e meio positivos no total. Desses, quantos estão doentes de verdade? Nove. Nove dividido por cinquenta e oito e meio: aproximadamente quinze por cento. Positivo no teste, e ainda assim só quinze por cento de chance de doença. A intuição falha porque ignora a taxa base: a doença é rara, então o pequeno percentual de erro aplicado à multidão de saudáveis produz mais falsos positivos do que a doença produz verdadeiros. Os falsos dominam. Guarde o método: em dúvida com Bayes, conte pessoas."
+    },
+    {
+      "tipo": "conceito",
+      "kicker": "TAXA BASE",
+      "frase": "Classificador com 95% de acurácia para fraude de 1% pode ser pior que um chute — a taxa base cobra caro.",
+      "fala": "Antes de seguir, quero cravar a lição da parte sete, porque ela reaparece direto na sua carreira de engenheiro de IA. A armadilha da taxa base não é curiosidade de livro: ela derruba sistemas em produção. Pense num classificador de fraude com noventa e cinco por cento de acurácia, num cenário onde a fraude ocorre em um por cento das transações. Parece ótimo, não é? Mas repare: um modelo preguiçoso que responda sempre não é fraude acerta noventa e nove por cento das vezes, sem aprender absolutamente nada. Os noventa e cinco por cento do seu modelo podem ser piores que um chute constante. E os alarmes que ele dispara sofrem do mesmo mal do teste médico: como legítimas são a esmagadora maioria, uma fração pequena de erro sobre elas afoga os poucos casos reais de fraude. Por isso, acurácia sozinha não diz quase nada em classes desbalanceadas: esse é um tema central do módulo cinco, e agora você já chega lá sabendo o porquê. Quando ouvir uma métrica, pergunte primeiro: qual é a taxa base?"
+    },
+    {
+      "tipo": "conceito",
+      "kicker": "PARTE 8 DE 8",
+      "frase": "Softmax: exponencia os scores e divide pela soma — números quaisquer viram probabilidades que somam um.",
+      "fala": "Parte oito, a última do conteúdo: a softmax, a ponte entre o mundo dos números brutos e o mundo das probabilidades. O problema que ela resolve: um classificador produz scores brutos, chamados logits, um número por classe. Algo como dois vírgula zero para gato, um vírgula zero para cachorro, zero vírgula um para pato. Esses números não são probabilidades: não somam um, e poderiam até ser negativos. A softmax faz a conversão em dois movimentos. Primeiro, exponencia cada score: eleva o número e de Euler a cada um deles. Isso garante duas coisas: tudo fica positivo, porque exponencial nunca é negativa, e as diferenças se acentuam, porque a exponencial cresce muito rápido: o score maior fica proporcionalmente ainda maior. Segundo movimento: divide cada exponencial pela soma de todas. Depois dessa divisão, os valores somam exatamente um, formando uma distribuição legítima de probabilidade. Vamos ver o código e conferir a conta à mão."
+    },
+    {
+      "tipo": "code",
+      "kicker": "SOFTMAX",
+      "titulo": "Do logit à probabilidade",
+      "code": "def softmax(z: np.ndarray) -> np.ndarray:\n    e = np.exp(z - z.max())  # evita overflow\n    return e / e.sum()\n\nprint(softmax(np.array([2.0, 1.0, 0.1])))\n# [0.659 0.242 0.099]\n# 66% gato, 24% cachorro, 10% pato\n# soma = 1",
+      "fala": "Leia a função comigo, são duas linhas. Primeira: e recebe np ponto exp de z menos z ponto max. Por que subtrair o máximo antes de exponenciar? Estabilidade numérica: exponencial de um logit grande, tipo mil, estoura o limite do float, o famoso overflow. Subtraindo o máximo, o maior expoente vira zero e nada estoura. E o resultado final não muda, porque a subtração se cancela na divisão. É o tipo de detalhe que separa código de tutorial de código de produção. Segunda linha: divide cada exponencial pela soma. Rodando com os logits dois, um e zero vírgula um: sai zero seiscentos e cinquenta e nove, zero duzentos e quarenta e dois, zero zero noventa e nove. Sessenta e seis por cento gato, vinte e quatro cachorro, dez pato, somando um. Conferindo à mão: e ao quadrado é cerca de sete vírgula trinta e nove, e elevado a um é dois vírgula setenta e dois, e elevado a zero vírgula um é um vírgula onze. Soma: onze vírgula vinte e um. Sete trinta e nove dividido por onze vinte e um: zero sessenta e seis. Bateu."
+    },
+    {
+      "tipo": "conceito",
+      "kicker": "TEMPERATURA",
+      "frase": "Um LLM faz softmax sobre o vocabulário a cada token; a temperatura só divide os logits antes.",
+      "fala": "E aqui a parte oito se conecta com o seu dia a dia de usuário de modelos de linguagem. O que um LLM faz a cada token gerado é exatamente o que acabamos de codificar, numa escala maior: produz um score para cada palavra do vocabulário inteiro, dezenas de milhares de logits, passa tudo pela softmax, obtém uma distribuição de probabilidade, e sorteia a próxima palavra dessa distribuição. Aquele parâmetro temperatura que você ajusta na API e nunca soube direito o que era? Ele apenas divide os logits antes da softmax. Temperatura alta encolhe os logits, as diferenças entre eles diminuem, e a distribuição achata: palavras improváveis ganham chance, o texto fica mais criativo e mais arriscado. Temperatura baixa amplia as diferenças, a distribuição afunila no favorito, e o texto fica mais determinístico e repetível. Não há magia nenhuma: é uma divisão antes de uma exponencial. Você acabou de desmontar mais uma caixa-preta, e essa é exatamente a proposta deste módulo."
+    },
+    {
+      "tipo": "conceito",
+      "kicker": "LAB GUIADO",
+      "frase": "Descida do gradiente em NumPy puro: cinco células, uma reta aprendida, e a perda caindo na tela.",
+      "fala": "Chegou a hora do laboratório guiado, a melhor parte da aula. Vamos implementar a descida do gradiente em NumPy puro, sem nenhuma biblioteca de machine learning, para resolver uma regressão linear: encontrar a reta que melhor explica um conjunto de pontos. O modelo é y igual a w vezes x mais b: dois parâmetros, a inclinação w e o intercepto b. A perda é o erro quadrático médio, MSE: a média dos quadrados das distâncias entre o que a reta prevê e os pontos reais. O plano tem cinco células, e você pode rodar no Colab ou localmente. Célula um: fabricar dados sintéticos com resposta conhecida, para podermos conferir se o algoritmo acerta. Célula dois: a perda e os gradientes. Célula três: o loop de treino, que é o coração de tudo. Célula quatro: os gráficos da convergência. Célula cinco: o experimento com learning rates, onde as patologias que discutimos aparecem ao vivo. Vamos célula por célula, e eu narro os resultados reais."
+    },
+    {
+      "tipo": "code",
+      "kicker": "LAB · CÉLULA 1",
+      "titulo": "Dados sintéticos com gabarito",
+      "code": "import numpy as np\nimport matplotlib.pyplot as plt\n\nrng = np.random.default_rng(42)\nx = rng.uniform(0, 10, 100)\ny = 2.5 * x + 7 + rng.normal(0, 2, 100)\nplt.scatter(x, y, s=12)\nplt.title(\"y = 2.5x + 7 + ruido\")\nplt.show()",
+      "fala": "Célula um: fabricamos os dados com gabarito escondido. O gerador de números aleatórios entra com semente quarenta e dois, para o experimento ser reprodutível: qualquer pessoa que rodar obtém exatamente os mesmos pontos. O x são cem valores uniformes entre zero e dez. E o y é a reta verdadeira, dois e meio vezes x mais sete, mais um ruído gaussiano com desvio dois, que suja os pontos como dados reais seriam sujos. Essa é uma técnica de engenheiro que eu quero que você adote: quando estiver aprendendo ou depurando um algoritmo, teste primeiro em dados sintéticos onde você conhece a resposta certa. Se o algoritmo não recupera um gabarito que você mesmo plantou, tem bug: e você descobre em segundos, não em semanas. Aqui, o gabarito é w igual a dois e meio e b igual a sete. No scatter da tela, a nuvem de pontos sobe da esquerda para a direita, com a tendência visível por baixo do ruído. Nosso desafio: recuperar o dois e meio e o sete só olhando para os pontos."
+    },
+    {
+      "tipo": "code",
+      "kicker": "LAB · CÉLULA 2",
+      "titulo": "Perda e gradientes",
+      "code": "def perda_mse(w, b, x, y):\n    \"\"\"Erro quadratico medio da reta.\"\"\"\n    return np.mean((y - (w*x + b)) ** 2)\n\ndef gradientes(w, b, x, y):\n    \"\"\"Direcao em que o erro SOBE.\"\"\"\n    erro = y - (w*x + b)\n    dw = -2 * np.mean(erro * x)\n    db = -2 * np.mean(erro)\n    return dw, db",
+      "fala": "Célula dois, as duas funções que sustentam o treino. A perda MSE: para cada ponto, a reta prevê w vezes x mais b: subtraímos a previsão do y verdadeiro, elevamos ao quadrado, e tiramos a média de tudo, com operações vetorizadas do NumPy, sem nenhum loop, como você aprendeu no módulo três. O quadrado tem dupla função: erros para cima e para baixo não se cancelam, e erros grandes pesam desproporcionalmente mais. A segunda função entrega os gradientes, as derivadas da MSE em relação a w e a b, que calculamos analiticamente com a regra da cadeia: dw é menos dois vezes a média do erro vezes x, db é menos dois vezes a média do erro. Você não precisa saber derivar essas fórmulas hoje: precisa saber lê-las. E repare no comentário na docstring, que é o ponto conceitual: esses gradientes apontam para onde o erro sobe. Nós vamos usá-los com o sinal trocado. Nos frameworks modernos, esse cálculo é automático: aqui fazemos à mão para nunca mais ser mistério."
+    },
+    {
+      "tipo": "code",
+      "kicker": "LAB · CÉLULA 3",
+      "titulo": "O loop de treino",
+      "code": "w, b, lr = 0.0, 0.0, 0.01\nhistorico = []\nfor passo in range(200):\n    dw, db = gradientes(w, b, x, y)\n    w -= lr * dw     # contra o gradiente\n    b -= lr * db\n    historico.append(perda_mse(w, b, x, y))\n\nprint(f\"w aprendido: {w:.3f}\")  # ~2.5\nprint(f\"b aprendido: {b:.3f}\")  # ~7.0",
+      "fala": "Célula três, e eu quero que você olhe para ela com respeito, porque estas sete linhas são treinar um modelo. É isto. Quando alguém diz que treinou uma rede neural por três dias em mil placas de vídeo, é este loop rodando, com matrizes gigantes no lugar dos nossos dois números. Vamos ler: w e b começam em zero, o chute inicial, e o learning rate é um centésimo. Duzentas vezes repetimos o ritual: calcular os gradientes no ponto atual, e atualizar cada parâmetro com w menos igual learning rate vezes gradiente. O menos igual é o passo contra o gradiente: o gradiente aponta a subida do erro, nós descemos. A cada volta, guardamos a perda no histórico para plotar depois. Resultado após duzentos passos: w aprendido, aproximadamente dois e meio. B aprendido, caminhando para sete. O algoritmo recuperou o gabarito que plantamos na célula um, só olhando os pontos barulhentos. Recomendo até um assert no final: se o w fugir do esperado, o notebook grita sozinho."
+    },
+    {
+      "tipo": "code",
+      "kicker": "LAB · CÉLULA 4",
+      "titulo": "Ver a convergência",
+      "code": "fig, eixos = plt.subplots(1, 2,\n                          figsize=(12, 4))\neixos[0].plot(historico)\neixos[0].set(title=\"Perda caindo\",\n             xlabel=\"Passo\", ylabel=\"MSE\")\neixos[1].scatter(x, y, s=12)\neixos[1].plot(np.sort(x),\n              w*np.sort(x) + b, color=\"red\")\nplt.tight_layout(); plt.show()",
+      "fala": "Célula quatro: ver para crer. Montamos dois gráficos lado a lado. O da esquerda plota o histórico da perda, passo a passo, e a forma dessa curva é uma velha conhecida sua agora: despenca rápido nos primeiros passos, quando estamos longe do vale e o gradiente é grande, e depois vai amaciando até quase estabilizar, os passos encurtando sozinhos perto do mínimo, exatamente como na nossa tabela feita à mão. Essa curva de perda é o eletrocardiograma do treinamento: no seu futuro profissional, será a primeira coisa que você vai olhar para diagnosticar qualquer treino. O gráfico da direita mostra a nuvem de pontos original e, em vermelho, a reta aprendida cortando o meio da nuvem. Um detalhe técnico honesto: ordenamos o x com np sort antes de traçar a linha, porque o matplotlib liga os pontos na ordem em que chegam: sem ordenar, a reta viraria um rabisco de idas e vindas. E repare que os eixos têm título e rótulos: o juramento do módulo três continua valendo."
+    },
+    {
+      "tipo": "code",
+      "kicker": "LAB · CÉLULA 5",
+      "titulo": "O efeito do learning rate",
+      "code": "for lr_teste in [0.001, 0.01, 0.05]:\n    w_t, b_t, hist = 0.0, 0.0, []\n    for _ in range(200):\n        dw, db = gradientes(w_t, b_t, x, y)\n        w_t -= lr_teste * dw\n        b_t -= lr_teste * db\n        hist.append(perda_mse(w_t, b_t, x, y))\n    plt.plot(hist, label=f\"lr={lr_teste}\")\nplt.legend(); plt.show()\n# desafio: lr=0.03 e lr=0.1",
+      "fala": "Célula cinco, o experimento final: o mesmo treino três vezes, mudando só o learning rate, e as três curvas de perda no mesmo gráfico. Com um milésimo, a curva desce numa lentidão dolorosa: duzentos passos terminam e a perda ainda está alta, o passinho é pequeno demais para a viagem. Com um centésimo, o nosso valor, a descida é firme e estabiliza confortavelmente: o bom equilíbrio. Com cinco centésimos, desce mais rápido ainda, mas repare que estamos flertando com o limite. E aí vem o desafio que deixo com você, e que eu faço questão que você rode: repita com três centésimos e com um décimo, e explique o que acontece com a curva. Não conto o final, mas dou a pista: lembre da patologia que discutimos na parte cinco, o passo que pula por cima do mínimo e aterrissa mais longe. Você vai reconhecê-la na hora em que a curva aparecer na tela. Esse olho clínico para curvas de perda, formado num exemplo de dois parâmetros, é o mesmo que diagnostica o fine-tuning de um modelo gigante."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "MINI-PROJETO",
+      "titulo": "Matemática com os seus números",
+      "bullets": [
+        "Notebook-relatorio com tres secoes",
+        "Cada conta: a mao e conferida em NumPy",
+        "Semelhanca: 5 embeddings de brinquedo",
+        "Gradiente: tabela de 5 passos, lr = 0.2",
+        "Probabilidade: Bayes seu + softmax"
+      ],
+      "fala": "Vamos ao mini-projeto do módulo, que se chama matemática da IA com meus próprios números. A proposta é um notebook-relatório com três seções, uma para cada bloco da aula: semelhança, gradiente e probabilidade. E a regra de ouro, que vale para o projeto inteiro e que dá nome a ele: toda conta aparece duas vezes. Primeiro à mão, escrita numa célula de markdown, com os seus números, do seu domínio, do seu cotidiano. Depois conferida em NumPy, numa célula de código logo abaixo. Os dois lados, sempre, lado a lado. Por que essa insistência? Porque é o mecanismo exato que transforma conceito em propriedade sua: a conta à mão prova que você entendeu, o código prova que a conta está certa, e o confronto entre os dois pega qualquer autoengano. Quando a mão e a máquina discordam, alguém errou, e descobrir quem é a melhor aula que existe. Reserve cerca de três horas, podendo dividir em duas sessões. Vamos aos requisitos de cada seção."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "REQUISITOS",
+      "titulo": "As três seções do relatório",
+      "bullets": [
+        "1. Embeddings de 5 itens de um dominio seu",
+        "   matriz 5x5 de cosseno + comentario",
+        "2. Tabela de GD com lr = 0.2, 5 passos",
+        "3. Bayes do cotidiano por contagens",
+        "   + softmax de 4 logits somando 1"
+      ],
+      "fala": "Requisito um, semelhança: crie embeddings de brinquedo, com três a cinco dimensões, para cinco itens de um domínio que você conhece de cor: filmes, músicas, pratos, jogos, produtos. Calcule a matriz cinco por cinco de similaridade de cosseno entre todos os pares e comente os dois extremos: o par mais parecido e o menos parecido, dizendo se o resultado confirmou ou surpreendeu a sua intuição. Requisito dois, gradiente: refaça a tabela de descida do gradiente da função w menos três ao quadrado, à mão, por cinco passos, agora com learning rate zero vírgula dois, e confirme os cinco valores com um loop em NumPy. Requisito três, probabilidade, em duas partes: monte um cenário de Bayes do seu cotidiano, spam, exame médico, alarme falso de carro, com números escolhidos por você, e resolva pelo método das contagens: e implemente a softmax aplicada a quatro logits, mostrando com um assert que a saída soma um. Três seções, seis contas, e nenhuma delas copiada do material: números seus."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "PASSO A PASSO · 1 A 3",
+      "titulo": "Do notebook à similaridade",
+      "bullets": [
+        "uv init modulo04 + numpy + jupyter",
+        "Tres secoes em celulas markdown",
+        "5 itens, dimensoes com significado",
+        "Par apostado: cosseno a mao no markdown",
+        "Matriz 5x5 com for dentro de for"
+      ],
+      "fala": "O passo a passo, que está detalhado na página do módulo com um checkpoint por etapa. Etapa um, quinze minutos: no seu repositório academia ia, o ritual do módulo três: uv init modulo zero quatro matemática, uv add numpy e jupyter, uv run jupyter lab. Crie o notebook com as três seções em células markdown. Etapa dois, vinte minutos: escolha o domínio e invente três ou quatro dimensões com significado, onde cada número responde quanto disso o item tem, de zero a um. Para filmes: ação, romance, comédia. Atribua valores de cabeça, sem sofrer com precisão: o que importa é que itens parecidos ganhem vetores parecidos. Etapa três, quarenta minutos: escolha o par que você aposta ser o mais parecido e calcule a similaridade de cosseno à mão numa célula markdown, texto simples serve. Depois, no código, monte os cinco vetores com np array, copie a função similaridade cosseno do módulo, e gere a matriz cinco por cinco com um for dentro de outro. Checkpoint: diagonal toda igual a um, e o seu par batendo com a conta à mão em duas casas."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "PASSO A PASSO · 4 A 6",
+      "titulo": "Gradiente, Bayes e entrega",
+      "bullets": [
+        "Tabela: 5 passos com lr = 0.2, de w = 0",
+        "Loop confere os 5 valores impressos",
+        "Bayes do cotidiano pelas 1000 pessoas",
+        "softmax de 4 logits + assert soma 1",
+        "Restart & Run All + commit + push"
+      ],
+      "fala": "Etapa quatro, quarenta e cinco minutos: a tabela do gradiente à mão, com learning rate zero vírgula dois, partindo de w igual a zero, por cinco passos. Os dois primeiros, por extenso: passo um, gradiente é dois vezes zero menos três, menos seis: w novo é zero menos zero vírgula dois vezes menos seis, um vírgula dois. Passo dois: gradiente menos três vírgula seis, w novo um vírgula noventa e dois. Depois confira com o loop de cinco linhas que está na página do módulo, e compare linha a linha. Repare como o w corre para três mais rápido que na nossa tabela com learning rate zero vírgula um: passo maior, convergência mais veloz, neste caso. Etapa cinco, meia hora: monte o seu cenário de Bayes, spam, exame, alarme falso, com três números seus: taxa base, taxa de detecção, taxa de falso alarme: e resolva pelo método das mil pessoas no markdown, conferindo as contagens em código. Etapa seis, vinte e cinco minutos: a softmax com quatro logits inventados, o assert de que a soma é um, Restart and Run All limpo, commit e push no repositório."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "SE TRAVAR",
+      "titulo": "Primeiros socorros do projeto",
+      "bullets": [
+        "Erro de shape: vetores de tamanhos != ",
+        "Diagonal 0.9999: use np.isclose",
+        "Tabela != loop: 90% e sinal trocado",
+        "30 min travado: pergunte a IA com contexto",
+        "Peca a explicacao, nao so a resposta"
+      ],
+      "fala": "Antes dos erros comuns, os primeiros socorros específicos deste projeto. Erro de shape na similaridade: os cinco vetores precisam ter o mesmo número de dimensões: confira com ponto shape antes de desconfiar da função. Diagonal da matriz dando zero vírgula nove nove nove nove em vez de um: isso não é bug, é arredondamento de ponto flutuante, compare com np ponto isclose e siga em frente. Tabela do gradiente divergindo do loop: noventa por cento das vezes é sinal trocado. Lembre: o passo é w menos learning rate vezes gradiente, e quando o gradiente é negativo, menos com menos vira mais, o w aumenta. Se a sua tabela anda para o lado errado, procure exatamente aí. E a regra geral da academia: travou por mais de trinta minutos em qualquer etapa, pergunte ao seu assistente de IA, colando a conta ou o erro e dizendo em qual etapa está. Mas peça a explicação, não só a resposta pronta: o objetivo do projeto é treinar o seu músculo, não o dele."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "ERROS COMUNS",
+      "titulo": "Cinco tropeços clássicos",
+      "bullets": [
+        "Comparar embeddings sem normalizar",
+        "Ignorar a regra do n do meio nos shapes",
+        "Learning rate no chute, sem experimento",
+        "Esquecer a taxa base ao ler metricas",
+        "Somar probabilidades que passam de 1"
+      ],
+      "fala": "Os cinco tropeços clássicos deste módulo, para você reconhecer de longe. Primeiro: comparar embeddings pelo produto escalar cru, sem normalizar. Vetores mais compridos ganham sempre, mesmo apontando para longe: normalize e compare cossenos. Segundo: ignorar a regra do n do meio e sair transpondo matrizes no chute até o erro sumir. O código pode até rodar, calculando a coisa errada em silêncio: escreva os shapes no papel. Terceiro: tratar o learning rate como detalhe e usar o primeiro valor que aparecer. Você viu na célula cinco que ele é a diferença entre convergir, se arrastar e explodir: sempre experimente. Quarto: ler noventa e cinco por cento de acurácia e esquecer de perguntar qual é a taxa base. Em classes desbalanceadas, esse número sozinho não significa nada. Quinto: montar probabilidades à mão que somam mais de um, ou esquecer o menos um da softmax caseira sem estabilidade numérica. Distribuição que não soma um não é distribuição: o assert existe para isso."
+    },
+    {
+      "tipo": "conceito",
+      "kicker": "RECAPITULANDO",
+      "frase": "Vetores dão o espaço, o gradiente dá o aprendizado, probabilidade dá a incerteza — e a softmax amarra tudo.",
+      "fala": "Vamos amarrar os fios da aula. Vetores são listas e setas ao mesmo tempo, e é por isso que qualquer coisa descrita em números vira geometria. O produto escalar é a régua de semelhança: mesma direção, valor grande: perpendicular, zero: e normalizado vira a similaridade de cosseno da busca semântica. Matrizes são transformações do espaço, com a regra de shapes do n do meio, e uma rede neural é uma pilha delas. A derivada é o medidor de sensibilidade, o gradiente empacota as sensibilidades e aponta a maior subida, e a descida do gradiente caminha no sentido contrário, com o learning rate ditando o passo: pequeno demais se arrasta, grande demais explode, e perto do vale os passos encurtam sozinhos. Distribuições repartem crença somando um, a esperança é a média ponderada do longo prazo, Bayes se resolve contando mil pessoas sem esquecer a taxa base, e a softmax exponencia e normaliza logits para fabricar probabilidades. Você calculou cada uma dessas ideias com os próprios dedos. Elas não são mais caixas-pretas."
+    },
+    {
+      "tipo": "fim",
+      "proximo": "Módulo 5 — Disciplinas de ML",
+      "bullets": [
+        "3Blue1Brown: algebra linear e calculo",
+        "Produto escalar, matriz 2x2 e GD a mao",
+        "Lab do gradiente com os learning rates",
+        "Bayes pelas 1000 pessoas, sem consulta",
+        "Mini-projeto publicado no academia-ia"
+      ],
+      "fala": "Antes de encerrar, o checklist de conclusão do módulo quatro. Os capítulos indicados de álgebra linear e de cálculo do três blue um brown, assistidos. Um produto escalar, uma multiplicação de matrizes dois por dois e cinco passos de descida do gradiente, calculados à mão. Saber explicar o produto escalar como medida de semelhança, ligando com embeddings: teste de verdade, explique em voz alta para alguém. O lab da descida do gradiente executado de ponta a ponta, incluindo o experimento dos learning rates. O problema de Bayes resolvido pelo método das mil pessoas sem consultar o material. A softmax implementada, com a prova de que a saída soma um. E o mini-projeto com os seus próprios números publicado no repositório academia ia. Cumpriu tudo? Então a matemática da IA deixou de ser território hostil. Na próxima aula, o módulo cinco: Disciplinas de ML, onde essas ideias viram modelos de verdade: validação, métricas além da acurácia, leakage, e o seu primeiro classificador honesto. Eu te espero lá. Até a próxima aula."
+    }
+  ]
+}

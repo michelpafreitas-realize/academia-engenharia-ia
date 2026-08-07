@@ -1,237 +1,241 @@
 WEBVTT
 
 1
-00:00:00.000 --> 00:00:01.523
+00:00:00.000 --> 00:00:01.385
 Bem-vindo ao módulo um:
 
 2
-00:00:01.523 --> 00:00:02.517
-Python para IA.
+00:00:01.385 --> 00:00:03.613
+Direção de IA, o coração do programa.
 
 3
-00:00:02.517 --> 00:00:07.814
-Aqui você troca o Python de faculdade pelo Python que processa dados de verdade:
+00:00:03.613 --> 00:00:09.695
+Aqui você especifica, dirige a ferramenta e verifica o resultado, e treina a fase que ninguém treina:
 
 4
-00:00:07.814 --> 00:00:10.728
-NumPy, Pandas, Matplotlib e chamadas de API.
+00:00:09.695 --> 00:00:13.128
+achar o defeito escondido num código que parece perfeito.
 
 5
-00:00:10.728 --> 00:00:15.960
-No fim, você conduz uma análise exploratória completa, do dado cru à conclusão.
+00:00:13.400 --> 00:00:17.990
+As ferramentas de agentic coding escrevem e testam mais rápido que você digita.
 
 6
-00:00:16.233 --> 00:00:22.283
-Python é a ferramenta número um do engenheiro de IA — o Python vetorizado do NumPy e do Pandas.
+00:00:17.990 --> 00:00:21.244
+O valor do engenheiro migrou da execução para a direção:
 
 7
-00:00:22.283 --> 00:00:28.333
-Boa parte do tempo de um projeto de IA é gasto limpando dados; este módulo treina esse músculo.
+00:00:21.244 --> 00:00:24.149
+especificar, orquestrar, responder pela qualidade.
 
 8
-00:00:28.333 --> 00:00:30.944
-Notebook bagunçado não vai para produção:
+00:00:24.149 --> 00:00:28.856
+A diferença é disciplina de especificação e verificação, não talento com prompts.
 
 9
-00:00:30.944 --> 00:00:33.873
-times contratam quem entrega código confiável.
+00:00:29.133 --> 00:00:36.302
+Prompt vago terceiriza as decisões, e a IA decide algo com confiança, mesmo quando não é o que você queria.
 
 10
-00:00:34.167 --> 00:00:35.922
-Python tem um jeito próprio:
+00:00:36.302 --> 00:00:38.848
+A spec executável devolve as decisões:
 
 11
-00:00:35.922 --> 00:00:36.548
-pythônico.
+00:00:38.848 --> 00:00:44.476
+objetivo, critérios de aceite verificáveis, restrições e exemplos com caso de borda.
 
 12
-00:00:36.548 --> 00:00:44.321
-Em vez de loop com índice e append, uma list comprehension resolve em uma linha — o mesmo vale para dicionários e conjuntos.
+00:00:44.476 --> 00:00:46.352
+Restrições poupam iterações:
 
 13
-00:00:44.321 --> 00:00:46.013
-Outras marcas do dia a dia:
+00:00:46.352 --> 00:00:48.429
+cortam o espaço onde a IA erra.
 
 14
-00:00:46.013 --> 00:00:48.834
-desempacotamento, enumerate, zip e f-strings.
+00:00:48.700 --> 00:00:56.770
+No lab você constrói o mesmo CLI de tarefas duas vezes, com prompt vago e com esta spec, medindo iterações, custo e defeitos na mesma régua.
 
 15
-00:00:48.834 --> 00:00:53.535
-Use comprehension quando cabe numa linha legível; senão, volte para o loop.
+00:00:56.770 --> 00:00:58.614
+O critério quatro é verificável:
 
 16
-00:00:53.833 --> 00:00:55.374
-Compare as duas versões.
+00:00:58.614 --> 00:01:02.764
+prazo inválido imprime erro, sai com código dois e não altera o arquivo.
 
 17
-00:00:55.374 --> 00:00:58.519
-A de cima é o loop clássico, com índice e append.
+00:01:03.033 --> 00:01:04.860
+A régua de uma spec é uma só:
 
 18
-00:00:58.519 --> 00:01:01.151
-A de baixo é a mesma lógica em uma linha:
+00:01:04.860 --> 00:01:07.002
+dá para implementar sem adivinhar?
 
 19
-00:01:01.151 --> 00:01:04.552
-comprehension com condição, mais curta e mais rápida.
+00:01:07.002 --> 00:01:11.916
+Ambiguidade resolvida no papel custa uma frase; no código, custa uma iteração.
 
 20
-00:01:04.552 --> 00:01:07.633
-O padrão se repete para dicionários e conjuntos.
+00:01:11.916 --> 00:01:14.121
+E iteração custa tokens e dinheiro.
 
 21
-00:01:07.900 --> 00:01:11.299
-Uma função boa faz uma coisa só e declara seus tipos.
+00:01:14.400 --> 00:01:21.095
+Dirigir com faz o sistema inteiro produz um bloco irrevisável, e revisão impossível é a porta de entrada de todo defeito.
 
 22
-00:01:11.299 --> 00:01:13.287
-A docstring explica o contrato:
+00:01:21.095 --> 00:01:27.624
+Fatie em tarefas de quinze a trinta minutos, cada uma com pronto observável, e comece pelo que pode invalidar o resto.
 
 23
-00:01:13.287 --> 00:01:16.238
-o que entra, o que sai, o que pode dar errado.
+00:01:27.900 --> 00:01:32.881
+A ferramenta só sabe o que está no contexto; gerir isso é metade da direção.
 
 24
-00:01:16.238 --> 00:01:17.264
-A função é pura:
+00:01:32.881 --> 00:01:38.910
+O permanente vai no manual de bordo do projeto; na tarefa, aponte só os arquivos relevantes.
 
 25
-00:01:17.264 --> 00:01:22.972
-mesmo input, mesmo output, sem efeito colateral — por isso um assert já basta como teste.
+00:01:38.910 --> 00:01:42.908
+Se a IA ressuscita uma abordagem já rejeitada, é context rot:
 
 26
-00:01:23.267 --> 00:01:29.456
-NumPy guarda números em arrays contínuos na memória e opera sobre todos de uma vez, em C — isso é vetorização.
+00:01:42.908 --> 00:01:44.940
+recomece limpo, colando a spec.
 
 27
-00:01:29.456 --> 00:01:35.926
-Multiplicar um array, ou filtrar com uma condição booleana, roda ordens de grandeza mais rápido que um loop Python.
+00:01:45.233 --> 00:01:48.798
+Testes passando e explicação confiante não são evidência:
 
 28
-00:01:35.926 --> 00:01:40.427
-Antes de escrever um for sobre um array, pergunte se existe um jeito vetorizado.
+00:01:48.798 --> 00:01:52.864
+a IA explica código errado com a mesma fluência que código certo.
 
 29
-00:01:40.700 --> 00:01:45.819
-Multiplicar o array de preços por zero vírgula nove aplica desconto a todos de uma vez.
+00:01:52.864 --> 00:01:55.240
+Revise contra a spec, bordas primeiro:
 
 30
-00:01:45.819 --> 00:01:49.585
-Filtrar com preços maior que cinquenta devolve só os que passam.
+00:01:55.240 --> 00:01:57.429
+entrada vazia, duplicata, negativo.
 
 31
-00:01:49.585 --> 00:01:54.586
-Broadcasting estica o array menor para casar com o maior, como no peso de cada prova.
+00:01:57.429 --> 00:02:02.057
+Diff que você não conseguiu revisar não está pronto; está apenas não lido.
 
 32
-00:01:54.586 --> 00:01:55.057
-A regra:
+00:02:02.333 --> 00:02:05.434
+Quatro modos respondem pela maioria dos defeitos:
 
 33
-00:01:55.057 --> 00:01:57.116
-cada dimensão deve ser igual ou um.
+00:02:05.434 --> 00:02:18.534
+alucinação de API, função plausível que não existe; passa no teste errado, satisfaz o teste, não a intenção; complexidade que ninguém pediu; e concordância servil, a IA implementando seu erro com entusiasmo.
 
 34
-00:01:57.400 --> 00:02:00.706
-O DataFrame do Pandas é uma tabela com superpoderes:
+00:02:18.534 --> 00:02:18.977
+A raiz:
 
 35
-00:02:00.706 --> 00:02:03.122
-cada coluna é um array NumPy com nome.
+00:02:18.977 --> 00:02:21.699
+o modelo produz o que parece bom; a defesa:
 
 36
-00:02:03.122 --> 00:02:04.075
-O fluxo básico:
+00:02:21.699 --> 00:02:23.597
+verificação externa ao modelo.
 
 37
-00:02:04.075 --> 00:02:06.873
-ler, espiar as linhas, checar tipos e nulos.
+00:02:23.867 --> 00:02:29.665
+Cada critério de aceite vira ao menos um teste, e a mesma suíte roda contra as duas rodadas do lab.
 
 38
-00:02:06.873 --> 00:02:11.069
-O groupby divide em grupos, calcula por grupo e junta o resultado.
+00:02:29.665 --> 00:02:32.242
+Testes são sua rede de proteção contra a IA:
 
 39
-00:02:11.069 --> 00:02:14.374
-Preencher ou descartar nulos é escolha de modelagem:
+00:02:32.242 --> 00:02:35.171
+diff que quebra a suíte é rejeitado sem discussão.
 
 40
-00:02:14.374 --> 00:02:15.328
-anote o porquê.
+00:02:35.467 --> 00:02:40.041
+Verificar tudo por leitura não escala; testar tudo é impossível.
 
 41
-00:02:15.600 --> 00:02:18.375
-Quatro gráficos cobrem quase toda exploração:
+00:02:40.041 --> 00:02:43.400
+Julgamento único, como segurança e arquitetura:
 
 42
-00:02:18.375 --> 00:02:20.656
-histograma, dispersão, barra e linha.
+00:02:43.400 --> 00:02:43.972
+leitura.
 
 43
-00:02:20.656 --> 00:02:23.862
-Gráfico sem título e eixos é adivinhação com estilo.
+00:02:43.972 --> 00:02:45.759
+Resposta certa conhecida:
 
 44
-00:02:23.862 --> 00:02:31.570
-Notebook é ótimo para explorar, mas células fora de ordem criam estado fantasma — rode Restart and Run All antes de encerrar.
+00:02:45.759 --> 00:02:46.188
+teste.
 
 45
-00:02:31.570 --> 00:02:34.776
-Depois, extraia partes reutilizáveis para um script.
+00:02:46.188 --> 00:02:48.261
+Comportamento probabilístico:
 
 46
-00:02:35.067 --> 00:02:38.208
-Muitos dados, e todos os LLMs, chegam por API.
+00:02:48.261 --> 00:02:50.691
+eval, que cresce até o módulo dez.
 
 47
-00:02:38.208 --> 00:02:41.350
-Defina sempre um timeout, porque a rede trava.
+00:02:50.691 --> 00:02:51.977
+Antes de entregar:
 
 48
-00:02:41.350 --> 00:02:46.404
-Chame sempre raise for status, para erro virar exceção em vez de silêncio.
+00:02:51.977 --> 00:02:55.051
+que evidência tenho, além da palavra da IA?
 
 49
-00:02:46.404 --> 00:02:51.459
-Nunca confie no formato da resposta — use get quando o campo puder faltar.
+00:02:55.333 --> 00:02:57.168
+O mini-projeto inverte o jogo:
 
 50
-00:02:51.733 --> 00:02:52.633
-O mini-projeto:
+00:02:57.168 --> 00:02:59.430
+você avalia código que a IA escreveu.
 
 51
-00:02:52.633 --> 00:02:56.893
-análise exploratória completa, num dataset real que não seja o Titanic.
+00:02:59.430 --> 00:03:06.707
+Uma sessão geradora produz três versões da mesma spec de carrinho, duas com defeitos plantados, e você revisa às cegas.
 
 52
-00:02:56.893 --> 00:03:04.333
-Escreva três perguntas antes de olhar os dados, documente cada decisão de limpeza, use um groupby e três gráficos com eixos.
+00:03:06.707 --> 00:03:11.477
+Para cada defeito, um teste que falha na versão defeituosa e passa na correta:
 
 53
-00:03:04.333 --> 00:03:08.713
-Extraia uma função pura, com tipos e asserts, num arquivo utils ponto pi.
+00:03:11.477 --> 00:03:13.189
+parecer sem prova é opinião.
 
 54
-00:03:08.713 --> 00:03:11.293
-Feche respondendo as perguntas com números.
+00:03:13.467 --> 00:03:15.608
+Você fechou o ciclo do programa:
 
 55
-00:03:11.567 --> 00:03:12.428
-Recapitulando:
+00:03:15.608 --> 00:03:17.749
+especificar, dirigir, verificar.
 
 56
-00:03:12.428 --> 00:03:22.214
-Python idiomático com comprehensions, NumPy com broadcasting, Pandas com groupby, gráficos com título e eixos, e chamadas de API com timeout e status checados.
+00:03:17.749 --> 00:03:18.820
+A regra de ouro:
 
 57
-00:03:22.214 --> 00:03:25.722
-Você fechou o ciclo completo de uma análise exploratória.
+00:03:18.820 --> 00:03:24.508
+pode usar IA para tudo, mas não pode entregar o que não consegue explicar e defender.
 
 58
-00:03:25.722 --> 00:03:29.784
-No próximo módulo, a matemática essencial por trás de todo modelo.
+00:03:24.508 --> 00:03:29.660
+No próximo módulo você especifica o comportamento de um LLM via prompt e API:
 
 59
-00:03:29.784 --> 00:03:30.215
+00:03:29.660 --> 00:03:32.270
+Módulo dois, Prompt Engineering e APIs.
+
+60
+00:03:32.270 --> 00:03:32.739
 Até lá.

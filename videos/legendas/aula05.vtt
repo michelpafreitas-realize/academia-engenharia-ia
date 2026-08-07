@@ -1,0 +1,2577 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:01.496
+Muito boa aula para você.
+
+2
+00:00:01.496 --> 00:00:05.746
+Esta é a aula completa do módulo cinco da Academia de Engenharia de IA:
+
+3
+00:00:05.746 --> 00:00:07.302
+Machine Learning Clássico.
+
+4
+00:00:07.302 --> 00:00:19.154
+Este é o módulo em que as ideias matemáticas do módulo quatro viram modelos de verdade, treinados com scikit-learn, avaliados com honestidade e, no final, submetidos a uma competição real do Kaggle.
+
+5
+00:00:19.154 --> 00:00:20.830
+Vamos percorrer oito partes:
+
+6
+00:00:20.830 --> 00:00:36.153
+os dois grandes modos de aprender, modelos lineares, árvores e ensembles, overfitting e underfitting, a separação entre treino, validação e teste, as métricas e as mentiras de cada uma, feature engineering, e o vilão número um do iniciante, o data leakage.
+
+7
+00:00:36.153 --> 00:00:44.713
+Depois, o laboratório guiado com o pipeline completo do Titanic, e o mini-projeto em que você compete de verdade, com submissão no leaderboard.
+
+8
+00:00:44.713 --> 00:00:48.064
+É uma aula longa e densa, do jeito que a matéria merece.
+
+9
+00:00:48.064 --> 00:00:49.920
+Papel, caneta, e vamos começar.
+
+10
+00:00:50.200 --> 00:00:53.378
+Sim, estamos na era dos modelos de linguagem gigantes.
+
+11
+00:00:53.378 --> 00:01:00.559
+E mesmo assim uma fatia enorme dos problemas de dados nas empresas continua sendo resolvida com machine learning clássico:
+
+12
+00:01:00.559 --> 00:01:05.267
+prever churn, aprovar crédito, estimar demanda, detectar fraude, ranquear leads.
+
+13
+00:01:05.267 --> 00:01:14.037
+Para dados tabulares, planilhas e tabelas de banco, o gradient boosting ainda vence redes neurais na maioria dos casos, custando uma fração do preço.
+
+14
+00:01:14.037 --> 00:01:22.689
+O engenheiro que só sabe chamar API de LLM usa um canhão de quinhentos reais para matar mosquitos que um XGBoost de cinquenta centavos mata melhor.
+
+15
+00:01:22.689 --> 00:01:24.749
+Mas o motivo mais profundo é outro:
+
+16
+00:01:24.749 --> 00:01:29.104
+o ML clássico é onde você aprende as disciplinas que valem para toda a IA.
+
+17
+00:01:29.104 --> 00:01:30.517
+Separar treino de teste.
+
+18
+00:01:30.517 --> 00:01:32.577
+Desconfiar de resultado bom demais.
+
+19
+00:01:32.577 --> 00:01:34.990
+Escolher a métrica que reflete o negócio.
+
+20
+00:01:34.990 --> 00:01:36.461
+Caçar vazamento de dados.
+
+21
+00:01:36.461 --> 00:01:43.465
+Avaliar um sistema com LLM em dois mil e vinte e seis usa exatamente os mesmos fundamentos que você aprende nesta aula.
+
+22
+00:01:43.465 --> 00:01:46.349
+Errar essas disciplinas custa caro, e constrange:
+
+23
+00:01:46.349 --> 00:01:51.352
+modelo aprovado em teste e falhando em produção é dos incidentes mais comuns da área.
+
+24
+00:01:51.633 --> 00:01:53.441
+O plano de hoje, em três blocos.
+
+25
+00:01:53.441 --> 00:01:54.966
+Primeiro bloco, os modelos:
+
+26
+00:01:54.966 --> 00:02:02.704
+a diferença entre aprendizado supervisionado e não-supervisionado, os modelos lineares que servem de baseline, e os reis do dado tabular:
+
+27
+00:02:02.704 --> 00:02:05.754
+árvores de decisão, Random Forest e gradient boosting.
+
+28
+00:02:05.754 --> 00:02:07.392
+Segundo bloco, a honestidade:
+
+29
+00:02:07.392 --> 00:02:15.017
+overfitting e underfitting com o trade-off viés-variância, e o protocolo sagrado de treino, validação e teste, com a validação cruzada.
+
+30
+00:02:15.017 --> 00:02:16.825
+Terceiro bloco, o discernimento:
+
+31
+00:02:16.825 --> 00:02:21.739
+as métricas de classificação e regressão, e como cada uma engana de um jeito diferente:
+
+32
+00:02:21.739 --> 00:02:24.732
+a arte de criar features que tornam o padrão visível:
+
+33
+00:02:24.732 --> 00:02:29.420
+e o data leakage, o erro que faz o modelo brilhar no papel e fracassar em produção.
+
+34
+00:02:29.420 --> 00:02:38.457
+Fechamos com o laboratório do Titanic, seis células que montam um pipeline completo com validação cruzada, e com o mini-projeto mais empolgante do período dois:
+
+35
+00:02:38.457 --> 00:02:42.411
+sua primeira competição real no Kaggle, com submissão e score público.
+
+36
+00:02:42.411 --> 00:02:44.332
+Guarde desde já a palavra da aula:
+
+37
+00:02:44.332 --> 00:02:45.009
+generalizar.
+
+38
+00:02:45.300 --> 00:02:48.984
+O guia de estudo do módulo, que é o mais longo do período dois:
+
+39
+00:02:48.984 --> 00:02:50.505
+dezesseis horas estimadas.
+
+40
+00:02:50.505 --> 00:02:56.353
+O prato principal é a Machine Learning Specialization do Andrew Ng, no Coursera, auditável de graça:
+
+41
+00:02:56.353 --> 00:02:59.744
+as semanas um a três do primeiro curso, umas quatro horas.
+
+42
+00:02:59.744 --> 00:03:04.481
+É o professor mais didático da área explicando regressão e classificação do zero.
+
+43
+00:03:04.481 --> 00:03:08.048
+Depois, dois cursos práticos do Kaggle Learn com certificado:
+
+44
+00:03:08.048 --> 00:03:14.364
+Intro to Machine Learning e Intermediate Machine Learning, quatro horas e meia somadas, direto no navegador.
+
+45
+00:03:14.364 --> 00:03:20.563
+O Machine Learning Crash Course do Google, interativo, cobre o mesmo terreno por outro ângulo, três horas.
+
+46
+00:03:20.563 --> 00:03:28.516
+No StatQuest, os vídeos de árvores, Random Forest, gradient boost e curva ROC, duas horas de animações que desmancham qualquer confusão.
+
+47
+00:03:28.516 --> 00:03:29.803
+As leituras da semana:
+
+48
+00:03:29.803 --> 00:03:38.341
+os módulos de regressão e classificação do ML For Beginners da Microsoft, e o guia do usuário do scikit-learn sobre pipelines e validação cruzada.
+
+49
+00:03:38.341 --> 00:03:41.674
+E o lab guiado desta aula, mais o mini-projeto do Kaggle.
+
+50
+00:03:41.674 --> 00:03:42.434
+Parece muito?
+
+51
+00:03:42.434 --> 00:03:44.364
+Divida em duas semanas sem culpa.
+
+52
+00:03:44.633 --> 00:03:45.162
+Parte um:
+
+53
+00:03:45.162 --> 00:03:47.157
+os dois grandes modos de aprender.
+
+54
+00:03:47.157 --> 00:03:52.029
+No aprendizado supervisionado, os dados vêm com a resposta certa, o chamado rótulo.
+
+55
+00:03:52.029 --> 00:03:55.257
+Prever o preço de uma casa a partir de vendas passadas:
+
+56
+00:03:55.257 --> 00:03:58.486
+cada casa histórica traz o preço pelo qual foi vendida.
+
+57
+00:03:58.486 --> 00:04:00.423
+Prever se o cliente vai cancelar:
+
+58
+00:04:00.423 --> 00:04:04.355
+cada cliente do passado traz a informação de que cancelou ou ficou.
+
+59
+00:04:04.355 --> 00:04:09.110
+Quando a resposta é numérica, preço, demanda, temperatura, chamamos de regressão.
+
+60
+00:04:09.110 --> 00:04:14.510
+Quando é uma categoria, cancela ou não cancela, spam ou não spam, chamamos de classificação.
+
+61
+00:04:14.510 --> 00:04:18.618
+O supervisionado é noventa por cento do machine learning nas empresas.
+
+62
+00:04:18.618 --> 00:04:22.023
+Já no aprendizado não-supervisionado não há rótulo nenhum:
+
+63
+00:04:22.023 --> 00:04:30.005
+o algoritmo procura estrutura sozinho, como agrupar clientes parecidos em segmentos, o clustering, ou reduzir dimensões para visualizar.
+
+64
+00:04:30.005 --> 00:04:33.645
+E aqui vai a pergunta-guia que resolve todo início de projeto:
+
+65
+00:04:33.645 --> 00:04:36.638
+eu tenho a resposta certa para exemplos do passado?
+
+66
+00:04:36.638 --> 00:04:36.873
+Tem:
+
+67
+00:04:36.873 --> 00:04:37.753
+supervisionado.
+
+68
+00:04:37.753 --> 00:04:38.223
+Não tem:
+
+69
+00:04:38.223 --> 00:04:42.977
+não-supervisionado, ou, muitas vezes, repense o problema antes de sair modelando.
+
+70
+00:04:43.267 --> 00:04:49.168
+Vamos treinar o olho com casos reais de empresa, porque classificar o problema certo é metade do projeto.
+
+71
+00:04:49.168 --> 00:04:51.248
+Prever o preço de venda de um imóvel:
+
+72
+00:04:51.248 --> 00:04:54.732
+existe rótulo, os preços históricos, e a resposta é um número:
+
+73
+00:04:54.732 --> 00:04:56.137
+regressão supervisionada.
+
+74
+00:04:56.137 --> 00:04:59.285
+Prever se o cliente cancela a assinatura no próximo mês:
+
+75
+00:04:59.285 --> 00:05:03.050
+existe rótulo, quem cancelou no passado, e a resposta é sim ou não:
+
+76
+00:05:03.050 --> 00:05:04.680
+classificação supervisionada.
+
+77
+00:05:04.680 --> 00:05:07.097
+Estimar quantas unidades vão vender amanhã:
+
+78
+00:05:07.097 --> 00:05:08.895
+número com histórico, regressão.
+
+79
+00:05:08.895 --> 00:05:10.638
+Detectar fraude numa transação:
+
+80
+00:05:10.638 --> 00:05:16.483
+fraude ou legítima, classificação, e das difíceis, pelo desbalanceamento que discutiremos na parte seis.
+
+81
+00:05:16.483 --> 00:05:16.820
+Agora:
+
+82
+00:05:16.820 --> 00:05:22.721
+segmentar a base de clientes em grupos parecidos para o marketing, sem nenhuma definição prévia de grupo:
+
+83
+00:05:22.721 --> 00:05:25.419
+não há rótulo, é clustering, não-supervisionado.
+
+84
+00:05:25.419 --> 00:05:28.454
+Repare que a pergunta-guia resolveu todos em segundos:
+
+85
+00:05:28.454 --> 00:05:31.152
+tenho a resposta certa para exemplos do passado?
+
+86
+00:05:31.152 --> 00:05:32.388
+E um aviso de estrada:
+
+87
+00:05:32.388 --> 00:05:39.245
+se alguém te pede para prever algo de que não existe nenhum exemplo histórico rotulado, o primeiro trabalho não é modelar:
+
+88
+00:05:39.245 --> 00:05:40.819
+é começar a coletar rótulos.
+
+89
+00:05:41.100 --> 00:05:41.755
+Parte dois:
+
+90
+00:05:41.755 --> 00:05:44.909
+modelos lineares, e a regra de ouro que os acompanha:
+
+91
+00:05:44.909 --> 00:05:46.278
+comece simples, sempre.
+
+92
+00:05:46.278 --> 00:05:50.860
+A regressão linear você já implementou com as próprias mãos no módulo quatro:
+
+93
+00:05:50.860 --> 00:05:54.550
+y igual a w vezes x mais b, ajustada por descida do gradiente.
+
+94
+00:05:54.550 --> 00:06:01.632
+A novidade é a regressão logística, e cuidado com o nome, porque apesar de se chamar regressão, ela é um classificador.
+
+95
+00:06:01.632 --> 00:06:02.108
+A ideia:
+
+96
+00:06:02.108 --> 00:06:13.237
+calcula a mesma saída linear de sempre e a passa por uma função chamada sigmoide, que espreme qualquer número, de menos infinito a mais infinito, para dentro do intervalo entre zero e um.
+
+97
+00:06:13.237 --> 00:06:16.094
+E um número entre zero e um tem leitura natural:
+
+98
+00:06:16.094 --> 00:06:16.927
+probabilidade.
+
+99
+00:06:16.927 --> 00:06:21.391
+A saída da logística é a probabilidade de o exemplo ser da classe positiva.
+
+100
+00:06:21.391 --> 00:06:23.593
+Por que começar por modelos lineares?
+
+101
+00:06:23.593 --> 00:06:24.307
+Três razões.
+
+102
+00:06:24.307 --> 00:06:25.676
+São rápidos de treinar.
+
+103
+00:06:25.676 --> 00:06:26.806
+São interpretáveis:
+
+104
+00:06:26.806 --> 00:06:31.448
+os coeficientes dizem o peso de cada variável, dá para explicar para o gestor.
+
+105
+00:06:31.448 --> 00:06:33.174
+E formam o baseline, a régua:
+
+106
+00:06:33.174 --> 00:06:39.066
+se o seu modelo sofisticado não bate a regressão logística, o problema não é falta de sofisticação:
+
+107
+00:06:39.066 --> 00:06:41.268
+é o dado ou a formulação do problema.
+
+108
+00:06:41.567 --> 00:06:46.100
+E aqui você conhece a biblioteca que vai te acompanhar pelo resto da carreira:
+
+109
+00:06:46.100 --> 00:06:46.972
+o scikit-learn.
+
+110
+00:06:46.972 --> 00:06:49.703
+Olhe a tela e repare na elegância da interface.
+
+111
+00:06:49.703 --> 00:06:53.306
+Importamos a LogisticRegression do módulo de modelos lineares.
+
+112
+00:06:53.306 --> 00:07:00.804
+Criamos o modelo, passando max iter igual a mil, que é o limite de iterações da otimização interna, para garantir a convergência.
+
+113
+00:07:00.804 --> 00:07:04.291
+E então as duas chamadas que definem o scikit-learn inteiro:
+
+114
+00:07:04.291 --> 00:07:05.104
+fit e predict.
+
+115
+00:07:05.104 --> 00:07:09.114
+O fit recebe X treino e y treino, as features e os rótulos, e treina:
+
+116
+00:07:09.114 --> 00:07:14.984
+por baixo do capô está rodando uma prima da descida do gradiente que você fez à mão no módulo quatro:
+
+117
+00:07:14.984 --> 00:07:17.076
+agora você sabe o que o fit esconde.
+
+118
+00:07:17.076 --> 00:07:20.738
+E o predict proba recebe o X de teste e devolve probabilidades:
+
+119
+00:07:20.738 --> 00:07:24.341
+pegamos a coluna um, que é a probabilidade da classe positiva.
+
+120
+00:07:24.341 --> 00:07:28.526
+Essa interface, fit e predict, é a mesma para todo modelo da biblioteca:
+
+121
+00:07:28.526 --> 00:07:30.734
+árvore, floresta, boosting, o que for.
+
+122
+00:07:30.734 --> 00:07:32.652
+Aprendeu uma vez, aprendeu todas.
+
+123
+00:07:32.652 --> 00:07:36.023
+Troque a classe do modelo e o resto do código nem percebe.
+
+124
+00:07:36.300 --> 00:07:36.926
+Parte três:
+
+125
+00:07:36.926 --> 00:07:40.059
+árvores, florestas e boosting, os reis do dado tabular.
+
+126
+00:07:40.059 --> 00:07:43.248
+Uma árvore de decisão aprende regras do tipo se e então:
+
+127
+00:07:43.248 --> 00:07:47.064
+se a idade é menor que dez e a classe é primeira, então sobreviveu.
+
+128
+00:07:47.064 --> 00:07:51.506
+É o modelo mais interpretável que existe, você literalmente desenha as regras.
+
+129
+00:07:51.506 --> 00:07:52.816
+Mas tem um vício grave:
+
+130
+00:07:52.816 --> 00:08:01.187
+uma árvore sozinha, se deixada crescer, decora o conjunto de treino com facilidade, criando uma regra específica para cada exemplo, ruído incluído.
+
+131
+00:08:01.187 --> 00:08:04.889
+É o overfitting em estado puro, e já já damos nome formal a isso.
+
+132
+00:08:04.889 --> 00:08:07.794
+A solução da área foi tão simples quanto brilhante:
+
+133
+00:08:07.794 --> 00:08:11.154
+se um modelo decora, use um comitê de modelos, um ensemble.
+
+134
+00:08:11.154 --> 00:08:16.792
+Em vez de confiar numa árvore, treine centenas, cada uma um pouco diferente, e combine as opiniões.
+
+135
+00:08:16.792 --> 00:08:22.430
+Os erros idiossincráticos de cada árvore se cancelam na média, e o que sobra é o padrão verdadeiro.
+
+136
+00:08:22.430 --> 00:08:31.428
+Há duas grandes famílias de comitê, Random Forest e gradient boosting, e a diferença entre elas cabe numa analogia de médicos que eu te conto na próxima tela.
+
+137
+00:08:31.700 --> 00:08:32.893
+A analogia prometida.
+
+138
+00:08:32.893 --> 00:08:37.776
+Random Forest é pedir opinião a trezentos médicos independentes e ficar com a maioria:
+
+139
+00:08:37.776 --> 00:08:47.942
+cada árvore é treinada com uma amostra aleatória dos dados e das colunas, então cada uma vê o problema por um ângulo levemente diferente, e a previsão final é a votação do comitê.
+
+140
+00:08:47.942 --> 00:08:49.645
+Erros individuais se cancelam.
+
+141
+00:08:49.645 --> 00:08:57.312
+Na prática, o Random Forest é robusto, quase não precisa de ajuste fino, e é uma excelente segunda tentativa depois do baseline linear.
+
+142
+00:08:57.312 --> 00:08:59.413
+Já o gradient boosting é outro filme:
+
+143
+00:08:59.413 --> 00:09:04.751
+é um médico estudando, caso a caso, exatamente os pacientes que os colegas anteriores erraram.
+
+144
+00:09:04.751 --> 00:09:10.487
+As árvores são construídas em sequência, e cada nova árvore foca em corrigir os erros das anteriores.
+
+145
+00:09:10.487 --> 00:09:15.882
+As implementações famosas se chamam XGBoost e LightGBM, e formam o padrão-ouro do dado tabular:
+
+146
+00:09:15.882 --> 00:09:19.289
+anos de competições do Kaggle confirmam, vence quase sempre.
+
+147
+00:09:19.289 --> 00:09:20.368
+Guarde o contraste:
+
+148
+00:09:20.368 --> 00:09:21.901
+floresta é paralela e vota:
+
+149
+00:09:21.901 --> 00:09:23.718
+boosting é sequencial e corrige.
+
+150
+00:09:23.718 --> 00:09:28.148
+No lab e no mini-projeto você vai colocar os dois na pista contra a logística.
+
+151
+00:09:28.433 --> 00:09:32.056
+Parte quatro, e aqui chegamos à ideia mais importante da aula.
+
+152
+00:09:32.056 --> 00:09:35.270
+O objetivo do machine learning não é acertar o passado:
+
+153
+00:09:35.270 --> 00:09:39.770
+é generalizar, ou seja, funcionar bem em dados novos, que o modelo nunca viu.
+
+154
+00:09:39.770 --> 00:09:44.503
+Parece óbvio, mas quase todos os desastres da área nascem de esquecer essa frase.
+
+155
+00:09:44.503 --> 00:09:49.003
+Há dois modos de fracassar, e eu quero que você os memorize como personagens.
+
+156
+00:09:49.003 --> 00:09:50.697
+O underfitting, ou alto viés:
+
+157
+00:09:50.697 --> 00:09:54.262
+o modelo é simples demais para o padrão que existe nos dados.
+
+158
+00:09:54.262 --> 00:09:56.424
+Ele vai mal no treino e mal no teste.
+
+159
+00:09:56.424 --> 00:09:57.943
+É o aluno que não estudou:
+
+160
+00:09:57.943 --> 00:09:59.755
+erra o simulado e erra a prova.
+
+161
+00:09:59.755 --> 00:10:01.800
+E o overfitting, ou alta variância:
+
+162
+00:10:01.800 --> 00:10:07.819
+o modelo decorou o treino, incluindo o ruído, as coincidências, as impressões digitais de cada exemplo.
+
+163
+00:10:07.819 --> 00:10:10.215
+Ele brilha no treino e fracassa no teste.
+
+164
+00:10:10.215 --> 00:10:12.845
+É o aluno que decorou o gabarito do simulado:
+
+165
+00:10:12.845 --> 00:10:18.980
+tira dez no simulado e trava na prova de verdade, porque nunca aprendeu a matéria, aprendeu as respostas.
+
+166
+00:10:18.980 --> 00:10:25.817
+Todo modelo que você treinar na vida vai pender para um desses dois lados, e o seu trabalho é diagnosticar para qual.
+
+167
+00:10:26.100 --> 00:10:27.307
+E como diagnosticar?
+
+168
+00:10:27.307 --> 00:10:31.714
+A regra cabe numa linha, e é sempre comparativa, nunca um número isolado.
+
+169
+00:10:31.714 --> 00:10:33.163
+Treino bom e teste ruim:
+
+170
+00:10:33.163 --> 00:10:34.974
+overfitting, o modelo decorou.
+
+171
+00:10:34.974 --> 00:10:37.087
+Treino ruim, independente do teste:
+
+172
+00:10:37.087 --> 00:10:39.260
+underfitting, o modelo não dá conta.
+
+173
+00:10:39.260 --> 00:10:42.822
+Noventa e nove por cento no treino e setenta e um no teste?
+
+174
+00:10:42.822 --> 00:10:46.021
+O abismo entre os dois é a assinatura do overfitting.
+
+175
+00:10:46.021 --> 00:10:50.971
+Agora, os remédios, e repare que são opostos, por isso o diagnóstico vem primeiro.
+
+176
+00:10:50.971 --> 00:10:51.997
+Para overfitting:
+
+177
+00:10:51.997 --> 00:10:57.913
+mais dados, modelo mais simples, regularização, que é penalizar a complexidade, ou menos features.
+
+178
+00:10:57.913 --> 00:10:59.000
+Para underfitting:
+
+179
+00:10:59.000 --> 00:11:01.414
+modelo mais capaz, ou melhores features.
+
+180
+00:11:01.414 --> 00:11:05.399
+Esse cabo de guerra tem nome de batismo, trade-off viés-variância:
+
+181
+00:11:05.399 --> 00:11:13.548
+simplificar demais aumenta o viés, flexibilizar demais aumenta a variância, e o ponto ótimo está no meio, encontrado experimentalmente.
+
+182
+00:11:13.548 --> 00:11:16.204
+E não pense que isso é assunto de ML antigo:
+
+183
+00:11:16.204 --> 00:11:22.241
+você vai gerenciar exatamente este trade-off no fine-tuning de modelos de linguagem, no módulo nove.
+
+184
+00:11:22.241 --> 00:11:25.380
+O vocabulário que você aprende hoje é o mesmo de lá.
+
+185
+00:11:25.667 --> 00:11:26.352
+Parte cinco:
+
+186
+00:11:26.352 --> 00:11:28.179
+a liturgia da avaliação honesta.
+
+187
+00:11:28.179 --> 00:11:32.461
+A regra sagrada do machine learning, e eu uso a palavra sagrada sem ironia:
+
+188
+00:11:32.461 --> 00:11:35.715
+o modelo só pode ser avaliado em dados que ele nunca viu.
+
+189
+00:11:35.715 --> 00:11:38.684
+O protocolo padrão divide o dataset em três pedaços.
+
+190
+00:11:38.684 --> 00:11:40.397
+Treino, uns setenta por cento:
+
+191
+00:11:40.397 --> 00:11:41.653
+onde o modelo aprende.
+
+192
+00:11:41.653 --> 00:11:43.480
+Validação, uns quinze por cento:
+
+193
+00:11:43.480 --> 00:11:51.130
+onde você compara modelos candidatos e ajusta hiperparâmetros, aquelas escolhas como a profundidade da árvore ou o número de vizinhos.
+
+194
+00:11:51.130 --> 00:11:53.186
+E teste, os quinze por cento finais:
+
+195
+00:11:53.186 --> 00:11:59.009
+tocado uma única vez, no fim de tudo, para a estimativa honesta de como o modelo se sai no mundo real.
+
+196
+00:11:59.009 --> 00:12:00.436
+Por que a cerimônia toda?
+
+197
+00:12:00.436 --> 00:12:05.518
+Porque quem ajusta o modelo olhando o resultado do teste transforma o teste em validação:
+
+198
+00:12:05.518 --> 00:12:14.310
+cada espiada vaza um pouco de informação, o modelo vai sendo moldado para aquele conjunto específico, e no final você fica sem estimativa honesta nenhuma.
+
+199
+00:12:14.310 --> 00:12:17.736
+O número que você reporta para o chefe vira ficção otimista.
+
+200
+00:12:17.736 --> 00:12:18.935
+Teste é urna lacrada:
+
+201
+00:12:18.935 --> 00:12:20.819
+abre uma vez, no final, e pronto.
+
+202
+00:12:21.100 --> 00:12:27.104
+E quando os dados são poucos e você não pode se dar ao luxo de separar quinze por cento para validação?
+
+203
+00:12:27.104 --> 00:12:30.894
+A resposta é a validação cruzada, o k-fold, e a ideia é elegante.
+
+204
+00:12:30.894 --> 00:12:33.400
+Divida os dados em cinco pedaços, os folds.
+
+205
+00:12:33.400 --> 00:12:34.508
+Treine cinco vezes:
+
+206
+00:12:34.508 --> 00:12:39.988
+em cada rodada, quatro pedaços treinam e o quinto valida, e o pedaço de validação vai rodando.
+
+207
+00:12:39.988 --> 00:12:45.934
+No final, todo exemplo foi usado para treinar e para validar, e você tem cinco medições em vez de uma.
+
+208
+00:12:45.934 --> 00:12:47.916
+Reporte a média e o desvio-padrão.
+
+209
+00:12:47.916 --> 00:12:50.481
+O código na tela faz tudo isso numa chamada:
+
+210
+00:12:50.481 --> 00:12:58.992
+cross val score recebe o modelo, os dados, cv igual a cinco para os cinco folds, e a métrica escolhida, aqui o F1, que você conhece na parte seis.
+
+211
+00:12:58.992 --> 00:12:59.925
+Repare no print:
+
+212
+00:12:59.925 --> 00:13:01.499
+média mais ou menos desvio.
+
+213
+00:13:01.499 --> 00:13:04.822
+Esse mais ou menos vale ouro e é a marca do profissional:
+
+214
+00:13:04.822 --> 00:13:09.369
+um F1 de zero oitenta e dois mais ou menos zero zero dois é um modelo estável:
+
+215
+00:13:09.369 --> 00:13:16.889
+o mesmo zero oitenta e dois mais ou menos zero quinze é uma loteria, o desempenho depende de qual fatia dos dados caiu no treino.
+
+216
+00:13:16.889 --> 00:13:19.396
+Número sem barra de erro é meia informação.
+
+217
+00:13:19.667 --> 00:13:20.290
+Parte seis:
+
+218
+00:13:20.290 --> 00:13:22.898
+métricas, e o subtítulo honesto desta parte é:
+
+219
+00:13:22.898 --> 00:13:24.486
+cada uma engana de um jeito.
+
+220
+00:13:24.486 --> 00:13:32.593
+Para classificação, tudo nasce de uma tabelinha dois por dois chamada matriz de confusão, que cruza o que o modelo disse com o que era verdade.
+
+221
+00:13:32.593 --> 00:13:33.443
+Quatro células:
+
+222
+00:13:33.443 --> 00:13:36.391
+verdadeiros positivos, o modelo disse sim e era sim:
+
+223
+00:13:36.391 --> 00:13:39.453
+falsos positivos, disse sim e era não, o alarme falso:
+
+224
+00:13:39.453 --> 00:13:42.741
+falsos negativos, disse não e era sim, o caso que escapou:
+
+225
+00:13:42.741 --> 00:13:44.102
+e verdadeiros negativos.
+
+226
+00:13:44.102 --> 00:13:50.678
+Toda métrica de classificação é uma conta sobre essas quatro células, e cada conta ilumina um canto e esconde outro.
+
+227
+00:13:50.678 --> 00:13:52.833
+A primeira e mais famosa é a acurácia:
+
+228
+00:13:52.833 --> 00:13:54.590
+a porcentagem total de acertos.
+
+229
+00:13:54.590 --> 00:13:59.806
+E é também a que mais engana, pelo motivo que você já conhece do módulo quatro, a taxa base:
+
+230
+00:13:59.806 --> 00:14:08.197
+com fraude em um por cento dos casos, o modelo preguiçoso que sempre diz não é fraude crava noventa e nove por cento de acurácia com utilidade zero.
+
+231
+00:14:08.197 --> 00:14:13.753
+Em classes desbalanceadas, e o mundo real é desbalanceado, acurácia sozinha é quase desinformação.
+
+232
+00:14:13.753 --> 00:14:15.851
+Vamos às métricas que olham onde dói.
+
+233
+00:14:16.133 --> 00:14:22.339
+Vamos dar corpo à matriz com um exemplo de fraude, e eu quero que você confira cada conta comigo.
+
+234
+00:14:22.339 --> 00:14:24.514
+Mil transações, dez fraudes reais.
+
+235
+00:14:24.514 --> 00:14:28.929
+O modelo marcou quarenta e sete como fraude, e olhe a matriz na tela.
+
+236
+00:14:28.929 --> 00:14:30.720
+Verdadeiros positivos, sete:
+
+237
+00:14:30.720 --> 00:14:32.128
+fraudes que ele pegou.
+
+238
+00:14:32.128 --> 00:14:33.599
+Falsos negativos, três:
+
+239
+00:14:33.599 --> 00:14:35.007
+fraudes que escaparam.
+
+240
+00:14:35.007 --> 00:14:36.734
+Falsos positivos, quarenta:
+
+241
+00:14:36.734 --> 00:14:41.852
+transações legítimas marcadas por engano, quarenta clientes honestos bloqueados.
+
+242
+00:14:41.852 --> 00:14:44.795
+Verdadeiros negativos, novecentas e cinquenta.
+
+243
+00:14:44.795 --> 00:14:47.290
+Agora as três leituras do mesmo modelo.
+
+244
+00:14:47.290 --> 00:14:47.866
+Acurácia:
+
+245
+00:14:47.866 --> 00:14:53.496
+sete mais novecentos e cinquenta acertos em mil, noventa e cinco vírgula sete por cento.
+
+246
+00:14:53.496 --> 00:14:54.136
+Soa ótimo.
+
+247
+00:14:54.136 --> 00:14:54.712
+Precisão:
+
+248
+00:14:54.712 --> 00:14:57.910
+das quarenta e sete marcadas, só sete eram fraude:
+
+249
+00:14:57.910 --> 00:14:59.958
+quatorze vírgula nove por cento:
+
+250
+00:14:59.958 --> 00:15:02.389
+de cada sete alarmes, seis são falsos.
+
+251
+00:15:02.389 --> 00:15:02.837
+Recall:
+
+252
+00:15:02.837 --> 00:15:05.012
+das dez fraudes reais, pegou sete:
+
+253
+00:15:05.012 --> 00:15:06.164
+setenta por cento.
+
+254
+00:15:06.164 --> 00:15:12.625
+Três números, três histórias completamente diferentes, sobre o mesmo modelo, com as mesmas previsões.
+
+255
+00:15:12.625 --> 00:15:14.609
+Quem olha só a acurácia aprova:
+
+256
+00:15:14.609 --> 00:15:19.087
+quem olha a precisão vê o time de atendimento afogado em alarme falso.
+
+257
+00:15:19.087 --> 00:15:22.158
+Por isso a matriz vem antes de qualquer métrica:
+
+258
+00:15:22.158 --> 00:15:23.501
+ela é a verdade crua.
+
+259
+00:15:23.800 --> 00:15:25.655
+As quatro métricas de trabalho.
+
+260
+00:15:25.655 --> 00:15:26.194
+Precisão:
+
+261
+00:15:26.194 --> 00:15:29.724
+dos que eu marquei como positivos, quantos eram de verdade?
+
+262
+00:15:29.724 --> 00:15:33.793
+Ela pune o alarme falso, mas ignora os positivos que deixei escapar.
+
+263
+00:15:33.793 --> 00:15:34.212
+Recall:
+
+264
+00:15:34.212 --> 00:15:37.264
+dos positivos reais que existiam, quantos eu achei?
+
+265
+00:15:37.264 --> 00:15:40.077
+Pune o caso que escapou, mas ignora os alarmes:
+
+266
+00:15:40.077 --> 00:15:43.248
+marcar tudo como positivo dá recall de cem por cento.
+
+267
+00:15:43.248 --> 00:15:45.522
+Percebeu que uma é o espelho da outra?
+
+268
+00:15:45.522 --> 00:15:46.958
+O F1 tenta o equilíbrio:
+
+269
+00:15:46.958 --> 00:15:51.805
+é a média harmônica de precisão e recall, que só é alta quando as duas são altas.
+
+270
+00:15:51.805 --> 00:15:52.404
+O defeito:
+
+271
+00:15:52.404 --> 00:15:57.251
+esconde qual das duas está ruim, e ignora que os custos raramente são simétricos.
+
+272
+00:15:57.251 --> 00:16:02.457
+E a ROC-AUC mede a qualidade do ranking de probabilidades em todos os cortes possíveis:
+
+273
+00:16:02.457 --> 00:16:05.150
+zero e meio é chute de moeda, um é perfeição:
+
+274
+00:16:05.150 --> 00:16:11.134
+mas pode parecer ótima em classes desbalanceadas e não diz nada sobre o threshold que você vai usar.
+
+275
+00:16:11.134 --> 00:16:17.896
+E as métricas de regressão, MAE e RMSE, ganham uma cena própria daqui a pouco, com uma conta que revela outliers.
+
+276
+00:16:18.167 --> 00:16:19.637
+E qual métrica escolher?
+
+277
+00:16:19.637 --> 00:16:20.802
+Essa é a pegadinha:
+
+278
+00:16:20.802 --> 00:16:26.561
+não é uma decisão técnica, é uma decisão de negócio, e o seu papel de engenheiro é traduzi-la.
+
+279
+00:16:26.561 --> 00:16:27.726
+A pergunta certa é:
+
+280
+00:16:27.726 --> 00:16:30.238
+qual erro custa mais caro neste problema?
+
+281
+00:16:30.238 --> 00:16:31.341
+Triagem de câncer:
+
+282
+00:16:31.341 --> 00:16:34.895
+deixar passar um doente, o falso negativo, custa uma vida:
+
+283
+00:16:34.895 --> 00:16:37.224
+um alarme falso custa um exame a mais.
+
+284
+00:16:37.224 --> 00:16:38.449
+Prioridade absoluta:
+
+285
+00:16:38.449 --> 00:16:38.878
+recall.
+
+286
+00:16:38.878 --> 00:16:39.797
+Filtro de spam:
+
+287
+00:16:39.797 --> 00:16:45.741
+jogar o e-mail legítimo do cliente na caixa de spam, o falso positivo, custa um contrato perdido:
+
+288
+00:16:45.741 --> 00:16:48.192
+deixar passar um spam custa um incômodo.
+
+289
+00:16:48.192 --> 00:16:48.866
+Prioridade:
+
+290
+00:16:48.866 --> 00:16:49.417
+precisão.
+
+291
+00:16:49.417 --> 00:16:54.442
+Mesmo tipo de modelo, prioridades opostas, porque os custos dos erros são opostos.
+
+292
+00:16:54.442 --> 00:16:57.935
+Quando alguém te pedir um modelo bom, devolva a pergunta:
+
+293
+00:16:57.935 --> 00:16:58.609
+bom em quê?
+
+294
+00:16:58.609 --> 00:17:00.815
+Qual erro a empresa prefere cometer?
+
+295
+00:17:00.815 --> 00:17:07.862
+Essa conversa, feita antes de escrever qualquer linha de código, vale mais que semanas de ajuste de hiperparâmetro.
+
+296
+00:17:07.862 --> 00:17:10.006
+E anote a versão curta para a vida:
+
+297
+00:17:10.006 --> 00:17:13.070
+a métrica é o contrato entre o modelo e o negócio.
+
+298
+00:17:13.070 --> 00:17:18.095
+Contrato mal escrito, modelo otimizando a coisa errada, com precisão de cirurgião.
+
+299
+00:17:18.367 --> 00:17:22.141
+E para regressão, quando a resposta é um número, duas réguas.
+
+300
+00:17:22.141 --> 00:17:23.812
+O MAE, erro absoluto médio:
+
+301
+00:17:23.812 --> 00:17:26.906
+a média dos tamanhos dos erros, ignorando o sinal.
+
+302
+00:17:26.906 --> 00:17:29.443
+A virtude é falar na unidade do problema:
+
+303
+00:17:29.443 --> 00:17:37.611
+um MAE de quatro mil reais num modelo de preço de imóvel significa que, em média, erramos quatro mil reais, qualquer gestor entende.
+
+304
+00:17:37.611 --> 00:17:40.086
+E o RMSE, raiz do erro quadrático médio:
+
+305
+00:17:40.086 --> 00:17:44.603
+eleva cada erro ao quadrado antes de tirar a média, e depois tira a raiz.
+
+306
+00:17:44.603 --> 00:17:48.378
+O quadrado faz os erros grandes pesarem desproporcionalmente:
+
+307
+00:17:48.378 --> 00:17:52.214
+prefira o RMSE quando errar feio é muito pior que errar pouco.
+
+308
+00:17:52.214 --> 00:17:55.184
+Agora a conta da tela, que vale a pena conferir.
+
+309
+00:17:55.184 --> 00:17:59.516
+Cinco previsões, quatro erros de mil reais e um erro de dezesseis mil.
+
+310
+00:17:59.516 --> 00:17:59.763
+MAE:
+
+311
+00:17:59.763 --> 00:18:02.610
+a média de um, um, um, um e dezesseis, quatro.
+
+312
+00:18:02.610 --> 00:18:02.919
+RMSE:
+
+313
+00:18:02.919 --> 00:18:06.755
+os quadrados são um, um, um, um e duzentos e cinquenta e seis:
+
+314
+00:18:06.755 --> 00:18:10.839
+a média dá cinquenta e dois, e a raiz, cerca de sete vírgula dois.
+
+315
+00:18:10.839 --> 00:18:12.139
+Quase o dobro do MAE.
+
+316
+00:18:12.139 --> 00:18:14.057
+E essa é a dica de diagnóstico:
+
+317
+00:18:14.057 --> 00:18:17.893
+RMSE muito maior que o MAE denuncia outliers dominando o erro:
+
+318
+00:18:17.893 --> 00:18:20.740
+alguns poucos casos em que o modelo erra feio.
+
+319
+00:18:20.740 --> 00:18:22.596
+Vá olhar esses casos, um a um:
+
+320
+00:18:22.596 --> 00:18:24.391
+quase sempre há história ali.
+
+321
+00:18:24.667 --> 00:18:25.296
+Parte sete:
+
+322
+00:18:25.296 --> 00:18:29.018
+feature engineering, a arte onde se ganha o jogo em dado tabular.
+
+323
+00:18:29.018 --> 00:18:32.396
+O ponto de partida é uma limitação que muita gente esquece:
+
+324
+00:18:32.396 --> 00:18:35.373
+o modelo enxerga apenas as colunas que você entrega.
+
+325
+00:18:35.373 --> 00:18:39.667
+Ele não sabe que existe um mundo lá fora, não deduz contexto, não adivinha.
+
+326
+00:18:39.667 --> 00:18:44.534
+Feature engineering é criar representações que tornam o padrão visível para o modelo.
+
+327
+00:18:44.534 --> 00:18:45.679
+O repertório básico:
+
+328
+00:18:45.679 --> 00:18:51.061
+extrair, de uma data crua, criar dia da semana, mês, é feriado, porque a sazonalidade mora aí.
+
+329
+00:18:51.061 --> 00:18:51.576
+Combinar:
+
+330
+00:18:51.576 --> 00:18:58.046
+renda dividida por número de dependentes pode dizer mais sobre o aperto financeiro que as duas colunas separadas.
+
+331
+00:18:58.046 --> 00:18:58.733
+Transformar:
+
+332
+00:18:58.733 --> 00:19:04.515
+o logaritmo do preço doma distribuições muito assimétricas, aquelas com cauda longa de valores altos.
+
+333
+00:19:04.515 --> 00:19:05.718
+Codificar categorias:
+
+334
+00:19:05.718 --> 00:19:11.500
+one-hot encoding transforma a coluna UF em várias colunas de zero e um, porque modelo não come texto.
+
+335
+00:19:11.500 --> 00:19:12.073
+E escalar:
+
+336
+00:19:12.073 --> 00:19:17.569
+modelos lineares e de distância precisam das features na mesma escala, o StandardScaler resolve:
+
+337
+00:19:17.569 --> 00:19:20.203
+árvores não se importam, elas só fazem cortes.
+
+338
+00:19:20.500 --> 00:19:25.153
+E o exemplo que prova que feature boa vem de entender o domínio, não de força bruta.
+
+339
+00:19:25.153 --> 00:19:33.573
+No Titanic, o dataset que você conhece do módulo três, existe uma coluna de nome completo do passageiro, aparentemente inútil para prever sobrevivência.
+
+340
+00:19:33.573 --> 00:19:35.512
+Mas dentro do nome mora um tesouro:
+
+341
+00:19:35.512 --> 00:19:36.010
+o título.
+
+342
+00:19:36.010 --> 00:19:40.774
+Mister, Missis, Miss, e o precioso Master, que na época era o tratamento para meninos.
+
+343
+00:19:40.774 --> 00:19:47.200
+Extraia o título com uma expressão regular e você criou uma feature que prevê sobrevivência melhor que a idade crua.
+
+344
+00:19:47.200 --> 00:19:47.643
+Por quê?
+
+345
+00:19:47.643 --> 00:19:51.687
+Porque Master identifica meninos, e crianças tinham prioridade nos botes:
+
+346
+00:19:51.687 --> 00:19:56.284
+e porque a idade tem um monte de valores faltantes, enquanto o nome está sempre lá.
+
+347
+00:19:56.284 --> 00:20:00.550
+Nenhum algoritmo do mundo descobriria isso sozinho olhando a coluna de texto:
+
+348
+00:20:00.550 --> 00:20:03.818
+foi um humano que conhecia o costume da época que enxergou.
+
+349
+00:20:03.818 --> 00:20:05.424
+Essa é a lição da parte sete:
+
+350
+00:20:05.424 --> 00:20:12.515
+uma hora conversando com quem entende do negócio, ou estudando o domínio, rende mais que uma noite de ajuste de hiperparâmetros.
+
+351
+00:20:12.515 --> 00:20:16.060
+No mini-projeto, o título é uma das features que você vai criar.
+
+352
+00:20:16.333 --> 00:20:17.914
+Parte oito, o vilão da aula:
+
+353
+00:20:17.914 --> 00:20:23.331
+data leakage, o vazamento de dados, o erro número um do iniciante e de muito veterano desatento.
+
+354
+00:20:23.331 --> 00:20:24.009
+A definição:
+
+355
+00:20:24.009 --> 00:20:28.975
+leakage é quando informação que não existiria no momento da previsão contamina o treino.
+
+356
+00:20:28.975 --> 00:20:35.804
+O modelo aprende com uma cola que não estará disponível na prova, fica ótimo no papel, e vai para produção fazer papelão.
+
+357
+00:20:35.804 --> 00:20:38.682
+É traiçoeiro justamente porque os números melhoram:
+
+358
+00:20:38.682 --> 00:20:42.802
+nada no seu notebook grita erro, pelo contrário, tudo parece maravilhoso.
+
+359
+00:20:42.802 --> 00:20:43.874
+O exemplo caricato:
+
+360
+00:20:43.874 --> 00:20:46.809
+prever inadimplência usando a coluna data do calote.
+
+361
+00:20:46.809 --> 00:20:50.703
+Se a data do calote está preenchida, o cliente obviamente deu calote:
+
+362
+00:20:50.703 --> 00:20:54.089
+o modelo aprende essa tautologia e crava acurácia altíssima.
+
+363
+00:20:54.089 --> 00:20:55.839
+Absurdo explícito assim é raro.
+
+364
+00:20:55.839 --> 00:20:58.153
+O perigo real são as versões disfarçadas:
+
+365
+00:20:58.153 --> 00:21:07.013
+um status da conta que foi atualizado depois do evento que você quer prever, uma média calculada sobre o dataset inteiro, uma duplicata atravessando o split.
+
+366
+00:21:07.013 --> 00:21:12.205
+Vamos ver as três formas clássicas com calma, porque é caçando essas três que você se salva.
+
+367
+00:21:12.500 --> 00:21:13.039
+Forma um:
+
+368
+00:21:13.039 --> 00:21:14.237
+a feature do futuro.
+
+369
+00:21:14.237 --> 00:21:18.970
+Qualquer coluna preenchida ou atualizada depois do evento que você quer prever.
+
+370
+00:21:18.970 --> 00:21:22.144
+A pergunta-antídoto, para cada coluna do seu dataset:
+
+371
+00:21:22.144 --> 00:21:26.757
+essa informação existiria no exato momento em que o modelo precisaria prever?
+
+372
+00:21:26.757 --> 00:21:28.314
+Se a resposta é não, fora.
+
+373
+00:21:28.314 --> 00:21:28.973
+Forma dois:
+
+374
+00:21:28.973 --> 00:21:30.950
+pré-processamento antes do split.
+
+375
+00:21:30.950 --> 00:21:37.060
+Calcular a média e o desvio para normalizar usando o dataset inteiro, antes de separar treino e teste.
+
+376
+00:21:37.060 --> 00:21:41.733
+Parece inofensivo, mas as estatísticas do teste vazaram para dentro do treino:
+
+377
+00:21:41.733 --> 00:21:45.626
+o modelo já sabe algo sobre os dados que deveria nunca ter visto.
+
+378
+00:21:45.626 --> 00:21:46.285
+Forma três:
+
+379
+00:21:46.285 --> 00:21:48.202
+duplicatas atravessando o split.
+
+380
+00:21:48.202 --> 00:21:52.455
+O mesmo cliente, ou uma quase-duplicata dele, cai no treino e no teste:
+
+381
+00:21:52.455 --> 00:21:55.750
+o modelo decora no treino e finge generalizar no teste.
+
+382
+00:21:55.750 --> 00:21:57.547
+E o sintoma clássico das três:
+
+383
+00:21:57.547 --> 00:21:58.805
+resultado bom demais.
+
+384
+00:21:58.805 --> 00:22:01.560
+Noventa e nove por cento num problema difícil?
+
+385
+00:22:01.560 --> 00:22:04.436
+Desconfie primeiro do leakage, não do seu gênio.
+
+386
+00:22:04.436 --> 00:22:11.684
+Essa desconfiança reflexa diante de números maravilhosos é, talvez, a marca mais confiável de um profissional experiente.
+
+387
+00:22:11.967 --> 00:22:15.729
+E o antídoto estrutural para a forma dois, que é a mais sorrateira:
+
+388
+00:22:15.729 --> 00:22:17.246
+o Pipeline do scikit-learn.
+
+389
+00:22:17.246 --> 00:22:17.695
+A ideia:
+
+390
+00:22:17.695 --> 00:22:20.672
+encadear pré-processamento e modelo num único objeto.
+
+391
+00:22:20.672 --> 00:22:28.590
+Imputação de valores faltantes, escala, one-hot encoding e o modelo final viram uma coisa só, com a mesma interface de sempre, fit e predict.
+
+392
+00:22:28.590 --> 00:22:31.230
+E aqui está a mágica que justifica a cerimônia:
+
+393
+00:22:31.230 --> 00:22:39.148
+quando você roda validação cruzada sobre um pipeline, o fit das transformações acontece só no pedaço de treino de cada fold, automaticamente.
+
+394
+00:22:39.148 --> 00:22:47.966
+A média usada para imputar, o desvio usado para escalar, tudo é calculado apenas com os dados de treino daquela rodada, e depois apenas aplicado à validação.
+
+395
+00:22:47.966 --> 00:22:55.772
+O vazamento da forma dois fica estruturalmente impossível, sem depender da sua disciplina num notebook às onze da noite de uma sexta-feira.
+
+396
+00:22:55.772 --> 00:22:56.895
+Por isso eu insisto:
+
+397
+00:22:56.895 --> 00:23:01.669
+pipeline não é frescura de organização, é dispositivo de segurança, o cinto do carro.
+
+398
+00:23:01.669 --> 00:23:07.959
+No lab, agora mesmo, você monta o seu primeiro, e a partir de hoje todo pré-processamento seu vive dentro de um.
+
+399
+00:23:08.233 --> 00:23:09.970
+Chegou o laboratório guiado:
+
+400
+00:23:09.970 --> 00:23:14.994
+o pipeline completo no Titanic, do dado cru à avaliação honesta, em seis células.
+
+401
+00:23:14.994 --> 00:23:18.591
+O velho conhecido do módulo três volta, mas o olhar mudou:
+
+402
+00:23:18.591 --> 00:23:26.034
+lá você explorava os dados, agora você vai prever quem sobrevive, com todas as disciplinas da aula aplicadas de uma vez.
+
+403
+00:23:26.034 --> 00:23:26.654
+O roteiro:
+
+404
+00:23:26.654 --> 00:23:30.065
+célula um, carregar os dados e definir alvo e features.
+
+405
+00:23:30.065 --> 00:23:36.454
+Célula dois, o split entre treino e teste, antes de qualquer pré-processamento, e você já sabe por quê.
+
+406
+00:23:36.454 --> 00:23:38.811
+Célula três, a construção do pipeline:
+
+407
+00:23:38.811 --> 00:23:44.703
+imputação, escala e one-hot dentro de um ColumnTransformer, com a regressão logística na ponta.
+
+408
+00:23:44.703 --> 00:23:47.494
+Célula quatro, o duelo por validação cruzada:
+
+409
+00:23:47.494 --> 00:23:49.975
+baseline logístico contra Random Forest.
+
+410
+00:23:49.975 --> 00:23:57.417
+Célula cinco, a avaliação final no teste, tocado uma única vez, com matriz de confusão, relatório de métricas e ROC-AUC.
+
+411
+00:23:57.417 --> 00:23:59.340
+E célula seis, a interpretação:
+
+412
+00:23:59.340 --> 00:24:01.945
+quais features o modelo achou importantes.
+
+413
+00:24:01.945 --> 00:24:06.845
+Rode no Colab ou localmente, com uv add scikit-learn pandas matplotlib seaborn.
+
+414
+00:24:06.845 --> 00:24:08.209
+Vamos célula a célula.
+
+415
+00:24:08.500 --> 00:24:09.089
+Célula um:
+
+416
+00:24:09.089 --> 00:24:09.854
+dados e alvo.
+
+417
+00:24:09.854 --> 00:24:13.388
+Carregamos o Titanic direto do seaborn, como no módulo três.
+
+418
+00:24:13.388 --> 00:24:18.747
+Definimos o alvo, a coluna survived, que vale um para quem sobreviveu e zero para quem não:
+
+419
+00:24:18.747 --> 00:24:22.516
+é ela que queremos prever, um problema de classificação binária.
+
+420
+00:24:22.516 --> 00:24:24.106
+E escolhemos sete features:
+
+421
+00:24:24.106 --> 00:24:33.293
+a classe da passagem, o sexo, a idade, as colunas sibsp e parch, que contam irmãos e cônjuges e pais e filhos a bordo, a tarifa paga, e o porto de embarque.
+
+422
+00:24:33.293 --> 00:24:38.063
+Separamos X maiúsculo, a tabela de features, e y minúsculo, o vetor de respostas:
+
+423
+00:24:38.063 --> 00:24:42.185
+essa convenção de nomes vem da notação matricial e a área inteira usa.
+
+424
+00:24:42.185 --> 00:24:50.842
+O print final mostra o shape, oitocentas e noventa e uma linhas por sete colunas, e um número que eu quero que você olhe com atenção de engenheiro:
+
+425
+00:24:50.842 --> 00:24:53.551
+a média do y, zero trezentos e oitenta e três.
+
+426
+00:24:53.551 --> 00:24:56.790
+Como y é zero ou um, a média é a taxa de sobrevivência:
+
+427
+00:24:56.790 --> 00:24:58.203
+trinta e oito por cento.
+
+428
+00:24:58.203 --> 00:25:02.326
+Ou seja, classes desbalanceadas, sessenta e dois contra trinta e oito:
+
+429
+00:25:02.326 --> 00:25:08.038
+a acurácia já começa devendo, e um chute de todo mundo morre já acerta sessenta e dois por cento.
+
+430
+00:25:08.038 --> 00:25:09.628
+Anote esse baseline mental.
+
+431
+00:25:09.900 --> 00:25:10.591
+Célula dois:
+
+432
+00:25:10.591 --> 00:25:14.391
+o split, e repare que ele vem antes de qualquer pré-processamento:
+
+433
+00:25:14.391 --> 00:25:20.610
+é a lição anti-leakage aplicada na prática, o teste sai da mesa antes de qualquer estatística ser calculada.
+
+434
+00:25:20.610 --> 00:25:26.196
+O train test split separa vinte por cento para teste, com três argumentos que merecem comentário.
+
+435
+00:25:26.196 --> 00:25:27.865
+Test size, zero vírgula dois:
+
+436
+00:25:27.865 --> 00:25:31.551
+oitenta e vinte, proporção padrão para um dataset deste tamanho.
+
+437
+00:25:31.551 --> 00:25:33.278
+Random state, quarenta e dois:
+
+438
+00:25:33.278 --> 00:25:37.251
+a semente que congela o sorteio, para o experimento ser reprodutível:
+
+439
+00:25:37.251 --> 00:25:41.800
+rodou de novo, obteve o mesmo split, essa disciplina vem desde o módulo quatro.
+
+440
+00:25:41.800 --> 00:25:44.622
+E o stratify igual a y, o detalhe fino da célula:
+
+441
+00:25:44.622 --> 00:25:52.338
+ele garante que a proporção de sobreviventes seja a mesma no treino e no teste, os trinta e oito por cento preservados dos dois lados.
+
+442
+00:25:52.338 --> 00:26:00.341
+Sem stratify, o sorteio poderia, por azar, concentrar sobreviventes num lado só, e você estaria treinando num problema e testando em outro.
+
+443
+00:26:00.341 --> 00:26:03.739
+Em classes desbalanceadas, estratificar é regra, não opção.
+
+444
+00:26:03.739 --> 00:26:08.115
+Quatro variáveis saem daqui, e o X teste e o y teste entram na urna lacrada:
+
+445
+00:26:08.115 --> 00:26:09.612
+só voltam na célula cinco.
+
+446
+00:26:09.900 --> 00:26:12.728
+Célula três, o coração do lab, e vamos por partes:
+
+447
+00:26:12.728 --> 00:26:15.274
+primeiro o tratamento de cada tipo de coluna.
+
+448
+00:26:15.274 --> 00:26:17.367
+Separamos as features em duas listas:
+
+449
+00:26:17.367 --> 00:26:19.799
+as numéricas, idade, sibsp, parch e tarifa:
+
+450
+00:26:19.799 --> 00:26:22.684
+e as categóricas, classe, sexo e porto de embarque.
+
+451
+00:26:22.684 --> 00:26:25.625
+Cada grupo ganha o seu mini-pipeline de dois passos.
+
+452
+00:26:25.625 --> 00:26:26.643
+Para as numéricas:
+
+453
+00:26:26.643 --> 00:26:33.374
+o SimpleImputer com estratégia de mediana preenche os valores faltantes, e a idade tem muitos, com a mediana da coluna:
+
+454
+00:26:33.374 --> 00:26:37.503
+a mediana em vez da média, para outliers não distorcerem o preenchimento:
+
+455
+00:26:37.503 --> 00:26:45.140
+e o StandardScaler coloca tudo na mesma escala, média zero e desvio um, que os modelos lineares agradecem, como você viu na parte sete.
+
+456
+00:26:45.140 --> 00:26:46.271
+Para as categóricas:
+
+457
+00:26:46.271 --> 00:26:50.626
+imputação pelo valor mais frequente, que é o que faz sentido para categorias:
+
+458
+00:26:50.626 --> 00:26:56.339
+e o OneHotEncoder transformando cada categoria em colunas de zero e um, porque modelo não come texto.
+
+459
+00:26:56.339 --> 00:26:59.450
+O handle unknown igual a ignore é o cinto de segurança:
+
+460
+00:26:59.450 --> 00:27:05.220
+se aparecer uma categoria nova no futuro, ele a codifica como tudo zero em vez de quebrar em produção.
+
+461
+00:27:05.500 --> 00:27:08.594
+E agora a montagem final, olhe como as peças se encaixam.
+
+462
+00:27:08.594 --> 00:27:14.511
+O ColumnTransformer recebe os dois mini-pipelines da tela anterior e diz qual grupo de colunas cada um trata:
+
+463
+00:27:14.511 --> 00:27:24.010
+o tratamento numérico nas quatro colunas numéricas, o categórico nas três categóricas, tudo em paralelo, e os resultados são concatenados numa tabela só, pronta para o modelo.
+
+464
+00:27:24.010 --> 00:27:29.112
+E o Pipeline final encadeia esse pré-processamento inteiro com a regressão logística na ponta.
+
+465
+00:27:29.112 --> 00:27:31.609
+O objeto pipe lr que sai daqui é uma coisa só:
+
+466
+00:27:31.609 --> 00:27:34.377
+chame fit, e ele imputa, escala, codifica e treina:
+
+467
+00:27:34.377 --> 00:27:40.023
+chame predict, e ele aplica as mesmas transformações, com as estatísticas aprendidas no treino, e prevê.
+
+468
+00:27:40.023 --> 00:27:42.302
+E aqui se cumpre a promessa da parte oito:
+
+469
+00:27:42.302 --> 00:27:51.747
+quando a validação cruzada rodar sobre este objeto, a mediana da imputação e a média da escala serão recalculadas dentro de cada fold, só com os dados de treino daquele fold.
+
+470
+00:27:51.747 --> 00:27:54.950
+O vazamento da forma dois ficou estruturalmente impossível.
+
+471
+00:27:54.950 --> 00:28:01.192
+Este esqueleto de célula, ColumnTransformer mais Pipeline, você vai reutilizar em todo projeto tabular da sua vida:
+
+472
+00:28:01.192 --> 00:28:02.332
+guarde-o com carinho.
+
+473
+00:28:02.600 --> 00:28:03.403
+Célula quatro:
+
+474
+00:28:03.403 --> 00:28:03.863
+o duelo.
+
+475
+00:28:03.863 --> 00:28:13.217
+Montamos o segundo competidor, o mesmo pré-processamento com um RandomForestClassifier de trezentas árvores na ponta, e repare como o pipeline paga o investimento:
+
+476
+00:28:13.217 --> 00:28:15.857
+trocamos só a última peça, o resto é idêntico.
+
+477
+00:28:15.857 --> 00:28:22.514
+E colocamos os dois para brigar em pé de igualdade, com validação cruzada de cinco folds sobre o conjunto de treino.
+
+478
+00:28:22.514 --> 00:28:25.671
+Atenção ao detalhe que separa o amador do profissional:
+
+479
+00:28:25.671 --> 00:28:29.458
+a validação cruzada roda sobre o treino, o teste continua na urna.
+
+480
+00:28:29.458 --> 00:28:34.107
+O loop imprime, para cada modelo, a média e o desvio da acurácia nos cinco folds.
+
+481
+00:28:34.107 --> 00:28:43.002
+Os resultados ficam na casa dos oitenta por cento, com a floresta tipicamente um pouco à frente da logística, e os desvios pequenos, sinal de estabilidade.
+
+482
+00:28:43.002 --> 00:28:45.240
+Lembra do baseline mental da célula um?
+
+483
+00:28:45.240 --> 00:28:48.397
+Chutar todo mundo morre dava sessenta e dois por cento:
+
+484
+00:28:48.397 --> 00:28:52.299
+os dois modelos batem isso com folga, então há sinal real nos dados.
+
+485
+00:28:52.299 --> 00:28:54.652
+E o comentário no código diz o essencial:
+
+486
+00:28:54.652 --> 00:28:59.358
+dentro de cada fold, imputação e escala foram ajustadas só no treino daquele fold.
+
+487
+00:28:59.358 --> 00:29:02.744
+O pipeline trabalhando de segurança, sem você pensar nisso.
+
+488
+00:29:03.033 --> 00:29:03.790
+Célula cinco:
+
+489
+00:29:03.790 --> 00:29:04.779
+o momento solene.
+
+490
+00:29:04.779 --> 00:29:06.584
+A urna é aberta, uma única vez.
+
+491
+00:29:06.584 --> 00:29:16.653
+Treinamos o vencedor da validação cruzada, a floresta, com todo o conjunto de treino, e o avaliamos no teste, aqueles vinte por cento que nenhuma decisão nossa jamais tocou.
+
+492
+00:29:16.653 --> 00:29:17.876
+Três relatórios saem.
+
+493
+00:29:17.876 --> 00:29:21.310
+A matriz de confusão, os quatro números crus da parte seis:
+
+494
+00:29:21.310 --> 00:29:29.575
+olhe principalmente os dois cantos dos erros, os falsos positivos e os falsos negativos, e pergunte qual dos dois doeria mais no seu problema.
+
+495
+00:29:29.575 --> 00:29:33.184
+O classification report, com precisão, recall e F1 por classe:
+
+496
+00:29:33.184 --> 00:29:40.983
+repare que o recall da classe sobreviveu costuma vir mais baixo que o da outra, o modelo encontra os que morreram com mais facilidade.
+
+497
+00:29:40.983 --> 00:29:45.465
+E a ROC-AUC sobre as probabilidades, que deve passar de zero oitenta e cinco:
+
+498
+00:29:45.465 --> 00:29:47.444
+bem acima do zero e meio da moeda.
+
+499
+00:29:47.444 --> 00:29:51.111
+E a última linha é uma assinatura da academia que você conhece:
+
+500
+00:29:51.111 --> 00:29:51.635
+o assert.
+
+501
+00:29:51.635 --> 00:29:57.513
+Se a AUC cair abaixo de zero oitenta, o notebook quebra na sua cara em vez de sorrir e deixar passar.
+
+502
+00:29:57.513 --> 00:30:02.170
+Este número final, do teste intocado, é o único que você reportaria para alguém.
+
+503
+00:30:02.170 --> 00:30:04.090
+Os da célula quatro eram bússola:
+
+504
+00:30:04.090 --> 00:30:04.905
+este é o mapa.
+
+505
+00:30:05.200 --> 00:30:09.225
+Célula seis, a pergunta que todo gestor faz e todo bom engenheiro antecipa:
+
+506
+00:30:09.225 --> 00:30:10.943
+o modelo decide com base em quê?
+
+507
+00:30:10.943 --> 00:30:17.920
+A floresta oferece as feature importances, uma pontuação de quanto cada feature contribuiu para as decisões das trezentas árvores.
+
+508
+00:30:17.920 --> 00:30:19.745
+O código pesca dentro do pipeline:
+
+509
+00:30:19.745 --> 00:30:26.078
+o named steps pre nos dá os nomes das colunas depois do one-hot, porque sexo virou duas colunas e embarque virou três:
+
+510
+00:30:26.078 --> 00:30:28.601
+e o named steps modelo entrega as importâncias.
+
+511
+00:30:28.601 --> 00:30:32.143
+Juntamos num Series do pandas, ordenamos e plotamos na horizontal.
+
+512
+00:30:32.143 --> 00:30:34.397
+E o resultado conta uma história coerente:
+
+513
+00:30:34.397 --> 00:30:39.388
+sexo e tarifa dominam o gráfico, exatamente o que a sua exploração do módulo três já sugeria:
+
+514
+00:30:39.388 --> 00:30:45.024
+mulheres sobreviveram muito mais, e tarifa alta é um espelho da classe social e da proximidade dos botes.
+
+515
+00:30:45.024 --> 00:30:47.546
+Essa checagem de coerência é o ponto da célula:
+
+516
+00:30:47.546 --> 00:30:52.216
+quando a importância confirma o que a exploração mostrou, a confiança no modelo cresce:
+
+517
+00:30:52.216 --> 00:30:57.207
+quando aparece uma feature suspeita dominando do nada, acende o alerta, inclusive de leakage.
+
+518
+00:30:57.207 --> 00:31:01.984
+Modelo que você não consegue explicar é modelo em que você não deveria confiar cegamente.
+
+519
+00:31:02.267 --> 00:31:05.318
+O mini-projeto do módulo cinco tem um sabor especial:
+
+520
+00:31:05.318 --> 00:31:07.793
+pela primeira vez, você compete de verdade.
+
+521
+00:31:07.793 --> 00:31:08.484
+O enunciado:
+
+522
+00:31:08.484 --> 00:31:19.422
+inscreva-se na competição Titanic do Kaggle, aquela mesma que serve de porta de entrada para a comunidade inteira, construa o seu pipeline e submeta as suas previsões ao leaderboard público.
+
+523
+00:31:19.422 --> 00:31:25.006
+Se preferir um problema de regressão, a competição House Prices segue exatamente o mesmo roteiro.
+
+524
+00:31:25.006 --> 00:31:25.812
+Os requisitos:
+
+525
+00:31:25.812 --> 00:31:31.741
+baixar os dados da competição e explorá-los, reaproveitando o seu roteiro de exploração do módulo três.
+
+526
+00:31:31.741 --> 00:31:35.368
+Montar um pipeline scikit-learn com pré-processamento completo:
+
+527
+00:31:35.368 --> 00:31:37.844
+imputação, one-hot, escala onde necessário.
+
+528
+00:31:37.844 --> 00:31:43.543
+Criar pelo menos duas features novas de sua autoria, e o título extraído do nome é candidato óbvio.
+
+529
+00:31:43.543 --> 00:31:47.400
+Comparar no mínimo três modelos via validação cruzada, numa tabela:
+
+530
+00:31:47.400 --> 00:31:49.990
+logística, Random Forest e gradient boosting.
+
+531
+00:31:49.990 --> 00:31:53.387
+Submeter ao Kaggle e registrar o score público no notebook.
+
+532
+00:31:53.387 --> 00:31:55.574
+E fechar com uma seção de post-mortem:
+
+533
+00:31:55.574 --> 00:31:59.316
+o que funcionou, o que não funcionou, qual seria o próximo passo.
+
+534
+00:31:59.316 --> 00:32:02.195
+Reserve umas cinco horas, em duas ou três sessões.
+
+535
+00:32:02.467 --> 00:32:04.472
+O passo a passo, primeira metade.
+
+536
+00:32:04.472 --> 00:32:05.931
+Etapa um, vinte minutos:
+
+537
+00:32:05.931 --> 00:32:13.770
+entre na página da competição Titanic logado, clique em Join Competition, aceite as regras, e baixe os três arquivos da aba Data:
+
+538
+00:32:13.770 --> 00:32:16.080
+o train ponto csv, que tem a resposta:
+
+539
+00:32:16.080 --> 00:32:19.544
+o test ponto csv, que não tem, é ele que você vai prever:
+
+540
+00:32:19.544 --> 00:32:22.886
+e o gender submission, o exemplo do formato de entrega.
+
+541
+00:32:22.886 --> 00:32:24.649
+Etapa dois, quarenta minutos:
+
+542
+00:32:24.649 --> 00:32:31.030
+crie o projeto modulo zero cinco kaggle com uv, suba o Jupyter e repita o raio-X do módulo três no train:
+
+543
+00:32:31.030 --> 00:32:32.914
+shape, info, contagem de nulos.
+
+544
+00:32:32.914 --> 00:32:33.400
+Atenção:
+
+545
+00:32:33.400 --> 00:32:39.356
+as colunas do Kaggle vêm com maiúsculas, Age, Sex, Pclass, diferente do dataset do seaborn do lab.
+
+546
+00:32:39.356 --> 00:32:43.124
+Etapa três, vinte minutos, e esta é uma esperteza de veterano:
+
+547
+00:32:43.124 --> 00:32:48.046
+faça a primeira submissão antes de modelar, enviando o próprio gender submission.
+
+548
+00:32:48.046 --> 00:32:56.494
+Destrava o processo, e o score que aparecer, perto de zero setecentos e sessenta e cinco, vira o seu baseline a bater, anotado no notebook.
+
+549
+00:32:56.494 --> 00:32:58.864
+Etapa quatro, quarenta e cinco minutos:
+
+550
+00:32:58.864 --> 00:33:01.234
+adapte as células três e quatro do lab.
+
+551
+00:33:01.234 --> 00:33:02.753
+Sem split de teste local:
+
+552
+00:33:02.753 --> 00:33:04.090
+o teste é o do Kaggle:
+
+553
+00:33:04.090 --> 00:33:06.643
+sua avaliação local é a validação cruzada.
+
+554
+00:33:06.933 --> 00:33:07.813
+Segunda metade.
+
+555
+00:33:07.813 --> 00:33:10.043
+Etapa cinco, quarenta e cinco minutos:
+
+556
+00:33:10.043 --> 00:33:13.739
+as features novas, criadas nos dois dataframes, treino e teste.
+
+557
+00:33:13.739 --> 00:33:19.195
+O título sai do nome com uma expressão regular que pega o que está entre a vírgula e o ponto:
+
+558
+00:33:19.195 --> 00:33:22.129
+e o tamanho da família é sibsp mais parch mais um.
+
+559
+00:33:22.129 --> 00:33:25.473
+Adicione as colunas novas ao ColumnTransformer e confira:
+
+560
+00:33:25.473 --> 00:33:34.508
+o value counts do título deve mostrar Mister, Miss, Missis e Master no topo, e a validação cruzada deve melhorar, ou você deve saber explicar por que não.
+
+561
+00:33:34.508 --> 00:33:36.679
+Etapa seis, quarenta e cinco minutos:
+
+562
+00:33:36.679 --> 00:33:44.247
+o duelo de três, logística, Random Forest e GradientBoosting, com a tabela de média e desvio, e um vencedor escolhido pela média.
+
+563
+00:33:44.247 --> 00:33:45.538
+Etapa sete, meia hora:
+
+564
+00:33:45.538 --> 00:33:56.391
+treine o vencedor com todo o treino, gere o submissao ponto csv com PassengerId e Survived, quatrocentas e dezoito linhas, sem coluna de índice, e proteja com um assert antes do upload.
+
+565
+00:33:56.391 --> 00:33:59.442
+Submeta e anote o segundo score ao lado do baseline.
+
+566
+00:33:59.442 --> 00:34:00.733
+Etapa oito, meia hora:
+
+567
+00:34:00.733 --> 00:34:03.784
+o post-mortem honesto, uma frase para cada pergunta:
+
+568
+00:34:03.784 --> 00:34:05.368
+a conferência anti-leakage:
+
+569
+00:34:05.368 --> 00:34:07.011
+nenhum fit fora do pipeline:
+
+570
+00:34:07.011 --> 00:34:10.413
+e o ritual de entrega, Restart and Run All, commit e push.
+
+571
+00:34:10.700 --> 00:34:12.620
+Os primeiros socorros do projeto.
+
+572
+00:34:12.620 --> 00:34:16.228
+O Kaggle rejeitou a submissão reclamando de linhas ou colunas:
+
+573
+00:34:16.228 --> 00:34:19.602
+o seu CSV precisa espelhar exatamente o sample submission:
+
+574
+00:34:19.602 --> 00:34:25.304
+quatrocentas e dezoito linhas, as colunas PassengerId e Survived, e index igual a false no to csv:
+
+575
+00:34:25.304 --> 00:34:28.912
+o assert da etapa sete existe para pegar isso antes do upload.
+
+576
+00:34:28.912 --> 00:34:31.530
+Apareceu um KeyError na coluna age minúscula:
+
+577
+00:34:31.530 --> 00:34:36.709
+as colunas do Kaggle são maiúsculas, Age, diferente do dataset do seaborn que o lab usou:
+
+578
+00:34:36.709 --> 00:34:38.803
+é a pegadinha mais comum do projeto.
+
+579
+00:34:38.803 --> 00:34:41.538
+A validação local deu bem acima do leaderboard:
+
+580
+00:34:41.538 --> 00:34:44.680
+cheiro forte de leakage, volte à parte oito e procure:
+
+581
+00:34:44.680 --> 00:34:49.975
+alguma estatística calculada fora do pipeline, alguma feature que usa informação do futuro.
+
+582
+00:34:49.975 --> 00:34:51.488
+E a regra geral de sempre:
+
+583
+00:34:51.488 --> 00:35:00.273
+travou por mais de trinta minutos em qualquer etapa, pergunte ao seu assistente de IA, colando o erro completo e dizendo em qual etapa do projeto está.
+
+584
+00:35:00.273 --> 00:35:03.066
+Mas peça a explicação, não só a resposta pronta.
+
+585
+00:35:03.066 --> 00:35:05.743
+O leaderboard do Kaggle ninguém sobe por você:
+
+586
+00:35:05.743 --> 00:35:08.012
+e é exatamente por isso que ele ensina.
+
+587
+00:35:08.300 --> 00:35:10.545
+Os cinco tropeços clássicos do módulo.
+
+588
+00:35:10.545 --> 00:35:11.077
+Primeiro:
+
+589
+00:35:11.077 --> 00:35:13.796
+confiar na acurácia em classes desbalanceadas.
+
+590
+00:35:13.796 --> 00:35:19.882
+Noventa e nove por cento com fraude de um por cento é o chute na classe majoritária de terno e gravata:
+
+591
+00:35:19.882 --> 00:35:22.541
+olhe precisão, recall e a matriz de confusão.
+
+592
+00:35:22.541 --> 00:35:23.014
+Segundo:
+
+593
+00:35:23.014 --> 00:35:25.023
+ajustar o modelo espiando o teste.
+
+594
+00:35:25.023 --> 00:35:31.050
+Cada espiada transforma um pouco do teste em validação, e no final o número que você reporta é ficção:
+
+595
+00:35:31.050 --> 00:35:32.646
+teste é urna, abre uma vez.
+
+596
+00:35:32.646 --> 00:35:33.178
+Terceiro:
+
+597
+00:35:33.178 --> 00:35:37.550
+dar fit no scaler ou no imputer fora do pipeline, sobre o dataset inteiro.
+
+598
+00:35:37.550 --> 00:35:40.623
+É a forma dois de leakage, silenciosa e comuníssima:
+
+599
+00:35:40.623 --> 00:35:43.696
+dentro do pipeline ela é estruturalmente impossível.
+
+600
+00:35:43.696 --> 00:35:44.110
+Quarto:
+
+601
+00:35:44.110 --> 00:35:47.537
+pular o baseline linear e ir direto para o modelo da moda.
+
+602
+00:35:47.537 --> 00:35:52.796
+Sem a régua da logística, você não sabe se o seu boosting é bom ou se o problema é fácil:
+
+603
+00:35:52.796 --> 00:35:54.510
+e às vezes a logística ganha.
+
+604
+00:35:54.510 --> 00:35:54.923
+Quinto:
+
+605
+00:35:54.923 --> 00:35:58.646
+celebrar um noventa e nove por cento em vez de desconfiar dele.
+
+606
+00:35:58.646 --> 00:36:01.364
+Resultado bom demais é sintoma, não conquista:
+
+607
+00:36:01.364 --> 00:36:03.078
+procure o vazamento primeiro.
+
+608
+00:36:03.078 --> 00:36:07.628
+Se não achar, aí sim, comemore, com a consciência tranquila de quem procurou.
+
+609
+00:36:07.900 --> 00:36:09.216
+Vamos amarrar os fios.
+
+610
+00:36:09.216 --> 00:36:13.283
+Supervisionado tem rótulo, e se divide em regressão e classificação:
+
+611
+00:36:13.283 --> 00:36:14.360
+a pergunta-guia é:
+
+612
+00:36:14.360 --> 00:36:16.633
+tenho a resposta certa para o passado?
+
+613
+00:36:16.633 --> 00:36:18.607
+Comece sempre pelo modelo linear:
+
+614
+00:36:18.607 --> 00:36:22.375
+a logística é o classificador baseline, rápida e interpretável.
+
+615
+00:36:22.375 --> 00:36:24.588
+Para dado tabular, os comitês mandam:
+
+616
+00:36:24.588 --> 00:36:29.912
+Random Forest vota em paralelo, gradient boosting corrige em sequência e é o padrão-ouro.
+
+617
+00:36:29.912 --> 00:36:31.407
+O objetivo é generalizar:
+
+618
+00:36:31.407 --> 00:36:37.090
+treino bom com teste ruim é overfitting, treino ruim é underfitting, e os remédios são opostos:
+
+619
+00:36:37.090 --> 00:36:39.243
+por isso o diagnóstico vem primeiro.
+
+620
+00:36:39.243 --> 00:36:40.440
+O protocolo sagrado:
+
+621
+00:36:40.440 --> 00:36:44.028
+treino, validação e teste, com o teste tocado uma única vez:
+
+622
+00:36:44.028 --> 00:36:48.634
+e com poucos dados, validação cruzada, reportando média mais ou menos desvio.
+
+623
+00:36:48.634 --> 00:36:50.369
+Métrica é decisão de negócio:
+
+624
+00:36:50.369 --> 00:36:55.872
+câncer prioriza recall, spam prioriza precisão, e a acurácia engana em classe desbalanceada.
+
+625
+00:36:55.872 --> 00:37:01.794
+Feature engineering torna o padrão visível, e feature boa vem do domínio, como o título do Titanic.
+
+626
+00:37:01.794 --> 00:37:07.895
+E o leakage tem três formas clássicas, um sintoma, o bom demais, e um antídoto estrutural, o pipeline.
+
+627
+00:37:07.895 --> 00:37:10.108
+Isso é machine learning profissional.
+
+628
+00:37:10.400 --> 00:37:14.124
+Antes de encerrar, o checklist de conclusão do módulo cinco.
+
+629
+00:37:14.124 --> 00:37:19.647
+As semanas um a três do curso do Andrew Ng, ou o equivalente no Crash Course, concluídas.
+
+630
+00:37:19.647 --> 00:37:24.922
+Os certificados de Intro e de Intermediate Machine Learning do Kaggle Learn, obtidos.
+
+631
+00:37:24.922 --> 00:37:30.073
+Saber desenhar a matriz de confusão de cabeça e derivar dela precisão, recall e F1:
+
+632
+00:37:30.073 --> 00:37:32.493
+teste de verdade, explique em voz alta.
+
+633
+00:37:32.493 --> 00:37:38.016
+Saber citar as três formas clássicas de data leakage e como o pipeline previne a segunda.
+
+634
+00:37:38.016 --> 00:37:43.105
+O lab do Titanic executado, com validação cruzada e ROC-AUC acima de zero oitenta.
+
+635
+00:37:43.105 --> 00:37:48.442
+A primeira submissão real feita no Kaggle, com o score público registrado no notebook:
+
+636
+00:37:48.442 --> 00:37:51.421
+acima de zero setenta e sete já é um bom começo.
+
+637
+00:37:51.421 --> 00:37:55.765
+E o mini-projeto com post-mortem publicado no repositório academia ia.
+
+638
+00:37:55.765 --> 00:37:56.572
+Cumpriu tudo?
+
+639
+00:37:56.572 --> 00:38:00.233
+Então você acabou de atravessar o rito de passagem da área.
+
+640
+00:38:00.233 --> 00:38:02.157
+Na próxima aula, o módulo seis:
+
+641
+00:38:02.157 --> 00:38:05.508
+Como LLMs Funcionam, onde os neurônios entram em cena:
+
+642
+00:38:05.508 --> 00:38:12.086
+redes neurais, backpropagation, PyTorch, e o motivo de tudo o que você aprendeu hoje continuar valendo lá.
+
+643
+00:38:12.086 --> 00:38:12.893
+Eu te espero.
+
+644
+00:38:12.893 --> 00:38:14.072
+Até a próxima aula.

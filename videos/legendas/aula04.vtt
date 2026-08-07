@@ -1,0 +1,2725 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:01.508
+Muito boa aula para você.
+
+2
+00:00:01.508 --> 00:00:05.853
+Esta é a aula completa do módulo quatro da Academia de Engenharia de IA:
+
+3
+00:00:05.853 --> 00:00:08.447
+Matemática Essencial, com abordagem visual.
+
+4
+00:00:08.447 --> 00:00:12.731
+Antes que você pense em fechar o vídeo, deixe-me acalmar o seu coração:
+
+5
+00:00:12.731 --> 00:00:17.075
+você não precisa de um mestrado em matemática para ser engenheiro de IA.
+
+6
+00:00:17.075 --> 00:00:25.039
+Precisa de intuição sólida sobre um punhado de ideias, e é exatamente isso que vamos construir juntos nos próximos quarenta minutos.
+
+7
+00:00:25.039 --> 00:00:26.729
+Vamos percorrer oito partes:
+
+8
+00:00:26.729 --> 00:00:33.607
+vetores, produto escalar, matrizes, derivada, descida do gradiente, probabilidade, o teorema de Bayes e a softmax.
+
+9
+00:00:33.607 --> 00:00:39.097
+Cada conceito vem com um exemplo numérico que você calcula à mão e depois confere em NumPy.
+
+10
+00:00:39.097 --> 00:00:45.071
+No final, faremos o laboratório da descida do gradiente e eu explico o seu mini-projeto em detalhe.
+
+11
+00:00:45.071 --> 00:00:48.811
+Papel e caneta na mão, porque hoje a gente calcula de verdade.
+
+12
+00:00:48.811 --> 00:00:49.656
+Vamos começar.
+
+13
+00:00:49.933 --> 00:00:52.259
+Deixe-me te dar o mapa antes da caminhada.
+
+14
+00:00:52.259 --> 00:00:56.523
+Tudo o que você vai tocar nesta área é construído sobre as ideias desta aula.
+
+15
+00:00:56.523 --> 00:00:57.796
+Embeddings são vetores.
+
+16
+00:00:57.796 --> 00:00:59.956
+Semelhança semântica é produto escalar.
+
+17
+00:00:59.956 --> 00:01:02.226
+Treinar um modelo é descida do gradiente.
+
+18
+00:01:02.226 --> 00:01:04.552
+A saída de um classificador é uma softmax.
+
+19
+00:01:04.552 --> 00:01:08.982
+A temperatura de um modelo de linguagem mexe numa distribuição de probabilidade.
+
+20
+00:01:08.982 --> 00:01:14.907
+Quem não tem essa base usa as ferramentas como caixas-pretas, e trava no primeiro comportamento inesperado.
+
+21
+00:01:14.907 --> 00:01:20.445
+Quem tem, lê um erro de shape, um loss que não desce, uma probabilidade estranha, e sabe onde olhar.
+
+22
+00:01:20.445 --> 00:01:23.379
+No dia a dia das empresas isso vira decisão concreta:
+
+23
+00:01:23.379 --> 00:01:34.676
+escolher a métrica de similaridade da sua busca, entender por que o fine-tuning divergiu com learning rate alto, explicar para o time de produto o que significa o modelo estar noventa por cento confiante.
+
+24
+00:01:34.676 --> 00:01:39.493
+Matemática que você calculou uma vez com os próprios dedos nunca mais vira caixa-preta.
+
+25
+00:01:39.767 --> 00:01:41.944
+Este é o plano de hoje, em três blocos.
+
+26
+00:01:41.944 --> 00:01:43.564
+O primeiro bloco é geometria:
+
+27
+00:01:43.564 --> 00:01:51.213
+vetores como setas e listas ao mesmo tempo, o produto escalar como régua de semelhança, e matrizes como máquinas de transformar o espaço.
+
+28
+00:01:51.213 --> 00:01:53.614
+O segundo bloco é o coração do treinamento:
+
+29
+00:01:53.614 --> 00:02:02.771
+a derivada como medidor de sensibilidade e a descida do gradiente, o algoritmo que treina todo modelo moderno, que vamos executar à mão, passo a passo, numa tabela.
+
+30
+00:02:02.771 --> 00:02:04.390
+O terceiro bloco é incerteza:
+
+31
+00:02:04.390 --> 00:02:11.872
+distribuições e esperança, o teorema de Bayes resolvido por contagens, e a softmax que transforma números quaisquer em probabilidades.
+
+32
+00:02:11.872 --> 00:02:23.319
+Depois vem o laboratório guiado, onde implementamos a descida do gradiente em NumPy puro e vemos a perda cair na tela, e fecho com o mini-projeto, onde você refaz tudo isso com números escolhidos por você.
+
+33
+00:02:23.319 --> 00:02:24.491
+Repare na progressão:
+
+34
+00:02:24.491 --> 00:02:28.847
+primeiro a intuição visual, depois a conta à mão, depois o código que confere.
+
+35
+00:02:29.133 --> 00:02:33.803
+Antes do conteúdo, o guia de estudo do módulo, que tem carga estimada de dez horas.
+
+36
+00:02:33.803 --> 00:02:37.629
+O prato principal são as séries visuais do canal três blue um brown:
+
+37
+00:02:37.629 --> 00:02:44.436
+os capítulos um a quatro da essência da álgebra linear, e os capítulos um a três da essência do cálculo, sobre derivadas.
+
+38
+00:02:44.436 --> 00:02:49.668
+São as melhores animações de matemática já feitas, e esta aula conversa diretamente com elas.
+
+39
+00:02:49.668 --> 00:02:54.732
+Depois, o canal StatQuest para descida do gradiente e estatística básica, uma hora e meia.
+
+40
+00:02:54.732 --> 00:03:01.370
+Se precisar de reforço em português, a Khan Academy tem trilhas de álgebra linear e probabilidade, reserve duas horas.
+
+41
+00:03:01.370 --> 00:03:07.615
+A leitura da semana são as seções iniciais do capítulo dois do livro gratuito Mathematics for Machine Learning.
+
+42
+00:03:07.615 --> 00:03:12.791
+E o laboratório desta aula, a descida do gradiente em NumPy puro, leva mais uma hora e meia.
+
+43
+00:03:12.791 --> 00:03:16.223
+Assista aos vídeos antes ou depois desta aula, como preferir:
+
+44
+00:03:16.223 --> 00:03:19.317
+aqui eu te dou a espinha dorsal, eles dão as animações.
+
+45
+00:03:19.600 --> 00:03:20.125
+Parte um:
+
+46
+00:03:20.125 --> 00:03:20.592
+vetores.
+
+47
+00:03:20.592 --> 00:03:26.429
+E eu quero começar com a ideia mais importante da aula inteira, aquela que sustenta todas as outras.
+
+48
+00:03:26.429 --> 00:03:28.647
+Um vetor é duas coisas ao mesmo tempo.
+
+49
+00:03:28.647 --> 00:03:32.440
+Primeiro, uma lista de números, como dois e três entre colchetes.
+
+50
+00:03:32.440 --> 00:03:34.075
+Segundo, uma seta no espaço:
+
+51
+00:03:34.075 --> 00:03:37.635
+a seta que sai do ponto zero zero e chega no ponto dois três.
+
+52
+00:03:37.635 --> 00:03:40.845
+Lista e seta são o mesmo objeto, visto de dois ângulos.
+
+53
+00:03:40.845 --> 00:03:47.440
+Essa dupla identidade é o truque central de toda a inteligência artificial, e eu peço que você guarde esta frase:
+
+54
+00:03:47.440 --> 00:03:53.802
+qualquer coisa que você consiga descrever com números vira um ponto no espaço, e aí geometria vira semântica.
+
+55
+00:03:53.802 --> 00:03:56.896
+Distância entre pontos vira diferença de significado.
+
+56
+00:03:56.896 --> 00:03:59.872
+Ângulo entre setas vira parentesco entre conceitos.
+
+57
+00:03:59.872 --> 00:04:09.736
+Parece abstrato agora, mas em dois minutos você vê isso funcionando com clientes de uma empresa, e daqui a alguns módulos, com palavras dentro de um modelo de linguagem.
+
+58
+00:04:10.033 --> 00:04:14.369
+Deixe-me desenhar a dupla identidade com calma, porque tudo depende dela.
+
+59
+00:04:14.369 --> 00:04:16.745
+Como lista, o vetor dois três é só isso:
+
+60
+00:04:16.745 --> 00:04:19.121
+o número dois e o número três, em ordem.
+
+61
+00:04:19.121 --> 00:04:25.417
+Como seta, é o segmento que sai da origem, o ponto zero zero, e termina no ponto de coordenadas dois três:
+
+62
+00:04:25.417 --> 00:04:28.447
+ande duas unidades para a direita e três para cima.
+
+63
+00:04:28.447 --> 00:04:29.813
+A lista diz os valores:
+
+64
+00:04:29.813 --> 00:04:31.951
+a seta mostra a posição e a direção.
+
+65
+00:04:31.951 --> 00:04:34.564
+Nenhuma das duas leituras é mais verdadeira:
+
+66
+00:04:34.564 --> 00:04:39.435
+são o mesmo objeto por dois pontos de vista, e a força vem de alternar entre eles.
+
+67
+00:04:39.435 --> 00:04:43.474
+Quando você programa, pensa na lista, porque é o que o NumPy guarda.
+
+68
+00:04:43.474 --> 00:04:47.335
+Quando você raciocina, pensa na seta, porque é o que dá intuição.
+
+69
+00:04:47.335 --> 00:04:49.057
+E o vocabulário novo da área:
+
+70
+00:04:49.057 --> 00:04:56.542
+embedding é um vetor denso que representa um objeto, palavra, imagem, usuário, num espaço onde distância significa semelhança.
+
+71
+00:04:56.542 --> 00:05:04.798
+Um embedding de verdade tem centenas de dimensões, mas cada intuição que você formar no plano de duas dimensões continua válida lá em cima.
+
+72
+00:05:04.798 --> 00:05:06.817
+É por isso que começamos no plano.
+
+73
+00:05:07.100 --> 00:05:08.490
+Olhe o exemplo na tela.
+
+74
+00:05:08.490 --> 00:05:13.626
+Um cliente de uma empresa pode ser descrito pelo vetor idade, renda e compras no mês.
+
+75
+00:05:13.626 --> 00:05:18.642
+O cliente A tem vinte e cinco anos, renda de quatro mil reais, três compras no mês.
+
+76
+00:05:18.642 --> 00:05:23.657
+O cliente B tem vinte e sete anos, renda de quatro mil e trezentos, quatro compras.
+
+77
+00:05:23.657 --> 00:05:24.080
+Repare:
+
+78
+00:05:24.080 --> 00:05:27.101
+os números são parecidos, coordenada a coordenada.
+
+79
+00:05:27.101 --> 00:05:32.056
+Então, como setas no espaço, esses dois clientes apontam quase para o mesmo lugar.
+
+80
+00:05:32.056 --> 00:05:32.963
+Estão próximos.
+
+81
+00:05:32.963 --> 00:05:36.891
+E proximidade no espaço significa perfis parecidos no mundo real.
+
+82
+00:05:36.891 --> 00:05:37.737
+Agora o salto:
+
+83
+00:05:37.737 --> 00:05:48.251
+numa rede neural de linguagem, cada palavra é representada por um vetor de centenas de dimensões, chamado embedding, uma representação numérica densa que captura significado.
+
+84
+00:05:48.251 --> 00:05:53.448
+Nós não conseguimos enxergar setecentas e sessenta e oito dimensões, ninguém consegue.
+
+85
+00:05:53.448 --> 00:05:58.524
+Mas, e essa é a boa notícia, toda a intuição de duas dimensões continua funcionando:
+
+86
+00:05:58.524 --> 00:06:00.155
+distância, ângulo, direção.
+
+87
+00:06:00.155 --> 00:06:03.116
+O que você entende no plano, vale no hiperespaço.
+
+88
+00:06:03.400 --> 00:06:04.029
+Parte dois:
+
+89
+00:06:04.029 --> 00:06:06.372
+o produto escalar, em inglês dot product.
+
+90
+00:06:06.372 --> 00:06:11.574
+Se a parte um te deu a matéria-prima, os vetores, esta parte te dá o instrumento de medida.
+
+91
+00:06:11.574 --> 00:06:17.118
+Eu vou te mostrar a conta, que é simples, e depois a leitura geométrica, que é onde mora o poder.
+
+92
+00:06:17.118 --> 00:06:20.833
+E já adianto a frase que resume tudo, para você guardar desde já:
+
+93
+00:06:20.833 --> 00:06:24.663
+produto escalar é a régua de semelhança da inteligência artificial.
+
+94
+00:06:24.663 --> 00:06:35.751
+Toda busca semântica, todo sistema de recomendação, toda comparação de embeddings que você vai construir nos próximos módulos, no fundo, é essa régua sendo aplicada milhões de vezes por segundo.
+
+95
+00:06:35.751 --> 00:06:39.352
+A conta cabe numa linha, e você confere de cabeça comigo agora.
+
+96
+00:06:39.633 --> 00:06:40.651
+A conta primeiro.
+
+97
+00:06:40.651 --> 00:06:45.498
+O produto escalar de dois vetores multiplica coordenada a coordenada e soma tudo.
+
+98
+00:06:45.498 --> 00:06:48.310
+Vetor um dois três com vetor quatro cinco seis:
+
+99
+00:06:48.310 --> 00:06:53.037
+um vezes quatro dá quatro, dois vezes cinco dá dez, três vezes seis dá dezoito.
+
+100
+00:06:53.037 --> 00:06:54.773
+Quatro mais dez mais dezoito:
+
+101
+00:06:54.773 --> 00:06:55.610
+trinta e dois.
+
+102
+00:06:55.610 --> 00:06:57.525
+Confira de cabeça, é isso mesmo.
+
+103
+00:06:57.525 --> 00:07:00.398
+Agora a leitura geométrica, que é o que importa:
+
+104
+00:07:00.398 --> 00:07:07.219
+o produto escalar é igual ao comprimento de a, vezes o comprimento de b, vezes o cosseno do ângulo entre as setas.
+
+105
+00:07:07.219 --> 00:07:07.698
+Traduzo:
+
+106
+00:07:07.698 --> 00:07:13.502
+setas apontando na mesma direção têm cosseno perto de um, logo produto escalar grande e positivo.
+
+107
+00:07:13.502 --> 00:07:17.452
+Setas perpendiculares têm cosseno zero, logo produto escalar zero:
+
+108
+00:07:17.452 --> 00:07:19.546
+uma não tem nada a ver com a outra.
+
+109
+00:07:19.546 --> 00:07:21.760
+E setas opostas dão produto negativo.
+
+110
+00:07:21.760 --> 00:07:23.795
+Repare no que acabou de acontecer:
+
+111
+00:07:23.795 --> 00:07:29.838
+uma soma de multiplicações, que qualquer computador faz em nanossegundos, virou um medidor de ângulo.
+
+112
+00:07:29.838 --> 00:07:33.249
+É assim que a máquina mede parentesco entre significados.
+
+113
+00:07:33.533 --> 00:07:35.585
+Vamos ler o código da tela juntos.
+
+114
+00:07:35.585 --> 00:07:41.198
+A função similaridade cosseno recebe dois vetores e retorna a semelhança entre menos um e um.
+
+115
+00:07:41.198 --> 00:07:44.940
+Na linha do return, o a arroba b é o produto escalar em NumPy:
+
+116
+00:07:44.940 --> 00:07:49.829
+o arroba é o operador de multiplicação vetorial que você conheceu no módulo três.
+
+117
+00:07:49.829 --> 00:07:54.536
+E dividimos pelo produto das normas, ou seja, dos comprimentos das duas setas.
+
+118
+00:07:54.536 --> 00:07:56.951
+Dividir pelos comprimentos é normalizar:
+
+119
+00:07:56.951 --> 00:08:00.572
+sobra só o cosseno do ângulo, a direção pura, sem o tamanho.
+
+120
+00:08:00.572 --> 00:08:04.314
+Abaixo, três embeddings de brinquedo, com três dimensões cada:
+
+121
+00:08:04.314 --> 00:08:05.581
+rei, rainha e banana.
+
+122
+00:08:05.581 --> 00:08:09.987
+A similaridade entre rei e rainha dá aproximadamente zero noventa e nove:
+
+123
+00:08:09.987 --> 00:08:12.944
+quase idênticos, as setas praticamente coincidem.
+
+124
+00:08:12.944 --> 00:08:16.264
+Entre rei e banana, aproximadamente zero trinta e três:
+
+125
+00:08:16.264 --> 00:08:17.229
+pouco parecidos.
+
+126
+00:08:17.229 --> 00:08:20.247
+É exatamente assim que a busca semântica funciona:
+
+127
+00:08:20.247 --> 00:08:27.671
+a pergunta do usuário vira embedding, cada documento vira embedding, e o documento com maior similaridade de cosseno vence.
+
+128
+00:08:27.671 --> 00:08:28.093
+Guarde:
+
+129
+00:08:28.093 --> 00:08:30.869
+produto escalar é a régua de semelhança da IA.
+
+130
+00:08:31.167 --> 00:08:37.794
+Quero que você enxergue o alcance do que acabamos de programar, porque essa funçãozinha de uma linha sustenta produtos inteiros.
+
+131
+00:08:37.794 --> 00:08:47.891
+Na busca semântica, a pergunta do usuário vira um embedding, cada documento da base vira um embedding, e a resposta é simplesmente o documento cuja seta faz o menor ângulo com a seta da pergunta:
+
+132
+00:08:47.891 --> 00:08:49.755
+maior similaridade de cosseno vence.
+
+133
+00:08:49.755 --> 00:08:53.172
+Repare no salto de qualidade em relação à busca por palavra-chave:
+
+134
+00:08:53.172 --> 00:09:03.580
+quem procura por como cancelar minha assinatura encontra o documento que diz encerramento de contrato, mesmo sem nenhuma palavra em comum, porque os significados apontam para a mesma direção do espaço.
+
+135
+00:09:03.580 --> 00:09:14.919
+O mesmo mecanismo movimenta sistemas de recomendação, filmes parecidos têm embeddings parecidos, detecção de duplicatas, e o RAG, a técnica de dar documentos ao modelo de linguagem que você vai construir no módulo sete.
+
+136
+00:09:14.919 --> 00:09:17.871
+Quando chegar lá, a régua já vai ser velha conhecida sua.
+
+137
+00:09:18.167 --> 00:09:18.803
+Parte três:
+
+138
+00:09:18.803 --> 00:09:19.324
+matrizes.
+
+139
+00:09:19.324 --> 00:09:22.333
+Uma matriz é uma grade de números, linhas e colunas.
+
+140
+00:09:22.333 --> 00:09:24.127
+Essa é a definição burocrática.
+
+141
+00:09:24.127 --> 00:09:26.904
+A definição geométrica, a que vale ouro, é esta:
+
+142
+00:09:26.904 --> 00:09:29.277
+uma matriz é uma transformação do espaço.
+
+143
+00:09:29.277 --> 00:09:31.591
+Uma rotação, uma esticada, uma projeção.
+
+144
+00:09:31.591 --> 00:09:35.873
+Multiplicar uma matriz por um vetor é aplicar essa transformação ao vetor:
+
+145
+00:09:35.873 --> 00:09:38.188
+a seta entra de um jeito e sai de outro.
+
+146
+00:09:38.188 --> 00:09:41.428
+E multiplicar matriz por matriz é compor transformações:
+
+147
+00:09:41.428 --> 00:09:45.015
+aplicar uma e depois a outra, como girar e em seguida esticar.
+
+148
+00:09:45.015 --> 00:09:46.925
+Por que você deveria se importar?
+
+149
+00:09:46.925 --> 00:09:53.869
+Porque uma rede neural é, essencialmente, uma pilha de multiplicações de matrizes intercaladas com funções não lineares.
+
+150
+00:09:53.869 --> 00:10:01.680
+Quando alguém diz que um modelo tem sete bilhões de parâmetros, está literalmente contando os números guardados dentro dessas matrizes.
+
+151
+00:10:01.680 --> 00:10:10.823
+Cada camada é uma transformação do espaço, e o aprendizado é ajustar essas transformações até que a geometria final separe gato de cachorro, spam de não spam.
+
+152
+00:10:11.100 --> 00:10:15.238
+Duas operações, duas leituras geométricas, e eu quero as duas na sua memória.
+
+153
+00:10:15.238 --> 00:10:18.570
+Multiplicar uma matriz por um vetor é aplicar a transformação:
+
+154
+00:10:18.570 --> 00:10:22.708
+o vetor entra, a máquina gira, estica ou projeta, e o vetor sai transformado.
+
+155
+00:10:22.708 --> 00:10:26.147
+Multiplicar uma matriz por outra matriz é compor transformações:
+
+156
+00:10:26.147 --> 00:10:31.198
+fabricar uma máquina nova que equivale a aplicar a primeira e depois a segunda, de uma vez só.
+
+157
+00:10:31.198 --> 00:10:34.853
+Girar e depois esticar vira uma única matriz que faz as duas coisas.
+
+158
+00:10:34.853 --> 00:10:38.185
+Essa ideia de compor é o que dá profundidade ao deep learning:
+
+159
+00:10:38.185 --> 00:10:49.470
+cada camada da rede é uma transformação do espaço, e empilhar camadas é compor transformações cada vez mais elaboradas, até que a geometria final coloque todos os gatos de um lado e todos os cachorros do outro.
+
+160
+00:10:49.470 --> 00:10:56.671
+E treinar, à luz da parte cinco que vem aí, é ajustar os números dentro dessas matrizes até a composição inteira fazer o que queremos.
+
+161
+00:10:56.671 --> 00:11:00.540
+Agora vamos aprender a conta em si, à mão, com uma matriz dois por dois.
+
+162
+00:11:00.833 --> 00:11:08.121
+Vamos fazer uma multiplicação de matrizes dois por dois à mão, porque quem faz uma vez nunca mais esquece a mecânica.
+
+163
+00:11:08.121 --> 00:11:08.620
+A regra:
+
+164
+00:11:08.620 --> 00:11:16.593
+o elemento da posição linha i coluna j do resultado é o produto escalar da linha i da primeira matriz com a coluna j da segunda.
+
+165
+00:11:16.593 --> 00:11:18.524
+Olhe a tela e acompanhe comigo.
+
+166
+00:11:18.524 --> 00:11:19.645
+Primeiro elemento:
+
+167
+00:11:19.645 --> 00:11:24.068
+linha um de A, que é um e dois, com coluna um de B, que é cinco e sete.
+
+168
+00:11:24.068 --> 00:11:25.438
+Um vezes cinco, cinco.
+
+169
+00:11:25.438 --> 00:11:27.058
+Dois vezes sete, quatorze.
+
+170
+00:11:27.058 --> 00:11:28.304
+Cinco mais quatorze:
+
+171
+00:11:28.304 --> 00:11:28.864
+dezenove.
+
+172
+00:11:28.864 --> 00:11:29.923
+Segundo elemento:
+
+173
+00:11:29.923 --> 00:11:32.290
+linha um com coluna dois, seis e oito.
+
+174
+00:11:32.290 --> 00:11:34.471
+Um vezes seis mais dois vezes oito:
+
+175
+00:11:34.471 --> 00:11:36.589
+seis mais dezesseis, vinte e dois.
+
+176
+00:11:36.589 --> 00:11:38.395
+A linha de baixo segue igual:
+
+177
+00:11:38.395 --> 00:11:45.496
+três vezes cinco mais quatro vezes sete dá quarenta e três, e três vezes seis mais quatro vezes oito dá cinquenta.
+
+178
+00:11:45.496 --> 00:11:46.119
+Resultado:
+
+179
+00:11:46.119 --> 00:11:49.296
+dezenove, vinte e dois, quarenta e três, cinquenta.
+
+180
+00:11:49.296 --> 00:11:51.850
+Embaixo, o NumPy confirma com A arroba B.
+
+181
+00:11:51.850 --> 00:11:54.404
+Repare que a peça fundamental reapareceu:
+
+182
+00:11:54.404 --> 00:11:58.577
+multiplicar matrizes é fazer vários produtos escalares organizados.
+
+183
+00:11:58.867 --> 00:12:06.927
+Antes de sair da parte três, a regra de compatibilidade de shapes, que vai te salvar de metade dos erros que você verá em deep learning.
+
+184
+00:12:06.927 --> 00:12:11.846
+Uma matriz m por n só pode multiplicar uma matriz n por p, e o resultado é m por p.
+
+185
+00:12:11.846 --> 00:12:12.558
+Em palavras:
+
+186
+00:12:12.558 --> 00:12:15.225
+o n do meio precisa bater, e depois ele some.
+
+187
+00:12:15.225 --> 00:12:15.699
+Exemplo:
+
+188
+00:12:15.699 --> 00:12:19.136
+uma matriz quatro por três vezes uma matriz três por dois.
+
+189
+00:12:19.136 --> 00:12:22.515
+O três do meio bate, desaparece, e sobra quatro por dois.
+
+190
+00:12:22.515 --> 00:12:28.916
+Se você tentar multiplicar quatro por três com duas por cinco, o NumPy reclama na hora com um erro de shape.
+
+191
+00:12:28.916 --> 00:12:32.412
+E aqui vai o conselho de quem já depurou muita rede neural:
+
+192
+00:12:32.412 --> 00:12:38.339
+quando aparecer um erro de dimensões incompatíveis, e vai aparecer, não saia chutando transposições.
+
+193
+00:12:38.339 --> 00:12:45.451
+Escreva os shapes de cada matriz no papel, aplique a regra do n do meio, e o ponto exato da incompatibilidade se revela.
+
+194
+00:12:45.451 --> 00:12:50.371
+Ler shapes é alfabetização em deep learning, e você acabou de aprender a gramática.
+
+195
+00:12:50.667 --> 00:12:51.439
+Parte quatro:
+
+196
+00:12:51.439 --> 00:12:52.092
+a derivada.
+
+197
+00:12:52.092 --> 00:13:00.409
+Se essa palavra te traz memórias ruins do ensino médio, limites, tabelas de regras decoradas, eu te convido a esquecer tudo por um instante.
+
+198
+00:13:00.409 --> 00:13:03.320
+A derivada responde uma pergunta prática e única:
+
+199
+00:13:03.320 --> 00:13:06.647
+se eu mexer um tiquinho na entrada, quanto mexe a saída?
+
+200
+00:13:06.647 --> 00:13:08.667
+Ela é um medidor de sensibilidade.
+
+201
+00:13:08.667 --> 00:13:09.142
+Só isso.
+
+202
+00:13:09.142 --> 00:13:10.746
+Imagine um botão de volume:
+
+203
+00:13:10.746 --> 00:13:15.083
+a derivada diz o quanto o som muda quando você gira o botão um milímetro.
+
+204
+00:13:15.083 --> 00:13:17.994
+Se a derivada é grande, o sistema é sensível ali:
+
+205
+00:13:17.994 --> 00:13:20.014
+um toque no botão e o som explode.
+
+206
+00:13:20.014 --> 00:13:22.747
+Se é pequena, você gira e quase nada acontece.
+
+207
+00:13:22.747 --> 00:13:24.766
+O sinal da derivada diz a direção:
+
+208
+00:13:24.766 --> 00:13:31.717
+positiva significa que aumentar a entrada aumenta a saída, negativa significa que aumentar a entrada diminui a saída.
+
+209
+00:13:31.717 --> 00:13:34.331
+E a magnitude diz a intensidade da resposta.
+
+210
+00:13:34.331 --> 00:13:43.064
+Com essa leitura, sensibilidade, direção e intensidade, você tem tudo o que precisa para entender como um modelo com bilhões de parâmetros aprende.
+
+211
+00:13:43.064 --> 00:13:44.787
+Deixe-me mostrar com números.
+
+212
+00:13:45.067 --> 00:13:48.633
+Vamos conferir a ideia com um exemplo que cabe na cabeça.
+
+213
+00:13:48.633 --> 00:13:52.262
+A função f de w igual a w ao quadrado tem derivada dois w.
+
+214
+00:13:52.262 --> 00:13:55.141
+No ponto w igual a três, a derivada vale seis.
+
+215
+00:13:55.141 --> 00:13:56.205
+Tradução prática:
+
+216
+00:13:56.205 --> 00:14:01.899
+perto de três, se eu aumentar w em um centésimo, f aumenta aproximadamente seis centésimos.
+
+217
+00:14:01.899 --> 00:14:04.276
+Vamos verificar na marra, olhe a tela.
+
+218
+00:14:04.276 --> 00:14:05.778
+Três ao quadrado é nove.
+
+219
+00:14:05.778 --> 00:14:09.908
+Três vírgula zero um ao quadrado é nove vírgula zero seis zero um.
+
+220
+00:14:09.908 --> 00:14:12.661
+A diferença é pouco mais de seis centésimos.
+
+221
+00:14:12.661 --> 00:14:14.726
+Bateu com a previsão da derivada.
+
+222
+00:14:14.726 --> 00:14:17.104
+Agora o passo que leva isso para a IA:
+
+223
+00:14:17.104 --> 00:14:20.983
+um modelo real não tem uma entrada, tem bilhões de parâmetros.
+
+224
+00:14:20.983 --> 00:14:27.866
+Calculamos a sensibilidade da saída em relação a cada um deles e empacotamos tudo num vetor chamado gradiente.
+
+225
+00:14:27.866 --> 00:14:32.935
+E aqui vem a frase que é o coração de todo o deep learning, sublinhe mentalmente:
+
+226
+00:14:32.935 --> 00:14:36.439
+o gradiente aponta na direção de maior subida da função.
+
+227
+00:14:36.439 --> 00:14:40.068
+Logo, o negativo do gradiente aponta para a maior descida.
+
+228
+00:14:40.068 --> 00:14:44.323
+Segure essa frase, porque a parte cinco é toda construída sobre ela.
+
+229
+00:14:44.600 --> 00:14:47.992
+Vamos dar ao gradiente uma cena só dele, porque ele merece.
+
+230
+00:14:47.992 --> 00:14:50.005
+Um modelo real não tem uma entrada:
+
+231
+00:14:50.005 --> 00:14:54.202
+tem milhões ou bilhões de parâmetros, cada um influenciando o erro final.
+
+232
+00:14:54.202 --> 00:14:57.135
+Para cada parâmetro, calculamos a derivada parcial:
+
+233
+00:14:57.135 --> 00:15:01.965
+a sensibilidade do erro àquele parâmetro específico, com todos os outros congelados.
+
+234
+00:15:01.965 --> 00:15:06.737
+Empacotamos todas essas sensibilidades num único vetor, e esse vetor é o gradiente.
+
+235
+00:15:06.737 --> 00:15:09.899
+E aí vem a propriedade que parece mágica mas é teorema:
+
+236
+00:15:09.899 --> 00:15:17.144
+o gradiente aponta, dentre todas as direções possíveis do espaço de parâmetros, exatamente aquela em que a função mais cresce.
+
+237
+00:15:17.144 --> 00:15:18.007
+A maior subida.
+
+238
+00:15:18.007 --> 00:15:19.272
+Consequência imediata:
+
+239
+00:15:19.272 --> 00:15:21.974
+o negativo do gradiente aponta a maior descida.
+
+240
+00:15:21.974 --> 00:15:24.504
+Pense no gradiente como uma bússola do erro:
+
+241
+00:15:24.504 --> 00:15:33.071
+em qualquer ponto da paisagem, ele indica para onde o erro sobe mais rápido, e nós, que queremos errar menos, caminhamos no sentido oposto da agulha.
+
+242
+00:15:33.071 --> 00:15:36.751
+Se essa frase ficou clara, a parte cinco vai parecer inevitável:
+
+243
+00:15:36.751 --> 00:15:38.936
+é só transformar a bússola em receita.
+
+244
+00:15:39.233 --> 00:15:39.966
+Parte cinco:
+
+245
+00:15:39.966 --> 00:15:49.729
+a descida do gradiente, gradient descent, o algoritmo que treina praticamente tudo em IA, do modelo linear mais simples ao maior modelo de linguagem do planeta.
+
+246
+00:15:49.729 --> 00:15:50.340
+O cenário:
+
+247
+00:15:50.340 --> 00:15:57.602
+treinar um modelo significa encontrar os parâmetros que minimizam o erro, medido por uma função chamada perda, ou loss.
+
+248
+00:15:57.602 --> 00:16:02.606
+Imagine a perda como uma paisagem montanhosa, onde a altitude é o tamanho do erro.
+
+249
+00:16:02.606 --> 00:16:07.610
+Você está em algum ponto dessa montanha, de olhos vendados, e quer chegar ao vale.
+
+250
+00:16:07.610 --> 00:16:09.318
+A receita tem quatro passos.
+
+251
+00:16:09.318 --> 00:16:09.501
+Um:
+
+252
+00:16:09.501 --> 00:16:13.407
+comece com parâmetros quaisquer, um lugar aleatório da montanha.
+
+253
+00:16:13.407 --> 00:16:13.712
+Dois:
+
+254
+00:16:13.712 --> 00:16:17.556
+calcule o gradiente da perda, que aponta para onde o erro sobe.
+
+255
+00:16:17.556 --> 00:16:17.862
+Três:
+
+256
+00:16:17.862 --> 00:16:25.978
+dê um passinho na direção contrária, w novo igual a w menos learning rate vezes gradiente, onde o learning rate é o tamanho do passo.
+
+257
+00:16:25.978 --> 00:16:26.405
+Quatro:
+
+258
+00:16:26.405 --> 00:16:28.358
+repita até o erro parar de cair.
+
+259
+00:16:28.358 --> 00:16:28.846
+Só isso.
+
+260
+00:16:28.846 --> 00:16:31.958
+Quatro linhas de receita movem indústrias inteiras.
+
+261
+00:16:31.958 --> 00:16:35.009
+E agora vamos executá-la à mão, número por número.
+
+262
+00:16:35.300 --> 00:16:47.389
+A receita completa está na tela, e vale a pena ler devagar, porque estes quatro passos treinam desde a regressão do nosso lab até os maiores modelos de linguagem do mundo, sem mudar uma vírgula da lógica.
+
+263
+00:16:47.389 --> 00:16:47.922
+Passo um:
+
+264
+00:16:47.922 --> 00:16:49.819
+comece com parâmetros quaisquer.
+
+265
+00:16:49.819 --> 00:16:50.767
+Sim, aleatórios:
+
+266
+00:16:50.767 --> 00:16:54.204
+o algoritmo não precisa de um bom começo, só de um começo.
+
+267
+00:16:54.204 --> 00:16:54.856
+Passo dois:
+
+268
+00:16:54.856 --> 00:17:00.011
+calcule o gradiente da perda no ponto atual, a bússola apontando para onde o erro sobe.
+
+269
+00:17:00.011 --> 00:17:02.974
+Passo três, a linha mais importante da IA moderna:
+
+270
+00:17:02.974 --> 00:17:06.115
+w novo igual a w menos learning rate vezes gradiente.
+
+271
+00:17:06.115 --> 00:17:08.308
+O sinal de menos é a alma do negócio:
+
+272
+00:17:08.308 --> 00:17:09.789
+andamos contra a bússola.
+
+273
+00:17:09.789 --> 00:17:12.100
+E o learning rate é o tamanho do passo:
+
+274
+00:17:12.100 --> 00:17:19.093
+um número pequeno, tipo zero vírgula zero um, que multiplica o gradiente e controla o quanto nos movemos por iteração.
+
+275
+00:17:19.093 --> 00:17:19.863
+Passo quatro:
+
+276
+00:17:19.863 --> 00:17:23.478
+repita, centenas ou milhares de vezes, até o erro estacionar.
+
+277
+00:17:23.478 --> 00:17:25.434
+Repare no que não tem na receita:
+
+278
+00:17:25.434 --> 00:17:27.982
+não tem fórmula fechada, não tem esperteza:
+
+279
+00:17:27.982 --> 00:17:29.285
+tem passinho repetido.
+
+280
+00:17:29.285 --> 00:17:31.004
+Agora vamos executá-la à mão.
+
+281
+00:17:31.300 --> 00:17:37.154
+Vamos minimizar f de w igual a abre parênteses w menos três fecha parênteses ao quadrado.
+
+282
+00:17:37.154 --> 00:17:38.272
+O mínimo é óbvio:
+
+283
+00:17:38.272 --> 00:17:40.179
+w igual a três zera a função.
+
+284
+00:17:40.179 --> 00:17:46.296
+Mas o algoritmo não sabe disso, ele só enxerga o gradiente local, e é isso que o torna geral.
+
+285
+00:17:46.296 --> 00:17:48.730
+A derivada é dois vezes w menos três.
+
+286
+00:17:48.730 --> 00:17:52.610
+Começamos em w igual a zero, learning rate zero vírgula um.
+
+287
+00:17:52.610 --> 00:17:53.202
+Passo um:
+
+288
+00:17:53.202 --> 00:17:56.557
+gradiente é dois vezes zero menos três, menos seis.
+
+289
+00:17:56.557 --> 00:17:57.017
+W novo:
+
+290
+00:17:57.017 --> 00:18:02.213
+zero menos zero vírgula um vezes menos seis, que é zero mais zero vírgula seis:
+
+291
+00:18:02.213 --> 00:18:03.397
+zero vírgula seis.
+
+292
+00:18:03.397 --> 00:18:03.858
+Repare:
+
+293
+00:18:03.858 --> 00:18:09.317
+o gradiente era negativo, a função descia para a direita, e andamos para a direita.
+
+294
+00:18:09.317 --> 00:18:10.040
+Passo dois:
+
+295
+00:18:10.040 --> 00:18:15.105
+gradiente dois vezes zero vírgula seis menos três, menos quatro vírgula oito.
+
+296
+00:18:15.105 --> 00:18:15.565
+W novo:
+
+297
+00:18:15.565 --> 00:18:16.947
+um vírgula zero oito.
+
+298
+00:18:16.947 --> 00:18:17.670
+Passo três:
+
+299
+00:18:17.670 --> 00:18:19.643
+um vírgula quatro seis quatro.
+
+300
+00:18:19.643 --> 00:18:20.498
+Passo quatro:
+
+301
+00:18:20.498 --> 00:18:22.077
+um vírgula sete sete um.
+
+302
+00:18:22.077 --> 00:18:22.866
+Passo cinco:
+
+303
+00:18:22.866 --> 00:18:24.576
+dois vírgula zero um sete.
+
+304
+00:18:24.576 --> 00:18:28.260
+Estamos caminhando para três, exatamente como prometido.
+
+305
+00:18:28.260 --> 00:18:31.548
+Refaça ao menos os dois primeiros passos no papel:
+
+306
+00:18:31.548 --> 00:18:33.916
+é a conta mais importante do módulo.
+
+307
+00:18:34.200 --> 00:18:40.348
+Duas observações finas sobre a tabela que acabamos de construir, e a primeira é uma elegância escondida.
+
+308
+00:18:40.348 --> 00:18:41.412
+Repare nos saltos:
+
+309
+00:18:41.412 --> 00:18:44.544
+de zero para zero vírgula seis, andamos seis décimos.
+
+310
+00:18:44.544 --> 00:18:48.091
+Do passo quatro para o cinco, andamos menos de três décimos.
+
+311
+00:18:48.091 --> 00:18:51.283
+Os passos vão encurtando sozinhos, sem ninguém mandar.
+
+312
+00:18:51.283 --> 00:18:51.756
+Por quê?
+
+313
+00:18:51.756 --> 00:18:58.376
+Porque perto do mínimo a função fica plana, o gradiente tende a zero, e o passo é learning rate vezes gradiente:
+
+314
+00:18:58.376 --> 00:19:00.091
+gradiente menor, passo menor.
+
+315
+00:19:00.091 --> 00:19:04.760
+O algoritmo freia naturalmente ao se aproximar do vale, com learning rate fixo.
+
+316
+00:19:04.760 --> 00:19:08.012
+A segunda observação é a decisão crítica do praticante:
+
+317
+00:19:08.012 --> 00:19:08.957
+o learning rate.
+
+318
+00:19:08.957 --> 00:19:14.396
+Com zero vírgula zero um, os passos ficam minúsculos e a convergência demora uma eternidade.
+
+319
+00:19:14.396 --> 00:19:17.115
+Com um vírgula um, acontece o desastre oposto:
+
+320
+00:19:17.115 --> 00:19:23.499
+cada passo pula por cima do mínimo e aterrissa mais longe do que estava, e o w explode para longe, divergiu.
+
+321
+00:19:23.499 --> 00:19:28.464
+Você vai ver as duas patologias com os próprios olhos no laboratório, daqui a pouco.
+
+322
+00:19:28.733 --> 00:19:29.379
+Parte seis:
+
+323
+00:19:29.379 --> 00:19:30.200
+probabilidade.
+
+324
+00:19:30.200 --> 00:19:31.315
+Mudamos de assunto:
+
+325
+00:19:31.315 --> 00:19:38.357
+saímos da geometria e do treinamento e entramos no raciocínio sob incerteza, que é o idioma nativo de todo modelo de IA.
+
+326
+00:19:38.357 --> 00:19:41.467
+O conceito de base é a distribuição de probabilidade:
+
+327
+00:19:41.467 --> 00:19:46.279
+uma repartição de crença entre os resultados possíveis, com uma regra inegociável:
+
+328
+00:19:46.279 --> 00:19:47.570
+tudo tem que somar um.
+
+329
+00:19:47.570 --> 00:19:49.741
+Cem por cento de crença, distribuído.
+
+330
+00:19:49.741 --> 00:19:50.680
+Um dado honesto:
+
+331
+00:19:50.680 --> 00:19:54.201
+um sexto para cada uma das seis faces, seis sextos somam um.
+
+332
+00:19:54.201 --> 00:19:55.844
+As alturas de uma população:
+
+333
+00:19:55.844 --> 00:20:02.064
+a curva do sino, a distribuição normal, onde valores perto da média são prováveis e os extremos são raros.
+
+334
+00:20:02.064 --> 00:20:03.590
+Por que isso importa aqui?
+
+335
+00:20:03.590 --> 00:20:10.397
+Porque a resposta de um modelo de linguagem é, literalmente, uma amostragem de uma distribuição sobre o vocabulário:
+
+336
+00:20:10.397 --> 00:20:16.206
+a cada token o modelo reparte crença entre dezenas de milhares de palavras possíveis e sorteia uma.
+
+337
+00:20:16.206 --> 00:20:23.189
+Quando você entende distribuições, entende o que a temperatura, o top p e o sorteio da próxima palavra realmente fazem.
+
+338
+00:20:23.467 --> 00:20:26.585
+Dois exemplos para a distribuição virar imagem mental.
+
+339
+00:20:26.585 --> 00:20:30.050
+O dado honesto é a distribuição mais democrática que existe:
+
+340
+00:20:30.050 --> 00:20:36.460
+um sexto de crença para cada uma das seis faces, todas igualmente prováveis, e seis vezes um sexto fecha em um.
+
+341
+00:20:36.460 --> 00:20:38.423
+É a chamada distribuição uniforme.
+
+342
+00:20:38.423 --> 00:20:41.426
+Já as alturas de uma população desenham outra forma:
+
+343
+00:20:41.426 --> 00:20:43.678
+a curva do sino, a distribuição normal.
+
+344
+00:20:43.678 --> 00:20:48.875
+Muita gente perto da média, e cada vez menos gente conforme você caminha para os extremos:
+
+345
+00:20:48.875 --> 00:20:54.419
+pessoas de dois metros e dez existem, mas são raras, e a curva desce até quase zero lá na ponta.
+
+346
+00:20:54.419 --> 00:20:56.902
+Formas diferentes, mesma regra inegociável:
+
+347
+00:20:56.902 --> 00:20:58.576
+a soma de toda a crença é um.
+
+348
+00:20:58.576 --> 00:21:04.755
+Se você monta probabilidades à mão e a soma dá um vírgula dois, não é uma distribuição, é um erro de conta.
+
+349
+00:21:04.755 --> 00:21:07.007
+E o exemplo que interessa à nossa área:
+
+350
+00:21:07.007 --> 00:21:16.997
+a cada token, um modelo de linguagem mantém uma distribuição sobre o vocabulário inteiro, dezenas de milhares de palavras, cada uma com sua fatia de crença, tudo somando um.
+
+351
+00:21:16.997 --> 00:21:20.347
+Gerar texto é sortear dessa distribuição, fatia por fatia.
+
+352
+00:21:20.633 --> 00:21:25.594
+O segundo conceito da parte seis é a esperança, também chamada de valor esperado.
+
+353
+00:21:25.594 --> 00:21:27.309
+A pergunta que ela responde:
+
+354
+00:21:27.309 --> 00:21:31.535
+se eu repetisse esse experimento infinitas vezes, qual seria a média?
+
+355
+00:21:31.535 --> 00:21:34.658
+A conta é uma média ponderada pelas probabilidades.
+
+356
+00:21:34.658 --> 00:21:35.638
+Exemplo na tela:
+
+357
+00:21:35.638 --> 00:21:40.721
+um bilhete de rifa custa cinco reais e paga cem reais com três por cento de chance.
+
+358
+00:21:40.721 --> 00:21:41.456
+Vale a pena?
+
+359
+00:21:41.456 --> 00:21:42.620
+Esperança do ganho:
+
+360
+00:21:42.620 --> 00:21:50.704
+três por cento vezes cem, que dá três reais, mais noventa e sete por cento vezes zero, que dá zero, menos os cinco reais do bilhete.
+
+361
+00:21:50.704 --> 00:21:51.745
+Três menos cinco:
+
+362
+00:21:51.745 --> 00:21:52.786
+menos dois reais.
+
+363
+00:21:52.786 --> 00:21:53.276
+Ou seja:
+
+364
+00:21:53.276 --> 00:21:56.706
+a cada bilhete comprado, você perde em média dois reais.
+
+365
+00:21:56.706 --> 00:22:02.830
+Num bilhete isolado você pode ganhar, claro, mas no longo prazo a média manda, e a média é prejuízo.
+
+366
+00:22:02.830 --> 00:22:07.056
+Em IA, a esperança está por toda parte, mesmo quando não é anunciada:
+
+367
+00:22:07.056 --> 00:22:12.446
+a perda que minimizamos com a descida do gradiente é a esperança do erro sobre os dados.
+
+368
+00:22:12.446 --> 00:22:15.141
+Aquela montanha que descemos na parte cinco?
+
+369
+00:22:15.141 --> 00:22:17.345
+A altitude dela é um valor esperado.
+
+370
+00:22:17.633 --> 00:22:18.286
+Parte sete:
+
+371
+00:22:18.286 --> 00:22:25.875
+o teorema de Bayes, e eu vou te apresentar o exemplo mais famoso da probabilidade, aquele que derruba médico, juiz e engenheiro.
+
+372
+00:22:25.875 --> 00:22:27.653
+A pergunta que Bayes responde:
+
+373
+00:22:27.653 --> 00:22:31.566
+dado que eu vi uma evidência, quanto devo acreditar numa hipótese?
+
+374
+00:22:31.566 --> 00:22:34.294
+Você não vai precisar decorar fórmula nenhuma:
+
+375
+00:22:34.294 --> 00:22:37.377
+o método intuitivo é pensar em contagens de pessoas.
+
+376
+00:22:37.377 --> 00:22:37.970
+O cenário:
+
+377
+00:22:37.970 --> 00:22:40.578
+uma doença atinge um por cento da população.
+
+378
+00:22:40.578 --> 00:22:47.397
+Existe um teste que acerta noventa por cento dos doentes, e que dá falso positivo em cinco por cento dos saudáveis.
+
+379
+00:22:47.397 --> 00:22:49.590
+Você fez o teste, e ele deu positivo.
+
+380
+00:22:49.590 --> 00:22:50.124
+Pergunta:
+
+381
+00:22:50.124 --> 00:22:52.792
+qual a chance de você estar realmente doente?
+
+382
+00:22:52.792 --> 00:22:57.713
+A intuição grita noventa por cento, afinal o teste acerta noventa por cento, certo?
+
+383
+00:22:57.713 --> 00:22:58.128
+Errado.
+
+384
+00:22:58.128 --> 00:22:59.610
+E não é errado por pouco:
+
+385
+00:22:59.610 --> 00:23:02.041
+a resposta verdadeira é seis vezes menor.
+
+386
+00:23:02.041 --> 00:23:10.697
+Vamos contar as pessoas na próxima tela e ver o número aparecer, e depois eu te mostro por que esse mesmo erro derruba sistemas de IA em produção.
+
+387
+00:23:10.967 --> 00:23:14.637
+Pense em mil pessoas, olhe a tela e acompanhe as contagens.
+
+388
+00:23:14.637 --> 00:23:15.134
+Doentes:
+
+389
+00:23:15.134 --> 00:23:17.187
+um por cento de mil, dez pessoas.
+
+390
+00:23:17.187 --> 00:23:19.613
+O teste acerta noventa por cento delas:
+
+391
+00:23:19.613 --> 00:23:21.292
+nove positivos verdadeiros.
+
+392
+00:23:21.292 --> 00:23:21.914
+Saudáveis:
+
+393
+00:23:21.914 --> 00:23:23.718
+novecentas e noventa pessoas.
+
+394
+00:23:23.718 --> 00:23:26.144
+O teste erra com cinco por cento delas:
+
+395
+00:23:26.144 --> 00:23:32.302
+novecentos e noventa vezes zero vírgula zero cinco, quarenta e nove vírgula cinco falsos positivos.
+
+396
+00:23:32.302 --> 00:23:35.661
+Agora junte todo mundo que recebeu resultado positivo:
+
+397
+00:23:35.661 --> 00:23:41.633
+nove verdadeiros mais quarenta e nove e meio falsos, cinquenta e oito e meio positivos no total.
+
+398
+00:23:41.633 --> 00:23:44.183
+Desses, quantos estão doentes de verdade?
+
+399
+00:23:44.183 --> 00:23:44.494
+Nove.
+
+400
+00:23:44.494 --> 00:23:47.106
+Nove dividido por cinquenta e oito e meio:
+
+401
+00:23:47.106 --> 00:23:49.159
+aproximadamente quinze por cento.
+
+402
+00:23:49.159 --> 00:23:53.700
+Positivo no teste, e ainda assim só quinze por cento de chance de doença.
+
+403
+00:23:53.700 --> 00:23:56.375
+A intuição falha porque ignora a taxa base:
+
+404
+00:23:56.375 --> 00:24:05.643
+a doença é rara, então o pequeno percentual de erro aplicado à multidão de saudáveis produz mais falsos positivos do que a doença produz verdadeiros.
+
+405
+00:24:05.643 --> 00:24:06.762
+Os falsos dominam.
+
+406
+00:24:06.762 --> 00:24:07.758
+Guarde o método:
+
+407
+00:24:07.758 --> 00:24:09.935
+em dúvida com Bayes, conte pessoas.
+
+408
+00:24:10.233 --> 00:24:16.690
+Antes de seguir, quero cravar a lição da parte sete, porque ela reaparece direto na sua carreira de engenheiro de IA.
+
+409
+00:24:16.690 --> 00:24:19.560
+A armadilha da taxa base não é curiosidade de livro:
+
+410
+00:24:19.560 --> 00:24:21.381
+ela derruba sistemas em produção.
+
+411
+00:24:21.381 --> 00:24:29.163
+Pense num classificador de fraude com noventa e cinco por cento de acurácia, num cenário onde a fraude ocorre em um por cento das transações.
+
+412
+00:24:29.163 --> 00:24:30.267
+Parece ótimo, não é?
+
+413
+00:24:30.267 --> 00:24:30.874
+Mas repare:
+
+414
+00:24:30.874 --> 00:24:37.993
+um modelo preguiçoso que responda sempre não é fraude acerta noventa e nove por cento das vezes, sem aprender absolutamente nada.
+
+415
+00:24:37.993 --> 00:24:42.573
+Os noventa e cinco por cento do seu modelo podem ser piores que um chute constante.
+
+416
+00:24:42.573 --> 00:24:46.161
+E os alarmes que ele dispara sofrem do mesmo mal do teste médico:
+
+417
+00:24:46.161 --> 00:24:52.618
+como legítimas são a esmagadora maioria, uma fração pequena de erro sobre elas afoga os poucos casos reais de fraude.
+
+418
+00:24:52.618 --> 00:24:56.591
+Por isso, acurácia sozinha não diz quase nada em classes desbalanceadas:
+
+419
+00:24:56.591 --> 00:25:01.117
+esse é um tema central do módulo cinco, e agora você já chega lá sabendo o porquê.
+
+420
+00:25:01.117 --> 00:25:03.545
+Quando ouvir uma métrica, pergunte primeiro:
+
+421
+00:25:03.545 --> 00:25:04.593
+qual é a taxa base?
+
+422
+00:25:04.867 --> 00:25:06.833
+Parte oito, a última do conteúdo:
+
+423
+00:25:06.833 --> 00:25:11.661
+a softmax, a ponte entre o mundo dos números brutos e o mundo das probabilidades.
+
+424
+00:25:11.661 --> 00:25:13.270
+O problema que ela resolve:
+
+425
+00:25:13.270 --> 00:25:17.859
+um classificador produz scores brutos, chamados logits, um número por classe.
+
+426
+00:25:17.859 --> 00:25:23.580
+Algo como dois vírgula zero para gato, um vírgula zero para cachorro, zero vírgula um para pato.
+
+427
+00:25:23.580 --> 00:25:25.786
+Esses números não são probabilidades:
+
+428
+00:25:25.786 --> 00:25:28.348
+não somam um, e poderiam até ser negativos.
+
+429
+00:25:28.348 --> 00:25:31.030
+A softmax faz a conversão em dois movimentos.
+
+430
+00:25:31.030 --> 00:25:32.937
+Primeiro, exponencia cada score:
+
+431
+00:25:32.937 --> 00:25:35.440
+eleva o número e de Euler a cada um deles.
+
+432
+00:25:35.440 --> 00:25:36.930
+Isso garante duas coisas:
+
+433
+00:25:36.930 --> 00:25:44.499
+tudo fica positivo, porque exponencial nunca é negativa, e as diferenças se acentuam, porque a exponencial cresce muito rápido:
+
+434
+00:25:44.499 --> 00:25:47.420
+o score maior fica proporcionalmente ainda maior.
+
+435
+00:25:47.420 --> 00:25:48.492
+Segundo movimento:
+
+436
+00:25:48.492 --> 00:25:51.055
+divide cada exponencial pela soma de todas.
+
+437
+00:25:51.055 --> 00:25:57.372
+Depois dessa divisão, os valores somam exatamente um, formando uma distribuição legítima de probabilidade.
+
+438
+00:25:57.372 --> 00:25:59.995
+Vamos ver o código e conferir a conta à mão.
+
+439
+00:26:00.267 --> 00:26:02.626
+Leia a função comigo, são duas linhas.
+
+440
+00:26:02.626 --> 00:26:03.185
+Primeira:
+
+441
+00:26:03.185 --> 00:26:05.979
+e recebe np ponto exp de z menos z ponto max.
+
+442
+00:26:05.979 --> 00:26:08.897
+Por que subtrair o máximo antes de exponenciar?
+
+443
+00:26:08.897 --> 00:26:10.263
+Estabilidade numérica:
+
+444
+00:26:10.263 --> 00:26:15.665
+exponencial de um logit grande, tipo mil, estoura o limite do float, o famoso overflow.
+
+445
+00:26:15.665 --> 00:26:19.577
+Subtraindo o máximo, o maior expoente vira zero e nada estoura.
+
+446
+00:26:19.577 --> 00:26:23.985
+E o resultado final não muda, porque a subtração se cancela na divisão.
+
+447
+00:26:23.985 --> 00:26:28.456
+É o tipo de detalhe que separa código de tutorial de código de produção.
+
+448
+00:26:28.456 --> 00:26:29.325
+Segunda linha:
+
+449
+00:26:29.325 --> 00:26:31.436
+divide cada exponencial pela soma.
+
+450
+00:26:31.436 --> 00:26:34.479
+Rodando com os logits dois, um e zero vírgula um:
+
+451
+00:26:34.479 --> 00:26:40.563
+sai zero seiscentos e cinquenta e nove, zero duzentos e quarenta e dois, zero zero noventa e nove.
+
+452
+00:26:40.563 --> 00:26:45.407
+Sessenta e seis por cento gato, vinte e quatro cachorro, dez pato, somando um.
+
+453
+00:26:45.407 --> 00:26:46.462
+Conferindo à mão:
+
+454
+00:26:46.462 --> 00:26:55.465
+e ao quadrado é cerca de sete vírgula trinta e nove, e elevado a um é dois vírgula setenta e dois, e elevado a zero vírgula um é um vírgula onze.
+
+455
+00:26:55.465 --> 00:26:55.776
+Soma:
+
+456
+00:26:55.776 --> 00:26:57.266
+onze vírgula vinte e um.
+
+457
+00:26:57.266 --> 00:27:00.246
+Sete trinta e nove dividido por onze vinte e um:
+
+458
+00:27:00.246 --> 00:27:01.550
+zero sessenta e seis.
+
+459
+00:27:01.550 --> 00:27:01.923
+Bateu.
+
+460
+00:27:02.200 --> 00:27:07.031
+E aqui a parte oito se conecta com o seu dia a dia de usuário de modelos de linguagem.
+
+461
+00:27:07.031 --> 00:27:12.480
+O que um LLM faz a cada token gerado é exatamente o que acabamos de codificar, numa escala maior:
+
+462
+00:27:12.480 --> 00:27:23.827
+produz um score para cada palavra do vocabulário inteiro, dezenas de milhares de logits, passa tudo pela softmax, obtém uma distribuição de probabilidade, e sorteia a próxima palavra dessa distribuição.
+
+463
+00:27:23.827 --> 00:27:28.546
+Aquele parâmetro temperatura que você ajusta na API e nunca soube direito o que era?
+
+464
+00:27:28.546 --> 00:27:31.074
+Ele apenas divide os logits antes da softmax.
+
+465
+00:27:31.074 --> 00:27:36.410
+Temperatura alta encolhe os logits, as diferenças entre eles diminuem, e a distribuição achata:
+
+466
+00:27:36.410 --> 00:27:40.904
+palavras improváveis ganham chance, o texto fica mais criativo e mais arriscado.
+
+467
+00:27:40.904 --> 00:27:47.814
+Temperatura baixa amplia as diferenças, a distribuição afunila no favorito, e o texto fica mais determinístico e repetível.
+
+468
+00:27:47.814 --> 00:27:48.993
+Não há magia nenhuma:
+
+469
+00:27:48.993 --> 00:27:51.184
+é uma divisão antes de uma exponencial.
+
+470
+00:27:51.184 --> 00:27:56.296
+Você acabou de desmontar mais uma caixa-preta, e essa é exatamente a proposta deste módulo.
+
+471
+00:27:56.567 --> 00:28:00.306
+Chegou a hora do laboratório guiado, a melhor parte da aula.
+
+472
+00:28:00.306 --> 00:28:08.720
+Vamos implementar a descida do gradiente em NumPy puro, sem nenhuma biblioteca de machine learning, para resolver uma regressão linear:
+
+473
+00:28:08.720 --> 00:28:12.335
+encontrar a reta que melhor explica um conjunto de pontos.
+
+474
+00:28:12.335 --> 00:28:14.704
+O modelo é y igual a w vezes x mais b:
+
+475
+00:28:14.704 --> 00:28:17.758
+dois parâmetros, a inclinação w e o intercepto b.
+
+476
+00:28:17.758 --> 00:28:20.189
+A perda é o erro quadrático médio, MSE:
+
+477
+00:28:20.189 --> 00:28:25.175
+a média dos quadrados das distâncias entre o que a reta prevê e os pontos reais.
+
+478
+00:28:25.175 --> 00:28:29.413
+O plano tem cinco células, e você pode rodar no Colab ou localmente.
+
+479
+00:28:29.413 --> 00:28:30.036
+Célula um:
+
+480
+00:28:30.036 --> 00:28:35.957
+fabricar dados sintéticos com resposta conhecida, para podermos conferir se o algoritmo acerta.
+
+481
+00:28:35.957 --> 00:28:36.705
+Célula dois:
+
+482
+00:28:36.705 --> 00:28:38.201
+a perda e os gradientes.
+
+483
+00:28:38.201 --> 00:28:38.949
+Célula três:
+
+484
+00:28:38.949 --> 00:28:41.567
+o loop de treino, que é o coração de tudo.
+
+485
+00:28:41.567 --> 00:28:42.439
+Célula quatro:
+
+486
+00:28:42.439 --> 00:28:44.184
+os gráficos da convergência.
+
+487
+00:28:44.184 --> 00:28:44.995
+Célula cinco:
+
+488
+00:28:44.995 --> 00:28:50.292
+o experimento com learning rates, onde as patologias que discutimos aparecem ao vivo.
+
+489
+00:28:50.292 --> 00:28:53.783
+Vamos célula por célula, e eu narro os resultados reais.
+
+490
+00:28:54.067 --> 00:28:54.635
+Célula um:
+
+491
+00:28:54.635 --> 00:28:57.079
+fabricamos os dados com gabarito escondido.
+
+492
+00:28:57.079 --> 00:29:02.933
+O gerador de números aleatórios entra com semente quarenta e dois, para o experimento ser reprodutível:
+
+493
+00:29:02.933 --> 00:29:06.343
+qualquer pessoa que rodar obtém exatamente os mesmos pontos.
+
+494
+00:29:06.343 --> 00:29:09.015
+O x são cem valores uniformes entre zero e dez.
+
+495
+00:29:09.015 --> 00:29:17.427
+E o y é a reta verdadeira, dois e meio vezes x mais sete, mais um ruído gaussiano com desvio dois, que suja os pontos como dados reais seriam sujos.
+
+496
+00:29:17.427 --> 00:29:20.894
+Essa é uma técnica de engenheiro que eu quero que você adote:
+
+497
+00:29:20.894 --> 00:29:27.885
+quando estiver aprendendo ou depurando um algoritmo, teste primeiro em dados sintéticos onde você conhece a resposta certa.
+
+498
+00:29:27.885 --> 00:29:31.977
+Se o algoritmo não recupera um gabarito que você mesmo plantou, tem bug:
+
+499
+00:29:31.977 --> 00:29:34.478
+e você descobre em segundos, não em semanas.
+
+500
+00:29:34.478 --> 00:29:37.774
+Aqui, o gabarito é w igual a dois e meio e b igual a sete.
+
+501
+00:29:37.774 --> 00:29:44.254
+No scatter da tela, a nuvem de pontos sobe da esquerda para a direita, com a tendência visível por baixo do ruído.
+
+502
+00:29:44.254 --> 00:29:45.049
+Nosso desafio:
+
+503
+00:29:45.049 --> 00:29:48.403
+recuperar o dois e meio e o sete só olhando para os pontos.
+
+504
+00:29:48.700 --> 00:29:51.846
+Célula dois, as duas funções que sustentam o treino.
+
+505
+00:29:51.846 --> 00:29:52.572
+A perda MSE:
+
+506
+00:29:52.572 --> 00:29:55.415
+para cada ponto, a reta prevê w vezes x mais b:
+
+507
+00:29:55.415 --> 00:30:06.002
+subtraímos a previsão do y verdadeiro, elevamos ao quadrado, e tiramos a média de tudo, com operações vetorizadas do NumPy, sem nenhum loop, como você aprendeu no módulo três.
+
+508
+00:30:06.002 --> 00:30:07.696
+O quadrado tem dupla função:
+
+509
+00:30:07.696 --> 00:30:13.382
+erros para cima e para baixo não se cancelam, e erros grandes pesam desproporcionalmente mais.
+
+510
+00:30:13.382 --> 00:30:21.488
+A segunda função entrega os gradientes, as derivadas da MSE em relação a w e a b, que calculamos analiticamente com a regra da cadeia:
+
+511
+00:30:21.488 --> 00:30:26.631
+dw é menos dois vezes a média do erro vezes x, db é menos dois vezes a média do erro.
+
+512
+00:30:26.631 --> 00:30:29.716
+Você não precisa saber derivar essas fórmulas hoje:
+
+513
+00:30:29.716 --> 00:30:30.986
+precisa saber lê-las.
+
+514
+00:30:30.986 --> 00:30:34.737
+E repare no comentário na docstring, que é o ponto conceitual:
+
+515
+00:30:34.737 --> 00:30:37.580
+esses gradientes apontam para onde o erro sobe.
+
+516
+00:30:37.580 --> 00:30:39.879
+Nós vamos usá-los com o sinal trocado.
+
+517
+00:30:39.879 --> 00:30:42.964
+Nos frameworks modernos, esse cálculo é automático:
+
+518
+00:30:42.964 --> 00:30:45.868
+aqui fazemos à mão para nunca mais ser mistério.
+
+519
+00:30:46.167 --> 00:30:52.719
+Célula três, e eu quero que você olhe para ela com respeito, porque estas sete linhas são treinar um modelo.
+
+520
+00:30:52.719 --> 00:30:53.144
+É isto.
+
+521
+00:30:53.144 --> 00:31:02.851
+Quando alguém diz que treinou uma rede neural por três dias em mil placas de vídeo, é este loop rodando, com matrizes gigantes no lugar dos nossos dois números.
+
+522
+00:31:02.851 --> 00:31:03.458
+Vamos ler:
+
+523
+00:31:03.458 --> 00:31:07.887
+w e b começam em zero, o chute inicial, e o learning rate é um centésimo.
+
+524
+00:31:07.887 --> 00:31:09.950
+Duzentas vezes repetimos o ritual:
+
+525
+00:31:09.950 --> 00:31:16.866
+calcular os gradientes no ponto atual, e atualizar cada parâmetro com w menos igual learning rate vezes gradiente.
+
+526
+00:31:16.866 --> 00:31:19.475
+O menos igual é o passo contra o gradiente:
+
+527
+00:31:19.475 --> 00:31:22.509
+o gradiente aponta a subida do erro, nós descemos.
+
+528
+00:31:22.509 --> 00:31:26.392
+A cada volta, guardamos a perda no histórico para plotar depois.
+
+529
+00:31:26.392 --> 00:31:28.273
+Resultado após duzentos passos:
+
+530
+00:31:28.273 --> 00:31:30.760
+w aprendido, aproximadamente dois e meio.
+
+531
+00:31:30.760 --> 00:31:32.823
+B aprendido, caminhando para sete.
+
+532
+00:31:32.823 --> 00:31:38.526
+O algoritmo recuperou o gabarito que plantamos na célula um, só olhando os pontos barulhentos.
+
+533
+00:31:38.526 --> 00:31:40.528
+Recomendo até um assert no final:
+
+534
+00:31:40.528 --> 00:31:43.623
+se o w fugir do esperado, o notebook grita sozinho.
+
+535
+00:31:43.900 --> 00:31:44.659
+Célula quatro:
+
+536
+00:31:44.659 --> 00:31:45.418
+ver para crer.
+
+537
+00:31:45.418 --> 00:31:47.315
+Montamos dois gráficos lado a lado.
+
+538
+00:31:47.315 --> 00:31:53.333
+O da esquerda plota o histórico da perda, passo a passo, e a forma dessa curva é uma velha conhecida sua agora:
+
+539
+00:31:53.333 --> 00:32:05.694
+despenca rápido nos primeiros passos, quando estamos longe do vale e o gradiente é grande, e depois vai amaciando até quase estabilizar, os passos encurtando sozinhos perto do mínimo, exatamente como na nossa tabela feita à mão.
+
+540
+00:32:05.694 --> 00:32:08.784
+Essa curva de perda é o eletrocardiograma do treinamento:
+
+541
+00:32:08.784 --> 00:32:14.368
+no seu futuro profissional, será a primeira coisa que você vai olhar para diagnosticar qualquer treino.
+
+542
+00:32:14.368 --> 00:32:20.494
+O gráfico da direita mostra a nuvem de pontos original e, em vermelho, a reta aprendida cortando o meio da nuvem.
+
+543
+00:32:20.494 --> 00:32:21.958
+Um detalhe técnico honesto:
+
+544
+00:32:21.958 --> 00:32:27.867
+ordenamos o x com np sort antes de traçar a linha, porque o matplotlib liga os pontos na ordem em que chegam:
+
+545
+00:32:27.867 --> 00:32:30.903
+sem ordenar, a reta viraria um rabisco de idas e vindas.
+
+546
+00:32:30.903 --> 00:32:33.235
+E repare que os eixos têm título e rótulos:
+
+547
+00:32:33.235 --> 00:32:35.620
+o juramento do módulo três continua valendo.
+
+548
+00:32:35.900 --> 00:32:37.769
+Célula cinco, o experimento final:
+
+549
+00:32:37.769 --> 00:32:43.158
+o mesmo treino três vezes, mudando só o learning rate, e as três curvas de perda no mesmo gráfico.
+
+550
+00:32:43.158 --> 00:32:46.127
+Com um milésimo, a curva desce numa lentidão dolorosa:
+
+551
+00:32:46.127 --> 00:32:51.295
+duzentos passos terminam e a perda ainda está alta, o passinho é pequeno demais para a viagem.
+
+552
+00:32:51.295 --> 00:32:55.749
+Com um centésimo, o nosso valor, a descida é firme e estabiliza confortavelmente:
+
+553
+00:32:55.749 --> 00:32:56.684
+o bom equilíbrio.
+
+554
+00:32:56.684 --> 00:33:01.797
+Com cinco centésimos, desce mais rápido ainda, mas repare que estamos flertando com o limite.
+
+555
+00:33:01.797 --> 00:33:05.921
+E aí vem o desafio que deixo com você, e que eu faço questão que você rode:
+
+556
+00:33:05.921 --> 00:33:10.430
+repita com três centésimos e com um décimo, e explique o que acontece com a curva.
+
+557
+00:33:10.430 --> 00:33:12.354
+Não conto o final, mas dou a pista:
+
+558
+00:33:12.354 --> 00:33:18.402
+lembre da patologia que discutimos na parte cinco, o passo que pula por cima do mínimo e aterrissa mais longe.
+
+559
+00:33:18.402 --> 00:33:21.811
+Você vai reconhecê-la na hora em que a curva aparecer na tela.
+
+560
+00:33:21.811 --> 00:33:29.564
+Esse olho clínico para curvas de perda, formado num exemplo de dois parâmetros, é o mesmo que diagnostica o fine-tuning de um modelo gigante.
+
+561
+00:33:29.833 --> 00:33:35.221
+Vamos ao mini-projeto do módulo, que se chama matemática da IA com meus próprios números.
+
+562
+00:33:35.221 --> 00:33:40.063
+A proposta é um notebook-relatório com três seções, uma para cada bloco da aula:
+
+563
+00:33:40.063 --> 00:33:42.364
+semelhança, gradiente e probabilidade.
+
+564
+00:33:42.364 --> 00:33:46.662
+E a regra de ouro, que vale para o projeto inteiro e que dá nome a ele:
+
+565
+00:33:46.662 --> 00:33:48.478
+toda conta aparece duas vezes.
+
+566
+00:33:48.478 --> 00:33:54.712
+Primeiro à mão, escrita numa célula de markdown, com os seus números, do seu domínio, do seu cotidiano.
+
+567
+00:33:54.712 --> 00:33:58.405
+Depois conferida em NumPy, numa célula de código logo abaixo.
+
+568
+00:33:58.405 --> 00:34:00.524
+Os dois lados, sempre, lado a lado.
+
+569
+00:34:00.524 --> 00:34:02.037
+Por que essa insistência?
+
+570
+00:34:02.037 --> 00:34:06.274
+Porque é o mecanismo exato que transforma conceito em propriedade sua:
+
+571
+00:34:06.274 --> 00:34:14.204
+a conta à mão prova que você entendeu, o código prova que a conta está certa, e o confronto entre os dois pega qualquer autoengano.
+
+572
+00:34:14.204 --> 00:34:19.894
+Quando a mão e a máquina discordam, alguém errou, e descobrir quem é a melhor aula que existe.
+
+573
+00:34:19.894 --> 00:34:23.587
+Reserve cerca de três horas, podendo dividir em duas sessões.
+
+574
+00:34:23.587 --> 00:34:25.705
+Vamos aos requisitos de cada seção.
+
+575
+00:34:26.000 --> 00:34:27.440
+Requisito um, semelhança:
+
+576
+00:34:27.440 --> 00:34:33.950
+crie embeddings de brinquedo, com três a cinco dimensões, para cinco itens de um domínio que você conhece de cor:
+
+577
+00:34:33.950 --> 00:34:36.312
+filmes, músicas, pratos, jogos, produtos.
+
+578
+00:34:36.312 --> 00:34:42.534
+Calcule a matriz cinco por cinco de similaridade de cosseno entre todos os pares e comente os dois extremos:
+
+579
+00:34:42.534 --> 00:34:48.468
+o par mais parecido e o menos parecido, dizendo se o resultado confirmou ou surpreendeu a sua intuição.
+
+580
+00:34:48.468 --> 00:34:49.966
+Requisito dois, gradiente:
+
+581
+00:34:49.966 --> 00:35:01.084
+refaça a tabela de descida do gradiente da função w menos três ao quadrado, à mão, por cinco passos, agora com learning rate zero vírgula dois, e confirme os cinco valores com um loop em NumPy.
+
+582
+00:35:01.084 --> 00:35:03.734
+Requisito três, probabilidade, em duas partes:
+
+583
+00:35:03.734 --> 00:35:12.722
+monte um cenário de Bayes do seu cotidiano, spam, exame médico, alarme falso de carro, com números escolhidos por você, e resolva pelo método das contagens:
+
+584
+00:35:12.722 --> 00:35:18.079
+e implemente a softmax aplicada a quatro logits, mostrando com um assert que a saída soma um.
+
+585
+00:35:18.079 --> 00:35:21.651
+Três seções, seis contas, e nenhuma delas copiada do material:
+
+586
+00:35:21.651 --> 00:35:22.400
+números seus.
+
+587
+00:35:22.667 --> 00:35:27.591
+O passo a passo, que está detalhado na página do módulo com um checkpoint por etapa.
+
+588
+00:35:27.591 --> 00:35:29.057
+Etapa um, quinze minutos:
+
+589
+00:35:29.057 --> 00:35:32.340
+no seu repositório academia ia, o ritual do módulo três:
+
+590
+00:35:32.340 --> 00:35:37.148
+uv init modulo zero quatro matemática, uv add numpy e jupyter, uv run jupyter lab.
+
+591
+00:35:37.148 --> 00:35:40.372
+Crie o notebook com as três seções em células markdown.
+
+592
+00:35:40.372 --> 00:35:41.897
+Etapa dois, vinte minutos:
+
+593
+00:35:41.897 --> 00:35:49.753
+escolha o domínio e invente três ou quatro dimensões com significado, onde cada número responde quanto disso o item tem, de zero a um.
+
+594
+00:35:49.753 --> 00:35:50.456
+Para filmes:
+
+595
+00:35:50.456 --> 00:35:51.805
+ação, romance, comédia.
+
+596
+00:35:51.805 --> 00:35:54.795
+Atribua valores de cabeça, sem sofrer com precisão:
+
+597
+00:35:54.795 --> 00:35:58.371
+o que importa é que itens parecidos ganhem vetores parecidos.
+
+598
+00:35:58.371 --> 00:36:00.071
+Etapa três, quarenta minutos:
+
+599
+00:36:00.071 --> 00:36:07.927
+escolha o par que você aposta ser o mais parecido e calcule a similaridade de cosseno à mão numa célula markdown, texto simples serve.
+
+600
+00:36:07.927 --> 00:36:17.425
+Depois, no código, monte os cinco vetores com np array, copie a função similaridade cosseno do módulo, e gere a matriz cinco por cinco com um for dentro de outro.
+
+601
+00:36:17.425 --> 00:36:18.070
+Checkpoint:
+
+602
+00:36:18.070 --> 00:36:22.643
+diagonal toda igual a um, e o seu par batendo com a conta à mão em duas casas.
+
+603
+00:36:22.933 --> 00:36:25.262
+Etapa quatro, quarenta e cinco minutos:
+
+604
+00:36:25.262 --> 00:36:31.888
+a tabela do gradiente à mão, com learning rate zero vírgula dois, partindo de w igual a zero, por cinco passos.
+
+605
+00:36:31.888 --> 00:36:33.739
+Os dois primeiros, por extenso:
+
+606
+00:36:33.739 --> 00:36:37.380
+passo um, gradiente é dois vezes zero menos três, menos seis:
+
+607
+00:36:37.380 --> 00:36:41.678
+w novo é zero menos zero vírgula dois vezes menos seis, um vírgula dois.
+
+608
+00:36:41.678 --> 00:36:42.335
+Passo dois:
+
+609
+00:36:42.335 --> 00:36:46.395
+gradiente menos três vírgula seis, w novo um vírgula noventa e dois.
+
+610
+00:36:46.395 --> 00:36:52.125
+Depois confira com o loop de cinco linhas que está na página do módulo, e compare linha a linha.
+
+611
+00:36:52.125 --> 00:36:57.976
+Repare como o w corre para três mais rápido que na nossa tabela com learning rate zero vírgula um:
+
+612
+00:36:57.976 --> 00:37:00.901
+passo maior, convergência mais veloz, neste caso.
+
+613
+00:37:00.901 --> 00:37:02.274
+Etapa cinco, meia hora:
+
+614
+00:37:02.274 --> 00:37:06.990
+monte o seu cenário de Bayes, spam, exame, alarme falso, com três números seus:
+
+615
+00:37:06.990 --> 00:37:09.975
+taxa base, taxa de detecção, taxa de falso alarme:
+
+616
+00:37:09.975 --> 00:37:15.049
+e resolva pelo método das mil pessoas no markdown, conferindo as contagens em código.
+
+617
+00:37:15.049 --> 00:37:17.079
+Etapa seis, vinte e cinco minutos:
+
+618
+00:37:17.079 --> 00:37:24.541
+a softmax com quatro logits inventados, o assert de que a soma é um, Restart and Run All limpo, commit e push no repositório.
+
+619
+00:37:24.833 --> 00:37:29.016
+Antes dos erros comuns, os primeiros socorros específicos deste projeto.
+
+620
+00:37:29.016 --> 00:37:30.759
+Erro de shape na similaridade:
+
+621
+00:37:30.759 --> 00:37:34.129
+os cinco vetores precisam ter o mesmo número de dimensões:
+
+622
+00:37:34.129 --> 00:37:37.266
+confira com ponto shape antes de desconfiar da função.
+
+623
+00:37:37.266 --> 00:37:41.391
+Diagonal da matriz dando zero vírgula nove nove nove nove em vez de um:
+
+624
+00:37:41.391 --> 00:37:47.143
+isso não é bug, é arredondamento de ponto flutuante, compare com np ponto isclose e siga em frente.
+
+625
+00:37:47.143 --> 00:37:49.409
+Tabela do gradiente divergindo do loop:
+
+626
+00:37:49.409 --> 00:37:51.965
+noventa por cento das vezes é sinal trocado.
+
+627
+00:37:51.965 --> 00:37:52.372
+Lembre:
+
+628
+00:37:52.372 --> 00:37:59.402
+o passo é w menos learning rate vezes gradiente, e quando o gradiente é negativo, menos com menos vira mais, o w aumenta.
+
+629
+00:37:59.402 --> 00:38:03.062
+Se a sua tabela anda para o lado errado, procure exatamente aí.
+
+630
+00:38:03.062 --> 00:38:04.689
+E a regra geral da academia:
+
+631
+00:38:04.689 --> 00:38:12.939
+travou por mais de trinta minutos em qualquer etapa, pergunte ao seu assistente de IA, colando a conta ou o erro e dizendo em qual etapa está.
+
+632
+00:38:12.939 --> 00:38:15.728
+Mas peça a explicação, não só a resposta pronta:
+
+633
+00:38:15.728 --> 00:38:19.097
+o objetivo do projeto é treinar o seu músculo, não o dele.
+
+634
+00:38:19.367 --> 00:38:23.511
+Os cinco tropeços clássicos deste módulo, para você reconhecer de longe.
+
+635
+00:38:23.511 --> 00:38:24.029
+Primeiro:
+
+636
+00:38:24.029 --> 00:38:27.541
+comparar embeddings pelo produto escalar cru, sem normalizar.
+
+637
+00:38:27.541 --> 00:38:31.283
+Vetores mais compridos ganham sempre, mesmo apontando para longe:
+
+638
+00:38:31.283 --> 00:38:32.952
+normalize e compare cossenos.
+
+639
+00:38:32.952 --> 00:38:33.413
+Segundo:
+
+640
+00:38:33.413 --> 00:38:38.133
+ignorar a regra do n do meio e sair transpondo matrizes no chute até o erro sumir.
+
+641
+00:38:38.133 --> 00:38:41.759
+O código pode até rodar, calculando a coisa errada em silêncio:
+
+642
+00:38:41.759 --> 00:38:43.314
+escreva os shapes no papel.
+
+643
+00:38:43.314 --> 00:38:43.832
+Terceiro:
+
+644
+00:38:43.832 --> 00:38:48.034
+tratar o learning rate como detalhe e usar o primeiro valor que aparecer.
+
+645
+00:38:48.034 --> 00:38:53.042
+Você viu na célula cinco que ele é a diferença entre convergir, se arrastar e explodir:
+
+646
+00:38:53.042 --> 00:38:54.136
+sempre experimente.
+
+647
+00:38:54.136 --> 00:38:54.539
+Quarto:
+
+648
+00:38:54.539 --> 00:38:59.432
+ler noventa e cinco por cento de acurácia e esquecer de perguntar qual é a taxa base.
+
+649
+00:38:59.432 --> 00:39:03.231
+Em classes desbalanceadas, esse número sozinho não significa nada.
+
+650
+00:39:03.231 --> 00:39:03.634
+Quinto:
+
+651
+00:39:03.634 --> 00:39:10.427
+montar probabilidades à mão que somam mais de um, ou esquecer o menos um da softmax caseira sem estabilidade numérica.
+
+652
+00:39:10.427 --> 00:39:13.190
+Distribuição que não soma um não é distribuição:
+
+653
+00:39:13.190 --> 00:39:14.687
+o assert existe para isso.
+
+654
+00:39:14.967 --> 00:39:16.664
+Vamos amarrar os fios da aula.
+
+655
+00:39:16.664 --> 00:39:22.890
+Vetores são listas e setas ao mesmo tempo, e é por isso que qualquer coisa descrita em números vira geometria.
+
+656
+00:39:22.890 --> 00:39:25.267
+O produto escalar é a régua de semelhança:
+
+657
+00:39:25.267 --> 00:39:26.851
+mesma direção, valor grande:
+
+658
+00:39:26.851 --> 00:39:27.983
+perpendicular, zero:
+
+659
+00:39:27.983 --> 00:39:31.605
+e normalizado vira a similaridade de cosseno da busca semântica.
+
+660
+00:39:31.605 --> 00:39:37.887
+Matrizes são transformações do espaço, com a regra de shapes do n do meio, e uma rede neural é uma pilha delas.
+
+661
+00:39:37.887 --> 00:39:48.979
+A derivada é o medidor de sensibilidade, o gradiente empacota as sensibilidades e aponta a maior subida, e a descida do gradiente caminha no sentido contrário, com o learning rate ditando o passo:
+
+662
+00:39:48.979 --> 00:39:54.299
+pequeno demais se arrasta, grande demais explode, e perto do vale os passos encurtam sozinhos.
+
+663
+00:39:54.299 --> 00:40:07.033
+Distribuições repartem crença somando um, a esperança é a média ponderada do longo prazo, Bayes se resolve contando mil pessoas sem esquecer a taxa base, e a softmax exponencia e normaliza logits para fabricar probabilidades.
+
+664
+00:40:07.033 --> 00:40:10.372
+Você calculou cada uma dessas ideias com os próprios dedos.
+
+665
+00:40:10.372 --> 00:40:12.183
+Elas não são mais caixas-pretas.
+
+666
+00:40:12.467 --> 00:40:16.142
+Antes de encerrar, o checklist de conclusão do módulo quatro.
+
+667
+00:40:16.142 --> 00:40:21.444
+Os capítulos indicados de álgebra linear e de cálculo do três blue um brown, assistidos.
+
+668
+00:40:21.444 --> 00:40:28.734
+Um produto escalar, uma multiplicação de matrizes dois por dois e cinco passos de descida do gradiente, calculados à mão.
+
+669
+00:40:28.734 --> 00:40:33.734
+Saber explicar o produto escalar como medida de semelhança, ligando com embeddings:
+
+670
+00:40:33.734 --> 00:40:36.807
+teste de verdade, explique em voz alta para alguém.
+
+671
+00:40:36.807 --> 00:40:42.892
+O lab da descida do gradiente executado de ponta a ponta, incluindo o experimento dos learning rates.
+
+672
+00:40:42.892 --> 00:40:47.893
+O problema de Bayes resolvido pelo método das mil pessoas sem consultar o material.
+
+673
+00:40:47.893 --> 00:40:51.447
+A softmax implementada, com a prova de que a saída soma um.
+
+674
+00:40:51.447 --> 00:40:56.448
+E o mini-projeto com os seus próprios números publicado no repositório academia ia.
+
+675
+00:40:56.448 --> 00:40:57.231
+Cumpriu tudo?
+
+676
+00:40:57.231 --> 00:41:00.665
+Então a matemática da IA deixou de ser território hostil.
+
+677
+00:41:00.665 --> 00:41:02.593
+Na próxima aula, o módulo cinco:
+
+678
+00:41:02.593 --> 00:41:06.329
+Disciplinas de ML, onde essas ideias viram modelos de verdade:
+
+679
+00:41:06.329 --> 00:41:11.510
+validação, métricas além da acurácia, leakage, e o seu primeiro classificador honesto.
+
+680
+00:41:11.510 --> 00:41:12.474
+Eu te espero lá.
+
+681
+00:41:12.474 --> 00:41:13.619
+Até a próxima aula.

@@ -2,120 +2,134 @@
   "id": "Modulo00",
   "slug": "mod00",
   "modulo": 0,
-  "titulo": "Boas-vindas & Setup",
+  "titulo": "Boas-vindas, Setup & Primeiro Produto",
   "periodo": "Período 1",
-  "carga": "4h",
+  "carga": "6h",
   "scenes": [
     {
       "tipo": "capa",
-      "fala": "Bem-vindo à Academia de Engenharia de IA. Este é o módulo zero: boas-vindas e setup. Antes de qualquer linha de machine learning, vamos preparar as duas coisas que vão te acompanhar pela formação inteira: a sua máquina e o seu método de estudo."
+      "fala": "Bem-vindo à Academia de Engenharia de IA. Módulo zero: boas-vindas, setup e primeiro produto. Você monta a bancada, configura o método de estudo e entrega um produto real dirigindo uma IA, publicado no GitHub."
     },
     {
       "tipo": "conceito",
       "kicker": "POR QUE ISSO IMPORTA",
-      "frase": "Quem tem um setup confiável gasta energia aprendendo IA — não brigando com instalação.",
-      "fala": "Todo engenheiro de IA já passou pela fase de instalar Python e torcer para funcionar. A diferença entre quem avança rápido e quem trava por semanas está quase sempre no ambiente. E nas empresas essa habilidade aparece no primeiro dia de trabalho: você recebe um repositório e precisa reproduzir o ambiente do time sem quebrar nada."
+      "frase": "A IA multiplica quem tem critério e afunda quem não tem.",
+      "fala": "Em 2026 a execução de código foi absorvida pelas ferramentas de agentic coding; o valor migrou para a direção. Por isso o lema da casa é Pensar, Dirigir, Verificar, Entregar. A IA multiplica quem tem critério e afunda quem não tem; este programa constrói o critério."
     },
     {
       "tipo": "topico",
-      "kicker": "O MÉTODO",
-      "titulo": "Como a Academia funciona",
+      "kicker": "COMO A CASA FUNCIONA",
+      "titulo": "Seis formatos, um objetivo",
       "bullets": [
-        "Vídeo e leitura — primeiro contato",
-        "Lab guiado — você executa junto",
-        "Quiz — força você a lembrar",
-        "Flashcards — revisão espaçada",
-        "Mini-projeto — a prova real"
+        "Vídeo e leitura: primeiro contato",
+        "Lab guiado: explique cada célula",
+        "Sessão de Direção: você dirige a IA",
+        "Quiz e flashcards: lembrar, não reler",
+        "Mini-projeto: nada conclui sem entrega"
       ],
-      "fala": "Cada módulo combina cinco formatos, de propósito. Vídeo e leitura para o primeiro contato. Lab guiado, onde você digita e executa o código junto. Quiz, que força você a lembrar, não só reconhecer. Flashcards para revisar em doses pequenas. E o mini-projeto, que é a prova real. A regra de ouro: nenhum módulo está concluído sem o mini-projeto entregue."
+      "fala": "Cada módulo combina seis formatos: vídeo e leitura, lab guiado onde você explica cada célula, Sessão de Direção, quiz que força a lembrar, flashcards e mini-projeto. Nenhum módulo conclui sem o mini-projeto entregue."
     },
     {
       "tipo": "conceito",
-      "kicker": "A CIÊNCIA DO MÉTODO",
-      "frase": "Errar no quiz é bom: o erro seguido da correção grava mais forte que o acerto fácil.",
-      "fala": "Três descobertas da ciência cognitiva sustentam esse desenho. Active recall: o cérebro fixa o que ele se esforça para puxar da memória. Repetição espaçada: revisar em intervalos crescentes de um, três, sete e trinta dias vence a curva do esquecimento. E projetos acima de consumo passivo. Uma analogia: assistir aula é ver alguém dirigir. Quiz é o simulado. Projeto é pegar o carro e ir até a padaria. Só a terceira te torna motorista."
+      "kicker": "A REGRA DE OURO",
+      "frase": "Pode usar IA para escrever qualquer código; não pode entregar o que não consegue explicar e defender.",
+      "fala": "Nada aqui proíbe IA; o que se cobra é compreensão. Ao final de cada projeto vem a Defesa no Campus: uma entrevista curta, conduzida por um LLM, sobre o seu próprio projeto. Dirigiu com critério, é tranquila; só aprovou o que a IA cuspiu, ela te pega."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "MÉTODO DE TRABALHO",
+      "titulo": "Especificar, dirigir, verificar",
+      "bullets": [
+        "Especificar: pensar antes de pedir",
+        "Dirigir: conduzir e corrigir o rumo",
+        "Verificar: testar, ler, medir",
+        "SPEC.md nasce antes do código",
+        "DECISIONS.md registra os trade-offs"
+      ],
+      "fala": "Especificar: objetivo, restrições e critérios de aceite; se você não sabe escrever o que quer, a IA não adivinha. Dirigir: conduzir a IA e corrigir o rumo. Verificar: ler, testar, medir. Todo projeto tem SPEC ponto md antes do código e DECISIONS ponto md, o diário do que você escolheu e rejeitou."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "MÉTODO DE ESTUDO",
+      "titulo": "A ciência por trás",
+      "bullets": [
+        "Active recall: puxar da memória",
+        "Errar no quiz grava mais forte",
+        "Revisão espaçada: 1, 3, 7, 14, 30 dias",
+        "Projeto vence consumo passivo",
+        "10 minutos de flashcards por dia"
+      ],
+      "fala": "Active recall: o cérebro fixa o que puxa da memória; errar no quiz e corrigir grava mais que o acerto fácil. Repetição espaçada: intervalos crescentes vencem o esquecimento; o Campus agenda os flashcards. E projetos: conhecimento que nunca virou entrega evapora."
     },
     {
       "tipo": "topico",
       "kicker": "A PROFISSÃO",
-      "titulo": "O Engenheiro de IA em 2026",
+      "titulo": "Engenheiro de IA em 2026",
       "bullets": [
-        "Cientista de dados — o que os dados dizem?",
-        "ML engineer — como treino e escalo o modelo?",
-        "Engenheiro de IA — como viro produto confiável?"
+        "Cientista de dados: o que dizem os dados",
+        "ML engineer: treinar e servir modelos",
+        "Eng. de IA: produto sobre modelos prontos",
+        "Especifica, dirige, verifica e responde"
       ],
-      "fala": "O termo AI Engineer ganhou nome próprio no ensaio The Rise of the AI Engineer, e virou a profissão que mais cresce na área. O cientista de dados pergunta o que os dados dizem sobre o negócio. O ML engineer pergunta como treinar e escalar um modelo próprio. O engenheiro de IA pergunta: como transformo este modelo em um produto confiável? Em 2026, a maior parte do valor vem de aplicar modelos de fundação a problemas reais — e é exatamente isso que a Academia forma."
+      "fala": "O cientista de dados extrai conhecimento dos dados. O ML engineer treina e serve modelos próprios. O engenheiro de IA especifica, dirige e verifica produtos sobre modelos de fundação e responde pela qualidade. A execução as ferramentas absorvem; o mercado paga o julgamento."
     },
     {
       "tipo": "code",
       "kicker": "AMBIENTE BASE",
-      "titulo": "Python 3.12+ e uv",
-      "code": "# Instala o uv (Linux/macOS/WSL)\ncurl -LsSf https://astral.sh/uv/install.sh | sh\n\nuv python install 3.12\nuv init meu-primeiro-projeto\ncd meu-primeiro-projeto\nuv add numpy\nuv run python -c \"import numpy\"",
-      "fala": "Python é a língua franca da IA, e o uv é o gerenciador moderno que cuida de tudo: versões do Python, ambientes virtuais e dependências por projeto. O conceito-chave é o ambiente virtual: uma caixinha isolada de pacotes para cada projeto. O projeto A pode usar NumPy um ponto vinte e seis e o projeto B, NumPy dois, sem briga. Sem isso, mais cedo ou mais tarde você quebra a instalação do sistema — todo veterano tem essa cicatriz."
+      "titulo": "Python 3.12 com uv",
+      "code": "# instala o uv (Linux, macOS, WSL)\ncurl -LsSf https://astral.sh/uv/install.sh | sh\n\n# Python moderno + projeto isolado\nuv python install 3.12\nuv init meu-primeiro-projeto\ncd meu-primeiro-projeto\nuv add numpy      # cria o .venv sozinho\nuv run python check_setup.py",
+      "fala": "Python é a língua franca da IA, e o uv é seu gerenciador: rápido, instala versões do Python e cria ambientes por projeto. Ambiente virtual é uma caixinha isolada de pacotes: cada projeto com suas versões, sem briga. Sem isso você quebra a instalação global; é cicatriz de veterano."
     },
     {
       "tipo": "topico",
-      "kicker": "FERRAMENTAS",
-      "titulo": "Editor e notebooks",
+      "kicker": "BANCADA DE 2026",
+      "titulo": "Sua ferramenta de agentic coding",
       "bullets": [
-        "VS Code + extensões Python e Jupyter",
-        "Jupyter — código, texto e resultado juntos",
-        "Colab — Jupyter na nuvem, GPU grátis"
+        "Gemini CLI: grátis com conta Google",
+        "Claude Code: referência da categoria",
+        "Cursor: editor com agente embutido",
+        "Nunca aceite um diff que você não leu",
+        "Contexto é combustível"
       ],
-      "fala": "O VS Code é o editor padrão da indústria — instale as extensões Python e Jupyter. O Jupyter Notebook mistura código, resultado e texto no mesmo documento, perfeito para explorar dados. E o Google Colab é um Jupyter na nuvem, grátis e com GPU: se a sua máquina for modesta, ele é seu melhor amigo. Guarde a regra prática: notebook para explorar, script para entregar."
+      "fala": "A ferramenta lê seu projeto, edita arquivos e roda comandos sob a sua direção. Gemini CLI é gratuita com conta Google; Claude Code, a referência; Cursor, editor com agente. O que importa é aprender a dirigir: nunca aceite um diff que você não leu, contexto é combustível, peça explicação, não só código."
     },
     {
       "tipo": "code",
-      "kicker": "VERSIONAMENTO",
-      "titulo": "Git e GitHub em 10 minutos",
-      "code": "git init                # inicia o repositório\ngit add .               # marca os arquivos\ngit commit -m \"primeiro commit\"\ngit remote add origin <url-do-repo>\ngit push -u origin main # envia ao GitHub",
-      "fala": "Git é o controle de versões do código: cada commit é uma fotografia do projeto que você pode revisitar. O GitHub é onde essas fotografias ficam na nuvem — e onde o seu portfólio nasce. Não precisa dominar branches agora. Precisa criar o hábito: todo projeto da Academia vive num repositório Git desde o primeiro dia."
+      "kicker": "GIT E GITHUB",
+      "titulo": "O ciclo que você usará mil vezes",
+      "code": "git init              # inicia o repositório\ngit add .             # marca os arquivos\ngit commit -m \"msg\"   # tira a fotografia\ngit remote add origin <url-do-seu-repo>\ngit push -u origin main   # envia ao GitHub",
+      "fala": "Cada commit é uma fotografia do projeto; o GitHub é onde seu portfólio nasce, e todo projeto da Academia vive num repositório desde o dia um. Crie as três contas: GitHub, Hugging Face e Google AI Studio, cuja chave gratuita a Defesa do Campus usa."
     },
     {
-      "tipo": "topico",
-      "kicker": "PLATAFORMAS",
-      "titulo": "Contas e chaves de API",
-      "bullets": [
-        "Hugging Face — o GitHub dos modelos",
-        "Google AI Studio — chave Gemini grátis",
-        "Anthropic e OpenAI — para mais adiante"
-      ],
-      "fala": "Crie hoje três contas, mesmo que só use daqui a alguns módulos. Hugging Face, o GitHub dos modelos. Google AI Studio, que dá uma chave de API gratuita para os modelos Gemini — suas primeiras chamadas a um LLM sem gastar um centavo. E deixe as plataformas pagas para quando o módulo de LLMs pedir. Uma regra de segurança inegociável: chave de API é senha. Nunca no código, nunca no GitHub. Sempre em variável de ambiente ou arquivo ponto env fora do versionamento."
-    },
-    {
-      "tipo": "topico",
-      "kicker": "HIGIENE DE ESTUDO",
-      "titulo": "Pomodoro e plano semanal",
-      "bullets": [
-        "Pomodoro: 25 min de foco + 5 de pausa",
-        "Blocos fixos no calendário",
-        "Revisão nos dias 1, 3, 7 e 30"
-      ],
-      "fala": "Pomodoro: vinte e cinco minutos de foco total, celular longe, e cinco de pausa. Reserve blocos fixos no calendário, como três sessões de uma hora e meia por semana. Constância vence intensidade: oito horas por semana durante meses supera maratonas de fim de semana seguidas de abandono. E revise os flashcards nos intervalos de um, três, sete e trinta dias."
+      "tipo": "conceito",
+      "kicker": "SEGURANÇA",
+      "frase": "Chave de API é senha: nunca no código, nunca no GitHub. Commitou é igual a vazou — revogue.",
+      "fala": "Chave de API é senha: nunca no código, nunca no GitHub; variável de ambiente ou ponto env fora do versionamento. Commitou, vazou: revogue. Na rotina, pomodoros e blocos fixos no calendário: constância vence intensidade."
     },
     {
       "tipo": "topico",
       "kicker": "MINI-PROJETO",
-      "titulo": "Seu quartel-general de estudos",
+      "titulo": "Seu primeiro produto real",
       "bullets": [
-        "Repositório público academia-ia",
-        "README com plano semanal concreto",
-        "check_setup.py rodando sem erros",
-        "Notebook executando no Colab"
+        "SPEC.md commitado antes do código",
+        "Produto dirigido com IA, publicado",
+        "DECISIONS.md conta a história real",
+        "QG academia-ia com plano semanal",
+        "Nenhuma chave visível nos repos"
       ],
-      "fala": "O mini-projeto deste módulo é montar o seu quartel-general de estudos: um repositório público chamado academia-ia, que será o diário de bordo da formação inteira. README dizendo quem você é e seu plano semanal, o script de verificação do ambiente rodando sem erros, e um notebook executando de ponta a ponta no Colab. Escreva o README como se fosse para o você de daqui a seis meses."
+      "fala": "Entregue seu primeiro produto real: especifique à mão, dirija a IA, verifique critério a critério e publique. O histórico do Git prova que a spec veio antes do código. Monte o quartel-general academia-ia, com plano semanal e o link do produto. Feche passando na Defesa, explicando qualquer linha."
     },
     {
       "tipo": "fim",
       "bullets": [
-        "uv instalado e Python 3.12+",
-        "VS Code com Python e Jupyter",
-        "Notebook local e no Colab",
-        "Contas: GitHub, HF e AI Studio",
-        "Repositório academia-ia publicado"
+        "Regra de ouro e ciclo de trabalho",
+        "uv, Colab e Git prontos",
+        "Ferramenta agentic instalada",
+        "Contas criadas, chaves fora do Git",
+        "Primeiro produto publicado"
       ],
-      "proximo": "Módulo 1 — Python para IA",
-      "fala": "Recapitulando o checklist: uv instalado com Python três ponto doze ou superior, VS Code configurado, notebook rodando local e no Colab, contas criadas e o repositório publicado com o mini-projeto. Ambiente pronto, método instalado. No próximo módulo começa o código de verdade: Python idiomático, NumPy, Pandas e a sua primeira análise de dados completa. Até lá."
+      "proximo": "Módulo 1 — Direção de IA",
+      "fala": "Bancada montada, método configurado e primeiro produto entregue dirigindo uma IA, com spec e decisões registradas. Você estreou o ciclo especificar, dirigir, verificar. A seguir, o módulo um, Direção de IA, aprofunda essa prática: conduzir a ferramenta como profissional. Até lá."
     }
   ]
 }

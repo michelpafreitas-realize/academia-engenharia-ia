@@ -2,122 +2,139 @@
   "id": "Modulo01",
   "slug": "mod01",
   "modulo": 1,
-  "titulo": "Python para IA",
+  "titulo": "Direção de IA: spec, contexto e verificação",
   "periodo": "Período 1",
-  "carga": "12h",
+  "carga": "10h",
   "scenes": [
     {
       "tipo": "capa",
-      "fala": "Bem-vindo ao módulo um: Python para IA. Aqui você troca o Python de faculdade pelo Python que processa dados de verdade: NumPy, Pandas, Matplotlib e chamadas de API. No fim, você conduz uma análise exploratória completa, do dado cru à conclusão."
+      "fala": "Bem-vindo ao módulo um: Direção de IA, o coração do programa. Aqui você especifica, dirige a ferramenta e verifica o resultado, e treina a fase que ninguém treina: achar o defeito escondido num código que parece perfeito."
     },
     {
       "tipo": "conceito",
       "kicker": "POR QUE ISSO IMPORTA",
-      "frase": "Quem domina vetorização escreve em 5 linhas o que o iniciante escreve em 50 — e roda 100x mais rápido.",
-      "fala": "Python é a ferramenta número um do engenheiro de IA — o Python vetorizado do NumPy e do Pandas. Boa parte do tempo de um projeto de IA é gasto limpando dados; este módulo treina esse músculo. Notebook bagunçado não vai para produção: times contratam quem entrega código confiável."
+      "frase": "Quem supervisiona sem critério não supervisiona — apenas aprova.",
+      "fala": "As ferramentas de agentic coding escrevem e testam mais rápido que você digita. O valor do engenheiro migrou da execução para a direção: especificar, orquestrar, responder pela qualidade. A diferença é disciplina de especificação e verificação, não talento com prompts."
     },
     {
       "tipo": "topico",
-      "kicker": "PYTHON IDIOMÁTICO",
-      "titulo": "Escreva como a comunidade",
+      "kicker": "A SPEC EXECUTÁVEL",
+      "titulo": "As 4 partes do contrato",
       "bullets": [
-        "List comprehension em vez de append",
-        "Desempacotamento: a, *resto = valores",
-        "enumerate no lugar de range(len(...))",
-        "zip para percorrer duas listas juntas",
-        "f-strings para formatar valores"
+        "Objetivo em uma frase",
+        "Critérios de aceite verificáveis",
+        "Restrições: o que NÃO pode",
+        "Exemplos com caso de borda",
+        "Tudo cabe em uma página"
       ],
-      "fala": "Python tem um jeito próprio: pythônico. Em vez de loop com índice e append, uma list comprehension resolve em uma linha — o mesmo vale para dicionários e conjuntos. Outras marcas do dia a dia: desempacotamento, enumerate, zip e f-strings. Use comprehension quando cabe numa linha legível; senão, volte para o loop."
+      "fala": "Prompt vago terceiriza as decisões, e a IA decide algo com confiança, mesmo quando não é o que você queria. A spec executável devolve as decisões: objetivo, critérios de aceite verificáveis, restrições e exemplos com caso de borda. Restrições poupam iterações: cortam o espaço onde a IA erra."
     },
     {
       "tipo": "code",
-      "kicker": "COMPREHENSIONS",
-      "titulo": "List comprehension",
-      "code": "# Iniciante: loop com índice e append\nquadrados = []\nfor i in range(len(numeros)):\n    if numeros[i] % 2 == 0:\n        quadrados.append(numeros[i] ** 2)\n\n# Pythônico: mais curto e mais rápido\nquadrados = [n**2 for n in numeros\n             if n % 2 == 0]",
-      "fala": "Compare as duas versões. A de cima é o loop clássico, com índice e append. A de baixo é a mesma lógica em uma linha: comprehension com condição, mais curta e mais rápida. O padrão se repete para dicionários e conjuntos."
-    },
-    {
-      "tipo": "code",
-      "kicker": "FUNÇÕES PURAS",
-      "titulo": "Tipagem, docstring e assert",
-      "code": "def taxa_conversao(\n    visitas: int, vendas: int\n) -> float:\n    \"\"\"Taxa = vendas / visitas.\"\"\"\n    if visitas == 0:\n        raise ValueError(\"visitas é 0\")\n    return vendas / visitas\n\nassert taxa_conversao(100, 5) == 0.05",
-      "fala": "Uma função boa faz uma coisa só e declara seus tipos. A docstring explica o contrato: o que entra, o que sai, o que pode dar errado. A função é pura: mesmo input, mesmo output, sem efeito colateral — por isso um assert já basta como teste."
+      "kicker": "SPEC NA PRÁTICA",
+      "titulo": "A spec do CLI de tarefas",
+      "code": "# SPEC — CLI de tarefas (tarefas.py)\n## Critérios de aceite\n2. list ordena por prazo; lista vazia\n   imprime \"Nenhuma tarefa.\"\n4. --prazo inválido: erro em stderr,\n   exit 2 e NÃO altera o arquivo.\n## Restrições\n- Só stdlib, sem classes, ~120 linhas\n- Nunca apagar: done marca, não remove\n## Exemplo\n$ python tarefas.py done 99\nErro: tarefa #99 não existe.  (exit 1)",
+      "fala": "No lab você constrói o mesmo CLI de tarefas duas vezes, com prompt vago e com esta spec, medindo iterações, custo e defeitos na mesma régua. O critério quatro é verificável: prazo inválido imprime erro, sai com código dois e não altera o arquivo."
     },
     {
       "tipo": "conceito",
-      "kicker": "A REGRA DO NUMPY",
-      "frase": "Se você escreveu um for sobre um array, provavelmente existe um jeito NumPy melhor.",
-      "fala": "NumPy guarda números em arrays contínuos na memória e opera sobre todos de uma vez, em C — isso é vetorização. Multiplicar um array, ou filtrar com uma condição booleana, roda ordens de grandeza mais rápido que um loop Python. Antes de escrever um for sobre um array, pergunte se existe um jeito vetorizado."
+      "kicker": "A RÉGUA",
+      "frase": "Spec boa é a que outra pessoa — ou outra IA — implementa sem te perguntar nada.",
+      "fala": "A régua de uma spec é uma só: dá para implementar sem adivinhar? Ambiguidade resolvida no papel custa uma frase; no código, custa uma iteração. E iteração custa tokens e dinheiro."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "DECOMPOSIÇÃO",
+      "titulo": "Tarefas de 15 a 30 minutos",
+      "bullets": [
+        "Cada tarefa com \"pronto quando\"",
+        "Uma tarefa, um diff revisável",
+        "Diff acima de 150 linhas? Eram duas",
+        "Ordene por risco, não por facilidade"
+      ],
+      "fala": "Dirigir com faz o sistema inteiro produz um bloco irrevisável, e revisão impossível é a porta de entrada de todo defeito. Fatie em tarefas de quinze a trinta minutos, cada uma com pronto observável, e comece pelo que pode invalidar o resto."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "GESTÃO DE CONTEXTO",
+      "titulo": "A memória de trabalho da sessão",
+      "bullets": [
+        "CLAUDE.md: o manual de bordo",
+        "Aponte os arquivos, não o repo todo",
+        "Context rot: a sessão longa confunde",
+        "Remédio: recomeçar limpo com a spec",
+        "Decisões duram em arquivo, não no chat"
+      ],
+      "fala": "A ferramenta só sabe o que está no contexto; gerir isso é metade da direção. O permanente vai no manual de bordo do projeto; na tarefa, aponte só os arquivos relevantes. Se a IA ressuscita uma abordagem já rejeitada, é context rot: recomece limpo, colando a spec."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "REVISÃO DE DIFF",
+      "titulo": "O protocolo em 5 passos",
+      "bullets": [
+        "Releia o critério antes do diff",
+        "Comece pelas bordas, não pelo feliz",
+        "Confira toda API que não reconhece",
+        "Desconfie de código não pedido",
+        "Peça explicação contra o código"
+      ],
+      "fala": "Testes passando e explicação confiante não são evidência: a IA explica código errado com a mesma fluência que código certo. Revise contra a spec, bordas primeiro: entrada vazia, duplicata, negativo. Diff que você não conseguiu revisar não está pronto; está apenas não lido."
+    },
+    {
+      "tipo": "topico",
+      "kicker": "MODOS DE FALHA",
+      "titulo": "O bestiário de 4 espécies",
+      "bullets": [
+        "Alucinação de API: nome plausível",
+        "Passa no teste errado, não na intenção",
+        "Complexidade que ninguém pediu",
+        "Concordância servil: endossa seu erro"
+      ],
+      "fala": "Quatro modos respondem pela maioria dos defeitos: alucinação de API, função plausível que não existe; passa no teste errado, satisfaz o teste, não a intenção; complexidade que ninguém pediu; e concordância servil, a IA implementando seu erro com entusiasmo. A raiz: o modelo produz o que parece bom; a defesa: verificação externa ao modelo."
     },
     {
       "tipo": "code",
-      "kicker": "NUMPY",
-      "titulo": "Vetorização e broadcasting",
-      "code": "import numpy as np\n\nprecos = np.array([100.0, 250.0, 80.0])\ncom_desconto = precos * 0.9  # sem loop\nacima_de_50 = precos[precos > 50]\n\nnotas = np.array([[8, 6], [5, 9]])\npesos = np.array([0.4, 0.6])\nponderadas = notas * pesos  # broadcast\nmedias = ponderadas.sum(axis=1)",
-      "fala": "Multiplicar o array de preços por zero vírgula nove aplica desconto a todos de uma vez. Filtrar com preços maior que cinquenta devolve só os que passam. Broadcasting estica o array menor para casar com o maior, como no peso de cada prova. A regra: cada dimensão deve ser igual ou um."
+      "kicker": "A RÉGUA VIRA TESTE",
+      "titulo": "Critérios de aceite viram asserts",
+      "code": "# teste_tarefas.py — a spec vira asserts\nr = run(\"list\")\nassert \"Nenhuma\" in r.stdout   # critério 5\n\nr = run(\"add\", \"pagar boleto\")\nassert \"#1\" in r.stdout        # critério 1\n\nr = run(\"add\", \"x\", \"--prazo\", \"banana\")\nassert r.returncode == 2       # critério 4\n\nr = run(\"done\", \"99\")\nassert r.returncode == 1       # critério 3",
+      "fala": "Cada critério de aceite vira ao menos um teste, e a mesma suíte roda contra as duas rodadas do lab. Testes são sua rede de proteção contra a IA: diff que quebra a suíte é rejeitado sem discussão."
     },
     {
       "tipo": "topico",
-      "kicker": "PANDAS",
-      "titulo": "A planilha programável",
+      "kicker": "VERIFICAÇÃO",
+      "titulo": "Leitura, teste ou eval?",
       "bullets": [
-        "DataFrame: tabela com colunas NumPy",
-        "head, info e describe: raio-X inicial",
-        "groupby: divide, calcula e junta",
-        "fillna e drop_duplicates: limpeza",
-        "Nulos: escolha de modelagem"
+        "Leitura: julgamento sobre algo único",
+        "Segurança se acha lendo, não testando",
+        "Teste: resposta certa conhecida",
+        "Eval: comportamento probabilístico"
       ],
-      "fala": "O DataFrame do Pandas é uma tabela com superpoderes: cada coluna é um array NumPy com nome. O fluxo básico: ler, espiar as linhas, checar tipos e nulos. O groupby divide em grupos, calcula por grupo e junta o resultado. Preencher ou descartar nulos é escolha de modelagem: anote o porquê."
-    },
-    {
-      "tipo": "topico",
-      "kicker": "VISUALIZAR E ENTREGAR",
-      "titulo": "Matplotlib, notebook e script",
-      "bullets": [
-        "Histograma, dispersão, barra e linha",
-        "Todo gráfico com título e eixos",
-        "Notebook: explorar e comunicar",
-        "Script: entregar e versionar",
-        "Restart & Run All antes de encerrar"
-      ],
-      "fala": "Quatro gráficos cobrem quase toda exploração: histograma, dispersão, barra e linha. Gráfico sem título e eixos é adivinhação com estilo. Notebook é ótimo para explorar, mas células fora de ordem criam estado fantasma — rode Restart and Run All antes de encerrar. Depois, extraia partes reutilizáveis para um script."
-    },
-    {
-      "tipo": "topico",
-      "kicker": "APIS HTTP",
-      "titulo": "Consumindo dados externos",
-      "bullets": [
-        "requests.get com timeout sempre",
-        "raise_for_status(): erro não passa",
-        "resp.json() vira dict Python",
-        "dados.get(campo) quando pode faltar"
-      ],
-      "fala": "Muitos dados, e todos os LLMs, chegam por API. Defina sempre um timeout, porque a rede trava. Chame sempre raise for status, para erro virar exceção em vez de silêncio. Nunca confie no formato da resposta — use get quando o campo puder faltar."
+      "fala": "Verificar tudo por leitura não escala; testar tudo é impossível. Julgamento único, como segurança e arquitetura: leitura. Resposta certa conhecida: teste. Comportamento probabilístico: eval, que cresce até o módulo dez. Antes de entregar: que evidência tenho, além da palavra da IA?"
     },
     {
       "tipo": "topico",
       "kicker": "MINI-PROJETO",
-      "titulo": "Sua análise exploratória",
+      "titulo": "O Code Review Reverso",
       "bullets": [
-        "Dataset real (não o Titanic) + 3 perguntas",
-        "Limpeza documentada linha a linha",
-        "groupby + 3 gráficos com eixos",
-        "Função pura em utils.py com assert",
-        "Conclusões respondendo as perguntas"
+        "3 versões da mesma spec, 2 com defeito",
+        "Geradas às cegas, sem ver o gabarito",
+        "Parecer com defeito localizado por linha",
+        "Teste que falha só na versão defeituosa",
+        "Confronto final com o gabarito"
       ],
-      "fala": "O mini-projeto: análise exploratória completa, num dataset real que não seja o Titanic. Escreva três perguntas antes de olhar os dados, documente cada decisão de limpeza, use um groupby e três gráficos com eixos. Extraia uma função pura, com tipos e asserts, num arquivo utils ponto pi. Feche respondendo as perguntas com números."
+      "fala": "O mini-projeto inverte o jogo: você avalia código que a IA escreveu. Uma sessão geradora produz três versões da mesma spec de carrinho, duas com defeitos plantados, e você revisa às cegas. Para cada defeito, um teste que falha na versão defeituosa e passa na correta: parecer sem prova é opinião."
     },
     {
       "tipo": "fim",
       "bullets": [
-        "List comprehension e funções puras",
-        "NumPy: vetorização e broadcasting",
-        "Pandas: groupby e limpeza",
-        "Gráficos com título e eixos",
-        "Análise exploratória publicada"
+        "Spec executável com critérios de aceite",
+        "Tarefas pequenas com \"pronto quando\"",
+        "Contexto gerido e sessão limpa",
+        "Revisão pelas bordas, não pela vibe",
+        "Leitura, teste ou eval conforme o risco"
       ],
-      "proximo": "Módulo 2 — Matemática Essencial",
-      "fala": "Recapitulando: Python idiomático com comprehensions, NumPy com broadcasting, Pandas com groupby, gráficos com título e eixos, e chamadas de API com timeout e status checados. Você fechou o ciclo completo de uma análise exploratória. No próximo módulo, a matemática essencial por trás de todo modelo. Até lá."
+      "proximo": "Módulo 2 — Prompt Engineering & APIs",
+      "fala": "Você fechou o ciclo do programa: especificar, dirigir, verificar. A regra de ouro: pode usar IA para tudo, mas não pode entregar o que não consegue explicar e defender. No próximo módulo você especifica o comportamento de um LLM via prompt e API: Módulo dois, Prompt Engineering e APIs. Até lá."
     }
   ]
 }

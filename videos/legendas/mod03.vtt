@@ -1,205 +1,237 @@
 WEBVTT
 
 1
-00:00:00.000 --> 00:00:01.577
+00:00:00.000 --> 00:00:01.718
 Bem-vindo ao módulo três:
 
 2
-00:00:01.577 --> 00:00:03.217
-Machine Learning Clássico.
+00:00:01.718 --> 00:00:04.124
+Python e Dados para quem dirige IA.
 
 3
-00:00:03.217 --> 00:00:08.325
-Mesmo na era dos LLMs, empresas resolvem churn, crédito e fraude com ML clássico.
+00:00:04.124 --> 00:00:09.417
+A IA escreve o Pandas por você; o que ela não faz é responder pelo resultado.
 
 4
-00:00:08.325 --> 00:00:16.272
-Você vai treinar modelos lineares, árvores e ensembles com scikit-learn, até montar um pipeline completo e submeter no Kaggle.
+00:00:09.417 --> 00:00:14.022
+Aqui você treina o Python que precisa reconhecer, não datilografar:
 
 5
-00:00:16.567 --> 00:00:22.082
-Para dados em tabela, gradient boosting ainda vence redes neurais, por uma fração do preço.
+00:00:14.022 --> 00:00:17.184
+ler, verificar e ajustar código gerado por IA.
 
 6
-00:00:22.082 --> 00:00:23.537
-Mas o essencial é outro:
+00:00:17.467 --> 00:00:27.887
+Quando um notebook de vinte células conclui que as vendas caíram trinta por cento, alguém precisa ler o groupby, notar o filtro que descartou metade das linhas e perguntar por que os nulos viraram zero.
 
 7
-00:00:23.537 --> 00:00:30.871
-aqui você aprende disciplinas que valem para toda a IA, como separar treino e teste e desconfiar de resultado bom demais.
+00:00:27.887 --> 00:00:28.867
+Esse alguém é você.
 
 8
-00:00:31.167 --> 00:00:33.072
-Pergunta-guia de todo projeto:
+00:00:29.133 --> 00:00:31.194
+A IA escreve Python pythônico:
 
 9
-00:00:33.072 --> 00:00:36.311
-você tem a resposta certa para exemplos do passado?
+00:00:31.194 --> 00:00:34.148
+comprehensions, enumerate, zip e f-strings.
 
 10
-00:00:36.311 --> 00:00:41.455
-Se tem, é supervisionado — regressão prevê número, classificação prevê categoria.
+00:00:34.148 --> 00:00:38.888
+O teste de leitura é traduzir cada linha para uma frase em português.
 
 11
-00:00:41.455 --> 00:00:43.995
-Se não tem rótulo, é não-supervisionado:
+00:00:38.888 --> 00:00:42.117
+Não consegue traduzir uma comprehension gerada?
 
 12
-00:00:43.995 --> 00:00:46.282
-o algoritmo busca estrutura sozinho.
+00:00:42.117 --> 00:00:43.353
+Achado de revisão:
 
 13
-00:00:46.282 --> 00:00:48.759
-É noventa por cento do ML nas empresas.
+00:00:43.353 --> 00:00:44.796
+peça um loop legível.
 
 14
-00:00:49.033 --> 00:00:52.543
-A regressão logística, apesar do nome, é um classificador:
+00:00:44.796 --> 00:00:48.093
+Legibilidade é critério de aceite, não frescura.
 
 15
-00:00:52.543 --> 00:00:57.262
-a saída linear passa por uma sigmoide, que vira probabilidade entre zero e um.
+00:00:48.367 --> 00:00:50.081
+Exija de toda função gerada:
 
 16
-00:00:57.262 --> 00:01:02.405
-Comece sempre por modelos lineares — são rápidos, interpretáveis e formam o baseline.
+00:00:50.081 --> 00:00:54.246
+nome que diz o que faz, tipos declarados e docstring com o contrato.
 
 17
-00:01:02.405 --> 00:01:06.337
-Se o modelo sofisticado não bate o baseline, o problema é o dado.
+00:00:54.246 --> 00:01:00.247
+Se a função é pura, mesmo input gera mesmo output, exija um assert que quebra se a lógica quebrar.
 
 18
-00:01:06.633 --> 00:01:10.782
-Uma árvore de decisão aprende regras se/então, mas sozinha decora o treino.
+00:01:00.247 --> 00:01:02.575
+Função sem teste é promessa sem prova.
 
 19
-00:01:10.782 --> 00:01:20.795
-Random Forest treina centenas de árvores em amostras aleatórias e vota; Gradient Boosting treina em sequência, cada árvore corrigindo a anterior — é o padrão-ouro para dado tabular.
+00:01:02.867 --> 00:01:08.274
+A IA gera o código, mas o projeto só roda na máquina do colega com ambiente versionado.
 
 20
-00:01:20.795 --> 00:01:24.777
-É como muitos médicos opinando versus um revisando os erros dos colegas.
+00:01:08.274 --> 00:01:12.625
+Com uv, cada dependência entra no pyproject, e um uv sync recria tudo.
 
 21
-00:01:25.067 --> 00:01:28.458
-O objetivo do ML não é acertar o passado, é generalizar.
+00:01:12.625 --> 00:01:17.411
+Import não declarado quebra o projeto para todo mundo, menos para quem gerou.
 
 22
-00:01:28.458 --> 00:01:32.454
-Underfitting vai mal no treino e no teste — modelo simples demais.
+00:01:17.700 --> 00:01:23.079
+NumPy guarda números em arrays contíguos e opera sobre todos de uma vez, em C compilado.
 
 23
-00:01:32.454 --> 00:01:35.361
-Overfitting decora o treino e fracassa no teste.
+00:01:23.079 --> 00:01:30.596
+O loop Python paga o interpretador a cada elemento; a versão vetorizada paga uma vez só e fica dez a cem vezes mais rápida.
 
 24
-00:01:35.361 --> 00:01:40.811
-Esse cabo de guerra entre viés e variância você vai gerenciar em todo projeto da carreira.
+00:01:30.596 --> 00:01:36.036
+Do Pandas aos tensores de um LLM, todo o ecossistema de IA é construído sobre essa ideia.
 
 25
-00:01:41.100 --> 00:01:42.138
-A regra sagrada:
+00:01:36.333 --> 00:01:40.011
+Broadcasting permite operar arrays de shapes diferentes:
 
 26
-00:01:42.138 --> 00:01:45.577
-o modelo só pode ser avaliado em dados que nunca viu.
+00:01:40.011 --> 00:01:44.411
+dimensões de tamanho um, ou inexistentes, são esticadas para casar.
 
 27
-00:01:45.577 --> 00:01:50.507
-Separe treino, validação e teste — o teste é tocado uma única vez, no final.
+00:01:44.411 --> 00:01:44.937
+A regra:
 
 28
-00:01:50.507 --> 00:01:53.102
-Com poucos dados, use validação cruzada:
+00:01:44.937 --> 00:01:49.994
+da direita para a esquerda, cada dimensão deve ser igual, um, ou inexistente.
 
 29
-00:01:53.102 --> 00:01:57.060
-k treinos alternando o fold, relatando média e desvio padrão.
+00:01:49.994 --> 00:01:52.818
+Três por dois com dois casa; com três, não.
 
 30
-00:01:57.333 --> 00:01:59.855
-Acurácia engana com classes desbalanceadas:
+00:01:52.818 --> 00:01:53.409
+Deu erro?
 
 31
-00:01:59.855 --> 00:02:05.779
-um por cento de fraude, chutar sempre não é fraude já dá noventa e nove por cento de acurácia inútil.
+00:01:53.409 --> 00:01:55.773
+Imprima os shapes e aplique a regra.
 
 32
-00:02:05.779 --> 00:02:10.705
-Precisão pergunta dos marcados quantos eram certos; recall, dos reais quantos achei.
+00:01:56.067 --> 00:02:00.877
+O ritual de abertura é head, info e describe, o raio-X de tipos e nulos.
 
 33
-00:02:10.705 --> 00:02:13.461
-Câncer prioriza recall; spam prioriza precisão.
+00:02:00.877 --> 00:02:03.750
+O coração é o groupby, split apply combine:
 
 34
-00:02:13.733 --> 00:02:16.503
-Modelo só enxerga as colunas que você entrega.
+00:02:03.750 --> 00:02:07.425
+divide em grupos, calcula por grupo, junta o resultado.
 
 35
-00:02:16.503 --> 00:02:20.175
-Feature engineering cria representações que revelam o padrão:
+00:02:07.425 --> 00:02:08.360
+Leia em frase:
 
 36
-00:02:20.175 --> 00:02:24.992
-extrair dia da semana, combinar renda por dependente, transformar com logaritmo.
+00:02:08.360 --> 00:02:11.233
+para cada UF, some e tire a média de valor.
 
 37
-00:02:24.992 --> 00:02:27.821
-One-hot vira categoria em colunas de zero e um.
+00:02:11.233 --> 00:02:13.371
+Quem verbaliza assim, lê Pandas.
 
 38
-00:02:27.821 --> 00:02:31.373
-No Titanic, o título do nome prevê melhor que a idade crua.
+00:02:13.667 --> 00:02:17.897
+Preencher nulos com mediana, descartar coluna, remover duplicatas:
 
 39
-00:02:31.667 --> 00:02:39.070
-Data leakage é informação que não existiria na hora da previsão contaminando o treino — ótimo no papel, inútil em produção.
+00:02:17.897 --> 00:02:20.653
+cada escolha de limpeza muda as conclusões.
 
 40
-00:02:39.070 --> 00:02:45.150
-Acontece com feature do futuro, pré-processamento antes do split, ou duplicatas atravessando o split.
+00:02:20.653 --> 00:02:23.666
+A IA faz essas escolhas por padrão, sem avisar.
 
 41
-00:02:45.150 --> 00:02:47.016
-Resultado bom demais é sintoma:
+00:02:23.666 --> 00:02:26.870
+Seu trabalho é achar cada uma e perguntar por quê:
 
 42
-00:02:47.016 --> 00:02:48.400
-desconfie do vazamento.
+00:02:26.870 --> 00:02:29.819
+limpeza sem justificativa é achado de revisão.
 
 43
-00:02:48.400 --> 00:02:50.507
-O Pipeline é o antídoto estrutural.
+00:02:30.100 --> 00:02:32.516
+Loop com iterrows é cem vezes mais lento:
 
 44
-00:02:50.800 --> 00:02:52.913
-O mini-projeto é competir de verdade:
+00:02:32.516 --> 00:02:33.989
+peça a versão vetorizada.
 
 45
-00:02:52.913 --> 00:02:56.225
-inscreva-se no Titanic no Kaggle e submeta suas previsões.
+00:02:33.989 --> 00:02:37.760
+Filtro que não reporta o shape esconde de onde veio a conclusão.
 
 46
-00:02:56.225 --> 00:03:02.622
-Construa um pipeline completo, crie pelo menos duas features novas e compare três modelos por validação cruzada.
+00:02:37.760 --> 00:02:47.188
+Notebook explora, script entrega; células fora de ordem criam estado fantasma, e o antídoto é Restart e Run All, em dobro para notebook que você não viu nascer.
 
 47
-00:03:02.622 --> 00:03:06.448
-Registre o score público e escreva um post-mortem do que funcionou.
+00:02:47.467 --> 00:02:49.196
+A regra que resume o módulo:
 
 48
-00:03:06.733 --> 00:03:07.576
-Recapitulando:
+00:02:49.196 --> 00:02:50.864
+a IA propõe, o dado dispõe.
 
 49
-00:03:07.576 --> 00:03:21.120
-você sabe montar a matriz de confusão e derivar precisão, recall e F1; sabe citar as formas de data leakage e como o Pipeline previne; rodou o lab do Titanic com validação cruzada; e fez sua primeira submissão real no Kaggle.
+00:02:50.864 --> 00:02:57.719
+Nenhuma conclusão entra no relatório sem você localizar o número que a sustenta, numa célula que você entendeu.
 
 50
-00:03:21.120 --> 00:03:24.672
-No próximo módulo, o salto é para deep learning na prática.
+00:02:57.719 --> 00:03:00.931
+Não entregue o que não consegue explicar e defender.
 
 51
-00:03:24.672 --> 00:03:25.093
+00:03:01.200 --> 00:03:03.480
+Escolha um dataset real e dirija a EDA:
+
+52
+00:03:03.480 --> 00:03:08.508
+spec com três perguntas antes de qualquer código, a IA gera o notebook, você verifica.
+
+53
+00:03:08.508 --> 00:03:17.160
+Explique cada célula com uma frase sua, aponte célula e número que provam cada conclusão e registre as escolhas silenciosas que aceitou ou reverteu.
+
+54
+00:03:17.433 --> 00:03:19.051
+Você fechou o Período 1:
+
+55
+00:03:19.051 --> 00:03:26.599
+lê Python idiomático, sabe por que vetorização é rápida, verbaliza groupby e revisa notebook de IA com critério.
+
+56
+00:03:26.599 --> 00:03:30.845
+O broadcasting daqui é o mesmo das matrizes e tensores adiante.
+
+57
+00:03:30.845 --> 00:03:32.058
+No próximo módulo:
+
+58
+00:03:32.058 --> 00:03:33.474
+Matemática Essencial.
+
+59
+00:03:33.474 --> 00:03:33.945
 Até lá.

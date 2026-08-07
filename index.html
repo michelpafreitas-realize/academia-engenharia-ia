@@ -168,7 +168,7 @@ footer{background:#292826;color:#c9c5bd;font-size:.82rem;text-align:center;paddi
 /* ================= DADOS ================= */
 const REPO='https://github.com/michelpafreitas-realize/academia-engenharia-ia';
 const MD=s=>`${REPO}/blob/main/modulos/${s}.md`;
-const VID=i=>MODS[i].vid?`${REPO}/releases/download/videos-v1/${MODS[i].vid}.mp4`:null; // vid = vídeo gravado que cobre o módulo (nomes antigos); null = em regravação
+const VID=i=>MODS[i].vid?`${REPO}/releases/download/videos-v2/${MODS[i].vid}.mp4`:null; // vid = vídeo do módulo (release videos-v2, numeração da grade nova)
 
 const PERIODOS=[
   {nome:'Período 1 — Construir com IA desde o dia 1',mods:[0,1,2,3]},
@@ -233,7 +233,7 @@ const MODS=[
   ['Repetição espaçada','Revisar em intervalos crescentes, na véspera de esquecer — memória de longo prazo'],
   ['Aviso do Módulo 0','A IA multiplica quem tem critério e afunda quem não tem — o programa existe para construir o critério']]},
 
-{slug:'01-direcao-de-ia',ic:'🎛️',t:'Direção de IA: spec, contexto e verificação',h:10,vid:null,
+{slug:'01-direcao-de-ia',ic:'🎛️',t:'Direção de IA: spec, contexto e verificação',h:10,vid:'mod01',
  r:'O coração da reforma: escrever specs executáveis, dirigir sessões de agentic coding com contexto bem gerido e verificar o que a IA entrega — por leitura, teste ou eval.',
  aulas:[['📖','Claude Code: best practices for agentic coding (Anthropic)','https://www.anthropic.com/engineering/claude-code-best-practices'],
   ['📖','Documentação do Claude Code (workflows, CLAUDE.md, contexto)','https://docs.claude.com'],
@@ -265,7 +265,7 @@ const MODS=[
   ['Concordância servil','A IA endossa seu erro com entusiasmo; nunca usar a concordância dela como validação'],
   ['Leitura × teste × eval','Julgamento único → leitura; resposta certa conhecida → teste; comportamento probabilístico → eval']]},
 
-{slug:'02-prompt-engineering-apis',ic:'💬',t:'Prompt Engineering & APIs',h:10,vid:'mod06',
+{slug:'02-prompt-engineering-apis',ic:'💬',t:'Prompt Engineering & APIs',h:10,vid:'mod02',
  r:'Do prompt profissional ao código: SDKs, structured output, streaming, custo por token e caching — o prompt é a spec.',
  aulas:[['💻','Prompt Engineering Interactive Tutorial (Anthropic, open source)','https://github.com/anthropics/courses'],
   ['📖','Documentação da Claude API','https://docs.claude.com'],
@@ -314,7 +314,7 @@ const MODS=[
   ['Prefill','Começar a resposta do assistente para forçar o formato (nota histórica: removido nos Claude 4.6+, use structured output)'],
   ['Núcleo manual do módulo','Escrever os prompts à mão — o prompt é a especificação; o código de suporte pode ser dirigido com IA']]},
 
-{slug:'03-python-dados',ic:'🐍',t:'Python & Dados para quem dirige IA',h:6,vid:'mod01',
+{slug:'03-python-dados',ic:'🐍',t:'Python & Dados para quem dirige IA',h:6,vid:'mod03',
  r:'Ler e revisar o Python que a IA escreve: vetorização como conceito, Pandas split-apply-combine e EDA dirigida com verificação.',
  aulas:[['📖','Tutorial oficial de Python em português (cap. 3–5)','https://docs.python.org/pt-br/3/tutorial/'],
   ['📖','NumPy — trilha oficial de aprendizado','https://numpy.org/learn/'],
@@ -364,7 +364,7 @@ const MODS=[
   ['Antídoto para estado fantasma','Restart & Run All antes de concluir — em dobro para notebook que você não viu nascer'],
   ['Ambiente reprodutível','pyproject.toml + uv.lock versionados; uv sync recria tudo em qualquer máquina']]},
 
-{slug:'04-matematica-essencial',ic:'📐',t:'Matemática Essencial (visual)',h:8,vid:'mod02',
+{slug:'04-matematica-essencial',ic:'📐',t:'Matemática Essencial (visual)',h:8,vid:'mod04',
  r:'Só a matemática que gera critério — produto escalar, gradiente e softmax calculados à mão, com a IA como tutor socrático.',
  aulas:[['🎥','Essence of Linear Algebra (3Blue1Brown)','https://www.3blue1brown.com/topics/linear-algebra'],
   ['🎥','Essence of Calculus (3Blue1Brown)','https://www.3blue1brown.com/topics/calculus'],
@@ -412,7 +412,7 @@ const MODS=[
   ['Teorema de Bayes','Atualiza a probabilidade de uma hipótese diante de nova evidência — sem esquecer a taxa base'],
   ['Núcleo manual do Módulo 4','Produto escalar, 5 passos de gradiente e softmax calculados no papel — o resto é dirigido com IA']]},
 
-{slug:'05-disciplinas-de-ml',ic:'🕵️',t:'Disciplinas de ML: validação, métricas e leakage',h:8,vid:'mod03',
+{slug:'05-disciplinas-de-ml',ic:'🕵️',t:'Disciplinas de ML: validação, métricas e leakage',h:8,vid:'mod05',
  r:'A IA constrói os pipelines; você desenha a validação, escolhe a métrica que reflete o negócio e caça o leakage plantado.',
  aulas:[['🎥','Matriz de confusão, precisão/recall e ROC-AUC (StatQuest)','https://www.youtube.com/@statquest'],
   ['📖','Google ML Crash Course — classificação','https://developers.google.com/machine-learning/crash-course'],
@@ -461,7 +461,7 @@ const MODS=[
   ['Papel de segurança do Pipeline','Todo fit de pré-processamento acontece só no treino de cada fold — antídoto estrutural contra leakage'],
   ['Prova de um leakage','Alegação + métrica com vs. sem + mecanismo explicado — apontar sem medir não é auditoria']]},
 
-{slug:'06-como-llms-funcionam',ic:'🧠',t:'Como LLMs Funcionam',h:10,vid:'mod04',
+{slug:'06-como-llms-funcionam',ic:'🧠',t:'Como LLMs Funcionam',h:10,vid:'mod06',
  r:'O capô aberto do LLM: tokens, atenção, pós-treino e amostragem — o essencial conceitual que explica por que o modelo falha, custa e acerta.',
  aulas:[['🎥','Neural Networks (3Blue1Brown) — redes e atenção, visualmente','https://www.3blue1brown.com/topics/neural-networks'],
   ['🎥','Intro to LLMs e Deep Dive into LLMs (canal do Karpathy)','https://www.youtube.com/@AndrejKarpathy'],
@@ -817,7 +817,7 @@ const MODS=[
   ['Maior alavanca de mercado (BR)','Remoto internacional em dólar/euro, com portfólio bilíngue'],
   ['Três newsletters de alto sinal','Latent Space, Ahead of AI (Raschka), Interconnects (Lambert)']]},
 
-{slug:'13-por-dentro-da-maquina',ic:'🔬',t:'⭐ Por Dentro da Máquina',h:20,vid:'mod05',
+{slug:'13-por-dentro-da-maquina',ic:'🔬',t:'⭐ Por Dentro da Máquina',h:20,vid:'mod13',
  r:'Trilha optativa de implementação: micrograd, makemore, tokenizador BPE e um GPT do zero — Karpathy completo, com XP bônus e condecoração 🔬.',
  aulas:[['🎥','Micrograd: backpropagation soletrado, do zero (Karpathy)','https://karpathy.ai/zero-to-hero.html'],
   ['🎥','Makemore: modelos de linguagem de caracteres (Zero to Hero)','https://karpathy.ai/zero-to-hero.html'],
